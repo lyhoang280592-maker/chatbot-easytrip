@@ -1,0 +1,170 @@
+===================================================================
+CORE KNOWLEDGE BASE - EASY TRIP & VISA (OPERATIONS & VISARUN)
+===================================================================
+Hotline/Zalo/Whatsapp: +84 868 462 071 | Telegram: @easytripvisa
+Address: 21 Phan Vinh, Phường Nam Nha Trang, Khánh Hòa
+Maps: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9
+Owner/Chairman: Mr. Ly Viet Hoang (+84 896 916 361)
+Joint Stock Commercial Bank for Foreign Trade of Viet Nam (Vietcombank) - EASY TRIP & VISA CO. LTD - Account Number: 1068582577
+
+-------------------------------------------------------------------
+1. VISARUN CONSULTATION LOGIC & ROUTING RULES
+-------------------------------------------------------------------
+Core objective: Collect exactly 5 pieces of information to match the bus route & departure date:
+  1. Nationality: To recommend the correct border and check surcharges.
+  2. Visa expiry date: To propose the departure date.
+  3. Current city: To suggest the starting point (Nha Trang / Da Nang).
+  4. Desired Visa type: Visa Free (45-day exemption) or 90-day Visa (E-visa).
+  5. Contact phone number (Phone/Whatsapp/Zalo).
+
+👉 DEPARTURE DATE RULE & SCHEDULE CONSTRAINTS:
+   - The bus departure date MUST be 1 day BEFORE the customer's Visa expiry date.
+   - The bus travels overnight, arriving at the border at 6:00 AM the next day (the expiry date) to complete procedures.
+   - **Cambodia Route Constraint**: The bus to Cambodia departs ONLY on **Tuesdays, Thursdays, and Sundays**. Therefore, for Cambodia runs, the customer's Visa expiry date MUST fall on a **Monday, Wednesday, or Friday** (departure + 1 day). If it falls on another day, the customer must choose the nearest preceding Tuesday, Thursday, or Sunday departure date.
+
+👉 NATIONALITY & BORDER CHECKPOINT CLASSIFICATION:
+   - Citizens of Russia (Nga), South Korea (Hàn Quốc), Belarus, Malaysia, Czech Republic, and other ASEAN countries => Recommend LAOS route (Bo Y border).
+     * Reason: These nationalities enjoy visa exemption for Laos, saving the cost of a Laos visa.
+   - Citizens of USA (Mỹ), Canada, Australia, UK (Anh), Ukraine, Kyrgyz, Brazil, Uzbekistan, and others => Recommend CAMBODIA route (Moc Bai border).
+
+👉 VIETNAM VISA-EXEMPTION & PACKAGE AVAILABILITY RULE:
+   - **Only** customers whose nationalities are visa-exempt for Vietnam (e.g., Russia, South Korea, Japan, Belarus, UK, France, Germany, Italy, Spain, ASEAN, etc.) can select the "45D Visa Free" (45 ngày miễn thị thực) package.
+   - Customers whose nationalities are **NOT** visa-exempt for Vietnam (e.g., USA, Canada, Australia, China, India, etc.) **CANNOT** select the "45D Visa Free" package. They are restricted to "90-day E-visa Single Entry" or "90-day E-visa Multi Entry".
+
+-------------------------------------------------------------------
+2. DETAILED VISARUN BUS ROUTES & SCHEDULES
+-------------------------------------------------------------------
+* NHA TRANG <=> LAOS JOURNEY (Bo Y Border)
+  - Laos 45 days (Visa Free) package: 1,400,000 VND. Departs DAILY at 21:30 (or 21:15 from Tran Phu).
+  - Laos 90 days (E-visa) package: 3,400,000 VND. Departs at 21:30 on Tuesday, Thursday, Sunday.
+  - Pick-up points: No. 4 Tran Phu - Muong Thanh (departs 21:15) / 40 Hon Chong (departs 21:30) / New Bo Ke Bo Cat link (https://maps.app.goo.gl/Kc6dm92VVAF1j13j9).
+  - Laos border fees (paid directly by customer): Vietnam border 50,000 VND * 2 = 100,000 VND; Laos border 20,000 VND * 2 = 40,000 VND. Total: 140,000 VND.
+  - 🚨 WARNING: Fast Track service at Bo Y border is suspended since April 23. Passengers must walk in and stamp passports manually.
+
+* NHA TRANG <=> CAMBODIA JOURNEY (Moc Bai Border)
+  - Cambodia 45 days Visa Free package: 1,400,000 VND. Departs at 21:30 on Tuesday, Thursday, Sunday.
+  - Cambodia 90 days E-visa package: 4,000,000 VND. Departs at 21:30 on Tuesday, Thursday, Sunday.
+  - Pick-up points: 40 Hon Chong (departs 21:30) / No. 4 Tran Phu (departs 21:15).
+  - Cambodia border fees: Cambodia Visa approx $35 - $50 (paid at checkpoint) + VN exit/entry fee 50k-150k VND.
+  - 🚨 WARNING: On Cambodia 90D runs, passengers must take a photo of their Vietnam exit stamp and send it to EasyTrip before 8:00 AM so the emergency 4-hour E-visa can be processed.
+
+-------------------------------------------------------------------
+3. PRICING, SURCHARGES & LOYALTY DISCOUNTS
+-------------------------------------------------------------------
+   - Restrictive Nationalities Surcharge: Egypt, Algeria, Tunisia, Sri Lanka, Mauritius => +850,000 VND.
+   - Difficult Nationalities Group 2 Surcharge: Turkey, Morocco (Ma-rốc), UAE => +650,000 VND.
+   - Multi-entry E-Visa Surcharge: +1,000,000 VND.
+   - Airport/Terminal Fast Track (Skip the Line):
+     * SGN (Hồ Chí Minh) & HAN (Hà Nội): 1,200,000 VND.
+     * DAD (Đà Nẵng), CXR (Nha Trang), PQC (Phú Quốc), VDO, HPH, HUI, VII, DLI, VCA: 1,000,000 VND.
+
+👉 VIETNAM E-VISA PRICING FOR DIRECT CUSTOMERS:
+   - Super urgent 1 hour: 4,600,000 VND.
+   - Same day (2 hours): 3,400,000 VND.
+   - Urgent 4 hours: 2,600,000 VND.
+   - Urgent 1 day: 2,200,000 VND.
+   - Urgent 2 days: 2,150,000 VND.
+   - Standard 3-5 days: 1,810,000 VND.
+
+👉 LOYALTY DISCOUNT (For returning customers / wholesale cost):
+   - Returning E-visa 3-5 days: 1,110,000 VND.
+   - Returning E-visa 2 days: 1,450,000 VND.
+   - Returning E-visa 1 day: 1,500,000 VND.
+   - Returning E-visa 4 hours: 2,000,000 VND.
+
+👉 CHILDREN & TRANSPORT DISCOUNT RULES (FOR VISA RUN):
+   - Children under 9 years old (trẻ em < 9 tuổi): Free bus ticket (miễn phí vé xe buýt) because they share a cabin with parents. They only pay for the visa portion.
+   - Visa-only (without bus / không sử dụng xe buýt) price:
+     * Citizens of Russia, Belarus, Ukraine, Kyrgyzstan, Kazakhstan, Uzbekistan, Tajikistan, and other CIS countries: 2,000,000 VND (flat rate for 90-day visa).
+     * Other nationalities: Package price minus 1,400,000 VND (e.g. 2,600,000 VND for Cambodia 90D).
+
+-------------------------------------------------------------------
+4. INTERNAL LOGISTICS & TELEGRAM/WHATSAPP COMMANDS
+-------------------------------------------------------------------
+* BUS DEPARTURE REGISTRATION (Telegram -> Easytrip booking bus -> General):
+  - Command: `Scheme [ngày] + [loại dịch vụ]` (e.g. `Scheme 20/06 - 45D Laos`)
+  - Deadline: Customers must pay in full before 14:00 (2 PM) on the day of departure.
+
+* SEAT LOCKING (Telegram -> Easytrip Booking Bus -> Lock ghế + nguồn):
+  - Command:
+    [Ngày khởi hành] - [Loại dịch vụ]
+    [Tên khách]
+    [Số ghế]
+    [Điểm đón]
+    [Nguồn] (e.g. whatsapp, zalo, telegram...)
+    [Trạng thái thanh toán] (paid/unpaid)
+
+* WHATSAPP E-VISA SUBMISSION (Group Easy Trip EV):
+  - Submit details + portrait photo + passport photo (4 corners visible, no glare, no fingers).
+  - Format:
+    SINGLE/ MULTI
+    E-VISA [Thời gian] x [Số lượng] khách
+    [DATE - TIME]: BORDER EXIT
+    [DATE - TIME]: BORDER ENTER
+    EFFECTIVE DATE EV: [DATE]
+
+-------------------------------------------------------------------
+5. CUSTOMER NOTIFICATION WARNINGS
+-------------------------------------------------------------------
+🚨 IMPORTANT VISA EXPIRY STAMP WARNING:
+   - Remind all customers: Before leaving the immigration counter, they MUST double-check the visa expiration date stamped in their passports. Border officers are often overloaded and write incorrect dates (e.g. stamping 25.01.2026 instead of 25.02.2026). Checking this immediately prevents severe visa overstay complications.
+   - Laos 45D bus tickets: Must issue physical/digital bus tickets to the passenger.
+   - Laos 90D & Cambodia runs: No ticket issuance is required.
+
+-------------------------------------------------------------------
+6. END-TO-END 7-STEP OPERATIONAL SOP WORKFLOW
+-------------------------------------------------------------------
+This section outlines the exact steps our operators/staff must follow when coordinating a visa run:
+
+Step 1: Date & Route Matching
+- Parse the customer's nationality. Check Vietnam visa-exemption status.
+- If not exempt (e.g. USA, Canada, Australia):
+  * Chặn gói "Free Visa 45 ngày". Chỉ áp dụng gói E-visa 90 ngày (Single/Multi).
+  * Đi tuyến Campuchia (không được đi Lào do không miễn visa Lào).
+  * Lịch xe đi Campuchia chỉ khởi hành tối Thứ 3, Thứ 5, Chủ Nhật.
+  * Hạn visa cũ bắt buộc phải rơi vào Thứ 2, Thứ 4, hoặc Thứ 6.
+
+Step 2: Seat Map & Locking (Sơ đồ ghế & Khóa chỗ)
+- Show the interactive seat map (A1-A20, B1-B20) to the customer to let them choose their seat.
+- Once a seat is selected, execute the Telegram "Lock ghế" command:
+  Format: [Ngày khởi hành] - [Loại dịch vụ] [Tên khách] [Số ghế] [Điểm đón] [Nguồn] [Trạng thái: Unpaid].
+- Keep the seat locked while waiting for payment.
+
+Step 3: Payment & Document Collection (Thanh toán & Thu thập thông tin)
+- Send the bank payment details (Vietcombank - EASY TRIP & VISA CO. LTD - 1068582577) along with the QR code.
+- Pricing rules:
+  * For Free Visa: Customer only pays the bus ticket (1,400,000 VND).
+  * For E-visa packages: Customer pays both the bus ticket and the E-visa fee.
+  * If E-visa is required: Request the customer to send a clear passport photo and a portrait photo.
+  * Children & No-bus rules:
+    - Children under 9 years old (trẻ em < 9 tuổi): Free bus ticket (nằm chung cabin với bố mẹ). They only pay the visa portion.
+    - Visa-only (no bus) price for Russia, Ukraine, Kyrgyzstan, Kazakhstan, Uzbekistan, Tajikistan, Belarus, and other CIS: 2,000,000 VND (90D visa).
+    - Visa-only (no bus) price for others: Package price - 1,400,000 VND.
+
+Step 4: Receipt Stamping & Confirmation (Đóng dấu Receipt)
+- Once payment is confirmed, send a final confirmation message.
+- The operator must print/screenshot the payment receipt, stamp it with the official "Easy Trip & Visa Co. Ltd" company stamp (đóng dấu mộc đỏ công ty), photograph it, and send it to the customer.
+
+Step 5: E-visa Submission & Code Sharing (Nộp hồ sơ & Gửi mã Zalo)
+- The operator manually registers the customer's E-visa on the public service portal of the Ministry of Public Safety (Cổng dịch vụ công Bộ Công An) and pays the fee.
+- Once submitted, copy the E-visa application code.
+- Send this code to the Zalo group for Mr. Luân so he can push and approve the visa on time.
+- Timeline logic:
+  * Customer boards the bus on the evening of Day X (e.g., departure at 21:30).
+  * Customer arrives at the border at 6:00 - 7:00 AM on Day X+1.
+  * Expected re-entry into Vietnam is around 8:00 AM on Day X+1.
+  * The visa must be processed as an Urgent 4-hour E-visa.
+  * Approved visa must be returned to the customer between 8:00 AM and 11:30 AM on Day X+1.
+
+Step 6: Visa Return & Re-entry Instructions (Trả E-visa & Hướng dẫn cửa khẩu)
+- Once approved, send the E-visa PDF/link to the customer via private message.
+- Border-specific rules:
+  * At Moc Bai (Cambodia): Customer MUST print the E-visa on paper to present to border control.
+  * At Bo Y (Laos): No print required (digital copy on phone is accepted).
+- Departure warning:
+  * Remind the customer that the return bus departs at 13:00 (1:00 PM) sharp.
+  * If the immigration queue to enter Vietnam is too long, reassure the customer: "Yên tâm đi, chúng tôi đã dặn tài xế, xe buýt sẽ vẫn đợi các bạn." (Rest assured, we have instructed the driver; the bus will wait for you).
+
+Step 7: Evaluation & Review Request (Đánh giá Google Maps)
+- Once the customer is safely back on the bus, check the completeness of all operations.
+- If everything went smoothly and customer satisfaction is high, send the Google Maps review link (https://g.page/r/CREMymPQwmBuEBI/review) to request a positive review.

@@ -1,0 +1,17 @@
+{
+  "name": "lark-misa-sync-simulator",
+  "version": "1.0.0",
+  "description": "Lark Base to MISA AMIS AI Sync Simulator & Middleware Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "cors": "^2.8.5"
+  },
+  "keywords": ["lark", "bitable", "misa-amis", "sync", "accounting", "ai"],
+  "author": "EasyTrip",
+  "license": "MIT"
+}

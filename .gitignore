@@ -1,0 +1,30 @@
+# Python & Virtual Env
+venv/
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Sensitive Environment & Credentials
+.env
+*.env
+*.session
+*.session-journal
+
+# Large Media & Temporary Output
+fleet_video.mov
+downloads/
+fb_export/
+output_docx_contracts/
+output_ho_chieu_khach_hang/
+extracted_signatures/
+HD_Khach_le/
+zalo_images/
+temp_*.jpg
+
+# OS & IDE
+.vscode/
+.DS_Store
+*.log
+node_modules/

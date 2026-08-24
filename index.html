@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lark Base ↔ MISA AMIS AI Sync Simulator (Bản Chạy Thử & Mô Phỏng)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <!-- Font Awesome for sleek icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <header class="app-header">
+        <div class="brand-area">
+            <div class="brand-badge lark-badge">
+                <i class="fa-solid fa-feather"></i> Lark Base
+            </div>
+            <div class="sync-arrows">
+                <i class="fa-solid fa-arrow-right-arrow-left pulse-icon"></i>
+            </div>
+            <div class="brand-badge misa-badge">
+                <i class="fa-solid fa-calculator"></i> MISA AMIS
+            </div>
+            <span class="version-tag"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Sync Middleware (Simulator)</span>
+        </div>
+
+        <div class="header-controls">
+            <div class="mode-switch-wrapper">
+                <span class="mode-label"><i class="fa-solid fa-shield-halved"></i> Chế độ an toàn:</span>
+                <label class="toggle-switch" title="Bật để chỉ mô phỏng (Dry-run), không ghi sổ thật">
+                    <input type="checkbox" id="safeModeToggle" checked>
+                    <span class="slider round"></span>
+                </label>
+                <span id="safeModeStatus" class="safe-badge dry-run">Dry-Run (Nháp an toàn)</span>
+            </div>
+
+            <div class="header-actions">
+                <button class="btn btn-outline" id="btnResetData" title="Khôi phục dữ liệu mẫu">
+                    <i class="fa-solid fa-rotate-left"></i> Dữ liệu mẫu
+                </button>
+                <button class="btn btn-primary" id="btnSyncAllApproved">
+                    <i class="fa-solid fa-bolt"></i> Đồng bộ các đơn đã duyệt
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace Layout -->
+    <div class="main-layout">
+        <!-- Left Panel: Navigation & Fast Stats -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Góc nhìn hệ thống</div>
+                <nav class="side-nav">
+                    <button class="nav-item active" data-tab="lark-base">
+                        <i class="fa-solid fa-table-cells"></i>
+                        <span>1. Bảng Lark Base (CRM)</span>
+                        <span class="badge" id="badgeLarkCount">4</span>
+                    </button>
+                    <button class="nav-item" data-tab="ai-pipeline">
+                        <i class="fa-solid fa-brain"></i>
+                        <span>2. AI & Data Transformer</span>
+                        <span class="badge-dot active"></span>
+                    </button>
+                    <button class="nav-item" data-tab="misa-amis">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                        <span>3. MISA AMIS (Chứng từ)</span>
+                        <span class="badge success" id="badgeMisaCount">2</span>
+                    </button>
+                    <button class="nav-item" data-tab="lark-bot">
+                        <i class="fa-solid fa-robot"></i>
+                        <span>4. Lark Bot AI Assistant</span>
+                        <span class="badge pulse-badge" id="badgeBotNotify">Bot</span>
+                    </button>
+                    <button class="nav-item" data-tab="field-mapping">
+                        <i class="fa-solid fa-sliders"></i>
+                        <span>5. Cấu hình Mapping & API</span>
+                    </button>
+                </nav>
+            </div>
+
+            <!-- Live Stat Widget -->
+            <div class="stat-widget">
+                <div class="widget-title">Thống kê đồng bộ hôm nay</div>
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <span class="stat-num" id="statPending">2</span>
+                        <span class="stat-desc">Chờ duyệt/đồng bộ</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-num text-success" id="statSynced">2</span>
+                        <span class="stat-desc">Đã đồng bộ nháp</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-num text-primary" id="statRevenue">84.5M</span>
+                        <span class="stat-desc">Tổng giá trị (VNĐ)</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-num text-warning" id="statWarning">0</span>
+                        <span class="stat-desc">Cảnh báo MST/SKU</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Webhook Realtime Monitor -->
+            <div class="webhook-monitor">
+                <div class="monitor-header">
+                    <span><i class="fa-solid fa-satellite-dish"></i> Webhook Listener</span>
+                    <span class="status-indicator online">Listening</span>
+                </div>
+                <div class="monitor-log" id="webhookLogFeed">
+                    <div class="log-entry system"><span class="log-time">14:40:01</span> Webhook sẵn sàng nhận sự kiện Lark Base...</div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Center Workspace Content -->
+        <main class="content-area">
+
+            <!-- TAB 1: LARK BASE VIEW -->
+            <section id="tab-lark-base" class="tab-pane active">
+                <div class="pane-header">
+                    <div class="pane-title-group">
+                        <h2><i class="fa-solid fa-table-list text-primary"></i> Lark Base - Bảng Dữ Liệu Đơn Hàng & CRM</h2>
+                        <p class="pane-subtitle">Thao tác trực tiếp trên bảng như giao diện Lark Base. Thử đổi trạng thái thành <strong>"Đã duyệt"</strong> để kích hoạt Webhook tự động.</p>
+                    </div>
+                    <div class="pane-actions">
+                        <button class="btn btn-sm btn-outline" id="btnAddNewOrder">
+                            <i class="fa-solid fa-plus"></i> Thêm đơn hàng mẫu
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Lark Table Wrapper -->
+                <div class="table-container">
+                    <table class="lark-table" id="larkDataTable">
+                        <thead>
+                            <tr>
+                                <th width="100">Mã Đơn</th>
+                                <th width="190">Khách Hàng</th>
+                                <th width="130">Mã Số Thuế</th>
+                                <th width="200">Sản Phẩm & SL</th>
+                                <th width="120">Tổng Tiền (VNĐ)</th>
+                                <th width="130">Thanh Toán</th>
+                                <th width="140">Trạng Thái Đơn</th>
+                                <th width="150">Đồng Bộ MISA</th>
+                                <th width="130">Mã Chứng Từ</th>
+                                <th width="120">Thao Tác</th>
+                            </tr>
+                        </thead>
+                        <tbody id="larkTableBody">
+                            <!-- Injected by JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="workflow-tips">
+                    <div class="tip-card">
+                        <i class="fa-solid fa-circle-info text-primary"></i>
+                        <div>
+                            <strong>Cách thử nghiệm:</strong> Bạn có thể bấm vào dropdown <strong>Trạng Thái Đơn</strong> của bất kỳ đơn nào và chuyển sang <code>Đã duyệt</code>. Hệ thống sẽ tự động kích hoạt Webhook và AI Mapping ngay tức khắc!
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 2: AI PIPELINE & DATA TRANSFORMER -->
+            <section id="tab-ai-pipeline" class="tab-pane">
+                <div class="pane-header">
+                    <div class="pane-title-group">
+                        <h2><i class="fa-solid fa-microchip text-accent"></i> Quy Trình AI Chuẩn Hóa & Đối Soát Định Khoản</h2>
+                        <p class="pane-subtitle">Xem cách AI tự động phân tích dữ liệu thô từ Lark CRM, định khoản Nợ/Có (TK 131, 511, 33311), và tạo Payload chuẩn MISA AMIS.</p>
+                    </div>
+                    <div class="pane-actions">
+                        <button class="btn btn-sm btn-accent" id="btnRunAIEvaluation">
+                            <i class="fa-solid fa-play"></i> Chạy kiểm tra toàn bộ đơn
+                        </button>
+                    </div>
+                </div>
+
+                <div class="pipeline-grid">
+                    <!-- Step 1: Raw from Lark -->
+                    <div class="pipeline-step-card">
+                        <div class="step-header">
+                            <span class="step-badge">Bước 1</span>
+                            <h3><i class="fa-solid fa-download"></i> Lark Data Extractor</h3>
+                        </div>
+                        <div class="step-content">
+                            <p class="step-desc">Trích xuất bản ghi JSON từ Lark Bitable API.</p>
+                            <pre class="code-box" id="jsonLarkPreview">{ "select_order": "Hãy chọn một đơn ở bảng Lark Base" }</pre>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: AI Transformer -->
+                    <div class="pipeline-step-card highlight">
+                        <div class="step-header">
+                            <span class="step-badge ai">Bước 2: AI Normalizer</span>
+                            <h3><i class="fa-solid fa-wand-magic-sparkles"></i> AI Chuẩn Hóa & Định Khoản</h3>
+                        </div>
+                        <div class="step-content">
+                            <div class="ai-rules-list">
+                                <div class="ai-rule-item valid"><i class="fa-solid fa-circle-check"></i> Validate định dạng Mã số thuế (10 hoặc 13 số)</div>
+                                <div class="ai-rule-item valid"><i class="fa-solid fa-circle-check"></i> Chuẩn hóa SKU & Đơn vị tính tương ứng với MISA</div>
+                                <div class="ai-rule-item valid"><i class="fa-solid fa-circle-check"></i> Tự động định khoản: Nợ TK 131 / Có TK 5111, Có TK 33311</div>
+                                <div class="ai-rule-item valid"><i class="fa-solid fa-circle-check"></i> Sinh kèm Phiếu thu (Nợ TK 1111/1121 - Có TK 131) nếu đã thanh toán</div>
+                            </div>
+                            <div class="ai-decision-box" id="aiDecisionBox">
+                                <div class="decision-title"><i class="fa-solid fa-lightbulb"></i> Phân tích AI:</div>
+                                <div class="decision-text">Sẵn sàng phân tích đơn hàng được chọn...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: MISA Payload Output -->
+                    <div class="pipeline-step-card">
+                        <div class="step-header">
+                            <span class="step-badge misa">Bước 3</span>
+                            <h3><i class="fa-solid fa-upload"></i> MISA AMIS Open API Payload</h3>
+                        </div>
+                        <div class="step-content">
+                            <p class="step-desc">Payload chuẩn định dạng MISA AMIS ACT Service.</p>
+                            <pre class="code-box json-view" id="jsonMisaPayload">{ "status": "Waiting for pipeline trigger" }</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 3: MISA AMIS VIEW -->
+            <section id="tab-misa-amis" class="tab-pane">
+                <div class="pane-header">
+                    <div class="pane-title-group">
+                        <h2><i class="fa-solid fa-building-columns text-misa"></i> Mô Phỏng Giao Diện Chứng Từ MISA AMIS Kế Toán</h2>
+                        <p class="pane-subtitle">Chứng từ được đồng bộ từ Lark Base sang dưới dạng <strong>"Chưa ghi sổ (Draft)"</strong> - Kế toán an tâm kiểm tra và đối soát.</p>
+                    </div>
+                    <div class="pane-actions">
+                        <div class="misa-view-toggle">
+                            <button class="btn btn-sm btn-tab active" data-misa-tab="sa-vouchers"><i class="fa-solid fa-file-invoice"></i> Chứng từ bán hàng</button>
+                            <button class="btn btn-sm btn-tab" data-misa-tab="ca-receipts"><i class="fa-solid fa-receipt"></i> Phiếu thu tiền</button>
+                            <button class="btn btn-sm btn-tab" data-misa-tab="customers"><i class="fa-solid fa-address-book"></i> Danh mục khách hàng</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sub-tab 1: Sales Vouchers -->
+                <div class="misa-sub-pane active" id="misa-sa-vouchers">
+                    <div class="misa-banner-notice">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Các chứng từ dưới đây được tạo tự động bởi AI Middleware. Trạng thái mặc định: <strong>Chưa ghi sổ (Tạm lưu)</strong> giúp an toàn 100% cho sổ cái. Kế toán viên có thể xuất hóa đơn điện tử trực tiếp trên MISA.</span>
+                    </div>
+
+                    <div class="table-container">
+                        <table class="misa-table" id="misaVoucherTable">
+                            <thead>
+                                <tr>
+                                    <th>Số Chứng Từ</th>
+                                    <th>Ngày CT</th>
+                                    <th>Mã Đối Tượng</th>
+                                    <th>Tên Khách Hàng</th>
+                                    <th>Diễn Giải</th>
+                                    <th>Tổng Tiền</th>
+                                    <th>Tiền Thuế</th>
+                                    <th>Trạng Thái</th>
+                                    <th>Nguồn Dữ Liệu</th>
+                                    <th>Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="misaVoucherBody">
+                                <!-- Injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Sub-tab 2: Cash Receipts -->
+                <div class="misa-sub-pane" id="misa-ca-receipts">
+                    <div class="table-container">
+                        <table class="misa-table" id="misaReceiptTable">
+                            <thead>
+                                <tr>
+                                    <th>Số Phiếu Thu</th>
+                                    <th>Ngày Thu</th>
+                                    <th>Người Nộp</th>
+                                    <th>Lý Do Thu</th>
+                                    <th>Số Tiền (VNĐ)</th>
+                                    <th>Tài Khoản Nợ/Có</th>
+                                    <th>Kèm Chứng Từ BH</th>
+                                    <th>Trạng Thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="misaReceiptBody">
+                                <!-- Injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Sub-tab 3: Customers Directory -->
+                <div class="misa-sub-pane" id="misa-customers">
+                    <div class="table-container">
+                        <table class="misa-table" id="misaCustomerTable">
+                            <thead>
+                                <tr>
+                                    <th>Mã Khách Hàng</th>
+                                    <th>Tên Công Ty / Cá Nhân</th>
+                                    <th>Mã Số Thuế</th>
+                                    <th>Địa Chỉ</th>
+                                    <th>Số Điện Thoại</th>
+                                    <th>Nhóm Khách Hàng</th>
+                                    <th>Trạng Thái</th>
+                                </tr>
+                            </thead>
+                            <tbody id="misaCustomerBody">
+                                <!-- Injected by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 4: LARK BOT AI ASSISTANT -->
+            <section id="tab-lark-bot" class="tab-pane">
+                <div class="pane-header">
+                    <div class="pane-title-group">
+                        <h2><i class="fa-solid fa-comments text-accent"></i> Lark Chatbot AI Assistant (Tương Tác & Ra Lệnh)</h2>
+                        <p class="pane-subtitle">Trò chuyện với Bot trên Lark bằng ngôn ngữ tự nhiên để ra lệnh đồng bộ, kiểm tra đơn lỗi, hoặc nhận thẻ thông báo kết quả tức thì.</p>
+                    </div>
+                    <div class="pane-actions">
+                        <button class="btn btn-sm btn-outline" id="btnClearChat">
+                            <i class="fa-solid fa-trash-can"></i> Xóa lịch sử chat
+                        </button>
+                    </div>
+                </div>
+
+                <div class="bot-layout">
+                    <!-- Chat feed -->
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages">
+                            <div class="chat-bubble bot">
+                                <div class="bot-avatar"><i class="fa-solid fa-robot"></i></div>
+                                <div class="bubble-content">
+                                    <div class="bot-name">MISA AI Sync Bot <span class="time-stamp">14:35</span></div>
+                                    <p>Xin chào Quản trị viên! Tôi là <strong>MISA AI Sync Assistant</strong>. Tôi có thể giúp bạn:</p>
+                                    <ul class="bot-feature-list">
+                                        <li>⚡ Tự động bắt sự kiện và đồng bộ khi Lark Base có đơn mới.</li>
+                                        <li>🔍 Kiểm tra và đối soát các đơn hàng chưa đồng bộ.</li>
+                                        <li>📝 Chạy thử nghiệm (Dry-run) và kiểm tra lỗi Mã số thuế/Mã hàng.</li>
+                                    </ul>
+                                    <p class="prompt-hint">💡 <em>Gợi ý: Hãy thử bấm vào các câu lệnh mẫu bên dưới hoặc gõ trực tiếp câu hỏi nhé!</em></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Quick Action Chips -->
+                        <div class="quick-prompts">
+                            <button class="chip-btn" data-prompt="Đồng bộ các đơn hàng đã duyệt hôm nay sang Misa">
+                                <i class="fa-solid fa-bolt"></i> Đồng bộ đơn hôm nay
+                            </button>
+                            <button class="chip-btn" data-prompt="Chạy thử nghiệm (Dry-Run) kiểm tra các đơn hàng">
+                                <i class="fa-solid fa-flask"></i> Chạy kiểm tra Dry-Run
+                            </button>
+                            <button class="chip-btn" data-prompt="Kiểm tra xem có đơn nào bị lỗi mã số thuế không?">
+                                <i class="fa-solid fa-triangle-exclamation"></i> Kiểm tra đơn lỗi MST
+                            </button>
+                            <button class="chip-btn" data-prompt="Tạo chứng từ cho đơn DH-2026-004">
+                                <i class="fa-solid fa-file-circle-plus"></i> Đồng bộ đơn DH-2026-004
+                            </button>
+                        </div>
+
+                        <!-- Chat Input Bar -->
+                        <div class="chat-input-area">
+                            <input type="text" id="chatInput" placeholder="Nhập câu lệnh cho Bot (ví dụ: Đồng bộ đơn hàng hôm nay sang Misa)..." autocomplete="off">
+                            <button class="btn btn-primary" id="btnSendChat">
+                                <i class="fa-solid fa-paper-plane"></i> Gửi
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Bot Info Sidebar -->
+                    <div class="bot-info-card">
+                        <div class="bot-profile">
+                            <div class="avatar-large"><i class="fa-solid fa-robot"></i></div>
+                            <h3>MISA AI Assistant</h3>
+                            <span class="bot-badge-tag"><i class="fa-solid fa-circle text-success"></i> Đang hoạt động 24/7</span>
+                        </div>
+                        <div class="bot-specs">
+                            <div class="spec-item">
+                                <span class="spec-label">Lark App:</span>
+                                <span class="spec-value">MISA AMIS Integration</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Cơ chế:</span>
+                                <span class="spec-value">Webhook + Natural Language NLP</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">Mục tiêu:</span>
+                                <span class="spec-value">Khách hàng, Đơn BH, Phiếu thu</span>
+                            </div>
+                            <div class="spec-item">
+                                <span class="spec-label">MISA Mode:</span>
+                                <span class="spec-value text-accent font-semibold">Chưa ghi sổ (Tạm lưu)</span>
+                            </div>
+                        </div>
+
+                        <div class="sample-cards-preview">
+                            <div class="preview-title">Ví dụ thông báo gửi qua Lark:</div>
+                            <div class="lark-mock-card success">
+                                <div class="card-header"><i class="fa-solid fa-circle-check"></i> ĐỒNG BỘ THÀNH CÔNG</div>
+                                <div class="card-body">
+                                    <p><strong>Mã Đơn:</strong> DH-2026-001</p>
+                                    <p><strong>Khách Hàng:</strong> Công ty TNHH Giải Pháp Công Nghệ Alpha</p>
+                                    <p><strong>Số Chứng Từ MISA:</strong> <span class="badge badge-sm">BH00892</span></p>
+                                    <p><strong>Tổng tiền:</strong> 35,200,000 đ (Đã tạo phiếu thu)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 5: FIELD MAPPING CONFIG -->
+            <section id="tab-field-mapping" class="tab-pane">
+                <div class="pane-header">
+                    <div class="pane-title-group">
+                        <h2><i class="fa-solid fa-sliders text-primary"></i> Cấu Hình Mapping Trường & Kết Nối API</h2>
+                        <p class="pane-subtitle">Tùy biến liên kết giữa cột dữ liệu trên Lark Base và các trường nghiệp vụ của MISA AMIS Kế toán.</p>
+                    </div>
+                    <div class="pane-actions">
+                        <button class="btn btn-sm btn-primary" id="btnSaveMapping">
+                            <i class="fa-solid fa-floppy-disk"></i> Lưu cấu hình
+                        </button>
+                    </div>
+                </div>
+
+                <div class="config-grid">
+                    <!-- Column Mapping Table -->
+                    <div class="config-card">
+                        <div class="card-head">
+                            <h3><i class="fa-solid fa-arrows-split-up-and-left"></i> Bảng Ánh Xạ Trường Dữ Liệu (Field Mapping)</h3>
+                        </div>
+                        <div class="table-container">
+                            <table class="config-table">
+                                <thead>
+                                    <tr>
+                                        <th>Cột Lark Base CRM</th>
+                                        <th>Kiểu Dữ Liệu</th>
+                                        <th>Trường MISA AMIS Tương Ứng</th>
+                                        <th>Ghi Chú Hạch Toán</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><code>Mã Đơn Hàng</code></td>
+                                        <td>Text</td>
+                                        <td><code>sa_voucher.order_number</code> / <code>ref_no</code></td>
+                                        <td>Số đơn đặt hàng / Tham chiếu</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>Tên Khách Hàng</code></td>
+                                        <td>Text / Link</td>
+                                        <td><code>account_object.account_object_name</code></td>
+                                        <td>Tên công ty / Người mua</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>Mã Số Thuế</code></td>
+                                        <td>Text</td>
+                                        <td><code>account_object.tax_code</code></td>
+                                        <td>Dùng để tìm hoặc tạo mới khách hàng</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>Chi Tiết Mặt Hàng</code></td>
+                                        <td>Sub-table / Multi-select</td>
+                                        <td><code>sa_voucher_detail.inventory_item_code</code></td>
+                                        <td>Mã hàng hóa, ĐVT, Số lượng, Đơn giá</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>Thuế Suất GTGT</code></td>
+                                        <td>Number / Select</td>
+                                        <td><code>sa_voucher_detail.vat_rate</code></td>
+                                        <td>Tài khoản thuế Có TK 33311 (8%, 10%)</td>
+                                    </tr>
+                                    <tr>
+                                        <td><code>Trạng Thái Thanh Toán</code></td>
+                                        <td>Single Select</td>
+                                        <td><code>ca_receipt</code> / <code>ba_deposit</code></td>
+                                        <td>Tự sinh phiếu thu khi đã thanh toán</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Connection Credentials -->
+                    <div class="config-card">
+                        <div class="card-head">
+                            <h3><i class="fa-solid fa-key"></i> Thông Tin Kết Nối API (MISA & Lark)</h3>
+                        </div>
+                        <div class="form-group">
+                            <label>MISA Open Platform App ID:</label>
+                            <input type="text" class="form-control" value="misa_app_amis_prod_89921" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>MISA Secret Key / Access Token:</label>
+                            <input type="password" class="form-control" value="••••••••••••••••••••••••••••" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Mã Công Ty / Chi Nhánh MISA:</label>
+                            <input type="text" class="form-control" value="CTY_CONG_NGHE_VIET_NAM_CN1" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Lark App ID / App Secret:</label>
+                            <input type="text" class="form-control" value="cli_a728198bbfa0900e" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Trạng thái MISA khi tạo chứng từ:</label>
+                            <select class="form-control" id="misaPostStateSelect">
+                                <option value="unposted" selected>Tạm lưu / Chưa ghi sổ (Khuyên dùng - An toàn 100%)</option>
+                                <option value="posted">Ghi sổ trực tiếp</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Modal: Voucher Detail Inspection -->
+    <div class="modal-overlay" id="voucherModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-file-lines text-primary"></i> Chi Tiết Chứng Từ Bán Hàng MISA AMIS</h3>
+                <button class="btn-close" id="btnCloseModal">&times;</button>
+            </div>
+            <div class="modal-body" id="modalVoucherContent">
+                <!-- Injected by JS -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline" id="btnModalClose">Đóng</button>
+                <button class="btn btn-primary" id="btnModalPost">
+                    <i class="fa-solid fa-check"></i> Thử nghiệm "Ghi sổ" chứng từ này
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

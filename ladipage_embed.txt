@@ -1,0 +1,508 @@
+<!-- EASYTRIP CHATBOT WIDGET PREMIUM -->
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+
+  /* Bọc tất cả trong ID riêng để tuyệt đối không bị Ladipage làm xấu */
+  #et-chat-widget * {
+    box-sizing: border-box !important;
+    font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif !important;
+    margin: 0;
+    padding: 0;
+    letter-spacing: normal !important;
+  }
+
+  #et-chat-widget {
+    --et-primary: #3b82f6; /* Xanh dương đậm */
+    --et-secondary: #8b5cf6; /* Tím hiện đại */
+    --et-gradient: linear-gradient(135deg, var(--et-primary) 0%, var(--et-secondary) 100%);
+    --et-bg: #ffffff;
+    --et-text: #1e293b;
+    --et-text-muted: #64748b;
+    --et-shadow: 0 20px 40px -10px rgba(0,0,0,0.15), 0 0 20px rgba(0,0,0,0.05);
+  }
+
+  /* Nút Bong Bóng Dưới Góc */
+  #et-toggle-btn {
+    position: fixed !important;
+    bottom: 30px !important;
+    right: 30px !important;
+    width: 64px !important;
+    height: 64px !important;
+    border-radius: 50% !important;
+    background: var(--et-gradient) !important;
+    border: none !important;
+    box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.5) !important;
+    cursor: pointer !important;
+    z-index: 2147483647 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+    outline: none !important;
+  }
+
+  #et-toggle-btn:hover {
+    transform: translateY(-5px) scale(1.05) !important;
+    box-shadow: 0 15px 35px -5px rgba(59, 130, 246, 0.6) !important;
+  }
+
+  #et-toggle-btn svg {
+    width: 32px !important;
+    height: 32px !important;
+    fill: white !important;
+    transition: all 0.3s ease !important;
+  }
+
+  /* Hiệu ứng Ripple (sóng âm tỏa ra) */
+  #et-toggle-btn::after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: var(--et-gradient);
+    z-index: -1;
+    animation: et-ripple 2s infinite ease-out;
+  }
+
+  @keyframes et-ripple {
+    0% { transform: scale(1); opacity: 0.8; }
+    100% { transform: scale(1.8); opacity: 0; }
+  }
+
+  /* Khung Chat (Máy tính) */
+  #et-chat-box {
+    position: fixed !important;
+    bottom: 110px !important;
+    right: 30px !important;
+    width: 380px !important;
+    height: 650px !important;
+    max-height: calc(100vh - 140px) !important;
+    background: var(--et-bg) !important;
+    border-radius: 24px !important;
+    box-shadow: var(--et-shadow) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
+    z-index: 2147483646 !important;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(40px) scale(0.95);
+    transform-origin: bottom right;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    border: 1px solid rgba(0,0,0,0.05) !important;
+  }
+
+  #et-chat-box.et-active {
+    opacity: 1 !important;
+    pointer-events: all !important;
+    transform: translateY(0) scale(1) !important;
+  }
+
+  /* Giao diện Điện Thoại (Bao phủ màn hình) */
+  @media (max-width: 768px) {
+    #et-chat-box {
+      bottom: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      max-height: 100vh !important;
+      border-radius: 0 !important;
+      transform: translateY(100%);
+      transform-origin: center;
+    }
+    #et-chat-box.et-active {
+      transform: translateY(0) !important;
+    }
+    #et-toggle-btn {
+      bottom: 20px !important;
+      right: 20px !important;
+    }
+  }
+
+  /* Phần đầu khung chat (Header) */
+  #et-header {
+    background: var(--et-gradient) !important;
+    padding: 24px 20px !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 16px !important;
+    color: white !important;
+    position: relative !important;
+    border-bottom-left-radius: 20px !important;
+    border-bottom-right-radius: 20px !important;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05) !important;
+  }
+
+  .et-avatar {
+    width: 52px !important;
+    height: 52px !important;
+    background: rgba(255,255,255,0.2) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    backdrop-filter: blur(5px) !important;
+    border: 2px solid rgba(255,255,255,0.4) !important;
+  }
+
+  .et-avatar svg {
+    width: 28px !important;
+    height: 28px !important;
+    fill: white !important;
+  }
+
+  .et-header-info {
+    flex: 1 !important;
+  }
+
+  .et-header-info h2 {
+    font-size: 1.25rem !important;
+    font-weight: 600 !important;
+    margin-bottom: 4px !important;
+    color: white !important;
+    letter-spacing: 0.5px !important;
+    line-height: 1.2 !important;
+  }
+
+  .et-header-info p {
+    font-size: 0.85rem !important;
+    font-weight: 400 !important;
+    opacity: 0.9 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    margin: 0 !important;
+  }
+
+  .et-dot {
+    width: 8px !important;
+    height: 8px !important;
+    background: #10b981 !important; 
+    border-radius: 50% !important;
+    box-shadow: 0 0 8px #10b981 !important;
+    animation: et-pulse 2s infinite !important;
+  }
+
+  @keyframes et-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+
+  #et-close-btn {
+    background: rgba(255,255,255,0.15) !important;
+    border: none !important;
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    transition: background 0.2s !important;
+    padding: 0 !important;
+  }
+  
+  #et-close-btn:hover { background: rgba(255,255,255,0.3) !important; }
+  #et-close-btn svg { width: 14px !important; height: 14px !important; fill: white !important; }
+
+  /* Khu vực tin nhắn */
+  #et-body {
+    flex: 1 !important;
+    padding: 24px 20px !important;
+    overflow-y: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 20px !important;
+    background: #f8fafc !important;
+  }
+
+  #et-body::-webkit-scrollbar { width: 6px !important; }
+  #et-body::-webkit-scrollbar-track { background: transparent !important; }
+  #et-body::-webkit-scrollbar-thumb { background: #cbd5e1 !important; border-radius: 10px !important; }
+
+  .et-msg {
+    display: flex !important;
+    max-width: 88% !important;
+    animation: et-slideUp 0.4s ease forwards !important;
+  }
+
+  @keyframes et-slideUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .et-bot { align-self: flex-start !important; }
+  .et-user { align-self: flex-end !important; flex-direction: row-reverse !important; }
+
+  .et-bubble {
+    padding: 14px 18px !important;
+    border-radius: 20px !important;
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.02) !important;
+    word-wrap: break-word !important;
+  }
+
+  .et-bot .et-bubble {
+    background: white !important;
+    color: var(--et-text) !important;
+    border-bottom-left-radius: 4px !important;
+    border: 1px solid rgba(0,0,0,0.03) !important;
+  }
+
+  .et-user .et-bubble {
+    background: var(--et-primary) !important;
+    color: white !important;
+    border-bottom-right-radius: 4px !important;
+  }
+
+  /* Khung nhập tin nhắn */
+  #et-footer {
+    padding: 16px 20px 24px !important;
+    background: white !important;
+    display: flex !important;
+    gap: 12px !important;
+    border-top: 1px solid rgba(0,0,0,0.05) !important;
+  }
+
+  #et-input {
+    flex: 1 !important;
+    padding: 14px 20px !important;
+    border: 1px solid #e2e8f0 !important;
+    border-radius: 30px !important;
+    font-size: 0.95rem !important;
+    background: #f1f5f9 !important;
+    outline: none !important;
+    transition: all 0.3s ease !important;
+    color: var(--et-text) !important;
+  }
+
+  #et-input:focus {
+    background: white !important;
+    border-color: var(--et-primary) !important;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1) !important;
+  }
+
+  #et-send {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+    background: var(--et-gradient) !important;
+    border: none !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    cursor: pointer !important;
+    box-shadow: 0 4px 10px rgba(59, 130, 246, 0.3) !important;
+    transition: transform 0.2s !important;
+    padding: 0 !important;
+  }
+
+  #et-send:hover { transform: scale(1.05) !important; }
+  #et-send svg { width: 22px !important; height: 22px !important; fill: none !important; stroke: white !important; stroke-width: 2 !important; stroke-linecap: round !important; stroke-linejoin: round !important; }
+
+  /* Hoạt ảnh đang gõ chữ... */
+  .et-typing { display: flex !important; gap: 5px !important; padding: 6px 4px !important; }
+  .et-typing span {
+    width: 8px !important; height: 8px !important; background: var(--et-text-muted) !important; border-radius: 50% !important;
+    animation: et-bounce 1.4s infinite ease-in-out both !important;
+  }
+  .et-typing span:nth-child(1) { animation-delay: -0.32s !important; }
+  .et-typing span:nth-child(2) { animation-delay: -0.16s !important; }
+  @keyframes et-bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+</style>
+
+<div id="et-chat-widget">
+  <div id="et-chat-box">
+    <div id="et-header">
+      <div class="et-avatar">
+        <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      </div>
+      <div class="et-header-info">
+        <h2>Trợ Lý Visa</h2>
+        <p><span class="et-dot"></span> Sẵn sàng hỗ trợ</p>
+      </div>
+      <button id="et-close-btn">
+        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+      </button>
+    </div>
+
+    <div id="et-body">
+      <div class="et-msg et-bot">
+        <div class="et-bubble">Xin chào! 👋 Mình là chuyên viên tư vấn Visa của EasyTrip. Mình có thể giúp gì cho chuyến đi sắp tới của bạn?</div>
+      </div>
+    </div>
+
+    <div id="et-footer">
+      <input type="text" id="et-input" placeholder="Nhắn tin cho chúng tôi..." autocomplete="off">
+      <button id="et-send">
+        <svg viewBox="0 0 24 24"><path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <button id="et-toggle-btn">
+    <svg id="et-icon-chat" viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z"/></svg>
+    <svg id="et-icon-close" viewBox="0 0 24 24" style="display:none;"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+  </button>
+</div>
+
+<script>
+(function() {
+  const API_URL = "https://chatbot-easytrip.onrender.com/chat";
+  
+  const toggleBtn = document.getElementById('et-toggle-btn');
+  const chatBox = document.getElementById('et-chat-box');
+  const closeBtn = document.getElementById('et-close-btn');
+  const inputEl = document.getElementById('et-input');
+  const sendBtn = document.getElementById('et-send');
+  const bodyEl = document.getElementById('et-body');
+  
+  const iconChat = document.getElementById('et-icon-chat');
+  const iconClose = document.getElementById('et-icon-close');
+
+  // Get or generate a unique user_id for this visitor
+  let userId = localStorage.getItem('et_visitor_id');
+  if (!userId) {
+    userId = 'visitor_' + Math.random().toString(36).substring(2, 11) + '_' + Date.now();
+    localStorage.setItem('et_visitor_id', userId);
+  }
+
+  let history = [];
+  let isOpen = false;
+  let isWaitingForResponse = false;
+  let lastHistoryLength = 0;
+
+  function toggleChat() {
+    isOpen = !isOpen;
+    if (isOpen) {
+      chatBox.classList.add('et-active');
+      iconChat.style.display = 'none';
+      iconClose.style.display = 'block';
+      setTimeout(() => inputEl.focus(), 300);
+    } else {
+      chatBox.classList.remove('et-active');
+      iconChat.style.display = 'block';
+      iconClose.style.display = 'none';
+    }
+  }
+
+  toggleBtn.addEventListener('click', toggleChat);
+  closeBtn.addEventListener('click', () => { if(isOpen) toggleChat(); });
+
+  function formatText(text) {
+    if (!text) return '';
+    // Replace markdown image ![alt](url) with <img> tag
+    let formatted = text.replace(/!\[(.*?)\]\((.*?)\)/g, '<img src="$2" alt="$1" class="chat-image" style="max-width: 100%; border-radius: 8px; margin-top: 10px; display: block;">');
+    // Replace markdown link [text](url) with <a> tag
+    formatted = formatted.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" target="_blank" style="color: #3b82f6; text-decoration: underline;">$1</a>');
+    // Replace markdown bold **text** with <strong>text</strong>
+    formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    // Replace markdown italic *text* with <em>text</em>
+    formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+    // Replace newlines with <br>
+    return formatted.replace(/\n/g, '<br>');
+  }
+
+  function renderMsg(txt, type) {
+    const d = document.createElement('div');
+    d.className = `et-msg et-${type}`;
+    d.innerHTML = `<div class="et-bubble">${formatText(txt)}</div>`;
+    bodyEl.appendChild(d);
+    bodyEl.scrollTop = bodyEl.scrollHeight;
+  }
+
+  function renderHistory(historyList) {
+    bodyEl.innerHTML = '';
+    
+    // Always render greeting first
+    renderMsg("Xin chào! 👋 Mình là chuyên viên tư vấn Visa của EasyTrip. Mình có thể giúp gì cho chuyến đi sắp tới của bạn?", 'bot');
+    
+    if (historyList && historyList.length > 0) {
+      historyList.forEach(msg => {
+        const type = msg.role === 'user' ? 'user' : 'bot';
+        renderMsg(msg.content, type);
+      });
+    }
+  }
+
+  function showTyping() {
+    const d = document.createElement('div');
+    d.className = 'et-msg et-bot';
+    d.id = 'et-typing';
+    d.innerHTML = '<div class="et-bubble et-typing-box"><div class="et-typing"><span></span><span></span><span></span></div></div>';
+    bodyEl.appendChild(d);
+    bodyEl.scrollTop = bodyEl.scrollHeight;
+  }
+
+  function hideTyping() {
+    const el = document.getElementById('et-typing');
+    if(el) el.remove();
+  }
+
+  async function sendMsg() {
+    if (isWaitingForResponse) return;
+    const txt = inputEl.value.trim();
+    if(!txt) return;
+
+    renderMsg(txt, 'user');
+    inputEl.value = '';
+    history.push({ role: 'user', content: txt });
+    showTyping();
+    isWaitingForResponse = true;
+
+    try {
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: userId, messages: history })
+      });
+
+      if(!res.ok) throw new Error('Network Err');
+      
+      const data = await res.json();
+      hideTyping();
+      renderMsg(data.reply, 'bot');
+      history.push({ role: 'model', content: data.reply });
+      lastHistoryLength += 2;
+    } catch (e) {
+      hideTyping();
+      renderMsg('Đường truyền chậm, xin vui lòng thử lại.', 'bot');
+      history.pop();
+    } finally {
+      isWaitingForResponse = false;
+    }
+  }
+
+  async function pollHistory() {
+    if (isWaitingForResponse) return;
+    
+    try {
+      const res = await fetch(`https://chatbot-easytrip.onrender.com/chat/${userId}/history`);
+      if (!res.ok) return;
+      
+      const data = await res.json();
+      if (data.success && data.history) {
+        if (data.history.length !== lastHistoryLength) {
+          lastHistoryLength = data.history.length;
+          
+          // Sync history array
+          history = [];
+          data.history.forEach(msg => {
+            history.push({ role: msg.role === 'user' ? 'user' : 'model', content: msg.content });
+          });
+          
+          renderHistory(data.history);
+        }
+      }
+    } catch (e) {
+      console.error('Error polling history:', e);
+    }
+  }
+
+  sendBtn.addEventListener('click', sendMsg);
+  inputEl.addEventListener('keypress', (e) => { if(e.key === 'Enter') sendMsg(); });
+
+  // Start polling
+  pollHistory();
+  setInterval(pollHistory, 3000);
+})();
+</script>

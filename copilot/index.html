@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Easy Trip & Visa - Co-Pilot Chat Studio</title>
+    <!-- Font chữ Outfit & Inter hiện đại -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css?v=2.3">
+</head>
+<body>
+    <!-- Nền sinh động Ambient -->
+    <div class="ambient-bg">
+        <div class="color-blob blob-1"></div>
+        <div class="color-blob blob-2"></div>
+        <div class="color-blob blob-3"></div>
+    </div>
+
+    <!-- Khung làm việc chính Dashboard -->
+    <div class="dashboard-wrapper">
+        <!-- Thanh đầu trang Header -->
+        <header class="dashboard-header">
+            <div class="header-logo">
+                <div class="brand-badge">HITL</div>
+                <div class="brand-names">
+                    <h1>Easy Trip & Visa</h1>
+                    <span>Hệ Thống Chat Đồng Hành & Huấn Luyện Bot Trực Tiếp</span>
+                </div>
+            </div>
+            
+            <!-- Chuyển Đổi Tab -->
+            <div class="dashboard-tabs">
+                <button class="tab-btn active" id="tab-btn-sandbox" onclick="switchTab('sandbox')">🧪 Sandbox Playground</button>
+                <button class="tab-btn" id="tab-btn-live" onclick="switchTab('live')">🌐 Live Channels Control</button>
+                <button class="tab-btn" id="tab-btn-ops" onclick="switchTab('ops')">📋 Quy Trình Vận Hành & Calculator</button>
+            </div>
+            
+            <!-- Chỉ số thời gian thực -->
+            <div class="analytics-bar">
+                <div class="stat-card">
+                    <span class="stat-label">Đã Duyệt (Approved)</span>
+                    <span class="stat-val" id="stat-approved">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Số Bài Học Đã Nhớ</span>
+                    <span class="stat-val" id="stat-learned">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Độ Tự Tin Trung Bình</span>
+                    <span class="stat-val text-cyan" id="stat-confidence">--%</span>
+                </div>
+                <div class="system-status">
+                    <span class="dot"></span>
+                    <span>Mô phỏng</span>
+                </div>
+                <div class="system-status sync-status offline" id="backend-sync-indicator" title="Nhấp để kiểm tra lại kết nối">
+                    <span class="dot-sync"></span>
+                    <span id="backend-sync-text">Backend Offline</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Thân Dashboard Chứa các Tab -->
+        <main class="dashboard-main-content">
+            
+            <!-- ========================================================== -->
+            <!-- TAB 1: SANDBOX PLAYGROUND (GIẢ LẬP NGOẠI TUYẾN) -->
+            <!-- ========================================================== -->
+            <div id="tab-sandbox" class="tab-panel active">
+                <div class="dashboard-body">
+                    
+                    <!-- CỘT TRÁI: GIẢ LẬP KHÁCH HÀNG (CUSTOMER SIMULATOR) -->
+                    <section class="panel-section customer-panel">
+                        <div class="panel-header">
+                            <div class="panel-icon">👤</div>
+                            <h3>Giao Diện Khách Hàng (Mô Phỏng)</h3>
+                        </div>
+                        
+                        <!-- Khung Điện thoại -->
+                        <div class="phone-frame">
+                            <div class="phone-screen">
+                                <!-- Header điện thoại -->
+                                <div class="phone-header">
+                                    <div class="phone-avatar-wrapper">
+                                        <div class="phone-avatar-pulse"></div>
+                                        <div class="phone-avatar">ET</div>
+                                    </div>
+                                    <div class="phone-header-info">
+                                        <h4>Easy Trip & Visa</h4>
+                                        <span class="phone-status"><span class="phone-dot"></span> Đang hoạt động</span>
+                                    </div>
+                                </div>
+
+                                <!-- Lịch sử Chat Khách hàng -->
+                                <div class="phone-chat-history" id="customer-chat-history">
+                                    <div class="phone-message bot">
+                                        <div class="phone-message-bubble">
+                                            Xin chào! Tôi là Trợ Lý AI của Easy Trip & Visa. 
+                                            Tôi có thể giúp gì cho bạn hôm nay? Vui lòng cho tôi biết quốc tịch của bạn để bắt đầu tư vấn nhé! 🇻🇳🌍
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Nhập tin nhắn Khách hàng -->
+                                <div class="phone-input-area">
+                                    <input type="text" id="customer-input" placeholder="Nhập tin nhắn với tư cách khách hàng..." autocomplete="off">
+                                    <button id="customer-send-btn" aria-label="Gửi">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Gợi ý câu hỏi nhanh cho khách hàng -->
+                        <div class="customer-suggested-queries">
+                            <span class="suggest-title">Nhấp nhanh để mô phỏng câu hỏi của khách hàng:</span>
+                            <div class="queries-grid">
+                                <button class="query-chip" data-text="Tôi là người Nga, tôi muốn đi visa run Lào từ Nha Trang.">🇷🇺 Đi Visa Run Lào (Người Nga)</button>
+                                <button class="query-chip" data-text="Lịch xe đi Campuchia (Mộc Bài) thế nào và giá bao nhiêu vậy?">🇰🇭 Xe đi Campuchia (Mộc Bài)</button>
+                                <button class="query-chip" data-text="Giá làm visa 90 ngày cho người Mỹ giá bao nhiêu ạ?">🇺🇸 E-visa 90 ngày (Người Mỹ)</button>
+                                <button class="query-chip" data-text="Tôi muốn thuê xe máy ở Nha Trang, thủ tục và giá như thế nào?">🛵 Thuê xe máy Nha Trang</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- CỘT PHẢI: BẢNG ĐIỀU KHIỂN CỦA BẠN (AGENT WORKSPACE & AI CO-PILOT) -->
+                    <section class="panel-section agent-panel">
+                        
+                        <!-- Giao diện Bảng Điều Khiển Live Chat -->
+                        <div class="workspace-card">
+                            <div class="panel-header">
+                                <div class="panel-icon">🧑‍💻</div>
+                                <h3>Bàn Làm Việc Của Agent (Bạn & Bot Co-Pilot)</h3>
+                            </div>
+
+                            <!-- Màn hình theo dõi cuộc chat thời gian thực -->
+                            <div class="agent-monitor-area" id="agent-monitor-area">
+                                <!-- Lịch sử Chat của Admin -->
+                                <div class="agent-chat-history" id="agent-chat-history">
+                                    <div class="agent-message system">
+                                        <span class="badge">Hệ Thống</span> Phiên làm việc bắt đầu. Bạn đang đồng hành cùng Bot AI.
+                                    </div>
+                                    <div class="agent-message bot">
+                                        <div class="sender-info">Bot AI:</div>
+                                        <div class="bubble">
+                                            Xin chào! Tôi là Trợ Lý AI của Easy Trip & Visa. 
+                                            Tôi có thể giúp gì cho bạn hôm nay? Vui lòng cho tôi biết quốc tịch của bạn để bắt đầu tư vấn nhé! 🇻🇳🌍
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Khu vực Can thiệp / Co-Pilot Draft Center -->
+                            <div class="copilot-draft-center" id="copilot-draft-center">
+                                <div class="copilot-card-header">
+                                    <div class="copilot-badge">🤖 CO-PILOT DRAFT</div>
+                                    <div class="confidence-container">
+                                        Độ tin cậy: <span id="copilot-confidence-badge" class="conf-high">--%</span>
+                                    </div>
+                                </div>
+
+                                <!-- Câu hỏi khách hàng vừa hỏi -->
+                                <div class="customer-question-preview">
+                                    <strong>Khách hàng vừa hỏi:</strong>
+                                    <p id="customer-question-text">Đang đợi tin nhắn mới từ khách hàng...</p>
+                                </div>
+
+                                <!-- Ô soạn thảo câu trả lời của Bot -->
+                                <div class="draft-editor-container">
+                                    <label for="draft-textarea">Dự thảo đề xuất từ Bot (Bạn có thể sửa trực tiếp vào đây):</label>
+                                    <textarea id="draft-textarea" rows="3" placeholder="Gợi ý câu trả lời từ Bot sẽ xuất hiện ở đây..."></textarea>
+                                </div>
+
+                                <!-- Các nút hành động để dạy Bot và phản hồi khách -->
+                                <div class="action-buttons-row">
+                                    <button id="btn-approve" class="btn btn-success" disabled>
+                                        <span class="btn-icon">✅</span> Duyệt & Gửi
+                                    </button>
+                                    <button id="btn-edit-send" class="btn btn-warning" disabled>
+                                        <span class="btn-icon">✍️</span> Sửa & Dạy Bot
+                                    </button>
+                                    <button id="btn-takeover" class="btn btn-primary" disabled>
+                                        <span class="btn-icon">🧑‍💻</span> Trực Tiếp Chat (Manual)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- BỘ NÃO HỌC TẬP CỦA BOT (AI LEARNING VECTOR HUB) -->
+                        <div class="brain-hub-card">
+                            <div class="panel-header">
+                                <div class="panel-icon">🧠</div>
+                                <h3>Bộ Não Tri Thức Của Bot (AI Learning Hub)</h3>
+                                <button id="btn-clear-brain" class="btn-link">Xoá toàn bộ bài học</button>
+                            </div>
+                            
+                            <p class="brain-desc">
+                                Những cuộc hội thoại được bạn chỉnh sửa hoặc trực tiếp tư vấn sẽ tự động chuyển thành bài học mới. 
+                                Bot sẽ sử dụng chúng để tư vấn chính xác 100% trong các lần sau!
+                            </p>
+
+                            <!-- Danh sách bài học của Bot -->
+                            <div class="brain-lessons-list" id="brain-lessons-list">
+                                <!-- Loaded dynamically -->
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+
+            <!-- ========================================================== -->
+            <!-- TAB 2: LIVE CHANNELS CONTROL (ĐIỀU KHIỂN HỆ THỐNG THỰC TẾ) -->
+            <!-- ========================================================== -->
+            <div id="tab-live" class="tab-panel">
+                <div class="dashboard-body live-grid">
+                    
+                    <!-- CỘT 1: DANH SÁCH PHIÊN CHAT (Live Channels List) -->
+                    <section class="panel-section channels-list-panel">
+                        <div class="panel-header">
+                            <div class="panel-icon">💬</div>
+                            <h3>Khách Hàng Đang Chat</h3>
+                        </div>
+                        <div class="channels-search-bar">
+                            <input type="text" id="channels-search-input" placeholder="Tìm kiếm khách hàng..." onkeyup="filterLiveSessions()">
+                        </div>
+                        <div class="channels-list" id="live-channels-list-container">
+                            <div class="no-channels">Đang quét danh sách hội thoại thực tế...</div>
+                        </div>
+                    </section>
+
+                    <!-- CỘT 2: CHI TIẾT HỘI THOẠI & CHAT TAY (Live Chat Window) -->
+                    <section class="panel-section live-chat-panel">
+                        <div class="panel-header live-chat-header-info">
+                            <div class="live-chat-client-info">
+                                <div class="platform-icon" id="live-chat-platform-icon">🧑‍💻</div>
+                                <h3 id="live-chat-client-name">Vui lòng chọn khách hàng</h3>
+                            </div>
+                            <div class="session-mode-indicator-wrap" id="session-mode-indicator-wrap" style="display: none;">
+                                <span>Chế độ Bot:</span>
+                                <select id="session-mode-select" onchange="changeSessionMode()">
+                                    <option value="auto">🟢 Tự Động (Auto)</option>
+                                    <option value="copilot">🟡 Co-Pilot (Nháp)</option>
+                                    <option value="manual">🔴 Tiếp Quản (Manual)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Khung chat tay của Agent -->
+                        <div class="live-chat-history-wrapper">
+                            <div class="live-chat-history" id="live-chat-history-container">
+                                <div class="no-active-chat">
+                                    <div class="chat-placeholder-icon">🧑‍💻</div>
+                                    <p>Chọn một khách hàng từ danh sách để bắt đầu theo dõi chat và tiếp quản hỗ trợ trực tiếp.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Nhập tin nhắn Agent gửi khách -->
+                        <div class="live-chat-input-area" id="live-chat-input-area-container" style="display: none;">
+                            <button class="attach-btn" onclick="document.getElementById('live-chat-file-input').click()" title="Gửi ảnh/file">📎</button>
+                            <input type="file" id="live-chat-file-input" style="display: none;" onchange="uploadLiveMedia(this)">
+                            <input type="text" id="live-chat-input" placeholder="Nhập tin nhắn gửi trực tiếp đến điện thoại khách hàng...">
+                            <button id="live-chat-send-btn" onclick="sendLiveManualMessage()">Gửi</button>
+                        </div>
+                    </section>
+
+                    <!-- CỘT 3: CO-PILOT DRAFT & HỌC TẬP THỰC TẾ -->
+                    <section class="panel-section live-copilot-panel">
+                        <!-- Trạm Nháp Thực Tế -->
+                        <div class="workspace-card live-copilot-card" id="live-copilot-draft-card" style="display: none;">
+                            <div class="panel-header">
+                                <div class="panel-icon">🤖</div>
+                                <h3>Dự Thảo Co-Pilot</h3>
+                            </div>
+                            <div class="copilot-draft-center">
+                                <div class="copilot-card-header">
+                                    <div class="copilot-badge">DỰ THẢO BOT AI</div>
+                                </div>
+                                <div class="draft-editor-container">
+                                    <textarea id="live-draft-textarea" rows="4" placeholder="Bot đang soạn tin nhắn nháp..."></textarea>
+                                </div>
+                                <div class="action-buttons-row">
+                                    <button class="btn btn-success" id="btn-live-approve" onclick="approveLiveDraft()">✅ Duyệt & Gửi</button>
+                                    <button class="btn btn-warning" id="btn-live-edit" onclick="editSendLiveDraft()">✍️ Sửa & Dạy</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- AI Learning Hub Thực Tế -->
+                        <div class="brain-hub-card live-brain-card">
+                            <div class="panel-header" style="display: flex; align-items: center; width: 100%;">
+                                <div class="panel-icon">🧠</div>
+                                <h3 style="margin: 0;">Bộ Não Tri Thức Hệ Thống</h3>
+                                <button id="btn-sync-excel" class="btn btn-warning" onclick="syncExcelMaster()" style="margin-left: auto; font-size: 0.75rem; padding: 6px 12px; border-radius: 6px; display: flex; align-items: center; gap: 4px; border: 1px solid rgba(251,191,36,0.3); background: rgba(251,191,36,0.1); color: #FBBF24; cursor: pointer; transition: all 0.2s;">
+                                    <span>🔄</span> Đồng bộ Excel Master
+                                </button>
+                            </div>
+                            <p class="brain-desc">Các bài học được huấn luyện thành công sẽ lưu tại đây và áp dụng ngay cho khách hàng tiếp theo.</p>
+                            <div class="brain-lessons-list" id="live-brain-lessons-container">
+                                <!-- Loaded dynamically from API -->
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+
+            <!-- ========================================================== -->
+            <!-- TAB 3: QUY TRÌNH VẬN HÀNH (OPERATIONS SOP & CALCULATOR) -->
+            <!-- ========================================================== -->
+            <div id="tab-ops" class="tab-panel">
+                <div class="dashboard-body ops-grid">
+                    <!-- COLUMN 1: INTERACTIVE CALCULATOR (Cột Trái) -->
+                    <section class="panel-section calculator-panel">
+                        <div class="panel-header">
+                            <div class="panel-icon">🧮</div>
+                            <h3>Bộ Tính Phí & Lộ Trình Tự Động</h3>
+                        </div>
+                        
+                        <div class="ops-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="ops-cust-name">Tên khách hàng</label>
+                                    <input type="text" id="ops-cust-name" placeholder="Ví dụ: John Doe" oninput="calculateOps()">
+                                </div>
+                                <div class="form-group">
+                                    <label for="ops-nationality">Quốc tịch</label>
+                                    <input type="text" id="ops-nationality" placeholder="Ví dụ: Russia, Egypt, US..." oninput="calculateOps()">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="ops-adults">Số lượng người lớn</label>
+                                    <input type="number" id="ops-adults" value="1" min="1" oninput="calculateOps()" style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--border-glass); border-radius: 8px; padding: 10px; color: var(--text-primary); outline: none;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="ops-children">Số lượng trẻ em dưới 9 tuổi</label>
+                                    <input type="number" id="ops-children" value="0" min="0" oninput="calculateOps()" style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--border-glass); border-radius: 8px; padding: 10px; color: var(--text-primary); outline: none;">
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="ops-city">Thành phố hiện tại</label>
+                                    <select id="ops-city" onchange="calculateOps()">
+                                        <option value="Nha Trang">Nha Trang</option>
+                                        <option value="Da Nang">Đà Nẵng</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ops-expiry">Ngày hết hạn Visa hiện tại</label>
+                                    <input type="date" id="ops-expiry" onchange="calculateOps()">
+                                    <div id="ops-date-warning" style="color: var(--warning); font-size: 0.75rem; margin-top: 4px; display: none; font-weight: 500;"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="ops-visa-type">Loại dịch vụ mong muốn</label>
+                                    <select id="ops-visa-type" onchange="onVisaTypeChange()">
+                                        <option value="visarun-laos-45d">Visa Run Lào - Miễn thị thực 45 ngày</option>
+                                        <option value="visarun-laos-90d">Visa Run Lào - E-Visa 90 ngày</option>
+                                        <option value="visarun-cambodia-45d">Visa Run Campuchia - Miễn thị thực 45 ngày</option>
+                                        <option value="visarun-cambodia-90d">Visa Run Campuchia - E-Visa 90 ngày</option>
+                                        <option value="ev-1h">E-Visa khẩn cấp 1 giờ</option>
+                                        <option value="ev-2h">E-Visa khẩn cấp 2 giờ</option>
+                                        <option value="ev-3h">E-Visa khẩn cấp 3 giờ</option>
+                                        <option value="ev-4h">E-Visa khẩn cấp 4 giờ</option>
+                                        <option value="ev-8h">E-Visa khẩn cấp 8 giờ (Trong ngày)</option>
+                                        <option value="ev-1d">E-Visa khẩn cấp 1 ngày</option>
+                                        <option value="ev-2d">E-Visa khẩn cấp 2 ngày</option>
+                                        <option value="ev-std">E-Visa tiêu chuẩn (3-5 ngày)</option>
+                                    </select>
+                                    <div id="ops-visa-warning" style="color: var(--danger); font-size: 0.75rem; margin-top: 4px; display: none; font-weight: 500;"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ops-entry-type">Loại nhập cảnh</label>
+                                    <select id="ops-entry-type" onchange="calculateOps()">
+                                        <option value="single">Single Entry (1 lần)</option>
+                                        <option value="multi">Multiple Entry (Nhiều lần - +1M VND)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="ops-transport">Sử dụng xe buýt</label>
+                                    <select id="ops-transport" onchange="calculateOps()" style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--border-glass); border-radius: 8px; padding: 10px; color: var(--text-primary); outline: none;">
+                                        <option value="yes">Có đi xe buýt</option>
+                                        <option value="no">Không sử dụng xe buýt (Chỉ làm visa)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ops-fasttrack">Dịch vụ Fast Track (Thông quan nhanh)</label>
+                                    <select id="ops-fasttrack" onchange="calculateOps()">
+                                        <option value="none">Không sử dụng</option>
+                                        <option value="SGN">Tân Sơn Nhất (SGN) / Nội Bài (HAN)</option>
+                                        <option value="DAD">Đà Nẵng (DAD)</option>
+                                        <option value="CXR">Cam Ranh (CXR)</option>
+                                        <option value="other">Các sân bay khác (PQC, VDO, HPH...)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group" style="display: flex; gap: 15px; align-items: center; height: 100%; padding-top: 10px; margin-bottom: 10px;">
+                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.8rem; color: var(--text-primary); font-weight: 500;">
+                                        <input type="checkbox" id="ops-loyalty" onchange="calculateOps()" style="width: 15px; height: 15px; cursor: pointer;"> Khách Loyalty / Đại lý
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.8rem; color: var(--text-primary); font-weight: 500;">
+                                        <input type="checkbox" id="ops-urgent-24h" onchange="calculateOps()" style="width: 15px; height: 15px; cursor: pointer;"> Đăng ký khẩn cấp &lt;24h
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Khung Tính Toán Khẩn Cấp (Hiện khi chọn dịch vụ E-visa khẩn cấp) -->
+                            <div class="emergency-calc-box" id="ops-emergency-box" style="background: rgba(244, 63, 94, 0.05); border: 1px solid rgba(244, 63, 94, 0.15); border-radius: 12px; padding: 12px; margin-top: 5px; display: none;">
+                                <h4 style="color: var(--danger); font-size: 0.85rem; margin-top: 0; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; font-weight: 600;">⚡ Tính Toán E-Visa Khẩn Cấp</h4>
+                                <div class="form-row">
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label for="ops-stamp-time">Thời điểm nhận dấu xuất cảnh / đăng ký</label>
+                                        <select id="ops-stamp-time" onchange="calculateOps()">
+                                            <option value="08:00">08:00 Sáng</option>
+                                            <option value="08:30">08:30 Sáng (Trễ nhất gói 4h sáng)</option>
+                                            <option value="09:00">09:00 Sáng (Trễ nhất gói 3h sáng)</option>
+                                            <option value="09:30">09:30 Sáng</option>
+                                            <option value="10:00">10:00 Sáng (Trễ nhất gói 2h sáng)</option>
+                                            <option value="10:30">10:30 Sáng</option>
+                                            <option value="11:00">11:00 Sáng (Trễ nhất gói 1h sáng)</option>
+                                            <option value="12:00">12:00 Trưa</option>
+                                            <option value="13:00">13:00 Chiều (Trễ nhất gói 4h chiều)</option>
+                                            <option value="13:30">13:30 Chiều</option>
+                                            <option value="14:00">14:00 Chiều (Trễ nhất gói 3h chiều)</option>
+                                            <option value="14:30">14:30 Chiều</option>
+                                            <option value="15:00">15:00 Chiều (Trễ nhất gói 2h chiều)</option>
+                                            <option value="15:30">15:30 Chiều</option>
+                                            <option value="16:00">16:00 Chiều (Trễ nhất gói 1h chiều)</option>
+                                            <option value="17:00">17:00 Chiều</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label for="ops-release-time">Khung giờ trả kết quả mong muốn</label>
+                                        <select id="ops-release-time" onchange="calculateOps()">
+                                            <option value="11:30">11:30 Sáng (T2 - T6)</option>
+                                            <option value="17:30">17:30 Chiều (T2 - T6)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div id="ops-emergency-warning" style="color: #FB7185; font-size: 0.75rem; margin-top: 6px; font-weight: 500;"></div>
+                            </div>
+                        </div>
+
+                        <!-- BUS LOGISTICS INFO (Thay thế cho Sơ đồ xe buýt) -->
+                        <div class="bus-logistics-card" style="background: rgba(30, 41, 59, 0.4); border: 1px solid var(--border-glass); border-radius: 12px; padding: 15px; margin-bottom: 20px;">
+                            <div class="bus-logistics-header" style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                                <span style="font-size: 1.1rem;">🚌</span>
+                                <h4 style="margin: 0; font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Thông Tin Xe Buýt & Điều Phối Lộ Trình</h4>
+                            </div>
+                            <div class="bus-logistics-content" style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.45;">
+                                <p style="margin: 0 0 6px 0;">⚠️ <strong>Quy định về Sơ đồ ghế:</strong> Sơ đồ ghế thực tế được cập nhật động và cung cấp trực tiếp từ các nhà xe. Nhân viên <strong>không tự ý thỏa thuận trước</strong> với khách mà cần đợi sơ đồ cập nhật từ phía nhà xe để chuyển tiếp cho khách hàng.</p>
+                                <p style="margin: 0 0 6px 0;">📍 <strong>Lộ trình đi Lào (Bo Y):</strong> Khởi hành hàng ngày lúc <strong>21:30</strong> tại 40 Hòn Chồng (Nha Trang). Thích hợp cho khách Nga, Hàn, ASEAN được miễn visa Lào.</p>
+                                <p style="margin: 0;">📍 <strong>Lộ trình đi Campuchia (Mộc Bài):</strong> Chỉ chạy tối <strong>Thứ 3, Thứ 5, Chủ Nhật</strong> lúc 21:30. Yêu cầu ngày hết hạn visa của khách phải rơi vào Thứ 2, Thứ 4 hoặc Thứ 6.</p>
+                            </div>
+                        </div>
+
+                        <!-- OUTPUT CARD (DYNAMIC CALCULATION RESULTS) -->
+                        <div class="calc-results-card">
+                            <h4 class="calc-results-title">📊 Kết Quả Phân Tích Lộ Trình & Chi Phí</h4>
+                            
+                            <div class="result-item">
+                                <span class="result-label">Lộ trình khuyến nghị:</span>
+                                <span class="result-value text-cyan" id="calc-route">--</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Ngày khởi hành (dự kiến):</span>
+                                <span class="result-value" id="calc-departure">--</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Phụ phí quốc tịch khó:</span>
+                                <span class="result-value text-warning" id="calc-surcharge-nation">0 VND</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Phụ phí E-Visa Multi:</span>
+                                <span class="result-value text-warning" id="calc-surcharge-multi">0 VND</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Phụ phí Fast Track:</span>
+                                <span class="result-value text-warning" id="calc-surcharge-fasttrack">0 VND</span>
+                            </div>
+                            <div class="result-item" id="calc-urgent-package-row" style="display: none;">
+                                <span class="result-label">Gói khẩn cấp tự động tính:</span>
+                                <span class="result-value text-cyan" id="calc-urgent-package-name">--</span>
+                            </div>
+                            
+                            <div class="calc-divider"></div>
+                            
+                            <div class="result-item total">
+                                <span class="result-label">Tổng chi phí dự kiến:</span>
+                                <span class="result-value text-green" id="calc-total">0 VND</span>
+                            </div>
+                        </div>
+                        
+                        <!-- GENERATED TELEGRAM COMMANDS -->
+                        <div class="ops-command-hub">
+                            <div class="command-group">
+                                <div class="command-header">
+                                    <span>🤖 Lệnh đăng ký Bus (Telegram General)</span>
+                                    <button class="btn-copy-small" onclick="copyText('cmd-bus-booking')">Sao chép</button>
+                                </div>
+                                <pre id="cmd-bus-booking">Scheme [Ngày] + [Loại dịch vụ]</pre>
+                            </div>
+                            
+                            <div class="command-group">
+                                <div class="command-header">
+                                    <span>🔒 Lệnh khóa ghế (Telegram Lock Ghế)</span>
+                                    <button class="btn-copy-small" onclick="copyText('cmd-seat-lock')">Sao chép</button>
+                                </div>
+                                <pre id="cmd-seat-lock">Đang chờ thông tin...</pre>
+                            </div>
+
+                            <div class="command-group">
+                                <div class="command-header">
+                                    <span>💬 Chi tiết hồ sơ nộp EV (WhatsApp Group)</span>
+                                    <button class="btn-copy-small" onclick="copyText('cmd-ev-apply')">Sao chép</button>
+                                </div>
+                                <pre id="cmd-ev-apply">Đang chờ thông tin...</pre>
+                            </div>
+                        </div>
+                    </section>
+                    
+                    <!-- COLUMN 2: OPERATIONAL PROCEDURES & BORDER GUIDES (Cột Phải) -->
+                    <section class="panel-section procedures-panel">
+                        <div class="panel-header">
+                            <div class="panel-icon">📋</div>
+                            <h3>Cẩm Nang & Mẫu Tin Nhắn Vận Hành</h3>
+                        </div>
+                        
+                        <div class="template-selector" style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; background: rgba(30, 41, 59, 0.3); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                            <label for="greet-lang-select" style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);">Ngôn ngữ cẩm nang & tin nhắn mẫu:</label>
+                            <select id="greet-lang-select" onchange="changeSopLanguage()" style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--border-glass); border-radius: 6px; padding: 4px 8px; color: var(--text-primary); font-size: 0.8rem; outline: none;">
+                                <option value="vi">Tiếng Việt 🇻🇳</option>
+                                <option value="en">English 🇬🇧</option>
+                                <option value="kr">Korean 🇰🇷</option>
+                                <option value="ru">Russian 🇷🇺</option>
+                                <option value="ar">Arabic 🇸🇦</option>
+                                <option value="fr">French 🇫🇷</option>
+                            </select>
+                        </div>
+                        
+                        <!-- Tabs bên trong cột cẩm nang -->
+                        <div class="sop-tabs">
+                            <button class="sop-tab-btn active" id="sop-tab-btn-greeting" onclick="switchSopTab('sop-greeting')">👋 Mẫu Tư Vấn & HD</button>
+                            <button class="sop-tab-btn" id="sop-tab-btn-payment" onclick="switchSopTab('sop-payment')">💳 Quy Trình & Thanh Toán</button>
+                            <button class="sop-tab-btn" id="sop-tab-btn-border" onclick="switchSopTab('sop-border')">🚌 Xe Buýt & Biên Giới</button>
+                            <button class="sop-tab-btn" id="sop-tab-btn-feedback" onclick="switchSopTab('sop-feedback')">✨ Chăm Sóc & Đánh Giá</button>
+                        </div>
+                        
+                        <!-- SOP TAB 1: MẪU TƯ VẤN (GREETING & ROUTING) -->
+                        <div id="sop-greeting" class="sop-tab-panel active">
+                            <div class="sop-card-warning">
+                                <strong>💡 Quy tắc điều phối:</strong> Nhận diện quốc tịch để tư vấn đi <strong>Lào (Bo Y)</strong> nhằm tiết kiệm chi phí nếu được miễn visa Lào (Nga, Hàn, ASEAN...), hoặc đi <strong>Campuchia (Mộc Bài)</strong> đối với các quốc tịch còn lại.
+                            </div>
+                            
+                            <div class="template-display-box">
+                                <div class="box-header">
+                                    <span>💬 Bước 1: Chào hỏi & Thu thập thông tin:</span>
+                                    <button class="btn-copy-small" onclick="copyText('tmpl-greeting-text')">Sao chép</button>
+                                </div>
+                                <div class="box-body" id="tmpl-greeting-text">...</div>
+                            </div>
+
+                            <div class="template-display-box">
+                                <div class="box-header">
+                                    <span>🚌 Bước 2: Đề xuất phương án & Tuyến đi:</span>
+                                    <button class="btn-copy-small" onclick="copyText('tmpl-route-text')">Sao chép</button>
+                                </div>
+                                <div class="box-body" id="tmpl-route-text">...</div>
+                            </div>
+
+                            <div class="template-display-box">
+                                <div class="box-header">
+                                    <span> Đà Nẵng - Lao Bảo (90 Phút):</span>
+                                    <button class="btn-copy-small" onclick="copyText('tmpl-danang-text')">Sao chép</button>
+                                </div>
+                                <div class="box-body" id="tmpl-danang-text">...</div>
+                            </div>
+                        </div>
+                        
+                        <!-- SOP TAB 2: THANH TOÁN (PAYMENT & TICKETS) -->
+                        <div id="sop-payment" class="sop-tab-panel">
+                            <div class="sop-card-warning">
+                                <strong>🚨 Hạn Chót Thanh Toán:</strong> Vé xe buýt phải thanh toán trước <strong>14:00 ngày đi</strong>. Hồ sơ E-Visa chỉ được nộp sau khi khách đã chuyển khoản đầy đủ trước ít nhất <strong>3 ngày</strong> (hoặc trước 24h đối với gói khẩn cấp đặc biệt).
+                            </div>
+                            
+                            <div class="template-display-box">
+                                <div class="box-header">
+                                    <span>💳 Thông tin chuyển khoản (Ngân Hàng Nam Á):</span>
+                                    <button class="btn-copy-small" onclick="copyText('tmpl-payment-text')">Sao chép</button>
+                                </div>
+                                <div class="box-body" id="tmpl-payment-text">...</div>
+                            </div>
+
+                            <div class="template-display-box">
+                                <div class="box-header">
+                                    <span> Bio Page & Hướng dẫn gửi ảnh:</span>
+                                    <button class="btn-copy-small" onclick="copyText('tmpl-req-docs')">Sao chép</button>
+                                </div>
+                                <div class="box-body" id="tmpl-req-docs">...</div>
+                            </div>
+                            
+                            <div class="qr-container" style="display: flex; flex-direction: column; align-items: center; background: rgba(30, 41, 59, 0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                                <img src="qr_code.jpg" alt="Mã QR Thanh Toán" class="qr-image" style="max-width: 130px; border-radius: 8px;" />
+                                <div class="qr-caption" id="lbl-qr-caption" style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 6px;">Quét mã QR để thanh toán Vietcombank VCB OneQR</div>
+                            </div>
+                        </div>
+                        
+                        <!-- SOP TAB 3: HƯỚNG DẪN CỬA KHẨU & XE BUÝT -->
+                        <div id="sop-border" class="sop-tab-panel">
+                            <div class="border-select-row">
+                                <button class="btn-route-select active" id="btn-guide-laos45" onclick="showBorderGuide('laos45')">🚌 Lào 45D</button>
+                                <button class="btn-route-select" id="btn-guide-laos90" onclick="showBorderGuide('laos90')">🚌 Lào 90D</button>
+                                <button class="btn-route-select" id="btn-guide-cam" onclick="showBorderGuide('cam')">🚌 Campuchia</button>
+                            </div>
+                            
+                            <div id="guide-laos45" class="guide-content active">
+                                <div class="sop-card-warning red">
+                                    <strong>🚨 TẠM DỪNG FAST TRACK BỜ Y:</strong> Dịch vụ Fast Track tại cửa khẩu Bờ Y hiện đang tạm dừng từ ngày 23/4. Hành khách phải tự đi bộ hoàn tất quy trình visarun thủ công!
+                                </div>
+                                <h4 style="font-size: 0.85rem; margin-top: 8px; margin-bottom: 6px; color: #FFF;">Lịch trình & Hướng dẫn Cửa khẩu Lào (Bờ Y) - 45D:</h4>
+                                <ol class="guide-list" style="font-size: 0.75rem; color: var(--text-secondary); padding-left: 15px; margin: 0 0 10px 0; line-height: 1.45;">
+                                    <li><strong>21:30</strong>: Xe xuất phát từ 40 Hòn Chồng Nha Trang (Hoặc 21:15 Trần Phu).</li>
+                                    <li><strong>06:00</strong>: Đến cửa khẩu. Ăn sáng/cà phê tự túc.</li>
+                                    <li><strong>06:45</strong>: Tài xế thu passport của khách để hỗ trợ làm thủ tục xuất cảnh.</li>
+                                    <li><strong>07:30</strong>: Khách xuống xe, lấy passport, đi qua máy quét nhận diện khuôn mặt. Sang cửa khẩu Lào đóng dấu và quay lại.</li>
+                                    <li><strong>08:00</strong>: Trở lại khu vực nhập cảnh Việt Nam, tài xế thu passport đóng dấu nhập cảnh.</li>
+                                    <li><strong>09:30</strong>: Xe khởi hành về Nha Trang.</li>
+                                </ol>
+                                <p class="guide-fee" style="font-size: 0.75rem; color: var(--accent-teal); font-weight: 500; margin: 0;">📌 Chi phí biên giới: Việt Nam: 50.000đ * 2 = 100.000đ. Lào: 20.000đ * 2 = 40.000đ. Tổng: 140.000đ.</p>
+                            </div>
+
+                            <div id="guide-laos90" class="guide-content">
+                                <h4 style="font-size: 0.85rem; margin-top: 8px; margin-bottom: 6px; color: #FFF;">Lịch trình & Hướng dẫn Cửa khẩu Lào (Bờ Y) - 90D:</h4>
+                                <ol class="guide-list" style="font-size: 0.75rem; color: var(--text-secondary); padding-left: 15px; margin: 0 0 10px 0; line-height: 1.45;">
+                                    <li>Lịch xe chạy: <strong>21:30</strong> các ngày Thứ 3, Thứ 5, Chủ Nhật hàng tuần.</li>
+                                    <li>Làm thủ tục xuất cảnh Việt Nam (Phí: 50.000đ). Chụp ảnh dấu xuất cảnh gửi ngay cho EasyTrip.</li>
+                                    <li>Sang cửa khẩu Lào điền tờ khai nhập cảnh và nộp lệ phí 20.000đ.</li>
+                                    <li>Quay lại quán cà phê tại khu vực trung lập ngồi nghỉ ngơi, đợi EasyTrip nộp và duyệt E-visa.</li>
+                                    <li>Khi nhận được E-visa (khoảng 11:30 sáng), quay lại cửa khẩu Việt Nam làm thủ tục nhập cảnh (Phí: 50.000đ). <strong>Lưu ý:</strong> Phải báo nhân viên là có E-visa.</li>
+                                </ol>
+                            </div>
+
+                            <div id="guide-cam" class="guide-content">
+                                <h4 style="font-size: 0.85rem; margin-top: 8px; margin-bottom: 6px; color: #FFF;">Lịch trình & Hướng dẫn Cửa khẩu Campuchia (Mộc Bài) 45D/90D:</h4>
+                                <ol class="guide-list" style="font-size: 0.75rem; color: var(--text-secondary); padding-left: 15px; margin: 0 0 10px 0; line-height: 1.45;">
+                                    <li>Lịch xe chạy: <strong>21:30</strong> các ngày Thứ 3, Thứ 5, Chủ Nhật từ 40 Hòn Chồng.</li>
+                                    <li><strong>06:30</strong>: Xe đến cửa khẩu Mộc Bài. Xếp hàng chờ mở cửa lúc 07:30.</li>
+                                    <li>Làm thủ tục xuất cảnh Việt Nam (Phí: 50k-150k VND). Gửi ảnh chụp dấu xuất cảnh trước 8:00 AM.</li>
+                                    <li>Di chuyển sang biên giới Campuchia (đi bộ hoặc đi xe ôm dịch vụ tầm 100k-150k VND).</li>
+                                    <li>Mua visa Campuchia tại cửa khẩu (Giá tầm 35$ - 50$).</li>
+                                    <li>Vào một quán cà phê có Wi-Fi ổn định bên Campuchia ngồi chờ tầm 4 tiếng để EasyTrip duyệt visa Việt Nam khẩn cấp (thường trả lúc 11:30).</li>
+                                    <li>In E-visa, sau đó làm thủ tục re-entry về Việt Nam (nên xếp hàng từ 11:15 - 11:45).</li>
+                                </ol>
+                            </div>
+
+                            <div class="template-display-box" style="margin-top: 10px;">
+                                <div class="box-header">
+                                    <span>🚌 Bước 9: Gửi thông tin xe buýt (Wi-Fi password):</span>
+                                    <button class="btn-copy-small" onclick="copyText('tmpl-bus-dispatch')">Sao chép</button>
+                                </div>
+                                <div class="box-body" id="tmpl-bus-dispatch">...</div>
+                            </div>
+                        </div>
+                        
+                        <!-- SOP TAB 4: CHĂM SÓC & PHẢN HỒI (FEEDBACK & RETENTION) -->
+                        <div id="sop-feedback" class="sop-tab-panel">
+                            <div class="template-display-box">
+                                <div class="box-header">
+                                    <span>✨ Mẫu xin đánh giá Google Maps sau chuyến đi:</span>
+                                    <button class="btn-copy-small" onclick="copyText('tmpl-feedback-text')">Sao chép</button>
+                                </div>
+                                <div class="box-body" id="tmpl-feedback-text">...</div>
+                            </div>
+                            
+                            <div class="template-display-box">
+                                <div class="box-header">
+                                    <span>⚠️ Tin nhắn cảnh báo kiểm tra ngày đóng dấu visa trên passport tại biên giới:</span>
+                                    <button class="btn-copy-small" onclick="copyText('tmpl-warning-text')">Sao chép</button>
+                                </div>
+                                <div class="box-body" id="tmpl-warning-text">...</div>
+                            </div>
+                        </div>
+
+                        <!-- STAFF INTERNAL AI HELPDESK CHAT đã được di chuyển thành CỘT 3 riêng biệt -->
+                    </section>
+
+                    <!-- COLUMN 3: STAFF INTERNAL AI HELPDESK CHAT (Cột Phải Ngoài Cùng) -->
+                    <section class="panel-section staff-chat-panel" id="staff-chat-panel">
+                        <div class="panel-header">
+                            <div class="panel-icon">💬</div>
+                            <h3>EasyTrip Staff AI Chat (Hỏi Đáp Nghiệp Vụ)</h3>
+                        </div>
+                        
+                        <div class="staff-chat-window" id="staff-chat-window">
+                            <div class="staff-msg bot">
+                                Chào bạn! Mình là AI hỗ trợ nghiệp vụ. Bạn có câu hỏi nào về dịch vụ, bảng giá, quy trình làm visa hay thông tin ngân hàng cần giải đáp nhanh không? Bạn cũng có thể dán ảnh hộ chiếu (passport) hoặc gửi file excel vào đây để mình hỗ trợ nhé!
+                            </div>
+                        </div>
+
+                        <div class="staff-chat-input-container">
+                            <!-- Khay xem trước tệp/ảnh chuẩn bị gửi -->
+                            <div id="staff-chat-attachment-preview" class="staff-chat-attachment-preview" style="display: none;"></div>
+                            
+                            <div class="staff-chat-input-area-new">
+                                <button class="staff-chat-attach-btn" onclick="document.getElementById('staff-chat-file-input').click()" title="Đính kèm ảnh/tệp">📎</button>
+                                <input type="file" id="staff-chat-file-input" style="display: none;" multiple onchange="handleStaffFileSelect(this)">
+                                <textarea id="staff-chat-input" placeholder="Hỏi AI giá khẩn cấp, dán ảnh passport, kéo thả file..." rows="1" oninput="autoResizeStaffInput(this)"></textarea>
+                                <button id="staff-chat-send-btn" onclick="sendStaffChatMessage()">Gửi</button>
+                            </div>
+                        </div>
+
+                        <div class="staff-suggestions" style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px;">
+                            <span style="font-size: 0.7rem; color: var(--text-secondary); width: 100%;">Gợi ý hỏi nhanh:</span>
+                            <button class="btn-copy-small" onclick="quickAskStaff('Giá e-visa khẩn cấp')" style="font-size: 0.65rem;">Giá khẩn cấp</button>
+                            <button class="btn-copy-small" onclick="quickAskStaff('Tài khoản ngân hàng Nam Á')" style="font-size: 0.65rem;">Tài khoản ngân hàng</button>
+                            <button class="btn-copy-small" onclick="quickAskStaff('Địa chỉ văn phòng ở đâu')" style="font-size: 0.65rem;">Địa chỉ văn phòng</button>
+                            <button class="btn-copy-small" onclick="quickAskStaff('Hồ sơ e-visa cần chụp gì')" style="font-size: 0.65rem;">Hồ sơ e-visa cần gì</button>
+                            <button class="btn-copy-small" onclick="quickAskStaff('Lịch xe đi Campuchia')" style="font-size: 0.65rem;">Lịch xe Campuchia</button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Auth Gate Overlay -->
+    <div id="auth-gate-overlay" class="auth-gate-overlay" style="display: none;">
+        <div class="auth-card">
+            <div class="auth-logo">🔒</div>
+            <h2>Xác Thực Admin</h2>
+            <p>Vui lòng nhập mã bảo mật để quản lý Live Chat Studio.</p>
+            <input type="password" id="auth-password-input" placeholder="Nhập mã truy cập..." onkeypress="handleAuthKeyPress(event)">
+            <button onclick="submitAuthCode()">Truy cập</button>
+        </div>
+    </div>
+
+    <!-- Script xử lý Logic của toàn bộ hệ thống -->
+    <script src="app.js"></script>
+</body>
+</html>

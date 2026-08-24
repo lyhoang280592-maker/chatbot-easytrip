@@ -1,0 +1,382 @@
+[
+  {
+    "question": "인물사진은 그냥 제 사진 보내드리면 되나요?",
+    "answer": "예, 알겠습니다."
+  },
+  {
+    "question": "버스 픽업 장소와 시간은 어디인가요?",
+    "answer": "버스는 다음 장소에서 픽업합니다: 04 Tran Phu Street - 9:15pm (지도: https://maps.app.goo.gl/ew7bXTr79tZfu4FLA)."
+  },
+  {
+    "question": "총 결제 금액은 얼마인가요?",
+    "answer": "총 결제 금액은 4,000,000 VND입니다."
+  },
+  {
+    "question": "결제 방법에는 어떤 것이 있나요?",
+    "answer": "은행 송금(계좌: Joint Stock Commercial Bank for Foreign Trade of Viet Nam, 수취인: EASY TRIP & VISA CO. LTD, 계좌번호: 1068582577, SWIFT: BFTVVNVX) 또는 사무실 직접 결제(주소: 21 Phan Vinh, South Nha Trang, 지도: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9) 중 선택하실 수 있습니다."
+  },
+  {
+    "question": "비자 런 일정은 어떻게 되나요?",
+    "answer": "E-visa 4시간 x 1인: 28/08 - 08:00 Bo Y 출국, 28/08 - 11:30 Bo Y 입국."
+  },
+  {
+    "question": "전자비자 신청을 위해 어떤 사진을 보내야 하나요?",
+    "answer": "여권 사진과 인물 사진을 보내주시면 전자비자 신청을 완료할 수 있습니다."
+  },
+  {
+    "question": "please check visa name",
+    "answer": "Sorry, I am processing information, please wait a moment! Don't worry sir, we will correct the name but in the e‑visa we take it from the passport to be sure everything is correct."
+  },
+  {
+    "question": "Pls, send us your QR account bank, sir",
+    "answer": "hello, I will send you later"
+  },
+  {
+    "question": "Should I come to office or to hospital?",
+    "answer": "Please come to our office at 21 Phan Vinh, South Nha Trang – not the hospital. We will be waiting for you there at 15:00. 📍 https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9 If you have any trouble finding us, just call or message us on Zalo/WhatsApp at +84 868 462 071."
+  },
+  {
+    "question": "Company provide TRC and work permit rights?",
+    "answer": "Yes ma'am"
+  },
+  {
+    "question": "I need move to Vietnam for work",
+    "answer": "Alright, the nanny company will contact you in a few minutes via WhatsApp"
+  },
+  {
+    "question": "From where the bus drive? Same place to cambodia? Or different?",
+    "answer": "The bus departs from Nha Trang to Ho Chi Minh City. Pick‑up location is 77 Thái Nguyên Street, departure time is 20:15 (later confirmed as 21:30). After a short transfer at the South Bus Station, the main bus travels straight to Ho Chi Minh City, stopping at the Moc Bai border (Cambodia) around 06:00‑06:30 AM the next morning."
+  },
+  {
+    "question": "20:30 or?",
+    "answer": "Yes, sir. 20:30."
+  },
+  {
+    "question": "One question we stop all 3 minutes for packages and other people. You now the time when we arrive?",
+    "answer": "We usually make brief stops for packages and other passengers, but the total travel time stays the same. The bus departs at 21:30 from Nha Trang, arrives at the Moc Bai border around 06:00‑06:30 AM, and reaches Ho Chi Minh City around 05:00 AM the next morning."
+  },
+  {
+    "question": "Can I pay at the reception desk?",
+    "answer": "Yes, you can pay at the reception desk. Just tell them your name and seat number on the bus."
+  },
+  {
+    "question": "Does the 4 million price include the round-trip trip to Cambodia and all the visas?",
+    "answer": "This 4 million VND will include bus fare and a single Vietnamese e-visa (excluding a Cambodian visa), sir."
+  },
+  {
+    "question": "how much is Cambodian visa?",
+    "answer": "You only need to pay an additional 1 million VND for us to register your Cambodian visa, sir."
+  },
+  {
+    "question": "Can you help to get TRC for my son if I work in Phu Quoc and I have my TRC sponsored by company that hired me in Phu Quoc? My son was born in Phu Quoc and has Philippines passport but he never left Vietnam, he is 8 months old and he doesn’t have any visa in his passport",
+    "answer": "Hello! Thank you for reaching out. 😊 I understand you're looking to get a Temporary Residence Card (TRC) for your 8‑month‑old son, who was born in Phu Quoc and holds a Philippines passport. Unfortunately, our company specializes in visa runs and bus services, not TRC processing. However, for TRC applications you should contact the Vietnam Immigration Department (Cục Quản lý Xuất nhập cảnh) directly. Since your son was born in Vietnam and has never left, he may be eligible for a visa exemption or a TRC based on your status. You will need to provide his birth certificate, your TRC, and other supporting documents. We recommend contacting the immigration office in Phu Quoc or a local visa agency that handles TRC applications. If you need help with a visa run or any bus services in the future, feel free to ask! 🚌"
+  },
+  {
+    "question": "Veuillez nous indiquer si vous paierez en espèces à notre bureau comme auparavant, ou par virement bancaire.",
+    "answer": "Je vais venir dans vos bureaux"
+  },
+  {
+    "question": "Veuillez nous indiquer votre heure d'arrivée afin que nous puissions vous accueillir comme il se doit.",
+    "answer": "Du coup je pense passer lundi"
+  },
+  {
+    "question": "Pouvez-vous nous indiquer l'heure qui vous convient pour notre passage ?",
+    "answer": "Bonjour… désolé je viens de voir votre message et je ne serais pas dispo car je pars en Thaïlande du coup je prend l’avion"
+  },
+  {
+    "question": "ALORS VOUS VOULLEZ ANNULER VOTRE RESERVATION ?",
+    "answer": "Oui je reviens vers vous dès que j’en aurai besoin 🫵🏾🙏🏾"
+  },
+  {
+    "question": "✅ chào ac .\nbên e nhận tăng người theo dõi, page pro vip thật ,càng nhiều người theo dõi để giúp page c đạt hiệu quả cao trong việc livestreams và kéo khách hàng  rất nhiều luôn chị ....\n1700 người theo dõi thật vĩnh viễn 250k ạ ,nếu c phát hiện ảo đền c 100 lần số tiền c bỏ ra ạ ,,người bên e thật 100%\nĐảm bảo giúp c lượng tương tác cao ! Kéo nhiều khách hàng và giúp c nhiều đơn hàng\n✅ ngoài ra Ace chưa có page pro vip thì bên e còn 20 con page chất lượng , livestreams  không bị khoá, lượng tiếp cận khách hàng cực mạnh, không bao giờ ẩn bình luận hay bị lỗi gì cả .đảm bảo ok luôn c nha. 😍Bên em làm xong mới Chuyển Khoảng nên khách hàng yên tâm ạ💪",
+    "answer": "안녕하세요! Easy Trip & Visa입니다. 저희는 비자런과 버스 서비스를 제공하는 회사로, 말씀하신 SNS 팔로워 증가 서비스는 제공하지 않습니다. 다른 문의 사항이 있으시면 도와드리겠습니다."
+  },
+  {
+    "question": "Is there a bus ride to Laos today? NHA Trang -> LAOS 45-day visa",
+    "answer": "Yes, we have a bus to Laos (Bo Y border) departing tonight! 🚌\n\nHere are the details:\n\n📍 **Departure time:** 21:30 from 40 Hon Chong (or 21:15 from No. 4 Tran Phu)\n\n💰 **Price:** **1,400,000 VND** (45-day visa-free package)\n\n⚠️ Please note: The bus departs overnight and arrives at the border around 06:00-06:30 AM the next morning.\n\nTo confirm your booking, could you please provide:\n1. Your **nationality** (to ensure you're eligible for the Laos visa-free entry)\n2. Your **visa expiry date** (to calculate the correct departure date)\n3. Your **pickup location** (40 Hon Chong or No. 4 Tran Phu)\n4. Your **contact phone number** (WhatsApp/Zalo)\n\nOnce I have these details, I'll check seat availability and send you the seat map! 😊"
+  },
+  {
+    "question": "79H 093.81 right?",
+    "answer": "Correct sir! Yes, that's correct! The bus number is **79H - 093.81**."
+  },
+  {
+    "question": "No option to change B9 cabin near toilet ?",
+    "answer": "I sincerely apologize, but there are no more slots available to exchange for you."
+  },
+  {
+    "question": "It seems it's not full and I can move to another lower cabin ?",
+    "answer": "You can't change seats at will... please discuss with the driver if you have any other requests!"
+  },
+  {
+    "question": "Good afternoon. Why can't I open the file you gave me with my visa?",
+    "answer": "Good afternoon! I'm sorry to hear you're having trouble opening the visa file. Could you please tell me which file you're referring to? Is it the e-visa PDF we sent you? If so, please try opening it with a PDF reader like Adobe Acrobat or Google Chrome. If the issue persists, please send us a screenshot of the error message so we can assist you further. You can also contact our support team directly via Telegram or WhatsApp for immediate help."
+  },
+  {
+    "question": "Hello! I would like to do a visa run on August 21. Could you please tell me How much does it cost?",
+    "answer": "To give you the exact price, I need a bit more information: 🌍 Your nationality, 📅 Your current visa expiry date, and 📍 Your current city (Nha Trang or Da Nang). Once I have these details, I can recommend the best route and provide the cost."
+  },
+  {
+    "question": "Hi! Could you please tell me if Ukrainian citizens need a Laos visa for this visa run, or is everything arranged by your company? Thank you!",
+    "answer": "Please note that our service fee includes your Vietnam E‑visa processing and round‑trip bus transportation. This fee does NOT include the Laos visa fee. You will need to prepare 1,600,000 VND in cash along with one 4×6 cm photo to purchase your Laos visa on arrival at the border."
+  },
+  {
+    "question": "Vers quelle heure je dois repasser au Vietnam ? Et on est d’accord que je n’ai rien à faire ?",
+    "answer": "Pour votre retour au Vietnam, vous devez repasser la frontière vers **13h00** (1h00 de l'après-midi), car le bus de retour part à ce moment‑là. 🚌 Vous n'avez rien à faire de spécial, il vous suffit de vous présenter au poste frontière avec votre passeport et votre e‑visa (imprimé si possible). Le bus vous attendra, ne vous inquiétez pas. ✅"
+  },
+  {
+    "question": "Du coup je repasse la frontière vers quelle heure ? Et j’ai plus rien à faire ? Je demande juste le visa de 45j ? Et c’est à ce moment où je mets les 50 000",
+    "answer": "Vous devez repasser la frontière vers **13h00**. Vous n’avez rien d’autre à faire – votre visa de 45 jours est déjà actif grâce à votre sortie et entrée. 💰 Vous paierez **50 000 VND** (frais de tampon de sortie/entrée) directement au guichet vietnamien."
+  },
+  {
+    "question": "Je suis dans la queue pour la frontière vietnamienne. Il y a énormément de monde et ça avance tout doucement",
+    "answer": "Don't worry! We've already informed the driver, and the bus will wait for you. Take your time and stay calm. 😊"
+  },
+  {
+    "question": "хочу уточнить по поводу праздников с 29 по 3 во вьетнаме",
+    "answer": "Добрый вечер! 🌙\n\nВы спрашиваете о праздниках с 29 по 3? Уточните, пожалуйста, какие даты вас интересуют: с 29 апреля по 3 мая? Или с 29 мая по 3 июня? В любом случае, мы работаем в обычном режиме, и визараны выполняются по расписанию. 🚌\n\nЕсли вы планируете визаран, подскажите, пожалуйста, ваше гражданство и дату истечения визы, чтобы я мог рассчитать для вас оптимальную дату выезда. 😊"
+  },
+  {
+    "question": "запишите пожалуйста на 1 сентября",
+    "answer": "Хорошо, записываю вас на **1 сентября**! 🚌\n\nНо мне нужно уточнить несколько деталей, чтобы правильно оформить бронирование:\n\n1. **Ваше гражданство** – для выбора маршрута (Лаос или Камбоджа)\n2. **Дата истечения текущей визы** – чтобы рассчитать правильную дату выезда\n3. **Город отправления** – Нячанг или Дананг?\n4. **Тип визы** – вы упомянули, что нужна 90‑дневная E‑visa, верно?\n5. **Ваш контактный номер** (WhatsApp/Zalo/Telegram)\n\nПожалуйста, предоставьте эти данные, и я сразу проверю наличие мест и забронирую для вас! 😊"
+  },
+  {
+    "question": "Do you have a visa run trip from Danang this Thursday 6/8?",
+    "answer": "We do have a visa run from Da Nang to Cambodia (Moc Bai border) this Thursday, 06/08. The bus departs at 21:30 from Da Nang."
+  },
+  {
+    "question": "I want a 3‑month visa extension. How much does it cost?",
+    "answer": "The package for a 90‑day E‑visa is 4,000,000 VND, which includes the round‑trip bus and the visa processing. You will also need to pay for your Cambodia visa at the border (approximately $35–$50) and the Vietnam exit/entry fees."
+  },
+  {
+    "question": "Are Israeli passport holders eligible for an E‑visa?",
+    "answer": "Due to current regulations, E‑visas for Israeli passport holders face very strict approval requirements and are unfortunately rarely granted. We are unable to process the E‑visa application for you at this time."
+  },
+  {
+    "question": "What is the approval rate for an Israeli multiple‑entry E‑visa if I depart Vietnam by air?",
+    "answer": "There is approximately a 70% approval rate for a multiple‑entry E‑visa when departing Vietnam by air."
+  },
+  {
+    "question": "What information do you need from me to confirm the booking?",
+    "answer": "We need your full name and date of birth, your current visa expiry date, your phone number (WhatsApp/Zalo), and your pickup location in Da Nang."
+  },
+  {
+    "question": "Could you please let me know which day you'll be visiting our office so I can schedule your appointment?",
+    "answer": "hi would monday be ok?"
+  },
+  {
+    "question": "If i can come in monday afternoon that would be best, please let me know if this works for you?",
+    "answer": "yes sure of course sir"
+  },
+  {
+    "question": "I'm sorry to hear that you need to cancel your booking. Could you please provide me with your booking details (name, phone number, or booking reference) so I can assist you with the cancellation process?",
+    "answer": "Hi, unfortunately i need cancel my booking as i cant do the 6th for departure now"
+  },
+  {
+    "question": "So, would you like to change the date, sir?",
+    "answer": "Ive had to make other arrangements, i will not do the bus run this time."
+  },
+  {
+    "question": "Could you please tell me your nationality and visa expiry date? That way I can confirm the best departure day for your visa run.",
+    "answer": "(No response provided in the conversation)"
+  },
+  {
+    "question": "Is this a human?",
+    "answer": "Yes, I am an AI assistant for Easy Trip & Visa Co. Ltd. 😊 If you need to speak with a human agent directly, please contact our support team via:\n\n📞 **Telegram**: https://t.me/easytripvisa_co_ltd\n📞 **WhatsApp**: https://wa.me/84868462071\n\nThey will be happy to assist you personally!"
+  },
+  {
+    "question": "Is my visa not done?",
+    "answer": "Sorry, I am processing information, please wait a moment!"
+  },
+  {
+    "question": "Hi, what price for evisa?",
+    "answer": "Our E-visa prices depend on the processing speed:\n\n🚀 **Super urgent 1 hour:** 4,600,000 VND\n⚡ **Same day (2 hours):** 3,400,000 VND\n⏳ **Urgent 4 hours:** 2,600,000 VND\n📅 **Urgent 1 day:** 2,200,000 VND\n📅 **Urgent 2 days:** 2,150,000 VND\n📅 **Standard 3-5 days:** 1,810,000 VND\n\nIf you need a visa run with bus, we also have packages starting from **1,400,000 VND** for bus only.\n\nCould you please tell me your **nationality** and **visa expiry date** so I can recommend the best option for you?"
+  },
+  {
+    "question": "Too expensive, I got my last evisa by 4hrs and it cost about 90$",
+    "answer": "If you are Russian please message us via telegram @easytripvisa_co_ltd\n\nEvisa 4 hours for Russian = 2.000.000"
+  },
+  {
+    "question": "Для подбора оптимального маршрута подскажите, пожалуйста, ваше гражданство?",
+    "answer": "Гражданство: Молдова (для одного клиента) и Россия (для девушки)."
+  },
+  {
+    "question": "Какая дата окончания вашей текущей визы во Вьетнаме?",
+    "answer": "Виза истекает 5 августа, значит выезжать нужно 4 августа (воскресенье)."
+  },
+  {
+    "question": "Во сколько отправляется автобус в Лаос (Бо Й) из Нячанга?",
+    "answer": "Автобус в Лаос (Бо Й) отправляется ежедневно в 21:30 из Нячанга."
+  },
+  {
+    "question": "Сколько стоит пакет «Лаос 90D» для граждан Молдовы?",
+    "answer": "3 400 000 VND (включает автобус туда‑обратно + оформление 90‑дневной электронной визы)."
+  },
+  {
+    "question": "Сколько стоит пакет «Лаос 45D» для граждан России?",
+    "answer": "1 400 000 VND (только автобус, виза не нужна – 45‑дневный безвизовый въезд)."
+  },
+  {
+    "question": "Какие дополнительные расходы на границе?",
+    "answer": "Дополнительные расходы на границе – 140 000 VND на человека (сборы Вьетнам + Лаос)."
+  },
+  {
+    "question": "Где можно сесть на автобус в Нячанге?",
+    "answer": "Удобное место посадки: 40 Hòn Chồng (отправление 21:30) или 4 Trần Phú (отправление 21:15)."
+  },
+  {
+    "question": "Какие данные нужны для бронирования?",
+    "answer": "Нужны: полное имя и дата рождения клиента, имя и дата рождения девушки, номер телефона/Telegram, выбранное место посадки."
+  },
+  {
+    "question": "Các gói Visarun và giá cả cho tuyến Lào (Cửa khẩu Bờ Y) là gì?",
+    "answer": "🚌 Tuyến Lào (Cửa khẩu Bờ Y):\n- Gói 45 ngày (Miễn thị thực): 1,400,000 VND\n- Gói 90 ngày (E‑visa): 3,400,000 VND"
+  },
+  {
+    "question": "Giá xe Fortuner và Sedona hiện tại cho một chuyến là bao nhiêu?",
+    "answer": "Fortuner: 2,500,000 VND mỗi chuyến\nSedona: 2,700,000 VND mỗi chuyến"
+  },
+  {
+    "question": "E-visa của tôi có thời hạn bao lâu và có thể xuất nhập cảnh nhiều lần không?",
+    "answer": "Visa của cô là visa Multi, thời hạn lưu trú tới ngày 03/10/2026 và cô có thể xuất nhập cảnh Việt Nam nhiều lần trong thời hạn này."
+  },
+  {
+    "question": "Bạn có thể gửi E-visa cho tôi không?",
+    "answer": "Dạ, con đã gửi E-visa cho cô rồi ạ."
+  },
+  {
+    "question": "How long do you think before I will get the 90 day visa?",
+    "answer": "We will send your visa to you at 11:30 AM, as soon as it is processed."
+  },
+  {
+    "question": "Have the visas been sent out yet?",
+    "answer": "This is your e-visa, sir."
+  },
+  {
+    "question": "This was my E visa for Cambodia. They never asked me for it. When I got to one of the stations, they did ask me for 1 million dong! I don’t think this happened last time. Do you need anything else from me?",
+    "answer": "No sir, we don't need anything now. Take your breakfast and enjoy your time."
+  },
+  {
+    "question": "Can you give us information on prices and how does it work with your agency?",
+    "answer": "Since you are from Bulgaria, you will need to take the Cambodia route (Moc Bai border) for your visa run, as Laos is not suitable for your nationality.\n\nHow it works:\n- We provide an overnight bus from Nha Trang to the Moc Bai border.\n- Our staff handle the exit from Vietnam and the entry into Cambodia.\n- You send us your exit stamp, and we apply for a new 90‑day single‑entry e‑visa for Vietnam.\n- Once the visa is ready (same day or next day), you return to Vietnam.\n\n**Prices (round‑trip bus + e‑visa) from Nha Trang:** 4,000,000 VND per person.\n- Departure times: 21:30 on Tuesday, Thursday, Sunday.\n- Pickup locations: Oceanus (21:30) or River Station (21:15).\n- Cambodia visa fee ($35‑$40) and border fees (50k‑150k VND) are paid directly at the border."
+  },
+  {
+    "question": "So can you provide me quotes both from Nha Trang and from Da Lat?",
+    "answer": "From Nha Trang the price is 4,000,000 VND per person for the Cambodia 90‑day package (round‑trip bus + e‑visa). We do not operate directly from Da Lat; you would need to travel to Nha Trang on your own (about 4‑5 hours by bus). Once you are in Nha Trang we can arrange the same visa‑run service as described above."
+  },
+  {
+    "question": "Can you help me extend my visa for another 90 days? Please tell me the price and what documents you need.",
+    "answer": "Due to the new regulations in Vietnam, we are no longer able to extend your visa. Once your current visa is about to expire, you will need to apply for a new visa."
+  },
+  {
+    "question": "Is my WhatsApp number correct? Can you call me or write to me on WhatsApp?",
+    "answer": "Sorry, our WhatsApp account is currently not available."
+  },
+  {
+    "question": "Can I call you?",
+    "answer": "This is our business chat. I have already sent you a message on Facebook. Please check your inbox when you have a moment."
+  },
+  {
+    "question": "어디서 모시러 갈까요?",
+    "answer": "Pick up place: 40 Hòn Chồng, 21:15 pm (https://maps.app.goo.gl/ZBWQ2vbWUg6KyKSr9)"
+  },
+  {
+    "question": "neu toi tra tien gap nhau lai xe du록 khong??",
+    "answer": "고객님께서 이 서비스를 처음 이용하시는 것이기 때문에 운전기사에게 직접 결제를 진행할 수 없습니다. 저희 사무실에 오셔서 카드 또는 현금으로 결제하실 수 있습니다!"
+  },
+  {
+    "question": "은행 계좌로 결제하고 싶어요. 어떻게 해야 하나요?",
+    "answer": "🏦 Bank: Joint Stock Commercial Bank for Foreign Trade of Viet Nam\n👤 Recipient: EASY TRIP & VISA CO. LTD\n🔢 Account number: 1068582577"
+  },
+  {
+    "question": "사무실에서 결제하고 싶어요. 주소가 어디인가요?",
+    "answer": "21 Phan Vinh, South Nha Trang (https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9). 카드 또는 현금으로 결제하실 수 있습니다."
+  },
+  {
+    "question": "버스 번호와 와이파이 비밀번호가 궁금합니다.",
+    "answer": "Bus number: 79H - 065.84\nWi‑Fi: 19002679"
+  },
+  {
+    "question": "라오스 국경 통과 일정이 어떻게 되나요?",
+    "answer": "⏰ 06:30 – 라오스 국경 통과: 라오스 여권의 출입국 도장 날인 절차를 직접 진행한 후 복귀합니다. (버스는 검문소에서 대기합니다.)\n⏰ 08:00 – 베트남 출국 구역으로 복귀.\n⏰ 08:10 – 약 30분간 휴식 (커피 및 간단한 간식).\n⏰ 09:30 – 🚍 나트랑으로 출발."
+  },
+  {
+    "question": "tôi cần gặp quản lý",
+    "answer": "Dạ, bạn vui lòng liên hệ trực tiếp qua các kênh hỗ trợ sau để gặp quản lý:\n\n📞 **Telegram**: https://t.me/easytripvisa_co_ltd\n📞 **WhatsApp**: https://wa.me/84868462071\n\nHoặc gọi hotline: **+84 868 462 071** (Zalo/WhatsApp/Telegram).\n\nCảm ơn bạn!"
+  },
+  {
+    "question": "Please send me bus number and location",
+    "answer": "02/07 – Cambodia\nGrisins Pavels/ 1988\nA6\nBus number: 79H - 042.02\nWifi: 19002679\nPick up place: 40 Hòn Chồng, 21:30 pm\nhttps://maps.app.goo.gl/LmwZhraVzHBuxoTm9\n\nYour bus has departed from Nha Trang, and you will take the bus to Laos via the Bo Y border. Bus number is 1234. The bus will pick you up at River Station in Nha Trang at 9:00 PM."
+  },
+  {
+    "question": "Visa you will send here in messenger?",
+    "answer": "Your visa will be sent via messenger. Please provide your messenger ID to receive the visa."
+  },
+  {
+    "question": "Could you connect with me in telegram?",
+    "answer": "Yes, sir"
+  },
+  {
+    "question": "Hello, I am interested in doing a visa run with a 90-day e-visa. Could you please let me know if you can arrange this?",
+    "answer": "Здравствуйте! Клиентам из России, Кыргызстана, Казахстана и др. просьба связаться с нами через Telegram... у нас для вас специальные цены."
+  },
+  {
+    "question": "Вы можете добавить мой номер в телеграмме что бы я смог написать,а то какие то ограничения там,не могу писать первым пока не добавят в контакты",
+    "answer": "@Easy_Trip_Visa_bot"
+  },
+  {
+    "question": "Да, пожалуйста, сообщите мне свой номер телефона.",
+    "answer": "+84703392717"
+  },
+  {
+    "question": "Hi, I have a Visa that is expiring on August 5th. I want to get the best service from Nha Trang to Cambodian border for renewal. I don't want to stand in any Queues or be hassled by VIP guys. Fastest possible without flying out. What is the price for this service? Also what day would I be traveling?",
+    "answer": "Can you please let us know your nationality so we can provide you the best services?"
+  },
+  {
+    "question": "What is the price for this service?",
+    "answer": "Since you are a Canadian citizen, we recommend you apply for a 90‑day E‑Visa to Cambodia. Here is our service price, which includes the E‑Visa processing fee and round‑trip bus transportation."
+  },
+  {
+    "question": "I want VIP door to door service. Can you supply???",
+    "answer": "We have sir! But the price is expensive and not really comfortable more than our bus service."
+  },
+  {
+    "question": "When will you send the instructions and details?",
+    "answer": "We will send you the instructions and details at 4:00 PM this afternoon!"
+  },
+  {
+    "question": "Таны эхнэр Вьетнам руу визгүй нэвтрэх боломжтой юу?",
+    "answer": "Тийм ээ, тэр Вьетнам руу визгүй орж болно."
+  },
+  {
+    "question": "Вьетнам руу 90 хоногийн цахим виз хэрхэн авах вэ?",
+    "answer": "Та 90 хоногийн цахим виз хүсэлт гаргаж болно."
+  },
+  {
+    "question": "Автобус хэдэн цагт гарах вэ?",
+    "answer": "Автобус 13:00 цагт хөдөлдөг."
+  },
+  {
+    "question": "Визний өргөдөл хожимдвал юу хийх ёстой?",
+    "answer": "Визний өргөдөл хожимдсон тохиолдолд та маргааш шинэ автобус захиалах шаардлагатай болно."
+  },
+  {
+    "question": "Би виз хожимдвал мөнгө буцаан авах боломжтой юу?",
+    "answer": "Бид таны мөнгийг буцаан олгоно."
+  },
+  {
+    "question": "Виз хожимдвол автобусны төлбөр хамаарах уу?",
+    "answer": "Таны өнөөдрийн автобусны төлбөр та суусан эсэхээс үл хамааран хэвээр байх болно."
+  },
+  {
+    "question": "Виз хожимдсаны дараа Лаос дээрх амралт хугацааг хэрхэн ашиглах вэ?",
+    "answer": "Виз хожимдвал та Лаост үлдэж, Вьетнам руу автобусаар буцахын тулд маргааш хүртэл хүлээх шаардлагатай болж магадгүй."
+  },
+  {
+    "question": "Do you do Vietnam e-visa?",
+    "answer": "Yes, we can process a Vietnam e-visa. Please provide us with the following information: visa expiration date, your nationality, and the city where you currently live."
+  },
+  {
+    "question": "Can you help me get a new visa after my previous single‑entry 90‑day visa has expired and I am currently outside Vietnam?",
+    "answer": "Unfortunately, we are unable to process or assist with a new visa for you at this time. Since your previous visa has already expired and you are currently outside of Vietnam, the immigration regulations for your nationality require a different procedure that we cannot facilitate from here."
+  }
+]

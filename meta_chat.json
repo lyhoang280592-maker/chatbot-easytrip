@@ -1,0 +1,3475 @@
+{
+  "about": "Exported from Meta Business / Facebook Page API",
+  "exported_at": "2026-08-24 08:28:02",
+  "chats": {
+    "list": [
+      {
+        "id": "t_991669766984064",
+        "name": "김세영",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_myTVDY_3bjgkkt7EDRd_nh7NHaRDqzgpMCMXR-P0sb9OvYx-2UwFFwSdytb6g458x9BoU2y3SEPn_x_Xl78_pw",
+            "from": "김세영",
+            "text": "ㅎㅎ",
+            "date": "2026-08-19T02:42:30+0000"
+          },
+          {
+            "id": "m_eS8EkGIskyWA7Wo6EEI1ix7NHaRDqzgpMCMXR-P0sb8vw6mTvOLOx8XP8qKPxD3o-9L2LFn8uH1iE3iEY6m4IA",
+            "from": "김세영",
+            "text": "27일 예약부탁드립니다",
+            "date": "2026-08-19T02:43:21+0000"
+          },
+          {
+            "id": "m_cyMhZ77nv4VuCrQB-G01VB7NHaRDqzgpMCMXR-P0sb88B33ycS47lcYOBfHDsgjSqVoRLrCwfGBJUI9q42ZkkA",
+            "from": "Easy Trip & Visa",
+            "text": "27/08 - 90D Laos\nKim Jun Ho/ 1997\nA12\n버스는 다음 장소에서 픽업합니다: 04 Tran Phu Street - 9:15pm\n📍https://maps.app.goo.gl/ew7bXTr79tZfu4FLA",
+            "date": "2026-08-19T02:43:32+0000"
+          },
+          {
+            "id": "m_GJU6lUF19Za8foDlsOKFbh7NHaRDqzgpMCMXR-P0sb9Wihr-3BghMNSqLdw5lOxrWxnHuKTB6-Fx7sXFvqKOYg",
+            "from": "Easy Trip & Visa",
+            "text": "전자비자 신청을 완료할 수 있도록 여권 사진과 인물 사진을 보내주시기 바랍니다.",
+            "date": "2026-08-19T02:44:33+0000"
+          },
+          {
+            "id": "m_RbIH2h0CezmW4TQoMMzRAR7NHaRDqzgpMCMXR-P0sb-4LUkHHypaqox7P7267caDIh9JkxkmmeVOvSEChrG8rw",
+            "from": "김세영",
+            "text": "인물사진은 그냥 제사진보내드리면 되나요?",
+            "date": "2026-08-19T02:44:54+0000"
+          },
+          {
+            "id": "m_7mTut6AJmHgT1FCWkW9nch7NHaRDqzgpMCMXR-P0sb_35OdLbwl0Dpgh9RPIgy_Lgekf2amUVUuOibAd3a6EXw",
+            "from": "Easy Trip & Visa",
+            "text": "예, 알겠습니다.",
+            "date": "2026-08-19T02:45:36+0000"
+          },
+          {
+            "id": "m_EYUDx8FOo64assKhZ9vBxB7NHaRDqzgpMCMXR-P0sb_-o5a6h6ryU_I-OG9vOqFHoEDjjBm5XBKBuU11cvCz6w",
+            "from": "Easy Trip & Visa",
+            "text": "네, 감사합니다. 이 사진 정말 아름답네요.",
+            "date": "2026-08-19T02:49:25+0000"
+          },
+          {
+            "id": "m_fOrG0KKExxA_DwBWpbbBsR7NHaRDqzgpMCMXR-P0sb_-EMMhMkkyAwqXWT0vAkPkVeiB2WfTYXrT0j-VwHQXWg",
+            "from": "Easy Trip & Visa",
+            "text": "버스 좌석 예약 및 전자 비자 서비스가 완료되었습니다. 총 결제 금액은 4,000,000 VND입니다.",
+            "date": "2026-08-19T02:51:29+0000"
+          },
+          {
+            "id": "m_zNTjxySmfRqCCVlm2fAhCx7NHaRDqzgpMCMXR-P0sb_8SCBOL0vczjyDjDhOGI6LDIlNLAjd7s-XA4Ui8zc7MA",
+            "from": "Easy Trip & Visa",
+            "text": "Please choose your payment method. You can transfer money to our company bank account or visit our office at the address below to purchase tickets!\nThank you!\nBank transfer (to an account in Vietnam)\n🏦 Bank: Joint Stock Commercial Bank for Foreign Trade of Viet Nam\n👤 Recipient: EASY TRIP & VISA CO. LTD\n🔢 Account number: 1068582577\n🌐 SWIFT code: BFTVVNVX\nAlternatively, you can also pay directly at our office: 21 Phan Vinh, South Nha Trang.\n\nhttps://maps.app.goo.gl/hPNMWxUAmm4VcgWK9",
+            "date": "2026-08-19T02:52:01+0000"
+          },
+          {
+            "id": "m_j-3uP3sBd0Hiv8rAqQZ-ox7NHaRDqzgpMCMXR-P0sb_D-DPT9tQ0xIRsbC8mMTrSuEcfzFo-YRcNrQw3gdGKBA",
+            "from": "김세영",
+            "text": "네 일중이라서",
+            "date": "2026-08-19T03:01:55+0000"
+          },
+          {
+            "id": "m_nW1Gv0ujOC1uRnT3bx-Ubh7NHaRDqzgpMCMXR-P0sb-byay40KPa-i6zHeeX5bLmpkVh5eAbZChqf0IIcMbSxQ",
+            "from": "김세영",
+            "text": "23일날에 드릴께요",
+            "date": "2026-08-19T03:02:05+0000"
+          },
+          {
+            "id": "m_x3K2AY_RKpg0Q9TfEylQWB7NHaRDqzgpMCMXR-P0sb8ngm3bbCQRzCysywta6aV1K2aXMosuD3Vq0fwv-7RDxg",
+            "from": "Easy Trip & Visa",
+            "text": "네, 이해합니다.",
+            "date": "2026-08-19T04:04:23+0000"
+          },
+          {
+            "id": "m_nmE_TO75BeiQ0DC2FZJ5Mx7NHaRDqzgpMCMXR-P0sb_Egz0KxkFD-zkvuqF7QpLMRZ_YQbwZ2wkdDbZ86gp2pQ",
+            "from": "Easy Trip & Visa",
+            "text": "고객님, 결제 잘 받았습니다.",
+            "date": "2026-08-21T13:50:45+0000"
+          },
+          {
+            "id": "m_KWeSu_7C_jr5C5-kOaI-bx7NHaRDqzgpMCMXR-P0sb8QJxyng83JRJZc8-73qarNVjFhoZbLyzkhdAjUHmMZQw",
+            "from": "Easy Trip & Visa",
+            "text": "Auto-label added: Order status marked as ordered.",
+            "date": "2026-08-21T13:50:48+0000"
+          },
+          {
+            "id": "m_UdMRQus_05UKgi254xiwNh7NHaRDqzgpMCMXR-P0sb-elPpfn5M_Mc2VRZRQEl9qeJDKf89R5JBtqJ4CHic_Vg",
+            "from": "Easy Trip & Visa",
+            "text": "27/08 - 90D Laos\nKim Se Young/ 1997\nA12\n버스는 다음 장소에서 픽업합니다: 04 Tran Phu Street - 9:15pm\n📍https://maps.app.goo.gl/ew7bXTr79tZfu4FLA\n\n\nSingle\nE-visa 4 hour x  1 person\n28/08 - 8:00: Exit Bo Y\n28/08 - 11:30: Entry Bo Y",
+            "date": "2026-08-21T13:58:33+0000"
+          },
+          {
+            "id": "m_esMdloGyKwJYEKE5C9Obbx7NHaRDqzgpMCMXR-P0sb8mxp-VQyIMqG-VSlDihYu-a7rUO4binlCsC--mk-OEYA",
+            "from": "Easy Trip & Visa",
+            "text": "https://maps.app.goo.gl/pLFi7RzZjtRuskPR7",
+            "date": "2026-08-23T12:39:14+0000"
+          },
+          {
+            "id": "m_reYQLPtgvjls0iph1uiGxh7NHaRDqzgpMCMXR-P0sb8ipqalTjjsDvPffqP59h76YUO_eGiHMIdPLq0GOLz8yQ",
+            "from": "Easy Trip & Visa",
+            "text": "안녕하세요, 고객님을 픽업할 버스 승차 장소에 대한 안내를 드립니다",
+            "date": "2026-08-23T12:41:00+0000"
+          },
+          {
+            "id": "m_ZXU6_MZFN0dZ_I8ddbgmex7NHaRDqzgpMCMXR-P0sb9MmshZP1-iYInEuMwC06u_L-zu4rLUOVaUgYDbDhICfA",
+            "from": "김세영",
+            "text": "감사합니다",
+            "date": "2026-08-23T12:44:20+0000"
+          },
+          {
+            "id": "m_B01nuMZ_Xx8-Hp17jxlp6B7NHaRDqzgpMCMXR-P0sb8xO1NNAP62iHH5ltE0Ymo0jBT4LkN9DADYBF2cEsSrcQ",
+            "from": "Easy Trip & Visa",
+            "text": "You're welcome! 😊 If you have any other questions or need help with your visa run, feel free to ask. I'm here to assist you!",
+            "date": "2026-08-23T12:44:25+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1376602930679796",
+        "name": "Jonny Lifegame",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_NlqmNknIHw2dpFGtEGIK8KdWFdHeFCk62v2BzQuA7RDDXA4uf1ONG7XarPboapTEO0N76bpIB-QxegECTTLN8A",
+            "from": "Jonny Lifegame",
+            "text": "please check visa name",
+            "date": "2026-08-18T07:59:34+0000"
+          },
+          {
+            "id": "m_K8qmRSX52OeH2Il2ko6QKKdWFdHeFCk62v2BzQuA7RBAmQXXHtQOoAYFD5kRFouej6OcYC4cl9Dn2yNvcmnbjA",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-18T07:59:39+0000"
+          },
+          {
+            "id": "m_HTyTIrRL3kM-O-okQaZ3vadWFdHeFCk62v2BzQuA7RAKnAI96YWCPlqdLierrnYHKp99K4mETl1tN-nYa9x3kw",
+            "from": "Easy Trip & Visa",
+            "text": "20/08 Nha Trang - Sai Gon\nKylchynskyi Yevhen / 1984\nA5\nHalushko Nataliia/ 1987\nB5\nPick up place: 77 Thái Nguyên - 20:30\nhttps://maps.app.goo.gl/53HaePipGR4U3xYg7\n\nSingle\nE-visa 4 hours x 2 people\n21/08 - 8:00: Exit Moc Bai\n21/08 - 11:30: Entry Moc Bai\n\n21/08 Sai Gon - Nha Trang\nKylchynskyi Yevhen / 1984\nA7\nHalushko Nataliia/ 1987\nB7\nPick up place: Bến xe An Sương - 20:30\nhttps://maps.app.goo.gl/Bme8ZZ2ZUBsE5xqG7",
+            "date": "2026-08-18T08:00:52+0000"
+          },
+          {
+            "id": "m_wArpEjrd6RiMV7CUoVRGsadWFdHeFCk62v2BzQuA7RA9TOcnJ4qQ4dHoBS8Ac-0YRzm3WZrd5GqAsf0N9AiV3Q",
+            "from": "Easy Trip & Visa",
+            "text": "sorry sir",
+            "date": "2026-08-18T08:00:57+0000"
+          },
+          {
+            "id": "m_6AT_EUuhRhd0w4ZX2_FeN6dWFdHeFCk62v2BzQuA7RBz6sX_vcWtYLzr7ujiH9gK2qNZiXIbcB-f9LqPRCpmyw",
+            "from": "Easy Trip & Visa",
+            "text": "don't worry sir we will correct the name but in the e-visa we take it from passport to be sure everything is correct",
+            "date": "2026-08-18T08:01:24+0000"
+          },
+          {
+            "id": "m_yUd6ys3NWg2rWyqbE57taadWFdHeFCk62v2BzQuA7RDCjzgU9cjcTB4OmGKPOJbsF7BxCUqakudQxaZbM4mpHg",
+            "from": "Easy Trip & Visa",
+            "text": "Ride Notification & Cost-Sharing Refund 🚕\n​Dear sir,\n​Regarding your 4-seater taxi ride from HCMC to Moc Bai Border Gate, another passenger will be joining you on the same route. 🤝\n​We understand that carpooling may reduce your personal space and privacy. Therefore, we would like to split the total fare equally among 3 passengers to help lower your cost:\n​🔹 Original total fare: 2,000,000 VND / 2 passengers\n🔹 Split among 3 passengers: 2,000,000 / 3 ≈ 667,000 VND / person\n🔹 Refund amount: 667,000 VND\n​We will refund 667,000 VND directly to you. 💸 Thank you so much for your understanding, and we wish you a safe and pleasant journey! 🌟",
+            "date": "2026-08-19T08:43:32+0000"
+          },
+          {
+            "id": "m_b648j973Cz5-YkwE4gFWmadWFdHeFCk62v2BzQuA7RBPihteIEZpObLWdI-GjYvMHv1Gc-Uv8SEUS2BESgP6xA",
+            "from": "Easy Trip & Visa",
+            "text": "Is that okay, sir?",
+            "date": "2026-08-19T08:43:50+0000"
+          },
+          {
+            "id": "m_-9VWJ_IoJjxIR1HibRLuLKdWFdHeFCk62v2BzQuA7RCHm9X-zCVG6TW_j1346fhb8eDSNjVz_dW96NvksIyqFw",
+            "from": "Easy Trip & Visa",
+            "text": "Please let us know your opinion, sir🥰",
+            "date": "2026-08-19T08:44:24+0000"
+          },
+          {
+            "id": "m_iGM6xtW5eBCKnGkpmzTcRadWFdHeFCk62v2BzQuA7RAfUHyj2TBhr5JTsl7L-PcebYXRs0xvFdX7oCxgDu0szA",
+            "from": "Easy Trip & Visa",
+            "text": "🚍 МАРШРУТ ПУТЕШЕСТВИЯ\n\n📅 20 августа - Четверг\n\n🌙 20:30: Прибытие в офис по адресу: улица Тай Нгуен, 77, Нячанг, провинция Кханьхоа\nСсылка на Google Maps: https://maps.app.goo.gl/S5KR8XE9WtDM1wpr7\n\nПутешествие из Нячанга в Хошимин будет включать короткий трансфер для вашего удобства.\n\nВы сядете на маршрутный автобус у офиса автобусной компании по адресу: улица Тай Нгуен, 77, Нячанг, провинция Кханьхоа. Там администратор проводит вас к маршрутному автобусу до Южного автовокзала. Оттуда вы пересядете на подходящий автобус до Хошимина. Если вам потребуется дополнительная помощь, пожалуйста, свяжитесь с нами. Мы всегда готовы помочь. Желаем вам безопасного путешествия!\n\n\n📅 21 августа - пятница\n\n🌅 5:00: Прибытие на автовокзал Ан Суонг.\n\nСсылка на Google Maps: https://maps.app.goo.gl/1r5ma19rEicuUV559\n\n🚗 5:00 – 7:30: Трансфер на частном автомобиле (4 места) от автовокзала Ан Куонг до пограничного пункта Мок Бай.\n\n🛂 7:30 – 13:30: Прохождение иммиграционных процедур и 📄 Ожидание одобрения электронной визы.\n\nПо прибытии на пограничный пункт Мок Бай, пожалуйста, немедленно покиньте его и сдайте нам выездной штамп до 8:00. После успешной сдачи выездного штампа, пожалуйста, отдохните и позавтракайте в ближайшем кафе, пока мы оформляем вашу электронную визу. Мы ожидаем предоставить вам результаты до 11:30 того же дня.\n\n\nПосле получения электронной визы, пожалуйста, пройдите по указанному на картинке ниже адресу, чтобы распечатать электронную визу и въехать во Вьетнам.\n\n🚗 14:00 – 16:30: Поездка на 4-местном автомобиле из Мок Бай ➔ Возвращение на автовокзал Ан Суонг.\n\n🌙 20:30: 🚌 Посадка на спальный автобус на автовокзале Ан Суонг ➔ Отправление в Нячанг.\n\nМесто отправления: Автовокзал Ан Суонг\n\nСсылка на Google Maps: https://maps.app.goo.gl/1r5ma19rEicuUV559\n\n📅 22 августа - суббота\n\n🏡 5:30: Прибытие в Нячанг; окончание поездки.\n\nПИТАНИЕ 🍽️\n\n🥖 Завтрак: Приготовьте легкий перекус для быстрого завтрака во время поездки в Мок Бай. 🍲 Обед: По возвращении во Вьетнам попросите водителя остановиться в местных ресторанах возле пограничного перехода Мок Бай на обед.\n\n🍚 Ужин (17:30 – 19:30): Отдохните и насладитесь неспешным ужином возле автовокзала Ан Куонг перед отъездом.",
+            "date": "2026-08-19T09:31:42+0000"
+          },
+          {
+            "id": "m_ZtmZ4sPXfGRdtnZ0uTnLjqdWFdHeFCk62v2BzQuA7RCb2tYGAafHLz5fK_m0l0fjvM4nMvIyeg5-VoyZdUXTCA",
+            "from": "Easy Trip & Visa",
+            "text": "Здесь вы можете распечатать электронную визу и повторно въехать во Вьетнам.",
+            "date": "2026-08-19T09:32:16+0000"
+          },
+          {
+            "id": "m_3cilNtSRJ2qFBjBuiJOmjKdWFdHeFCk62v2BzQuA7RAtOeZjeYZaPkurQmS9z9zWyYAhrek3jWFz-OnI164kkg",
+            "from": "Easy Trip & Visa",
+            "text": "Here is the complete English translation with all details and Google Maps links preserved:\n🚍 TRAVEL ITINERARY\n📅 Thursday, August 20\n🌙 20:30: Arrive at the office at 77 Thai Nguyen Street, Nha Trang, Khanh Hoa Province.\nGoogle Maps link: https://maps.app.goo.gl/S5KR8XE9WtDM1wpr7\nThe journey from Nha Trang to Ho Chi Minh City will include a short transit transfer for your convenience.\nYou will board a shuttle bus at the bus company office at 77 Thai Nguyen Street, Nha Trang, Khanh Hoa Province. The staff there will guide you to the shuttle heading to the South Bus Station. From there, you will transfer to the sleeper bus to Ho Chi Minh City. If you need any assistance, please contact us. We are always ready to help. Wishing you a safe journey!\n📅 Friday, August 21\n🌅 05:00: Arrival at An Suong Bus Station.\nGoogle Maps link: https://maps.app.goo.gl/1r5ma19rEicuUV559\n🚗 05:00 – 07:30: Private 4-seater car transfer from An Suong Bus Station to Moc Bai Border Gate.\n🛂 07:30 – 13:30: Immigration procedures & 📄 waiting for e-visa approval.\nUpon arrival at the Moc Bai border gate, please proceed through Vietnam exit immigration immediately and send us a clear photo of your exit stamp before 08:00. After sending the exit stamp, please relax and have breakfast at a nearby café while we process your e-visa. We expect to deliver your e-visa by 11:30 on the same day.\nOnce you receive your e-visa, please head to the location shown in the image below to print out the e-visa document and re-enter Vietnam.\n🚗 14:00 – 16:30: Private 4-seater car transfer from Moc Bai ➔ Return to An Suong Bus Station.\n🌙 20:30: 🚌 Board the sleeper bus at An Suong Bus Station ➔ Depart for Nha Trang.\nDeparture point: An Suong Bus Station\nGoogle Maps link: https://maps.app.goo.gl/1r5ma19rEicuUV559\n📅 Saturday, August 22\n🏡 05:30: Arrival in Nha Trang; end of trip.\n🍽️ MEAL SUGGESTIONS\n🥖 Breakfast: Prepare a light snack for a quick breakfast during the drive to Moc Bai.\n🍲 Lunch: After re-entering Vietnam, ask the driver to stop at local restaurants near the Moc Bai border area for lunch.\n🍚 Dinner (17:30 – 19:30): Relax and enjoy a leisurely dinner near An Suong Bus Station before departure.",
+            "date": "2026-08-19T09:33:46+0000"
+          },
+          {
+            "id": "m_e_4Iu5bxhoxmQFCPut4GfqdWFdHeFCk62v2BzQuA7RDZlmiczoSOuHYyUqp0tr5mqiCb-9Og4gF9_tk2F1LXTQ",
+            "from": "Easy Trip & Visa",
+            "text": "Here is where you can print out your e-visa and re-enter Vietnam.",
+            "date": "2026-08-19T09:34:22+0000"
+          },
+          {
+            "id": "m_zeg0vQVSMo56myH6_uMYhadWFdHeFCk62v2BzQuA7RDyMUYVmyAFbSk5arDXIxf34QRXuu4mJOANgFnr0CQnpA",
+            "from": "Easy Trip & Visa",
+            "text": "Could you please confirm this for us, sir?",
+            "date": "2026-08-19T09:34:55+0000"
+          },
+          {
+            "id": "m_nlQoRsy1xd_6IbwnNPuwyKdWFdHeFCk62v2BzQuA7RAChL1TRTtvzAmGrd9Eo7atQbuyKKw71achvQrH1Afnvg",
+            "from": "Jonny Lifegame",
+            "text": "ok",
+            "date": "2026-08-19T16:06:35+0000"
+          },
+          {
+            "id": "m_gf2mxSKXA8lX_SJbb-EBzqdWFdHeFCk62v2BzQuA7RDvMNKMhNFc59HjNyx6fs_eSMvdGPlU2xauU1Vq3wnTrA",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! 😊 How can I assist you with your visa run today? If you have any questions about our bus schedules, prices, or routes, feel free to ask!",
+            "date": "2026-08-19T16:06:41+0000"
+          },
+          {
+            "id": "m_zsmaaYqFRowQ7_u0KmG156dWFdHeFCk62v2BzQuA7RD6G5OUngwnJgSBVXovl4bgqQFD_pv4tJuG7JcZaJFpFA",
+            "from": "Easy Trip & Visa",
+            "text": "Pls, send us your QR account bank, sir",
+            "date": "2026-08-19T16:07:25+0000"
+          },
+          {
+            "id": "m_xqPIOr-smclcMI7lQO8W5adWFdHeFCk62v2BzQuA7RAw41Brl2loAN2lEpJ_rL3nru57WMit4imHoAo5egDXLg",
+            "from": "Jonny Lifegame",
+            "text": "hello, I will send you later",
+            "date": "2026-08-20T02:18:07+0000"
+          },
+          {
+            "id": "m_hzztZBW3vO7fSiHYdAn3LKdWFdHeFCk62v2BzQuA7RCsUcbY5ov7k-dIDogEblXrA0w7DyvWY3DwhLiDtDoLKQ",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! No problem, take your time. 😊\n\nWhenever you're ready, just send me your details and I'll help you arrange your visa run.\n\nIf you have any questions in the meantime, feel free to ask!",
+            "date": "2026-08-20T02:18:43+0000"
+          },
+          {
+            "id": "m_CftYwrCd3pCwp3APK9jX4KdWFdHeFCk62v2BzQuA7RBWwFUdY7898R70gO40dX0oaEpJzgHk8Z4nq2PeK9DOPg",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! 😊 No problem, take your time. Whenever you're ready, just send over your details and I'll help you arrange your visa run. If you have any questions in the meantime, feel free to ask!",
+            "date": "2026-08-20T02:18:43+0000"
+          },
+          {
+            "id": "m_2_JgEKh6D74dfvogiljhZKdWFdHeFCk62v2BzQuA7RCpl9-q8FCo6I_1vI1sROa7q1swXb0rRnOKpV5psZTCBQ",
+            "from": "Easy Trip & Visa",
+            "text": "Thank you very much, sir. We have received your exit stamp and we will process your E-visa🥰🥰🥰",
+            "date": "2026-08-20T23:33:09+0000"
+          },
+          {
+            "id": "m_UheAa7WWfHbzVye1tSzOHqdWFdHeFCk62v2BzQuA7RAzSQHZUQxsaPHKnm6ukQ97_SBAcHUHysMkK8kupLUapA",
+            "from": "Easy Trip & Visa",
+            "text": "Now, please relax and enjoy breakfast at the cafes near the border crossing. We will send you your e-visa around 11:30 AM. Afterwards, you will need to print it out on paper to re-enter Vietnam.",
+            "date": "2026-08-20T23:35:06+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1599839798451432",
+        "name": "Vlad Čoki",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_djSShOKGPTUT8V-VX2xq6uBXDNH00nuJv6Bas7CC7NLv9WWfRRtv13K50bzF9qTGPZgPPfj47E0KomsZtsfwcw",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-14T06:42:35+0000"
+          },
+          {
+            "id": "m_2V2FvhXYJPVYumvk-HtUBOBXDNH00nuJv6Bas7CC7NLaxEtGcRv60K139akP-riqsk71sGtJuKkyeQctkNCzWA",
+            "from": "Vlad Čoki",
+            "text": "I live in The Arena - Cam Ranh",
+            "date": "2026-08-14T06:43:09+0000"
+          },
+          {
+            "id": "m_kWJzLCaeDBPqDsz88-Q0r-BXDNH00nuJv6Bas7CC7NJ4ve3Q15pZhkFKAFYmAK3zMagTK-UyWmd869hihXM2rw",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-14T06:43:13+0000"
+          },
+          {
+            "id": "m_EhExLk8PsCAObqrLSAikg-BXDNH00nuJv6Bas7CC7NIaHSu4OMYKokMLw8SUaQll8DmevWBVkO9Mgz_p4Eui8Q",
+            "from": "Easy Trip & Visa",
+            "text": "Omg",
+            "date": "2026-08-14T06:45:15+0000"
+          },
+          {
+            "id": "m_5xOB13UaAfSfYtLynC6uAeBXDNH00nuJv6Bas7CC7NKt2vFoBKmKnWdQzvtGC7qC-DUPN08DNFWrOJePIKOFVA",
+            "from": "Easy Trip & Visa",
+            "text": "Okey you can come",
+            "date": "2026-08-14T06:45:26+0000"
+          },
+          {
+            "id": "m_LoS-ozCNGI00yG6Zql1PtuBXDNH00nuJv6Bas7CC7NKqt3GUYvnsCRMsiEgBCVEUvZ1jCL0zXZjp0oVLwgodXg",
+            "from": "Easy Trip & Visa",
+            "text": "Before 16:00",
+            "date": "2026-08-14T06:45:39+0000"
+          },
+          {
+            "id": "m_EYruu-ikPmHguPsRsbj0fOBXDNH00nuJv6Bas7CC7NKgp-CQNybZ57R511afj6HCOs8pWRXxNVMLpPqlLKQJZg",
+            "from": "Easy Trip & Visa",
+            "text": "After that we in hospital",
+            "date": "2026-08-14T06:45:48+0000"
+          },
+          {
+            "id": "m_Xz_n54VTqHyG2op6wwGPTuBXDNH00nuJv6Bas7CC7NKLI3_ZRTWRRdGVHwD0kjjdxCApd1Xwl-3iQU-r4dZHLQ",
+            "from": "Vlad Čoki",
+            "text": "On my way. 15:00 I should be there",
+            "date": "2026-08-14T06:45:52+0000"
+          },
+          {
+            "id": "m_pOgGFj-_bIDCI-ETvW5ySOBXDNH00nuJv6Bas7CC7NLWxrs95ue2vtWYmbWUUhBIGRC2zah3QgAwehO8bMbFvA",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-14T06:45:54+0000"
+          },
+          {
+            "id": "m_mSQE-WffKrnVvb0-_kzbseBXDNH00nuJv6Bas7CC7NLNb8TCaOnDC96hmxkagZwlju_aJenAx8F1yBH_c_n_sA",
+            "from": "Easy Trip & Visa",
+            "text": "Tam Tri Hospital \n7th floor",
+            "date": "2026-08-14T06:46:17+0000"
+          },
+          {
+            "id": "m_3-iUKd3WOzfKCjLzBS2dGuBXDNH00nuJv6Bas7CC7NLd48QEEBKDwnW73gov7WPJxz8kJ_cyvNd9M-kCFzW1ng",
+            "from": "Vlad Čoki",
+            "text": "Should I come to office or to hospital?",
+            "date": "2026-08-14T06:46:37+0000"
+          },
+          {
+            "id": "m_3WJApomOcqh3d5nmTzHOyOBXDNH00nuJv6Bas7CC7NKZkQ6qsQKqAAuYGZw2WMSYozVmPfri9XSMtldS1UeIzQ",
+            "from": "Easy Trip & Visa",
+            "text": "No worries",
+            "date": "2026-08-14T06:46:39+0000"
+          },
+          {
+            "id": "m_Z28L-LR_DiXQdI2auBj3weBXDNH00nuJv6Bas7CC7NJ0OlcwNDnmuODABHcu4MR14wXubzSQnmSVFO3th4YSvA",
+            "from": "Easy Trip & Visa",
+            "text": "Please come to our office at **21 Phan Vinh, South Nha Trang** – not the hospital. We will be waiting for you there at **15:00**. 🚌\n\n📍 https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n\nIf you have any trouble finding us, just call or message us on Zalo/WhatsApp at **+84 868 462 071**. See you soon!",
+            "date": "2026-08-14T06:46:42+0000"
+          },
+          {
+            "id": "m_2n7gbudHDMG7pokywDyiyeBXDNH00nuJv6Bas7CC7NJXw5Pt-WPaAbXWuOHmrImXxEFOa4Q4hqKEOv9008CD9g",
+            "from": "Vlad Čoki",
+            "text": "Ok",
+            "date": "2026-08-14T06:47:05+0000"
+          },
+          {
+            "id": "m_zdAlqmAvj7NS9QVGTp-RaOBXDNH00nuJv6Bas7CC7NJVFUibbj8n1twVCaeLGLOzSLyCf0_J7OCj4Jcze90ELw",
+            "from": "Easy Trip & Visa",
+            "text": "Great! We'll see you at the office at **21 Phan Vinh, South Nha Trang** around **15:00**. 🚌\n\n📍 https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n\nIf you get lost or need any help, just call or message us on Zalo/WhatsApp at **+84 868 462 071**. Safe travels and see you soon!",
+            "date": "2026-08-14T06:47:09+0000"
+          },
+          {
+            "id": "m_z4BD-QrnQ43FxWAc9_t2KuBXDNH00nuJv6Bas7CC7NK5X0rzd6BwNekBqvJuYnzDhZHVROUAMtdigXqduHSfKw",
+            "from": "Easy Trip & Visa",
+            "text": "Office 1st",
+            "date": "2026-08-14T06:47:09+0000"
+          },
+          {
+            "id": "m_FO_BpvgOeB_R9Z2FHvO_leBXDNH00nuJv6Bas7CC7NKPOTyHA1u8BL-4U7D1u8f2yHLGsd3WtKWiVhFn7mHXKg",
+            "from": "Easy Trip & Visa",
+            "text": "This is my AI chat box...forget it",
+            "date": "2026-08-14T06:47:34+0000"
+          },
+          {
+            "id": "m_4_f0KRcyMqtx2HmdNtiNleBXDNH00nuJv6Bas7CC7NI-T5XUr_JNFr5MaEJkB7kZCpa1FqwtUKmzifGZamBLqQ",
+            "from": "Easy Trip & Visa",
+            "text": "Good morning, sir. This is your visa Cambodia, sir. My staff will print it into 2 copies and bring it to you at the bus stop, sir",
+            "date": "2026-08-19T05:19:39+0000"
+          },
+          {
+            "id": "m_TFVH_MjaBoyvOrTAmmNceOBXDNH00nuJv6Bas7CC7NIBsf-fNv5VI0IXcN-RJ5nkXVUrLDAJb_w6g01dRSiRjQ",
+            "from": "Vlad Čoki",
+            "text": "That's amazing. Thank you very much 🙏❤️",
+            "date": "2026-08-19T06:17:24+0000"
+          },
+          {
+            "id": "m_j05oho1w-XmT9X4lslUhr-BXDNH00nuJv6Bas7CC7NKLGPgLF0AzQX3e1ivSZzKTH46s13X6S-ihukD-bCk4Jw",
+            "from": "Easy Trip & Visa",
+            "text": "You're very welcome! 😊 I'm glad I could help. If you have any more questions or need assistance with booking, feel free to ask anytime. Have a wonderful day! 🙏❤️",
+            "date": "2026-08-19T06:17:28+0000"
+          },
+          {
+            "id": "m_ek_eiXxc9A7NIqtwm56cvOBXDNH00nuJv6Bas7CC7NIJh18MXAmDvbnuHtSnjMTfFeCtazjWQVxA3Iz6y2Drrg",
+            "from": "Vlad Čoki",
+            "text": "Following you from my two Facebook profiles 😀",
+            "date": "2026-08-19T06:28:16+0000"
+          },
+          {
+            "id": "m_0wMPtwVB_iIHsSALcGGXCOBXDNH00nuJv6Bas7CC7NJpJmJfzUrDmM-KAqQ3oPVvIFYgyEGGtDJxSkUNWZF8mg",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-19T06:28:20+0000"
+          },
+          {
+            "id": "m_hMoqDl1g3Ct5BbWIvR1uh-BXDNH00nuJv6Bas7CC7NJNOWOKM_rezj5zYAX2xQt-aSw74xttfj2c0AyBlapmjA",
+            "from": "Easy Trip & Visa",
+            "text": "Thank you, sir",
+            "date": "2026-08-19T06:29:17+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1523741156464452",
+        "name": "Zaza Soup",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_p8CtIwBtT-RXEWhCpzb6dvQL8iJD5Y54QpgUsOB5wd7XLOWwD7J72miiKO6BocExQXG5LXEHCepe68oVoQxHfA",
+            "from": "Zaza Soup",
+            "text": "I need apple job",
+            "date": "2026-08-19T03:40:36+0000"
+          },
+          {
+            "id": "m_MFXJDkYclH22riMLvUSKB_QL8iJD5Y54QpgUsOB5wd4m_87eEUU523CAEYuCRj019m_C6Pqk44e8tETrqvOkqw",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-19T03:40:40+0000"
+          },
+          {
+            "id": "m_e63y691RcNG2NYCSrNZkf_QL8iJD5Y54QpgUsOB5wd7SWZUKKDIH6lodkaflPmDjOj_0onITJ0ablN6BCM4jrw",
+            "from": "Zaza Soup",
+            "text": "Nanny in Vietnam",
+            "date": "2026-08-19T03:41:00+0000"
+          },
+          {
+            "id": "m_9f392Kkl7hnUyrpsELyqL_QL8iJD5Y54QpgUsOB5wd44xPWTC0h_VcYAswESNhR-npypHFOXxGe53GO9EOduSw",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-19T03:41:04+0000"
+          },
+          {
+            "id": "m_lrT-eDCBIDMEK4uEM_Cdo_QL8iJD5Y54QpgUsOB5wd4vgE6l3-wNYiSq3sNkrJLrlf1w8Fj8ls497QnSZLXLBg",
+            "from": "Easy Trip & Visa",
+            "text": "Thank you for your interest in the position at our company.\n\nCould you please send us an updated copy of your CV? We would like to present your application to our Recruitment Department for review before submitting it to the Director.\n\nWe look forward to receiving your CV soon.",
+            "date": "2026-08-19T04:13:33+0000"
+          },
+          {
+            "id": "m_dG7WgWa6tJSVkhbGNyWvsvQL8iJD5Y54QpgUsOB5wd7GR8sl4ls-aPgCRVtxTEPTC1xtbfUMbRym6Lx5qzqO3Q",
+            "from": "Zaza Soup",
+            "text": "Company provide TRC and work permit rights?",
+            "date": "2026-08-19T04:30:25+0000"
+          },
+          {
+            "id": "m_UKkRMJmFYMiZvwImP0roUvQL8iJD5Y54QpgUsOB5wd6bkl6-kVRhQ2WPOg3IQt1ZWCal-948AbP4A1OhcZnM1w",
+            "from": "Easy Trip & Visa",
+            "text": "Yes ma'am",
+            "date": "2026-08-19T05:21:41+0000"
+          },
+          {
+            "id": "m_VxGBE8XfOAjDP3q7JCrZ3_QL8iJD5Y54QpgUsOB5wd47LhPJt-QQZt6REgzWK6gx0D1DcTfUa5aLCMICKcJgHQ",
+            "from": "Easy Trip & Visa",
+            "text": "Can you send us your cv ?",
+            "date": "2026-08-19T05:22:37+0000"
+          },
+          {
+            "id": "m_9GpDskp2z_ySIL_3ijF_LvQL8iJD5Y54QpgUsOB5wd7Be6Az12U5_NlM5PITyqjgO5qPtvOsAi_FcM5jRoocVg",
+            "from": "Easy Trip & Visa",
+            "text": "Thank you for your response. First, could you please send us your CV so that our HR department can review it? Regarding the TRC or work visa, you may discuss those details directly with our Director afterward.\n\nWe look forward to receiving your CV",
+            "date": "2026-08-19T05:23:12+0000"
+          },
+          {
+            "id": "m_6rPu1mF1RbpokauMnq8q4vQL8iJD5Y54QpgUsOB5wd4jhdvfLoH0DbTyZgnUyiU0ihKCamf1U6c4B82shThYdw",
+            "from": "Zaza Soup",
+            "text": "Ok wait please",
+            "date": "2026-08-19T05:31:25+0000"
+          },
+          {
+            "id": "m_XlmZiK--JIzIDQZDWoUeXvQL8iJD5Y54QpgUsOB5wd5P6bgkYS3cgkLaIaUyjYMMhoOHwjLOYMwXicuZUU62yQ",
+            "from": "Easy Trip & Visa",
+            "text": "Auto-label added: Lead stage set to intake.",
+            "date": "2026-08-19T05:31:39+0000"
+          },
+          {
+            "id": "m_3pLhUfEK-fPQfAylZKKyGfQL8iJD5Y54QpgUsOB5wd6KRy0yyBfegWV3gREtQOjhElLBpyJxFvCpfUGXo9ysww",
+            "from": "Zaza Soup",
+            "text": "SOUPHANSA OUNNALATH\n\nPROFESSIONAL NEWBORN SPECIALIST & NANNY\nVientiane, Laos | +856 20 98 759 996\nsouphansaounnalad@gmail.com\n\nPROFILE SUMMARY\nDedicated and experienced professional nanny with 3 years of hands-on experience specializing in full-charge newborn care (0–12 months) and early childhood English language instruction. Experienced with expatriate families in Laos. Responsible, adaptable, safety-conscious, and prepared to relocate for full-time or live-in opportunities.\nCORE COMPETENCIES\n * Full-charge newborn care, feeding routines, bathing and diapering\n * Bottle sterilization, formula preparation and breastmilk storage\n * Infant hygiene, nursery sanitation and daily routine management\n * Sleep routines and age-appropriate newborn care\n * English language immersion through play, stories, songs and conversation\n * Adaptable to Chinese expatriate household standards and routines\n * Reliable, nurturing, organized and responsible\nPROFESSIONAL EXPERIENCE\nFull-Charge Newborn Care Specialist & English Nanny\nPrivate Chinese Expatriate Families | Vientiane, Laos\n2023 – 2026 | 3 Years Experience\n * Provided comprehensive, round-the-clock care for newborn infants (0–12 months), managing feeding, hygiene and daily routines.\n * Handled bottle sterilization, formula preparation, breastmilk storage, bathing, diapering and sleep routines.\n * Delivered interactive English language instruction to toddlers and young children through conversation, flashcards, storytelling and educational games.\n * Monitored developmental milestones and communicated daily observations and wellbeing updates to parents.\n * Maintained a safe, nurturing and culturally respectful environment suited to expatriate family standards.\nEDUCATION\nHigh School Diploma\nGrade 12 / M.6\nLANGUAGES\n * Lao: Native\n * English: Fluent\n * Thai: Conversational\n * Chinese: Conversational\nPERSONAL DETAILS\n * Full Name: Souphansa Ounnalath\n * Date of Birth: 03 December 1994\n * Nationality: Lao\n * Location: Vientiane, Laos\nRELOCATION\nReady to relocate for full-time / live-in nanny positions in Vietnam.\nReferences available upon request",
+            "date": "2026-08-19T06:01:21+0000"
+          },
+          {
+            "id": "m_OIFCs1gj-XBvQtBr-t4j4vQL8iJD5Y54QpgUsOB5wd470LtcArulV7BFwWTe7_TtFLc1I3p3bNeDWRXzDLSHOA",
+            "from": "Easy Trip & Visa",
+            "text": "Where do you currently live?",
+            "date": "2026-08-19T06:08:39+0000"
+          },
+          {
+            "id": "m_Q8oBHQRlOIgI4jRgrIaDEvQL8iJD5Y54QpgUsOB5wd4QiH9ZC_zr6b8l4SYhUoO_DoYEBjC1Nc5pVmjlkwuUAA",
+            "from": "Zaza Soup",
+            "text": "Laos",
+            "date": "2026-08-19T06:08:56+0000"
+          },
+          {
+            "id": "m_H2cgTYQIdYUVVJLZwi__tPQL8iJD5Y54QpgUsOB5wd70EqQ0jHXeOpfArS1VDkHCKmKqkM0E-uqNANaXrM0CpQ",
+            "from": "Easy Trip & Visa",
+            "text": "Which chat channel can we contact you through?",
+            "date": "2026-08-19T06:09:01+0000"
+          },
+          {
+            "id": "m_j5TekkDOT2f0a3_ipFMfwvQL8iJD5Y54QpgUsOB5wd6uM7oohMIp4RysG5lgK2m5niDNPpZ3ss3Fym8fyonvvQ",
+            "from": "Easy Trip & Visa",
+            "text": "Private chat channel",
+            "date": "2026-08-19T06:09:13+0000"
+          },
+          {
+            "id": "m_QcLDDkCHeqWHiKyX3wNyFfQL8iJD5Y54QpgUsOB5wd4Gf-ol2VJhjWTSvXDnZq-Xy6peXkoCUsCcQXFqwnTk3A",
+            "from": "Zaza Soup",
+            "text": "I need move to Vietnam for work",
+            "date": "2026-08-19T06:09:18+0000"
+          },
+          {
+            "id": "m_40qGAOUnAFY_q_lcWqFCdPQL8iJD5Y54QpgUsOB5wd6VGpxZ4pMRoECv3SaiiopuWJpvGiQQui-X_rpXKGl5Cw",
+            "from": "Zaza Soup",
+            "text": "Whatsapp",
+            "date": "2026-08-19T06:09:21+0000"
+          },
+          {
+            "id": "m_3sw3g-D1F6DxQ8BdmKUOcPQL8iJD5Y54QpgUsOB5wd72H2upPhKg4feagQ6OOBBOAMekjap0mlONPCerXmkYwA",
+            "from": "Zaza Soup",
+            "text": "+856 20 98 759 996",
+            "date": "2026-08-19T06:09:38+0000"
+          },
+          {
+            "id": "m__o5xa39JmHz8Ng-PCnAEnfQL8iJD5Y54QpgUsOB5wd7laGPOcmUR7m795eujHyl6fQ7FSN3f_-VABcrcy4A3hw",
+            "from": "Easy Trip & Visa",
+            "text": "Alright, the nanny company will contact you in a few minutes via WhatsApp",
+            "date": "2026-08-19T06:10:00+0000"
+          },
+          {
+            "id": "m_cpYArnmHeXcGgOF9UvCFF_QL8iJD5Y54QpgUsOB5wd66ETPi7Sh3MkhHSw8gc9xBvOMRUKTJWRlveVuYmVupIQ",
+            "from": "Zaza Soup",
+            "text": "Thank you",
+            "date": "2026-08-19T06:10:13+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1269837175087331",
+        "name": "Dave JB",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_A4VRcmN9bdf1wf1vGn1UqJRMG-U7n7eQQ6PoVsb1K8IxEs8LEiROmoOj-qtPCWFQ4j3nSgKggExAh661AxTXGg",
+            "from": "Dave JB",
+            "text": "From where the bus drive? Same place to cambodia? Or different?",
+            "date": "2026-08-18T04:42:57+0000"
+          },
+          {
+            "id": "m_SVRmhj-OQG7YixowYetv75RMG-U7n7eQQ6PoVsb1K8LapKEKodlUBc1XBtCW8YVqtRamDCBPvHzvWWAsHXIzNA",
+            "from": "Easy Trip & Visa",
+            "text": "Please wait a moment, we will send your final booking details shortly.",
+            "date": "2026-08-18T04:44:22+0000"
+          },
+          {
+            "id": "m_p-fS0T63h61P2ijQnSwvypRMG-U7n7eQQ6PoVsb1K8L7vdMyQXUcvd3fV_01B70UnLWM9bbycoEATz1fY7sQxQ",
+            "from": "Easy Trip & Visa",
+            "text": "18/08 Nha Trang - Ho Chi Minh \nDavid Juergen Beck/1996\nB4\nPick up place: 77 Thái Nguyên - 20:15\nhttps://maps.app.goo.gl/GnHVv9WFeu8QdKRo9",
+            "date": "2026-08-18T04:45:49+0000"
+          },
+          {
+            "id": "m_CUzGr4MNuXlbUZPHbq7iZpRMG-U7n7eQQ6PoVsb1K8KOpdHOdyplKpKnS4lH_cTYwOXeFoXmhzY7po-RtUuDVQ",
+            "from": "Easy Trip & Visa",
+            "text": "This is your bus information. We will send you the bus number in the afternoon, sir",
+            "date": "2026-08-18T04:46:22+0000"
+          },
+          {
+            "id": "m_n6BQrpuxVRZlHV92bC1WEZRMG-U7n7eQQ6PoVsb1K8I2RhspbKZLpCLkC8GfZkNuO9SrNuFvZ3hkiEYYE1H66w",
+            "from": "Dave JB",
+            "text": "Thank you really much 🙏🏼",
+            "date": "2026-08-18T04:47:35+0000"
+          },
+          {
+            "id": "m_7Yq_wDqvBZMpHRMUDhDDQ5RMG-U7n7eQQ6PoVsb1K8K7e9WjmTuZcjBOCd7aNciOrBiVgKHi9RehxyZdQUY6Uw",
+            "from": "Easy Trip & Visa",
+            "text": "You're very welcome! 😊 If you have any other questions or need help with your visa run, feel free to ask. I'm here to assist you!",
+            "date": "2026-08-18T04:47:39+0000"
+          },
+          {
+            "id": "m_o4Z3pVsAeoqn6A7hXM1c_JRMG-U7n7eQQ6PoVsb1K8LNREwXHYYVkEqqUrDEotr23d3pKGjT8xWG3NowI1DNvA",
+            "from": "Easy Trip & Visa",
+            "text": "18/08 Nha Trang - Ho Chi Minh \nDavid Juergen Beck/1996\nB4\nBus number: 79B - 034.78\nWifi: 19002679\nPick up place: 77 Thái Nguyên - 20:15\nhttps://maps.app.goo.gl/GnHVv9WFeu8QdKRo9",
+            "date": "2026-08-18T07:40:10+0000"
+          },
+          {
+            "id": "m_vLRpTpo4AcmtDPSET4Cgg5RMG-U7n7eQQ6PoVsb1K8LHpneHpQK5kOJIl4QHsf8KYF30S4q3AXyhRrQVH91_FA",
+            "from": "Easy Trip & Visa",
+            "text": "Good afternoon, this is your bus information tonight",
+            "date": "2026-08-18T07:40:40+0000"
+          },
+          {
+            "id": "m_0HvXKPi4HdLlECXnEhMfJJRMG-U7n7eQQ6PoVsb1K8IDix2yitu7qxYaRmKI1qjVrpaIMsQWSXSBni7DE3fqdg",
+            "from": "Dave JB",
+            "text": "Here or",
+            "date": "2026-08-18T12:56:57+0000"
+          },
+          {
+            "id": "m_zEAcdjM6LAqwlYMRw1BufZRMG-U7n7eQQ6PoVsb1K8KUUMW3BvIxQ-l1ko_A8SnGItQ2g-DYfhL4TPc0b6u_XQ",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! 👋 How can I assist you with your visa run today? If you're looking for a visa run, I can help you with the details. Could you please tell me your nationality and visa expiry date?",
+            "date": "2026-08-18T12:57:02+0000"
+          },
+          {
+            "id": "m_PLCqeyonvM-tQKE4EcIMU5RMG-U7n7eQQ6PoVsb1K8LscMWTJ2Xm3bNAkO0sn-h5Swzwpn3PV0ETKl2PjFe01A",
+            "from": "Easy Trip & Visa",
+            "text": "This is an automated AI message. We apologize for any inconvenience.",
+            "date": "2026-08-18T12:58:21+0000"
+          },
+          {
+            "id": "m_f2wRp75PxlbGlIhERqF4KJRMG-U7n7eQQ6PoVsb1K8KOQhV4N17HGHYeM-1UNA24mxQCjaa12ZSyYm0B0KmywQ",
+            "from": "Easy Trip & Visa",
+            "text": "Yes, you can pay at the reception desk. Please tell them your name and seat number on the bus.",
+            "date": "2026-08-18T12:59:37+0000"
+          },
+          {
+            "id": "m_K9lI5eU7XUVG3n1WW3bsmJRMG-U7n7eQQ6PoVsb1K8LkszAs1x1yhtv7t3ZTEFFv9jIVElcDiDqW2Ve1iy-Dyw",
+            "from": "Dave JB",
+            "text": "Okayno problem",
+            "date": "2026-08-18T13:00:16+0000"
+          },
+          {
+            "id": "m_Q6uqex1-dA-AINeLH5Wtf5RMG-U7n7eQQ6PoVsb1K8J38e6yZZnmMMd1lwRHmWUAD_YRN1F0ajIgsQ3TOp5jZg",
+            "from": "Dave JB",
+            "text": "Okay perfect",
+            "date": "2026-08-18T13:00:23+0000"
+          },
+          {
+            "id": "m_Ry3Z4rFAzeuHEiXd8-neHZRMG-U7n7eQQ6PoVsb1K8I1NQaKNhLiVCbHSBbah_R-KcOR-9nhvyMSrMi3bakzjQ",
+            "from": "Easy Trip & Visa",
+            "text": "Hello, sir! For your journey from Nha Trang to Ho Chi Minh City, there will be a short transfer step to make your travel as smooth and convenient as possible.\n​Please arrive at bus office at 77 Thai Nguyen Street, the receptionist will guide you onto the shuttle bus to the South Bus Station. From there, you will board the main bus and travel straight to Ho Chi Minh City.\n​If you need any further assistance, please feel free to message us right away! Wishing you a safe and wonderful journey!",
+            "date": "2026-08-18T13:22:30+0000"
+          },
+          {
+            "id": "m_oo12zq72Bg-fgsqBjTdSR5RMG-U7n7eQQ6PoVsb1K8JseAO-2UO8JPJyzB4ZVBNdnP6ZcQe5-waQI19eDdjUOA",
+            "from": "Dave JB",
+            "text": "20:30 or? I sit in front of the bus office 👍🏼",
+            "date": "2026-08-18T13:23:25+0000"
+          },
+          {
+            "id": "m_XkAmQUAWTOj5lCfAPqf8d5RMG-U7n7eQQ6PoVsb1K8JFizYB84SbilvePf5lEogE4b6XIM9_7s6pxTlo46mKzQ",
+            "from": "Easy Trip & Visa",
+            "text": "Yes, sir. 20:30",
+            "date": "2026-08-18T13:23:51+0000"
+          },
+          {
+            "id": "m_mhJ-P_lkyc_LBgBHqsJV-5RMG-U7n7eQQ6PoVsb1K8JmVmgcJl0qeJu1Wyu2AEb-98oaEniW_0jfL9rVQxAoqw",
+            "from": "Dave JB",
+            "text": "Okay i sit in the shuttle thank you",
+            "date": "2026-08-18T13:28:25+0000"
+          },
+          {
+            "id": "m_AwZlmt6nMZKhkwa-4fizRZRMG-U7n7eQQ6PoVsb1K8J78vxtetnoZ4tX2U-l1hHOV_ukxoc47InC5cy_GErhpA",
+            "from": "Easy Trip & Visa",
+            "text": "🥰🥰",
+            "date": "2026-08-18T13:29:33+0000"
+          },
+          {
+            "id": "m_QNZOiymCM0Q0gVhPjCM6b5RMG-U7n7eQQ6PoVsb1K8LRqczAecwJwjlfTo1cPY6uReUB2W6FJo4ggymdGPFTFQ",
+            "from": "Dave JB",
+            "text": "One question we stop all 3 minutes for packages and other people. You now the time when we arrive?",
+            "date": "2026-08-18T15:19:06+0000"
+          },
+          {
+            "id": "m_7U3gDUnBZENQrlx_sLSsPJRMG-U7n7eQQ6PoVsb1K8Kc1v4TR3OXCDOX-husZYX9MzSo6dFyUDoseFgTcOmA0Q",
+            "from": "Easy Trip & Visa",
+            "text": "We usually stop briefly for packages and other passengers, but the total travel time remains the same. You can expect to arrive at the Moc Bai border around 06:00 - 06:30 AM. 🚌",
+            "date": "2026-08-18T15:19:42+0000"
+          },
+          {
+            "id": "m_8E7UrQHssDvk94lgPcOcupRMG-U7n7eQQ6PoVsb1K8IWYv7x8orJKTVU5YQNYMKaTT5FD_EEdtdaCjRo9MFFpQ",
+            "from": "Easy Trip & Visa",
+            "text": "We usually make a few short stops along the way for restroom breaks and to pick up other passengers. The bus departs at 21:30 from Nha Trang and arrives at the Moc Bai border around 06:00 - 06:30 AM the next morning. So you can expect to arrive at the border early in the morning. 😊",
+            "date": "2026-08-18T15:19:42+0000"
+          },
+          {
+            "id": "m_m781JdtqtQzLDWIVe4mubZRMG-U7n7eQQ6PoVsb1K8LfjkTro1VmrsDm4WNzqMNJ-7BQk6nVJ5ak3m0IoNFLcQ",
+            "from": "Easy Trip & Visa",
+            "text": "Apologies for the inconvenience. The bus is expected to arrive in Ho Chi Minh City around 5 AM tomorrow. Please rest assured that the bus will continue on schedule and will arrive on time.",
+            "date": "2026-08-18T15:23:02+0000"
+          },
+          {
+            "id": "m_EJG53mn_IA5__9nC_LfhGpRMG-U7n7eQQ6PoVsb1K8LNJEIZY2OfU5472S8Pddrl9xDNLODy8ZrhekhfmnSNPA",
+            "from": "Dave JB",
+            "text": "Thank you 👍🏼",
+            "date": "2026-08-18T15:23:17+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_29872939532296269",
+        "name": "Ilkin Nabi",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_CO2UKIlY0Ujhd5SgXbEGjb1QxHcwKRM7b-EOceiTiK-4n6rQH6CsrhhTZP2M7W5TmDYxtd6_O16j1ODJg7CuoQ",
+            "from": "Ilkin Nabi",
+            "text": "hello",
+            "date": "2026-08-15T10:31:03+0000"
+          },
+          {
+            "id": "m_Eg_A94R0mibm2gbUDDi-tr1QxHcwKRM7b-EOceiTiK-9zssouRku40QjVeKtmGY5XxJaWSj-znXGZT1QQuM7kw",
+            "from": "Ilkin Nabi",
+            "text": "I am writing for Visarun",
+            "date": "2026-08-15T10:31:08+0000"
+          },
+          {
+            "id": "m_KiKF1TKIG_l65CDYlzOqxb1QxHcwKRM7b-EOceiTiK-P-LTS_UijFuNxGd04lU0mnOLP59Q78-6X47pUhIpVbQ",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! 👋 Welcome to Easy Trip & Visa Co. Ltd! How can I assist you today? Whether you need a visa run, bus tickets, or any travel information, I'm here to help. 😊",
+            "date": "2026-08-15T10:31:09+0000"
+          },
+          {
+            "id": "m_NGTsoke1JM2J4KceNMWBD71QxHcwKRM7b-EOceiTiK_juuv8HlFz6xDVzPrkTvnEWs4ySFJfaE7c7ZQtx_K8Wg",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-15T10:31:12+0000"
+          },
+          {
+            "id": "m_ozA86KdL9jHvIZqW_3c66r1QxHcwKRM7b-EOceiTiK9zyrgfX1jVvi4biJZWUNeFjRag7nvZ2XOgawEnD_zzHw",
+            "from": "Easy Trip & Visa",
+            "text": "Good evening, sir.",
+            "date": "2026-08-15T10:32:05+0000"
+          },
+          {
+            "id": "m_7kC21DRVkkQIJzxLXLRla71QxHcwKRM7b-EOceiTiK8j8Iiv_54YQZN8famPD396-RkBwU4BxEKB6WTjHW01JA",
+            "from": "Ilkin Nabi",
+            "text": "good evening",
+            "date": "2026-08-15T10:32:17+0000"
+          },
+          {
+            "id": "m_5vWO_pBBHFki4CIyvKz4m71QxHcwKRM7b-EOceiTiK-lWcm5tJav8HO97V4ocP4_ofPDVtjRs3USMjvfa9tshg",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-15T10:32:20+0000"
+          },
+          {
+            "id": "m_evXM0u_oRvAXZcOmWv5qj71QxHcwKRM7b-EOceiTiK8amFy6uoxnMQYFBiUuxOWTcuPbNsJWVXvTeWUHiNIXeQ",
+            "from": "Ilkin Nabi",
+            "text": "I wanna ask. Does the 4 million price include the round-trip trip to Cambodia and all the visas?",
+            "date": "2026-08-15T10:32:28+0000"
+          },
+          {
+            "id": "m_rn8biQSr1gGDdfiTQOtyb71QxHcwKRM7b-EOceiTiK9pJEs7c2W-cN_7oVmbLYnHAJ9O4tpj32oe2rfocs21-A",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-15T10:32:34+0000"
+          },
+          {
+            "id": "m_WOD9CNjzwI7OIcbAzvTEkb1QxHcwKRM7b-EOceiTiK-Yl0f4Zc76NCQMJERNZqaKXex84zSwcGAXN3NPP8789Q",
+            "from": "Easy Trip & Visa",
+            "text": "This 4 million VND will include bus fare and a single Vietnamese e-visa (excluding a Cambodian visa), sir.",
+            "date": "2026-08-15T10:33:35+0000"
+          },
+          {
+            "id": "m_jL8tOeRKcSyVSb8ag9RRsb1QxHcwKRM7b-EOceiTiK9I85A8RO6EiTHI7wrYA8A-JFH5bIQtLJbjetCnp0LMvQ",
+            "from": "Ilkin Nabi",
+            "text": "how much is Cambodian visa?",
+            "date": "2026-08-15T10:33:59+0000"
+          },
+          {
+            "id": "m_8GocW14n0jyLHAVFguJ2i71QxHcwKRM7b-EOceiTiK9Ku50X2syWLr5IT-tNwZV9gdavC-a1F6iEhgCIxe_lzA",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-15T10:34:02+0000"
+          },
+          {
+            "id": "m_E4Dlbc6chuWpQP0ACDwCSL1QxHcwKRM7b-EOceiTiK9VD7yJa2pEctd_9PEC-lRke94QJsY8Se-ntXpaz0AKFQ",
+            "from": "Easy Trip & Visa",
+            "text": "You only need to pay an additional 1 million VND for us to register your Cambodian visa, sir.",
+            "date": "2026-08-15T10:34:37+0000"
+          },
+          {
+            "id": "m_zseuI1zT1NahoAc70366S71QxHcwKRM7b-EOceiTiK8-8zOVaxo3DC8NzW2Z0wAHKITVpHeq_1VX2KaiN-JqKg",
+            "from": "Easy Trip & Visa",
+            "text": "So, may I ask you for your nationality, visa expiry date, and the city you are currently living in?",
+            "date": "2026-08-15T10:35:41+0000"
+          },
+          {
+            "id": "m_gFVX6X-jfY7dKhw8-H2snr1QxHcwKRM7b-EOceiTiK-D4M9cNppNN1Q-wflP153FO3Z7Y3iE3fXt0rJfq9bZaQ",
+            "from": "Ilkin Nabi",
+            "text": "Azerbaijan",
+            "date": "2026-08-15T10:36:20+0000"
+          },
+          {
+            "id": "m_DykKdkzdszaz6_0S2dHomL1QxHcwKRM7b-EOceiTiK9kux0QlXnBzZcz-_mH27p9ppc3usHJGCv0A_BhOs-Bag",
+            "from": "Ilkin Nabi",
+            "text": "Nha Trang",
+            "date": "2026-08-15T10:36:25+0000"
+          },
+          {
+            "id": "m_xc1DsBevZnaYQX7PHhWd2L1QxHcwKRM7b-EOceiTiK86pBRXpNkuJth1Y00VIrsYao3RxTkMeN7-Xh9A_FceOw",
+            "from": "Ilkin Nabi",
+            "text": "till 2034",
+            "date": "2026-08-15T10:36:42+0000"
+          },
+          {
+            "id": "m_yHS9qmDrcrQl9lgOvW9AL71QxHcwKRM7b-EOceiTiK-UTmcykY-6y4kMWuAjc2AS4-I9sOmPkTFp1c3CaBemyA",
+            "from": "Easy Trip & Visa",
+            "text": "Excuse me for being confusing, sir. I meant your visa expiry date, by the way.",
+            "date": "2026-08-15T10:38:50+0000"
+          },
+          {
+            "id": "m_ePoBkDErUYc2-fgiTrSQor1QxHcwKRM7b-EOceiTiK9ZSg5JZnxj8_3soXEGNym3-ehnjlttQh6uZA776yUUdQ",
+            "from": "Ilkin Nabi",
+            "text": "September",
+            "date": "2026-08-15T10:39:08+0000"
+          },
+          {
+            "id": "m_OD3S76KeBhpYl88BBrbvWb1QxHcwKRM7b-EOceiTiK_pZbHw1ZGWM1egdhRmecLtK385gCrFQAkweT41v7xnaA",
+            "from": "Easy Trip & Visa",
+            "text": "Can you please tell your exactly date like exemple (17/ septembre) ?",
+            "date": "2026-08-15T10:40:03+0000"
+          },
+          {
+            "id": "m_2uFRAvz5bZUdfVfeFjSW6b1QxHcwKRM7b-EOceiTiK8Pm2jJdhodQ0ma8MSx-hlt4oojGnb_uarED2jKjlkJeA",
+            "from": "Easy Trip & Visa",
+            "text": "What date in September are you referring to? With that precise information, we can provide the best advice.",
+            "date": "2026-08-15T10:40:20+0000"
+          },
+          {
+            "id": "m_yvR_sru3GwRoUYAfJ-UPA71QxHcwKRM7b-EOceiTiK9k_VN1reTj7zYOFmPLaDFLVbDtd1fG18oSld-qSRUNqg",
+            "from": "Ilkin Nabi",
+            "text": "My passport isn’t with me right now, so I can’t check it at the moment. I will get in touch with you later, thank you for information!",
+            "date": "2026-08-15T10:41:55+0000"
+          },
+          {
+            "id": "m_ECh-5NMmCgf5XtVPWsKg4b1QxHcwKRM7b-EOceiTiK-hClvXl8gj8qOtOfj4ZDM-nQVudt42zBJoVaeJvVcj4w",
+            "from": "Easy Trip & Visa",
+            "text": "Thank you, sir. Have a nice evening, sir!",
+            "date": "2026-08-15T10:52:29+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_2433884470468466",
+        "name": "Facebook user",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_yVRKv2FKItWgw-ZfGqBbGa4c2LleHbZgWcmoh30s91hHQvCIsfH13EuBEUarWhUKOa272ehgnTzPMaUeAkjRqw",
+            "from": "Facebook user",
+            "text": "Hello 👋",
+            "date": "2026-08-11T11:55:02+0000"
+          },
+          {
+            "id": "m_7IB8-L2WeTPLsWLfXspFYK4c2LleHbZgWcmoh30s91iHdggzzJLsUxIdMxIjizdmh40UkWV8HTphPH8HwWr-yQ",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! 👋 Welcome to Easy Trip & Visa Co. Ltd! 😊 How can I assist you today? Whether you need a visa run, bus tickets, or any travel information, I'm here to help. Please let me know your nationality and visa expiry date so I can recommend the best route for you. 🚌",
+            "date": "2026-08-11T11:55:07+0000"
+          },
+          {
+            "id": "m_bkX-f8DUt6THgBI8do69ia4c2LleHbZgWcmoh30s91iHoKf2ustp9PBeJKbxLWbzd9HMYJXvsHoOsGnREYxvGw",
+            "from": "Facebook user",
+            "text": "Can you help to get TRC for my son if I work in Phu Quoc and I have my TRC sponsored by company that hired me in Phu Quoc? \nMy son was born in Phu Quoc and has Philippines passport but he never left Vietnam, he is 8 months old and he doesn’t have any visa in his passport",
+            "date": "2026-08-11T11:57:32+0000"
+          },
+          {
+            "id": "m_ePuG4H_e72rQbQZ_KM-EbK4c2LleHbZgWcmoh30s91jUYbgIrV452PsDJRHytwR7dQR9dhqneCHe0R8HISBb3w",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! Thank you for reaching out. 😊\n\nI understand you're looking to get a Temporary Residence Card (TRC) for your 8-month-old son, who was born in Phu Quoc and holds a Philippines passport. Unfortunately, our company specializes in visa runs and bus services, not TRC processing. However, I can offer some general guidance.\n\nFor TRC applications, you'll need to contact the Vietnam Immigration Department (Cục Quản lý Xuất nhập cảnh) directly. Since your son was born in Vietnam and has never left, he may be eligible for a visa exemption or a TRC based on your status. You'll need to provide his birth certificate, your TRC, and other supporting documents.\n\nFor specific assistance, I recommend contacting the immigration office in Phu Quoc or a local visa agency that handles TRC applications. If you need help with a visa run or any bus services in the future, feel free to ask! 🚌\n\nWould you like information about our visa run packages or anything else?",
+            "date": "2026-08-11T11:57:37+0000"
+          },
+          {
+            "id": "m_J_94i2fGc41N-xhIvoNDxq4c2LleHbZgWcmoh30s91jLXhSJVbdKJ-e6K_dkpXmUcThWNQBbhK9AkNqL-8K4yA",
+            "from": "Easy Trip & Visa",
+            "text": "HELLO MR .VIKTOR IT'S JUST A AI ROBOT",
+            "date": "2026-08-11T12:07:21+0000"
+          },
+          {
+            "id": "m_Mk3KTGFTLsxnyFb8_D-5rK4c2LleHbZgWcmoh30s91jR-2jL8qFIARy1L4sbV1nQ8LGCVaXhui7CLjGYBYucmA",
+            "from": "Easy Trip & Visa",
+            "text": "WELCOME TO EASY TRIP",
+            "date": "2026-08-11T12:07:47+0000"
+          },
+          {
+            "id": "m_tugqm11WjYYtKub5iSaV864c2LleHbZgWcmoh30s91gwekb1kcKbO1ApbdtW7uVc-g7a6t8c0E2xkAMjh78l_w",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry...this is ours AI chat box and we not yet to teach it 😅",
+            "date": "2026-08-11T12:07:57+0000"
+          },
+          {
+            "id": "m_aBgbD3z9WxWq6AjK_byPKK4c2LleHbZgWcmoh30s91i2jMAC5RYpVFhDeEIcb926FxDSKUfynssuZLCkQsee7A",
+            "from": "Easy Trip & Visa",
+            "text": "You can make Visa TT for your son => then go to Immigration Phu Quốc => submit TRC",
+            "date": "2026-08-11T12:11:38+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1802753464464344",
+        "name": "Meyer Lansky",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_EiXMQDGbxVWC78P6yu7fnD6RhkzHbO3LVVpI7kOxsty57nbvaR7Pqv9QGPJ4LqJiJNOquvKEAH6rzkZaofUmcQ",
+            "from": "Easy Trip & Visa",
+            "text": "16/08 - Cambodia",
+            "date": "2026-08-07T09:46:39+0000"
+          },
+          {
+            "id": "m_C0pXDVw6CIZcZe_xM9QOfj6RhkzHbO3LVVpI7kOxstzsPMN9gvcq6DeNZrtchZEbz7_VRtZ6wEBmpKReAcC_0w",
+            "from": "Easy Trip & Visa",
+            "text": "Veuillez choisir le siège dans le bus qui correspond le mieux à vos besoins.",
+            "date": "2026-08-07T09:47:45+0000"
+          },
+          {
+            "id": "m_0XPv4BRNvbZqjS_4XqwZtT6RhkzHbO3LVVpI7kOxstwV2jdWvl0Iz-edYvR7HyOLpJHrV18e1gaAEoYD8yc1ig",
+            "from": "Meyer Lansky",
+            "text": "A6",
+            "date": "2026-08-07T09:48:05+0000"
+          },
+          {
+            "id": "m_3IvKRsGL5XOliqtVQeOlbD6RhkzHbO3LVVpI7kOxstyNIkUnsvM18DwqbdjIf27pjos0Uj7MqFyGsDFtlfmO-g",
+            "from": "Easy Trip & Visa",
+            "text": "16/08 -  45D Cam\nOnema Olangi/ 1988\nnumero de chaise : A6\nPick up place: 40 Hòn Chồng, 21:30 pm\nhttps://maps.app.goo.gl/LmwZhraVzHBuxoTm9",
+            "date": "2026-08-07T09:49:06+0000"
+          },
+          {
+            "id": "m_W3pCJbYykeQRp-YQJAxhGj6RhkzHbO3LVVpI7kOxstxcw_JmWDdpejd6g-4-Iw76RI3GWNdsAWGYTTszWyJ_4Q",
+            "from": "Meyer Lansky",
+            "text": "Ok",
+            "date": "2026-08-07T09:50:23+0000"
+          },
+          {
+            "id": "m_Psnp8dAvfoO7FUJk3lTw_D6RhkzHbO3LVVpI7kOxstw4mZhfcuYSTdRtOBQN-Vbn729rAUL3g-gHAn-LwSqAdw",
+            "from": "Easy Trip & Visa",
+            "text": "Veuillez nous indiquer si vous paierez en espèces à notre bureau comme auparavant, ou par virement bancaire.",
+            "date": "2026-08-07T09:51:58+0000"
+          },
+          {
+            "id": "m_zAtfbKxISBRclEeSgibpxj6RhkzHbO3LVVpI7kOxstyhLvCKHK6Rqia1dITsNReVI9m38xPeipSvN0KYmClevw",
+            "from": "Meyer Lansky",
+            "text": "Je vais venir dans vos bureaux",
+            "date": "2026-08-07T09:52:24+0000"
+          },
+          {
+            "id": "m_o1EJbVgSbS45ZCgYQL58gz6RhkzHbO3LVVpI7kOxstx41B3v90Dpx9ZbJWkT5v0aAWuOrsOtk0Na9CxJwpafsw",
+            "from": "Easy Trip & Visa",
+            "text": "Oui, monsieur. Nos bureaux sont ouverts de 8h00 à 17h00, du lundi au jeudi. Veuillez nous indiquer votre heure d'arrivée afin que nous puissions vous accueillir comme il se doit.",
+            "date": "2026-08-07T09:54:52+0000"
+          },
+          {
+            "id": "m_heHfbSCsyhbDbAIUkKkY_z6RhkzHbO3LVVpI7kOxstxsNOHcuAVw_yN9phUuB4SUzFpy19D5vCZPBhyeY1-OSw",
+            "from": "Meyer Lansky",
+            "text": "Du coup je pense passer lundi",
+            "date": "2026-08-07T09:55:27+0000"
+          },
+          {
+            "id": "m_FgmtZHaVNnlJDWjvYYiFWj6RhkzHbO3LVVpI7kOxstyb4uMkZ4snVdHzr1QlZuu0evUEcgw0YBCs3EgiglzboA",
+            "from": "Meyer Lansky",
+            "text": "Vu qu’il est déjà 17h",
+            "date": "2026-08-07T09:55:36+0000"
+          },
+          {
+            "id": "m_LZSbSrzy5s2TWwof3JgJUT6RhkzHbO3LVVpI7kOxstz4cNvkIb0wCfOgTLjZFAXpHPrrKR-vT7LkGfYPHtQqbA",
+            "from": "Easy Trip & Visa",
+            "text": "Oui Monsieur.",
+            "date": "2026-08-07T09:56:43+0000"
+          },
+          {
+            "id": "m_yipcCZllzPlrmmKjNXiv4j6RhkzHbO3LVVpI7kOxstyTZ6xvtH2peFKbQLumubs8YATeUvLf_plQ1iW5As2vfA",
+            "from": "Easy Trip & Visa",
+            "text": "Ce que vous voulez mr",
+            "date": "2026-08-07T09:56:52+0000"
+          },
+          {
+            "id": "m_NbC5DyYt5E6FerVuDAyPDz6RhkzHbO3LVVpI7kOxstx7qXzk9QaVnAjoOSXxb61P8Ut2WCkRFJbXRxsFvgNH-g",
+            "from": "Easy Trip & Visa",
+            "text": "C’est a votre choix",
+            "date": "2026-08-07T09:56:57+0000"
+          },
+          {
+            "id": "m_LImV-CCLHTxkIW1i1CNYyj6RhkzHbO3LVVpI7kOxstzfnfepIjSlPdCi9sWSQtRMzuAjEeLzZyOk5b3F8iALZw",
+            "from": "Easy Trip & Visa",
+            "text": "Soyez le bienvenu",
+            "date": "2026-08-07T09:57:08+0000"
+          },
+          {
+            "id": "m_cxlmoubOzPu2atZeCl7dqD6RhkzHbO3LVVpI7kOxstzN2AnVxfJcU7AbR3oR1lBlSmd7ppkJEK5duX5tUWR6rQ",
+            "from": "Meyer Lansky",
+            "text": "Lundi alors",
+            "date": "2026-08-07T09:57:11+0000"
+          },
+          {
+            "id": "m_FVcqlmpAm8xkYAvvNINBrD6RhkzHbO3LVVpI7kOxstxQv0xbsU-3AeAW3PwSoFNYGJxmi4y4iYSTXM2csFWP_w",
+            "from": "Easy Trip & Visa",
+            "text": "D'accord",
+            "date": "2026-08-07T09:57:19+0000"
+          },
+          {
+            "id": "m_I_iHxgAvOthC1l_vdDg_pj6RhkzHbO3LVVpI7kOxstx-vkmgWrVQqYBeBUIQHr-xlXEO-TxRI3hwA1qb3ziU8A",
+            "from": "Easy Trip & Visa",
+            "text": "bonjour mr onema j'espere que vous etes bien",
+            "date": "2026-08-11T09:01:12+0000"
+          },
+          {
+            "id": "m_heftUVfHv4dtBT_f5Tonwj6RhkzHbO3LVVpI7kOxstxYUAegIy-oxqVejanni25yzr1PE9HbMQI_pGZgtm7vfw",
+            "from": "Easy Trip & Visa",
+            "text": "Pouvez-vous nous indiquer l'heure qui vous convient pour notre passage ?",
+            "date": "2026-08-11T09:03:16+0000"
+          },
+          {
+            "id": "m_GHscZCAvq1wsOhjAwAZ0UT6RhkzHbO3LVVpI7kOxstxr-AXci-3Y_ZR86tzjeFYymx-Heeh_dFwMTfxsCq-5LA",
+            "from": "Meyer Lansky",
+            "text": "Bonjour… désolé je viens de voir votre message et je ne serais pas dispo car je pars en Thaïlande du coup je prend l’avion",
+            "date": "2026-08-11T11:04:20+0000"
+          },
+          {
+            "id": "m_oIzQB_piER1gKy2XUtPCfj6RhkzHbO3LVVpI7kOxstzEtzp0gsNeOL4F67triYOpehsamKZiZAou4gX7uCqbuQ",
+            "from": "Easy Trip & Visa",
+            "text": "Bonjour ! Pas de souci, je comprends tout à fait. Profitez bien de votre voyage en Thaïlande ! ✈️ Si vous avez besoin de nos services à votre retour, n'hésitez pas à nous recontacter. Bonne continuation ! 😊",
+            "date": "2026-08-11T11:04:55+0000"
+          },
+          {
+            "id": "m_i0WEhDcGNVKTXutnqekGrD6RhkzHbO3LVVpI7kOxstxiiPnFLDWv7pqqb2bTMF0SmQUruSuSaFYfUfqtK5WHKw",
+            "from": "Easy Trip & Visa",
+            "text": "Bonjour ! Pas de souci, merci de nous avoir prévenus. Bon voyage en Thaïlande ! ✈️ Si vous avez besoin d'aide pour un visa ou un visa run à votre retour, n'hésitez pas à nous contacter. Bonne continuation !",
+            "date": "2026-08-11T11:04:55+0000"
+          },
+          {
+            "id": "m_mztryNJvqzoTm6hFsfsukz6RhkzHbO3LVVpI7kOxstwQxjQi_XtmZhtM8yAq3nOox5kSeVf8saOaasWW38RBgA",
+            "from": "Easy Trip & Visa",
+            "text": "ALORS VOUS VOULLEZ ANNULER VOTRE RESERVATION ?",
+            "date": "2026-08-11T11:12:36+0000"
+          },
+          {
+            "id": "m_lfP6w4zCn5uyzAZhlkQ6Hz6RhkzHbO3LVVpI7kOxstyfnO5b648ImTOSeedjO7957uMaScNxAMYqkUvGY_ctmQ",
+            "from": "Meyer Lansky",
+            "text": "Oui je reviens vers vous dès que j’en aurai besoin 🫵🏾🙏🏾",
+            "date": "2026-08-11T11:13:15+0000"
+          },
+          {
+            "id": "m_AF1KmDz_dAMl_CD9RB0k8T6RhkzHbO3LVVpI7kOxstyoiqdGZPp5Y3ivEK4QFgE9Il6c0apgqb8nMpO2byCCKg",
+            "from": "Easy Trip & Visa",
+            "text": "Bonjour ! Merci pour votre message. Pas de souci, nous restons à votre disposition dès que vous en aurez besoin. Bon voyage en Thaïlande et à bientôt ! 😊",
+            "date": "2026-08-11T11:13:19+0000"
+          },
+          {
+            "id": "m_POwMhfJU0IbO201eQxZOuz6RhkzHbO3LVVpI7kOxstx_RPQhwfetnaO5YYO3EuwR-lJ1dHmMj9DqSxfgcSQc6Q",
+            "from": "Easy Trip & Visa",
+            "text": "D'ACCORD MR ONEMA BON VOYAGE",
+            "date": "2026-08-11T11:15:03+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1545910553739395",
+        "name": "Vũ Thị Thương Huyền",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_WpZY3SohaGZ5LVXMmvn3oiXXcTDmAw5GOGuXOTpR_IGG9xd4lbPGTMdKwG2YjWl8W10qr5_qXCIRDvm-sxfJ7w",
+            "from": "Vũ Thị Thương Huyền",
+            "text": "✅ chào ac .\nbên e nhận tăng người theo dõi, page pro vip thật ,càng nhiều người theo dõi để giúp page c đạt hiệu quả cao trong việc livestreams và kéo khách hàng  rất nhiều luôn chị ....\n1700 người theo dõi thật vĩnh viễn 250k ạ ,nếu c phát hiện ảo đền c 100 lần số tiền c bỏ ra ạ ,,người bên e thật 100%\nĐảm bảo giúp c lượng tương tác cao ! Kéo nhiều khách hàng và giúp c nhiều đơn hàng\n✅ ngoài ra Ace chưa có page pro vip thì bên e còn 20 con page chất lượng , livestreams  không bị khoá, lượng tiếp cận khách hàng cực mạnh, không bao giờ ẩn bình luận hay bị lỗi gì cả .đảm bảo ok luôn c nha.                         😍Bên em làm  xong mới Chuyển Khoảng nên khách hàng yên tâm ạ💪",
+            "date": "2026-08-10T08:06:12+0000"
+          },
+          {
+            "id": "m_SjA5LYI19oIdUokclFO5FCXXcTDmAw5GOGuXOTpR_IFx2l38qlo55M3yxJjJKNkCJNOeRGeYJZ8ZuZLJzKzeqg",
+            "from": "Easy Trip & Visa",
+            "text": "This message was automatically moved to spam.",
+            "date": "2026-08-10T08:06:14+0000"
+          },
+          {
+            "id": "m_f4-_GMmHRIEwXavDHDKMkiXXcTDmAw5GOGuXOTpR_IGFhHpJgmMkA9XrOUo4CLxV1owDfhHBNJNS-9wqNkf1kA",
+            "from": "Easy Trip & Visa",
+            "text": "안녕하세요! Easy Trip & Visa입니다. 저희는 비자런과 버스 서비스를 제공하는 회사로, 말씀하신 SNS 팔로워 증가 서비스는 제공하지 않습니다. 다른 문의 사항이 있으시면 도와드리겠습니다.",
+            "date": "2026-08-10T08:06:18+0000"
+          },
+          {
+            "id": "m_jQdGSAOVfJTpt9hZT2EuQSXXcTDmAw5GOGuXOTpR_IFgEe4CjxH9ab42eL3suPrHjfQGDSG1VNDOHaj2AalFlQ",
+            "from": "Vũ Thị Thương Huyền",
+            "text": ".",
+            "date": "2026-08-10T08:22:56+0000"
+          },
+          {
+            "id": "m_KFIMQxj2D2msP3oMihx7ISXXcTDmAw5GOGuXOTpR_IEUJMIWOAF-rDWUNo1z1OuLKWj_SiyDC8wjjI1c-lVIhA",
+            "from": "Easy Trip & Visa",
+            "text": "This message was automatically moved to spam.",
+            "date": "2026-08-10T08:22:56+0000"
+          },
+          {
+            "id": "m_pBrHIegqCBZOtkoiH7EPDCXXcTDmAw5GOGuXOTpR_IEelWyUzoI-1RLoz6Ie2vU313snXL1yv_o3u3PiGAgTIQ",
+            "from": "Easy Trip & Visa",
+            "text": "안녕하세요! Easy Trip & Visa입니다. 저희는 비자런과 버스 서비스를 제공하는 회사로, 말씀하신 SNS 팔로워 증가 서비스는 제공하지 않습니다. 다른 문의 사항이 있으시면 도와드리겠습니다.",
+            "date": "2026-08-10T08:22:59+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1580249610418882",
+        "name": "Jayp Park",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_RqcFPbwngu8pgeKXz75cDRaiIACYVcdTF4pQJNMOjnqpeenlBcdaDKI_CH9SMAL3pcaAt3i8trvEwPxe0vL7dg",
+            "from": "Jayp Park",
+            "text": "hello",
+            "date": "2026-08-10T02:46:16+0000"
+          },
+          {
+            "id": "m_P66HEklv-NtxoqJKnuak7RaiIACYVcdTF4pQJNMOjnr6qFmweF5Zhop8TsFTpPUJeIQZUJlZ3dPQSqDydw4zMw",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! 👋 Welcome to Easy Trip & Visa Co. Ltd! How can I assist you today? Whether you need a visa run, bus tickets, or any travel information, I'm here to help. 😊",
+            "date": "2026-08-10T02:46:21+0000"
+          },
+          {
+            "id": "m_-HTArdEKF9xw9AJz-4ITCBaiIACYVcdTF4pQJNMOjnpA_hKNhYuOfM31op_GC3_ZvhZXlIe4YFlWiglmy3Ovxg",
+            "from": "Jayp Park",
+            "text": "Is there a bus ride to Laos today? NHA Trang -> LAOS 45-day visa",
+            "date": "2026-08-10T02:47:01+0000"
+          },
+          {
+            "id": "m_9BwxJD4IK5wliOpK0eLM2BaiIACYVcdTF4pQJNMOjnpdHDEriA3nVYSh2gJ4nTpXjFxUYsA8pytF4wNkHuODpA",
+            "from": "Easy Trip & Visa",
+            "text": "Yes, we have a bus to Laos (Bo Y border) departing tonight! 🚌\n\nHere are the details:\n\n📍 **Departure time:** 21:30 from 40 Hon Chong (or 21:15 from No. 4 Tran Phu)\n\n💰 **Price:** **1,400,000 VND** (45-day visa-free package)\n\n⚠️ Please note: The bus departs overnight and arrives at the border around 06:00-06:30 AM the next morning.\n\nTo confirm your booking, could you please provide:\n\n1. Your **nationality** (to ensure you're eligible for the Laos visa-free entry)\n2. Your **visa expiry date** (to calculate the correct departure date)\n3. Your **pickup location** (40 Hon Chong or No. 4 Tran Phu)\n4. Your **contact phone number** (WhatsApp/Zalo)\n\nOnce I have these details, I'll check seat availability and send you the seat map! 😊",
+            "date": "2026-08-10T02:47:07+0000"
+          },
+          {
+            "id": "m_AIvMZhwGw-7P9qemSvxCvRaiIACYVcdTF4pQJNMOjnon7W2_YGv3pGbru9irwXyYmrxag1rX7OMOjYK3XFGTtA",
+            "from": "Jayp Park",
+            "text": "11-07-2026",
+            "date": "2026-08-10T02:50:13+0000"
+          },
+          {
+            "id": "m_QNshs_I7z6mJy_xLKOHTKRaiIACYVcdTF4pQJNMOjnqn13MVBwC4lf2seD9JFpVcm8qbkkJjcSc79OE7rxfqZA",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-10T02:50:17+0000"
+          },
+          {
+            "id": "m_tql0rzXgbVfqBDVicIOZrxaiIACYVcdTF4pQJNMOjnqomFw8FAzMHo6-rBoPiArZH2ojFeXInGmpO3ZkgV2wEQ",
+            "from": "Jayp Park",
+            "text": "04 tran phu",
+            "date": "2026-08-10T02:50:31+0000"
+          },
+          {
+            "id": "m_BHQP4zifNMmh9vuOKOYAeBaiIACYVcdTF4pQJNMOjnpcAlGrfNshfdaZTA1pL9AbqAZ8lHw5TY5v2fkRUSHH1w",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-10T02:50:35+0000"
+          },
+          {
+            "id": "m_f_kXYJ-37DEr2igEsAjo4RaiIACYVcdTF4pQJNMOjnpFHOj8A-U8a2bxH_UKvMkAjR5wUMlRghRTCGFT6R-HjA",
+            "from": "Easy Trip & Visa",
+            "text": "고객님, 죄송합니다. 이 메시지는 자동 AI 메시지입니다. 무시해 주시면 담당 직원이 직접 연락드리겠습니다.",
+            "date": "2026-08-10T02:54:36+0000"
+          },
+          {
+            "id": "m_EWsQ0d8rZF0YWhdMbNekzxaiIACYVcdTF4pQJNMOjnoNnmdj47jTOhDMaz0nhlZHZ6zoRofpv7niIWfwsT9Drg",
+            "from": "Jayp Park",
+            "text": "ok",
+            "date": "2026-08-10T02:54:52+0000"
+          },
+          {
+            "id": "m_O5dreipqmrYoz4OHaFKJFhaiIACYVcdTF4pQJNMOjnriprUkDfT9_xUCZ9bxzchmrhs9bEp8gB-q886WJ36lgg",
+            "from": "Easy Trip & Visa",
+            "text": "Thank you! I have all the details I need. Let me summarize your booking:\n\n🚌 **Route:** Nha Trang → Laos (Bo Y border)\n📅 **Departure Date:** **10/07 (Friday)** — this is 1 day before your visa expires on 11/07, so you'll cross the border on your expiry date without overstaying.\n⏰ **Departure Time:** **21:15** from **No. 4 Tran Phu**\n💰 **Price:** **1,400,000 VND** (45-day visa-free package)\n\nPlease wait a moment while we check seat availability and send you the seat map... 😊",
+            "date": "2026-08-10T02:55:00+0000"
+          },
+          {
+            "id": "m_9ntsEkztPP39sKgJDNPr2BaiIACYVcdTF4pQJNMOjnpWaftgHLFLonxyn2hNoMbX_qTkiUaDe1uyiHn7V43Ycg",
+            "from": "Jayp Park",
+            "text": "My number is 0762 519 899.",
+            "date": "2026-08-10T02:55:04+0000"
+          },
+          {
+            "id": "m_AA4PefL7ChQrM-NkBaLPuhaiIACYVcdTF4pQJNMOjnomqY4M_2_aIJ4gttxSJla1GtcW2lwKCl6_1lSEorpPBQ",
+            "from": "Easy Trip & Visa",
+            "text": "Auto-label added: Lead stage set to intake.",
+            "date": "2026-08-10T02:55:10+0000"
+          },
+          {
+            "id": "m_OSXoe7-naA-G2woBfDyaPxaiIACYVcdTF4pQJNMOjnonY1jUm3EcYKXz7YW9M2lekduleJYtpue3xElmHYzZiA",
+            "from": "Jayp Park",
+            "text": "A5",
+            "date": "2026-08-10T02:55:29+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1035092446102964",
+        "name": "Sonny Macasaet Jr.",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_NSborTjY55305ANVM_lgr0dSV83n6vwJaRudbzyrokyoMt2i4PdBPr399TPM_vXisEQjp5jGue_keBxCEBcxmg",
+            "from": "Easy Trip & Visa",
+            "text": "Sonny Macasaet Jr. replied to a post. View post(https://www.facebook.com/permalink.php?story_fbid=pfbid0owSJaCmxLQP1fPivHdftnhnHQzrXBsQQftxQe5peDZ8ujoKfxR7hQYKnAM9BnXyYl&id=61588647007889)",
+            "date": "2026-08-01T08:20:59+0000"
+          },
+          {
+            "id": "m_Q1vD7JhTWkMqUbmtK-rTb0dSV83n6vwJaRudbzyrokx1RM3kGCbrKZUqguKAO4M6rRZKLirQrFyCFFSnkGcZ0A",
+            "from": "Easy Trip & Visa",
+            "text": "Mr. Sonny Macasaet\nA1\nOceanus\nFacebook\nunpaid",
+            "date": "2026-08-01T08:21:16+0000"
+          },
+          {
+            "id": "m_MD8z5Gz85DijvEjfZIs29kdSV83n6vwJaRudbzyrokx2WaY1YJTzGRzh18GyUrRiFonaH-z_3WoP3DbvEtOSeA",
+            "from": "Easy Trip & Visa",
+            "text": "08/08 45D LAOS\nMr. Sonny Macasaet\nA1\npick up place: 40 - Hon Chong - 21:15\nhttps://maps.app.goo.gl/CwaKVXCkGrXP85Qv6",
+            "date": "2026-08-03T09:11:01+0000"
+          },
+          {
+            "id": "m_pEuc8iirIcX2a_PU3tpZTkdSV83n6vwJaRudbzyrokwx6NAndbLWUY3zeQpDqjAOe9_7Zu9wnssyMKjd-jy9Sw",
+            "from": "Easy Trip & Visa",
+            "text": "Detailed Schedule:\n​08/08/2026\n⏰ 21:15 - pick up place: 40 - Hon Chong\n09/08/2026\n⏰ 06:00 – Arrive at the border. Disembark and enjoy breakfast or coffee time ☕️🥐\n⏰ 06:45 – Check-in and board the bus.\n​⏰ 07:30 – Final checkpoint. Disembark briefly to collect your passport and undergo facial recognition screening. ​➡️ Laos Border – Individually stamp your Laos entry/exit passports and return. (The bus will wait at the checkpoint.)\n​⏰ 08:00 – Return to the Vietnam Immigration area. The driver will collect your passport for entry stamping.\n​⏰ 08:10 – Approximately 30 minutes of rest (coffee and snack time).\n​⏰ 09:00 – 🚍 Depart for Nha Trang.",
+            "date": "2026-08-03T09:21:01+0000"
+          },
+          {
+            "id": "m_QVDibko8w0VYU6z5ZPLjCkdSV83n6vwJaRudbzyrokwhKOT0cW7zBIvHqxrCp0hmrSsmFWpLbeefYziAwdGB1w",
+            "from": "Easy Trip & Visa",
+            "text": "When crossing the border with Laos, you will need to fill out a form.  You'll need to complete it upon ARRIVAL in Laos and again upon DEPARTURE.\nThe image shows an example of how to fill out the form.\nA correctly filled-out form will save you time.\n\nWhat you need to prepare (Total: 140,000 VND per person):\nVietnam Exit Stamp: 50,000 VND\nLaos Entry Stamp: 20,000 VND\nLaos Exit Stamp: 20,000 VND\nVietnam Entry Stamp: 50,000 VND\nA few helpful tips:\nThese amounts are actually not official fixed fees.\nWhen it is your turn at passport control, you usually just place the corresponding banknote inside your passport.\nThis helps border control officers process your documents faster, avoid unnecessary questions, and stamp your passport smoothly.\nWishing you a smooth and pleasant journey!",
+            "date": "2026-08-03T09:26:45+0000"
+          },
+          {
+            "id": "m_TaegSUaCTxFhTNWSJRdk5UdSV83n6vwJaRudbzyrokxSsPjRQyLDIA3JXdQUzJbZuVmx49--sXexHG72g3t5_g",
+            "from": "Easy Trip & Visa",
+            "text": "08/08 45D LAOS\nMr. Sonny Macasaet\nA1\nbus 79H - 093.81\nWifi: 19002679\npick up place: 40 - Hon Chong - 21:15\nhttps://maps.app.goo.gl/CwaKVXCkGrXP85Qv6",
+            "date": "2026-08-08T02:36:35+0000"
+          },
+          {
+            "id": "m_1tpOwe4scFWiwkeQ_UkFaUdSV83n6vwJaRudbzyrokws8dsVnBYF_WCCHERtmvYeXjI5XWC4p6NdAoPE5CemVw",
+            "from": "Easy Trip & Visa",
+            "text": "This is your bus number. Sir",
+            "date": "2026-08-08T02:36:51+0000"
+          },
+          {
+            "id": "m_ARvqy6P4hlmWIpRsAC_qhUdSV83n6vwJaRudbzyrokxnQklt9cvNNkJVPD2mC74UhKI5GJJJXzz9Hls4Wl5tEQ",
+            "from": "Sonny Macasaet Jr.",
+            "text": "79H 093.81 right?",
+            "date": "2026-08-08T14:19:12+0000"
+          },
+          {
+            "id": "m_0A0_8yz49-Lni621PlTOh0dSV83n6vwJaRudbzyrokwlvn0Vc_Ns8F6WtQLDo9bqGZaT5L8C8KJY8v0u3aO3ZQ",
+            "from": "Easy Trip & Visa",
+            "text": "Correct sir!",
+            "date": "2026-08-08T14:19:47+0000"
+          },
+          {
+            "id": "m_0s8NQVO2QcYz197JIlCqtEdSV83n6vwJaRudbzyrokyvRjWXg6WXtbZBvd09T9RJ1slaN4VwuYwpRxYSHIeCmw",
+            "from": "Easy Trip & Visa",
+            "text": "Yes, sir",
+            "date": "2026-08-08T14:19:50+0000"
+          },
+          {
+            "id": "m_elr6KcJxD6PzYvXHufR4wEdSV83n6vwJaRudbzyrokw_nwIQwIqQ94P-UPPAIrkelsLOOdgnIR3NQrJRKRDBuA",
+            "from": "Easy Trip & Visa",
+            "text": "Yes, that's correct! 🚌 The bus number is **79H 093.81**. \n\nPlease wait a moment while we check seat availability and send you the seat map...",
+            "date": "2026-08-08T14:19:58+0000"
+          },
+          {
+            "id": "m_zkv4AzQVA11XsX6WYbgW1UdSV83n6vwJaRudbzyrokzKqZZmnKzS92ubulmRj7BA_LJAIF886w3KKzvnqnykCg",
+            "from": "Easy Trip & Visa",
+            "text": "Yes, that's correct! The bus number is **79H - 093.81**. 🚌\n\nIs there anything else I can help you with?",
+            "date": "2026-08-08T14:19:58+0000"
+          },
+          {
+            "id": "m_OWZTvrkz7MVi1beZziUvSUdSV83n6vwJaRudbzyrokwU5dT7b3AjNN52UVtf3CCpzmYizwRZTqo-01LNspQLBA",
+            "from": "Easy Trip & Visa",
+            "text": "Yes, that's correct! The bus number is **79H - 093.81**. 🚌\n\nIf you have any other questions or need further assistance, feel free to ask! 😊",
+            "date": "2026-08-08T14:19:58+0000"
+          },
+          {
+            "id": "m_Wt7gVUoNl445yS3nnUU_hkdSV83n6vwJaRudbzyrokxUKc4C-TDnabHgQMO2M0dJzKdts50hC14rtQHjSjo1kA",
+            "from": "Easy Trip & Visa",
+            "text": "Ong",
+            "date": "2026-08-08T14:20:49+0000"
+          },
+          {
+            "id": "m_7mm-JTKQNIxugO4NOT884EdSV83n6vwJaRudbzyrokyJ7pQCRFwNjJ3Hzw4hcPcmN52HrxHg8fHEw-6U0yFEqw",
+            "from": "Easy Trip & Visa",
+            "text": "Omg",
+            "date": "2026-08-08T14:20:57+0000"
+          },
+          {
+            "id": "m_-ahQZHM9zNnx44C2vGAclUdSV83n6vwJaRudbzyrokz2jMeXyUSaAtKwDYKgJ9IeR_crtSDsr3VjmTYbfhFiiA",
+            "from": "Sonny Macasaet Jr.",
+            "text": "thank you!! all good",
+            "date": "2026-08-08T14:21:04+0000"
+          },
+          {
+            "id": "m_wCHhjt9lvBjDsw8Tqs9AOkdSV83n6vwJaRudbzyrokwPFrcJXOl0KRPfnlt--nB-TmGkEcire9tn1RSPWrcG7w",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-08T14:21:08+0000"
+          },
+          {
+            "id": "m_6Aoq8RxpIgEYtwUGtFero0dSV83n6vwJaRudbzyrokzve6w8eOSzx0eaeBTRd3sTOOkdYYuxE-PkP_kk1Gz_9g",
+            "from": "Easy Trip & Visa",
+            "text": "We wish you a pleasant journey. Thank you for using our services. Mr. Sonny",
+            "date": "2026-08-08T14:22:48+0000"
+          },
+          {
+            "id": "m_ME2bkb8gYIy4Zm-F3l3fpEdSV83n6vwJaRudbzyrokxpdGbJthzsHMGeNuvUs0RPims3HImz9RPyaqfcm7JoUg",
+            "from": "Easy Trip & Visa",
+            "text": "🔹 Visa Exemption – Nha Trang ↔️ Laos (Bo Y)\nDeparture: Daily at 21:00 from Nha Trang\nArrival in Laos: 06:30 the next morning\nDeparture from Laos: 09:30 AM\nReturn to Nha Trang: 19:00 the same day",
+            "date": "2026-08-08T15:21:41+0000"
+          },
+          {
+            "id": "m_EgNCNY9l2Y833GGqBWW3CEdSV83n6vwJaRudbzyrokzj2xyQ2asEqUkWYZ1-vYyUTdr2kcLhYfWFArAy9v91oA",
+            "from": "Easy Trip & Visa",
+            "text": "Here is your visa run itinerary, sir",
+            "date": "2026-08-08T15:23:02+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1231453545674925",
+        "name": "Gary Johnb",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_SoR2pkcVUCADucckIab28u6Hntca9otV-I42hY_9c5C-q_wiIxCKNVKxIAEXksx0X6IIFRxI6t-5qUGd2P-x-A",
+            "from": "Easy Trip & Visa",
+            "text": "Here is your bus information, sir.",
+            "date": "2026-08-06T06:26:48+0000"
+          },
+          {
+            "id": "m_HyGyVz-6rYTwlfFoaYmLTe6Hntca9otV-I42hY_9c5AJwBA7JHNCRH26vFRQqJsTEzjadx_jGBUlrb9eh7iiJA",
+            "from": "Gary Johnb",
+            "text": "Hello",
+            "date": "2026-08-06T10:52:23+0000"
+          },
+          {
+            "id": "m_XbjERqYOfW1Y2dSKUZe2Ye6Hntca9otV-I42hY_9c5CRp-HMbMe76F9mazL8xrgC5ADzUT4klvF_Ng8oPZqlog",
+            "from": "Gary Johnb",
+            "text": "Thankyou",
+            "date": "2026-08-06T10:52:25+0000"
+          },
+          {
+            "id": "m_RMMvT-ob77JqM6ahRYgBd-6Hntca9otV-I42hY_9c5DIGrzzCJehUqkxmIuyXtWdKSxemxeEshBdJCXW8GwTZA",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! 👋 Welcome to Easy Trip & Visa Co. Ltd! How can I assist you today? Whether you need a visa run, bus tickets, or any travel information, I'm here to help. 😊",
+            "date": "2026-08-06T10:52:27+0000"
+          },
+          {
+            "id": "m_Envzc2dZouxwJ0U-I-Ache6Hntca9otV-I42hY_9c5AaHkWwa1-p99DC_zatK0X4BDfsGtSFL3Z8jfPgzpEzAg",
+            "from": "Easy Trip & Visa",
+            "text": "You're welcome! 😊 If you have any questions about our visa run services, bus schedules, or need help planning your trip, just let me know. I'm happy to assist!",
+            "date": "2026-08-06T10:52:30+0000"
+          },
+          {
+            "id": "m_YEcDB_rpTGow40mb-bMvN-6Hntca9otV-I42hY_9c5DKAJsWLsjhRC3XLkoTqjt8apMhYu2wo1-Hwq0UmrmNEQ",
+            "from": "Gary Johnb",
+            "text": "No option to change B9 cabin near toilet ?",
+            "date": "2026-08-06T10:52:47+0000"
+          },
+          {
+            "id": "m_78jbEWHCVQd34lNoINiF4e6Hntca9otV-I42hY_9c5ACQbbcfkc6SZzgMTRKw8KxRWdCJDx4zXT_DsSVM3yPbA",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-06T10:52:52+0000"
+          },
+          {
+            "id": "m_FF5ci0B2Ku67M1W0GHHr2-6Hntca9otV-I42hY_9c5AeNsXAPwBwG0Nl6ObaPFmZZy_cHEe-yuSkh1vbrH1iMA",
+            "from": "Easy Trip & Visa",
+            "text": "I sincerely apologize, but there are no more slots available to exchange for you.",
+            "date": "2026-08-06T10:54:56+0000"
+          },
+          {
+            "id": "m_Jq1iIEeUCroaKv3K8hzThe6Hntca9otV-I42hY_9c5D3VpvyA4iJmTEw5UVOHlkqQLjRRhUxQG9IUICikhkZOw",
+            "from": "Easy Trip & Visa",
+            "text": "🥲",
+            "date": "2026-08-06T11:05:55+0000"
+          },
+          {
+            "id": "m_Kg0VMNrudeNtu1c1fh6G_e6Hntca9otV-I42hY_9c5CD2Ub9-TdtLqFVhmmQvGBsaah6ZQfY1ZKYKEVUVx6MiQ",
+            "from": "Gary Johnb",
+            "text": "No problem. Thought I'd ask thx",
+            "date": "2026-08-06T11:36:43+0000"
+          },
+          {
+            "id": "m_Y1tB1WUlYJPmbUEqzC66g-6Hntca9otV-I42hY_9c5CpY2IhhcfZtyUj36vvJLa8cKaEAHaJ615WL2ief7vMHA",
+            "from": "Easy Trip & Visa",
+            "text": "You're welcome! If you have any other questions or need help with a visa run in the future, feel free to reach out. Have a great day! 😊",
+            "date": "2026-08-06T11:37:17+0000"
+          },
+          {
+            "id": "m_rXSrcZ-kjqO8LhCuxtLI8u6Hntca9otV-I42hY_9c5DbdatySz3lBesaL3Iyqpn97VIsgOxsQBtSsVdFeLSdfw",
+            "from": "Easy Trip & Visa",
+            "text": "You're welcome! If you have any other questions or need help with a visa run in the future, feel free to reach out. Have a great day! 😊",
+            "date": "2026-08-06T11:37:18+0000"
+          },
+          {
+            "id": "m_vbRRmWN3xJ2McgWe8jS06u6Hntca9otV-I42hY_9c5ASVobU4jIdu9mojxgji76samGy0rFpChW9nyUfcQBLHQ",
+            "from": "Easy Trip & Visa",
+            "text": "Have you boarded the bus yet, sir?",
+            "date": "2026-08-06T14:23:43+0000"
+          },
+          {
+            "id": "m_Y1d2RCcEyYouORM5ZQ-Bde6Hntca9otV-I42hY_9c5CyEkERHDxGLzW6QrfV26NY8CJcfrFJojM5U6ebTKo5Zg",
+            "from": "Easy Trip & Visa",
+            "text": "The Cambodian bus might arrive later than other buses, so please rest assured.",
+            "date": "2026-08-06T14:25:12+0000"
+          },
+          {
+            "id": "m_XXfHmiNzcbumjQY1Ta7RrO6Hntca9otV-I42hY_9c5AT_J-rdgYbh7DvcF8lNokUVnRwdSrHQJxxqykfGx7E1g",
+            "from": "Gary Johnb",
+            "text": "Just arriving now",
+            "date": "2026-08-06T14:26:09+0000"
+          },
+          {
+            "id": "m_oLbFeghtZ4T54h0nx1DH9-6Hntca9otV-I42hY_9c5AymlujjLKe1a2f89X1p4YQIHX_bfWv1Zq8adjNVvTLnw",
+            "from": "Easy Trip & Visa",
+            "text": "Welcome to Nha Trang! 😊 I'm here to help you with your visa run. Could you please tell me your nationality and your visa expiry date? This will help me recommend the best route and schedule for you. 🚌",
+            "date": "2026-08-06T14:26:13+0000"
+          },
+          {
+            "id": "m_EAbAHcZTKqUZCvFXo8cvlu6Hntca9otV-I42hY_9c5CAcDASory1yu8WrvEphy7SuvfJDtvlnwh5iqjcv9S_Nw",
+            "from": "Easy Trip & Visa",
+            "text": "Once you've boarded the bus, please let us know, sir. ☺️",
+            "date": "2026-08-06T14:31:04+0000"
+          },
+          {
+            "id": "m_E_snCKKrUcHXmkXNbwDFb-6Hntca9otV-I42hY_9c5ADj-RbE6kwq5kddqCyfSsv3F2WbAQXmE-pIztjuEPBvQ",
+            "from": "Gary Johnb",
+            "text": "I'm on the coach",
+            "date": "2026-08-06T14:55:12+0000"
+          },
+          {
+            "id": "m_-phyznFCMmApmujLvrL9U-6Hntca9otV-I42hY_9c5D960iiFeYnTZKGRDid1risBCDi6VCPgVPl5xR9A9SRMA",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-06T14:55:15+0000"
+          },
+          {
+            "id": "m_ZJYuENGq0WDvts1tjbSrue6Hntca9otV-I42hY_9c5Anq-4LP9ZV5BI_x9GnPRhWitLm2-v4e-cCiuF7ob-mFg",
+            "from": "Gary Johnb",
+            "text": "It seems it's not full and I can move to another lower cabin ?",
+            "date": "2026-08-06T14:55:53+0000"
+          },
+          {
+            "id": "m_Gi2-wFQ55NP1QobEM9s4au6Hntca9otV-I42hY_9c5CvRj805hGgnlvtp68CSf2_VHwcVXYjPDHCLmFJv2Kyrg",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-06T14:55:57+0000"
+          },
+          {
+            "id": "m_zdlSLpwxUwWQeqdYJubMSO6Hntca9otV-I42hY_9c5CqN9NUUlGAzgYCYYrhBTMLptUW5kDQoQlZhxBVqr_UWQ",
+            "from": "Gary Johnb",
+            "text": "They came on",
+            "date": "2026-08-06T14:59:34+0000"
+          },
+          {
+            "id": "m_IbYTnzpkiYyFrN_9nMxK-O6Hntca9otV-I42hY_9c5B7Jv2FPmbLnIJS8Y4JGS93c-vM_yvP4R0edURf17aYxA",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-06T14:59:37+0000"
+          },
+          {
+            "id": "m_iRHI_vWj_4oLiKR-Bap7du6Hntca9otV-I42hY_9c5CQsK7pUcAmgQvzEMnyBhtFo_KDtKm2UpmyACYU2xehkA",
+            "from": "Easy Trip & Visa",
+            "text": "Please take your right seat, sir. Have a pleasant journey!",
+            "date": "2026-08-06T15:05:07+0000"
+          },
+          {
+            "id": "m_fjrcZEAldeOeHflPQSZEje6Hntca9otV-I42hY_9c5BmOzgSLKVnx1qbxT3Idn1cMfAFfGHI-lrZyf6FDPbGGA",
+            "from": "Easy Trip & Visa",
+            "text": "You can't change seats at will... please discuss with the driver if you have any other requests!",
+            "date": "2026-08-06T15:05:24+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1375235294492635",
+        "name": "Олександр Андрющенко",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_2L9ji4UUdWCLAf2rQdlogiMPt2xxFoaSV-cd1NBOPG-TCtVcYXaaggheX9_JxBD_zVF2OLq72GFJ0VnKGUHT3A",
+            "from": "Олександр Андрющенко",
+            "text": "Good afternoon)) thank you, my trip went very well)) if any of my friends are going to rest in Vietnam, I will definitely recommend you)) Thank you 😊",
+            "date": "2026-07-14T02:43:04+0000"
+          },
+          {
+            "id": "m_CcaMJGNQ0Tz4ZrPRR52wNyMPt2xxFoaSV-cd1NBOPG-iI-4MOKsyhUoB2Zv0FpMzmplRKmaORhkyQ1Hroi5tew",
+            "from": "Easy Trip & Visa",
+            "text": "Thank you so much for your kind words! 😊 We're thrilled to hear your trip went well. If your friends ever plan a visit to Vietnam, we'd be happy to help them too. Have a wonderful day! 🚌✨",
+            "date": "2026-07-14T02:43:11+0000"
+          },
+          {
+            "id": "m_HTDSO-9KsxJ4asMp2XacaSMPt2xxFoaSV-cd1NBOPG_crnQQ7JusxEaZir9j_T7CExZgFx27nltsM-NFzVQXEQ",
+            "from": "Easy Trip & Visa",
+            "text": "Dear Valued Customers!\nEasy Trip & Visa Co. Ltd . Business ID: 4202051389\n\nWe sincerely thank you for trusting and using our visa services. We would love to hear your feedback through a review on our Google Maps business page:\nhttps://g.page/r/CREMymPQwmBuEBI/review\n\nOr you can send your honest suggestions directly to our directors:\n\nMr. Ly Viet Hoang - Chairman, Easy Trip & Visa Co. Ltd\nPhone call: +84 89 69 16 361 (Speaks English)\n\nFor the latest updates or to share our information, please follow us on:\nWebsite: https://www.easytripvisa.com (https://www.easytripvisa.com/)\nZalo: https://zalo.me/84868462071\nWhatsApp:  https://wa.me/84868462071\nTelegram: https://t.me/easytripvisa_co_ltd\nFacebook : Easy Trip & Visa\nInstagram : easytrip_visa",
+            "date": "2026-07-14T02:55:32+0000"
+          },
+          {
+            "id": "m_Qn1vL3KwwRV5ZXjOM7XO9yMPt2xxFoaSV-cd1NBOPG8yHMqfKvGcJQZ6lIGVgdpeRwn0ztvz7vZ2EgkOMVYtfw",
+            "from": "Олександр Андрющенко",
+            "text": "Good afternoon. Why can't I open the file you gave me with my visa?",
+            "date": "2026-08-06T04:49:52+0000"
+          },
+          {
+            "id": "m_vWNKEMV3hTKVeCI73OIUECMPt2xxFoaSV-cd1NBOPG8Exhnw4g78zPGqtGpi-d0JvlJ8ahTdEwaUJfrmlR_tUQ",
+            "from": "Easy Trip & Visa",
+            "text": "Good afternoon! I'm sorry to hear you're having trouble opening the visa file. Could you please tell me which file you're referring to? Is it the e-visa PDF we sent you? If so, please try opening it with a PDF reader like Adobe Acrobat or Google Chrome. If the issue persists, please send us a screenshot of the error message so we can assist you further. You can also contact our support team directly via Telegram or WhatsApp for immediate help.",
+            "date": "2026-08-06T04:49:59+0000"
+          },
+          {
+            "id": "m_NHwMukNsZW5GvfdrBGJWKCMPt2xxFoaSV-cd1NBOPG-FBw11xEoWYEsh48vpgMG_Y6OpCyNKn8ytx5oq49er7Q",
+            "from": "Олександр Андрющенко",
+            "text": "☝️☝️☝️ This doesn't work, why?",
+            "date": "2026-08-06T04:50:43+0000"
+          },
+          {
+            "id": "m_fXN7-Q81H5y3du0BM6T5pyMPt2xxFoaSV-cd1NBOPG_sS6lLf52t-o0D8H6NLko0HI8EqpTr1ChyQiOxH9EAkg",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-06T04:50:48+0000"
+          },
+          {
+            "id": "m_-JF7xC7RY8buA4SvMjV24SMPt2xxFoaSV-cd1NBOPG94j44Gj0sXpDxfEpJ30Yen3qYDbetX5zGZq0CvL1GJvA",
+            "from": "Easy Trip & Visa",
+            "text": "This is your e-visa, sir",
+            "date": "2026-08-06T04:51:29+0000"
+          },
+          {
+            "id": "m_vR1yOG1Mg_WdFsP536gpKyMPt2xxFoaSV-cd1NBOPG_IBHj0bZMLasxAYEGF3EceX2uC0FWGXIVr-UIcrXIckA",
+            "from": "Олександр Андрющенко",
+            "text": "Pdf",
+            "date": "2026-08-06T04:52:04+0000"
+          },
+          {
+            "id": "m_k4YQtYRG-aa8PuoxjWAx_CMPt2xxFoaSV-cd1NBOPG9hKAHgoBY5slp019lAF4I2DQteqeR4DO5bWJmsUeb2Gg",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-06T04:52:10+0000"
+          },
+          {
+            "id": "m_D7Xv4NexF7_U3Q0UmoKRiCMPt2xxFoaSV-cd1NBOPG9Gblru2SEFpfvvKrMaJAifAhrCzTRMKKXuqxU3vABnGA",
+            "from": "Олександр Андрющенко",
+            "text": "They ask me for this at the bank.",
+            "date": "2026-08-06T04:52:18+0000"
+          },
+          {
+            "id": "m_oNXoEFzN7w8MSEUsy14ANyMPt2xxFoaSV-cd1NBOPG9vykNk9_gkVCGUaD7AGv2xRr_wctssQZ7laYgM7XjU1A",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-06T04:52:23+0000"
+          },
+          {
+            "id": "m_g8mgDr_klwTggS-79v-t-iMPt2xxFoaSV-cd1NBOPG9R0rhAHbkz3Q1SVkBiQ5fNLRk-TiJif7NrqVHpz36rsQ",
+            "from": "Easy Trip & Visa",
+            "text": "This is file PDF sir",
+            "date": "2026-08-06T04:53:12+0000"
+          },
+          {
+            "id": "m_BV-3VkBwcdDyG0AlZXUPZiMPt2xxFoaSV-cd1NBOPG-1HegC4ij4JL9aFXIRObWDpkqakXk3r7MIVChK0w5O5g",
+            "from": "Олександр Андрющенко",
+            "text": "But it doesn't work.",
+            "date": "2026-08-06T04:54:28+0000"
+          },
+          {
+            "id": "m_IsZ_fxquuD1Zv-6u7rhXACMPt2xxFoaSV-cd1NBOPG9FhBVW47zEc-JX42AEPyznB4v0xFUpmmAOS6pJLiRslw",
+            "from": "Easy Trip & Visa",
+            "text": "We don't know sir",
+            "date": "2026-08-06T04:54:38+0000"
+          },
+          {
+            "id": "m_tOwxbw54fa1fa3ngTE0ccyMPt2xxFoaSV-cd1NBOPG_suElkH9HpalOz988iE6U6Xwtv83_SCgpP_6RtPbyTJw",
+            "from": "Олександр Андрющенко",
+            "text": "I can't open it.",
+            "date": "2026-08-06T04:54:48+0000"
+          },
+          {
+            "id": "m_qVa8mmA25A5CNzgBKG7LuiMPt2xxFoaSV-cd1NBOPG8UNV4v5CiK93eZ4MTMuswJdDYNu7j0SuoR8fkWbuctMQ",
+            "from": "Easy Trip & Visa",
+            "text": "Okey sir",
+            "date": "2026-08-06T04:55:01+0000"
+          },
+          {
+            "id": "m_JKmWKOjnEGtC7FbQnNgXOSMPt2xxFoaSV-cd1NBOPG9MvsjYd5wTLu7AUUykRdxvW0teauMLuk9-va8ZNoAhZg",
+            "from": "Easy Trip & Visa",
+            "text": "Wait us a bit",
+            "date": "2026-08-06T04:55:07+0000"
+          },
+          {
+            "id": "m_wES0VCMm7qxNKr7rrucwliMPt2xxFoaSV-cd1NBOPG-pL39J3PkPXSJ63nwgQelavt4MKEl1XqgbwACMqgAs-Q",
+            "from": "Easy Trip & Visa",
+            "text": "Can u open it?",
+            "date": "2026-08-06T04:55:54+0000"
+          },
+          {
+            "id": "m_7Uea3qHtrkRrNMlT46F-kiMPt2xxFoaSV-cd1NBOPG_i6JAbRpZrdZqPKj4On7o5CynjT6v3aM874p6RTCvokQ",
+            "from": "Олександр Андрющенко",
+            "text": "Thank you 😊 have a nice day,",
+            "date": "2026-08-06T04:57:56+0000"
+          },
+          {
+            "id": "m_JPnUab9n0QNVfoXq-egq6iMPt2xxFoaSV-cd1NBOPG_EMhYYPFGMPwtuz40fUwL7d3PC69OS1igCNc75-ytDaA",
+            "from": "Easy Trip & Visa",
+            "text": "Have a nice day, sir",
+            "date": "2026-08-06T04:58:11+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1205969778369700",
+        "name": "Inesa Toronova",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_bw_zDNR5m3isudv4-VdjSQWq069lzpjxPaIR8TEcRP3NZ_G0e-0Cs5-iwbOd42nYSZniPixzIZ03D_E2Fg6FKQ",
+            "from": "Inesa Toronova",
+            "text": "Hello! I would like to do a visa run on August 21.\n\nCould you please tell me How much does it cost?",
+            "date": "2026-08-04T03:03:35+0000"
+          },
+          {
+            "id": "m_eMJb9qxF4rhOI_xQZVqGrAWq069lzpjxPaIR8TEcRP2lX1bJ-zykdGpSOKiME-wI6ZFqqbdd5ofM-9r9GJBTDg",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! Thank you for reaching out to Easy Trip & Visa. 😊\n\nTo give you the exact price, I need a bit more information. Could you please tell me:\n\n🌍 Your nationality?\n📅 Your current visa expiry date?\n📍 Your current city (Nha Trang or Da Nang)?\n\nOnce I have these details, I can recommend the best route and provide the cost. 🚌",
+            "date": "2026-08-04T03:03:41+0000"
+          },
+          {
+            "id": "m_LR_ZrZW-7gzq94jJEl9mfwWq069lzpjxPaIR8TEcRP3pv4LHTwnutyn9p4HfJNkUOcNJGFDO4mwXPI0KzZWzxg",
+            "from": "Inesa Toronova",
+            "text": "From danang",
+            "date": "2026-08-04T03:03:46+0000"
+          },
+          {
+            "id": "m_vpbNCqJ1PxOjW_Vf_lwCIgWq069lzpjxPaIR8TEcRP3dkbq8VLPrJT6kpVvj8pTi7PsPil-ohRKfEAvDOCRlqw",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, our system is temporarily busy. Please leave your phone number or contact support!",
+            "date": "2026-08-04T03:03:49+0000"
+          },
+          {
+            "id": "m_0KSb_cjcAaNeor7ZWGyr7QWq069lzpjxPaIR8TEcRP2yZCbHeBDogqfB_p3iNlcFKLyIP035KXJT_Cjt2KZUGw",
+            "from": "Inesa Toronova",
+            "text": "Ukraine",
+            "date": "2026-08-04T03:03:50+0000"
+          },
+          {
+            "id": "m_1KEEbtAvuLvFvJpxQbDB6gWq069lzpjxPaIR8TEcRP3oZ3NDezSNRKEVl86OIclXnsJrgAWGZdB5EiAOQac-TA",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-04T03:03:55+0000"
+          },
+          {
+            "id": "m_SmCFuL4dCPwuwmL57t1dcAWq069lzpjxPaIR8TEcRP2PyWmxku1oE38W1shWk6sp0ZSxnExx24Oxq3c8J6jx5g",
+            "from": "Easy Trip & Visa",
+            "text": "Welcome ms . Inesa",
+            "date": "2026-08-04T03:04:13+0000"
+          },
+          {
+            "id": "m_9me9e7Q5U-ZLV_4zTG2C7AWq069lzpjxPaIR8TEcRP3_Wz0axXt2i8LumVSXRV1JvsjApTVcPVaDKt_Q6bRYnw",
+            "from": "Easy Trip & Visa",
+            "text": "Good morning! Sorry, this was an automated AI message. Our agent will now assist you directly. Could you please let me know your visa expiration date ?",
+            "date": "2026-08-04T03:09:35+0000"
+          },
+          {
+            "id": "m_lwX6wohQdh9e-OCZe7c6VAWq069lzpjxPaIR8TEcRP15-UXbCu8eRgZKfvIlGZtqYvKiCeUeSKii32h4ijw-Mw",
+            "from": "Inesa Toronova",
+            "text": "22 August",
+            "date": "2026-08-04T03:09:49+0000"
+          },
+          {
+            "id": "m_6Txc_yGu6w_lr0J6ZwvPngWq069lzpjxPaIR8TEcRP3ZYQKLMjE2Que7CeZHCBFqie1Xf0lQQ2oIlvTrfhQNww",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-04T03:09:54+0000"
+          },
+          {
+            "id": "m_xnCi7_4CiCljNmjWZ6RLwwWq069lzpjxPaIR8TEcRP2oMt-JVSBuSkVqjeetujCCNvzB6zRofMflNr4l-Uq6qg",
+            "from": "Easy Trip & Visa",
+            "text": "This is our price, ma'am",
+            "date": "2026-08-04T03:11:35+0000"
+          },
+          {
+            "id": "m_eLo0KPW6UsEX3uYv7iSnWwWq069lzpjxPaIR8TEcRP21KGk8jQLE6-enZQCZkj4pgJFKfcHy0nyBVL0knGy0AQ",
+            "from": "Inesa Toronova",
+            "text": "Hi! Could you please tell me if Ukrainian citizens need a Laos visa for this visa run, or is everything arranged by your company? Thank you!",
+            "date": "2026-08-04T03:13:18+0000"
+          },
+          {
+            "id": "m_BGXuRJwDhalmfLhs6EMeDAWq069lzpjxPaIR8TEcRP2Ra_u7ixiI__nKE5sqrRWWg-i8Cs8Gh8fFspKuD9fo3g",
+            "from": "Easy Trip & Visa",
+            "text": "Please note that our service fee includes your Vietnam E-visa processing and round-trip bus transportation.\nKindly be informed that this fee does NOT include the Laos visa fee. You will need to prepare 1,600,000 VND in cash along with 01 photo 4x6 to purchase your Laos visa on arrival at the border.",
+            "date": "2026-08-04T03:22:30+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_2590802401355002",
+        "name": "Emma Sauvade",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_JZKdg_l-zNaEtFMFq02Qw6gIw-5HrrYqsZy7SSDvfRZRI30TuPVEdCNSpJYTgirSScqWx5ZxN0R4eAbCymYRFQ",
+            "from": "Easy Trip & Visa",
+            "text": "Non ne dit pas ça c’est votre droit je suis toujours disponible a te répondre 😍😍",
+            "date": "2026-08-02T15:00:36+0000"
+          },
+          {
+            "id": "m_YCxSBAZ0Kd7wcPacufywg6gIw-5HrrYqsZy7SSDvfRYz-ll08NZOxL0lk-70VvFPmUj0T36a69ht0h9MAv5zcA",
+            "from": "Emma Sauvade",
+            "text": "Merci tu es adorable ☺️",
+            "date": "2026-08-02T15:01:19+0000"
+          },
+          {
+            "id": "m_D75Q3vazRC6-hdNPa57TyqgIw-5HrrYqsZy7SSDvfRbRikHfoywyx-yhonS2jfXX5de9WWpj55ndgo0wfhlZoQ",
+            "from": "Easy Trip & Visa",
+            "text": "🥰🥰🥰",
+            "date": "2026-08-02T15:01:35+0000"
+          },
+          {
+            "id": "m_mAdfAHTIUsB8mE5LdMnVe6gIw-5HrrYqsZy7SSDvfRbioXjyxah-Vv3UT14NQjn-seXPVDVsK1XUhXqOS_HBUA",
+            "from": "Emma Sauvade",
+            "text": "Bonjour \nJ’ai passé la frontière cambodgienne sans problème \nJ’attends du côté du combodge \nVers quelle heure je dois repasser au Vietnam ? Et on est d’accord que je n’ai rien à faire ?",
+            "date": "2026-08-03T01:12:14+0000"
+          },
+          {
+            "id": "m_1b-mxNGZLrUNzHifqzan-KgIw-5HrrYqsZy7SSDvfRbSAYotqEwhtgOwFtBj2zRlv8P5u_A_-JNrfUFvhVn4ew",
+            "from": "Easy Trip & Visa",
+            "text": "Bonjour ! C'est une excellente nouvelle que vous ayez traversé la frontière sans problème. 🎉\n\nPour votre retour au Vietnam, vous devez repasser la frontière vers **13h00** (1h00 de l'après-midi), car le bus de retour part à ce moment-là. 🚌\n\nVous n'avez rien à faire de spécial, il vous suffit de vous présenter au poste frontière avec votre passeport et votre e-visa (imprimé si possible). Le bus vous attendra, ne vous inquiétez pas. ✅\n\nSi vous avez besoin d'aide, contactez-nous via Telegram ou WhatsApp. Bonne journée !",
+            "date": "2026-08-03T01:12:19+0000"
+          },
+          {
+            "id": "m_LMp2z1_XylnTHGEwRmQuGqgIw-5HrrYqsZy7SSDvfRZlYMHgHfwVmDbE3SHTuLkBzdHq0_ptL1itFnbniVKQ1w",
+            "from": "Easy Trip & Visa",
+            "text": "Oui tu as bien fait super",
+            "date": "2026-08-03T01:19:56+0000"
+          },
+          {
+            "id": "m_6d6oYbq0_svI-gMh8spO7qgIw-5HrrYqsZy7SSDvfRZsOnDA_PWzU1FoaXG6PQyu5asPTamypq9bHbF2bnVe6A",
+            "from": "Easy Trip & Visa",
+            "text": "Comment t'as trouver la procedure tout va bien ??",
+            "date": "2026-08-03T01:20:45+0000"
+          },
+          {
+            "id": "m_NRyj6DVyOf0vV4CmQ_hc0KgIw-5HrrYqsZy7SSDvfRas3c1kAB-gKAGrPJ8dtK1-X27rt7BO6ksutt8I_Q4-EA",
+            "from": "Emma Sauvade",
+            "text": "J’ai suivi des gentils russes qui me montre haha",
+            "date": "2026-08-03T01:21:35+0000"
+          },
+          {
+            "id": "m_rrTKN4MgYuLtbInHmRUOS6gIw-5HrrYqsZy7SSDvfRbV2ZNnZ7IOBKyxtdJUCxKaS_OrklHmKpio55xVNaXzvw",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-03T01:21:39+0000"
+          },
+          {
+            "id": "m_h6qB29on9Qlhl_uEFCQq2qgIw-5HrrYqsZy7SSDvfRb7g7RYbfF6g2sx-HSLqN7crVBluHh2T-klvwxH_fNksg",
+            "from": "Easy Trip & Visa",
+            "text": "Hahaha génial",
+            "date": "2026-08-03T01:22:36+0000"
+          },
+          {
+            "id": "m_AHTcvWSYPyiroMi9DH29qqgIw-5HrrYqsZy7SSDvfRbhBRqHShAgFOdbhZ-NqyGDCitpHWxVvwo1oNb-Sy3rGA",
+            "from": "Easy Trip & Visa",
+            "text": "Comme je te l'ai dit tu vas entrer dans ce monde et faire la connaissance de gens",
+            "date": "2026-08-03T01:23:05+0000"
+          },
+          {
+            "id": "m_rXRWktqoWwXe9N8YpMFEHKgIw-5HrrYqsZy7SSDvfRbUpT5_3_fesYqs8YxEW4NhPTlgJVsWhQx8o6aV4HPZIw",
+            "from": "Emma Sauvade",
+            "text": "Oui :)",
+            "date": "2026-08-03T01:25:18+0000"
+          },
+          {
+            "id": "m_GUd8M1xbnrF4LFgX6DSBHagIw-5HrrYqsZy7SSDvfRaIA_Z5uCo9X2rOs9Py-bSLrLlxQgPWE2lC6aY0oNIJRw",
+            "from": "Easy Trip & Visa",
+            "text": "Haha, c'est super que vous ayez trouvé de la compagnie ! 😄\n\nN'oubliez pas de repasser la frontière vers **13h00** pour le bus de retour. 🚌\n\nSi vous avez besoin d'aide, contactez-nous via Telegram ou WhatsApp. Bonne journée !",
+            "date": "2026-08-03T01:25:21+0000"
+          },
+          {
+            "id": "m_tQjBG_nWmMzTBkCbnGDeBqgIw-5HrrYqsZy7SSDvfRYndA2sMf5uRdys_ZDn-IEKtOo7h_hmP2CpDTWDeRvJZA",
+            "from": "Emma Sauvade",
+            "text": "Du coup je repasse la frontière vers quelle heure ? Et j’ai plus rien à faire ? Je demande juste le visa de 45j ? Et c’est à ce moment où je mets les 50 000",
+            "date": "2026-08-03T01:27:29+0000"
+          },
+          {
+            "id": "m_1dTgFhZixvqWgY96hcOY0qgIw-5HrrYqsZy7SSDvfRZuFrz8vRqjNqcTkqlAWmmo7YzwXUM83v_0J0bzcqovsg",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-03T01:27:34+0000"
+          },
+          {
+            "id": "m_x2_FiU2QDsOxlzrCm1-2tagIw-5HrrYqsZy7SSDvfRbYRLFv0-yf2LFE4JD4rf0Qh3x7pNO8EilexUB_qBaWWg",
+            "from": "Easy Trip & Visa",
+            "text": "Oui exactement",
+            "date": "2026-08-03T01:38:22+0000"
+          },
+          {
+            "id": "m_9RnfcmNspoz4cGsLTcsGiKgIw-5HrrYqsZy7SSDvfRZf3SmJCXm6qLtP5zYCW_q82GRXPT4MnCDrJA0GfPvBbg",
+            "from": "Easy Trip & Visa",
+            "text": "Les gens qui ont e-visa 90 jours ce sont des gens qui vont rester là-bas pour attendre e-visa a 11h30",
+            "date": "2026-08-03T01:39:15+0000"
+          },
+          {
+            "id": "m_OMqZnnfvL3qUy1Wnt9Oq1KgIw-5HrrYqsZy7SSDvfRZWoX2OMQsmew8s-gvTHHOHhAy4odb2lcCZpnu8yJi8cQ",
+            "from": "Easy Trip & Visa",
+            "text": "Mais pour toi si tu as finis c’est bon tu peux repasser la frontière",
+            "date": "2026-08-03T01:39:44+0000"
+          },
+          {
+            "id": "m_mFNeAD8UtaUZF2KJyk7ACqgIw-5HrrYqsZy7SSDvfRY-KR1zVcTXnz0nyRhYTzbETxLud8nWXgIp9Xcl-t2SDg",
+            "from": "Emma Sauvade",
+            "text": "Super merci",
+            "date": "2026-08-03T01:40:33+0000"
+          },
+          {
+            "id": "m_3FSjz5kw47sAf4rHUi77y6gIw-5HrrYqsZy7SSDvfRalsgZJ--13DtkVbHYaKRqKnSX5_tUus0XX58aB3Y4xPQ",
+            "from": "Easy Trip & Visa",
+            "text": "Avec plaisir ! 😊 Pour récapituler :\n\n🚌 **Retour au Vietnam** : repassez la frontière vers **13h00** (le bus part à cette heure).\n\n✅ **Procédure** : présentez votre passeport au contrôle vietnamien. Vous n'avez **rien d'autre à faire** – votre visa de 45 jours est déjà actif grâce à votre sortie et entrée.\n\n💰 **Frais** : oui, vous paierez **50 000 VND** (frais de tampon de sortie/entrée) directement au guichet vietnamien.\n\nSi vous avez la moindre question, contactez-nous sur Telegram ou WhatsApp. Bon retour ! 🚌",
+            "date": "2026-08-03T01:40:38+0000"
+          },
+          {
+            "id": "m_A1OrEJNaQr99cX29GGnOd6gIw-5HrrYqsZy7SSDvfRa5ZzVIqauSMFAwc_undcfMCIZNg9I9WkWuO42NtVsoVw",
+            "from": "Emma Sauvade",
+            "text": "Je suis dans la queue pour la frontière vietnamienne. Il y a énormément de monde et ça avance tout doucement",
+            "date": "2026-08-03T05:39:45+0000"
+          },
+          {
+            "id": "m_oNIgdWbteBWgo_9GkY8xNagIw-5HrrYqsZy7SSDvfRZ_wP1vehqT148VTnfAmpH1RZhO60k_QGyJb4kjOO91Qw",
+            "from": "Easy Trip & Visa",
+            "text": "Don't worry! We've already informed the driver, and the bus will wait for you. Take your time and stay calm. 😊",
+            "date": "2026-08-03T05:39:48+0000"
+          },
+          {
+            "id": "m_DjvCIrsLCcZjL8BQe-oFs6gIw-5HrrYqsZy7SSDvfRbpZdfmjnEkXz0kUj2qtgCiQlkkhRp5T7F2cnvnYE6xcQ",
+            "from": "Easy Trip & Visa",
+            "text": "Tt a fait normale parceque la plupart des gens devraient aller a la frontière au même. Temp il faut just que tu attend quelque moment ☺️",
+            "date": "2026-08-03T06:46:54+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_4430293177224734",
+        "name": "Polina  Anikeychik",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_cnjMiHmScG52u4vOWmgIJ_zBe-zvuH5T-Tb_dcC4ez8oXg_1NMbXcGSISVfLliiUI9Z0J8C__10WnzNaWF0Bmw",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-01T22:03:31+0000"
+          },
+          {
+            "id": "m_KTav8m5lfLozi4PmLBKgT_zBe-zvuH5T-Tb_dcC4ez9v-nnF3athQaPQg_gAtveAy7irglY9aTxa54f3gWbyRQ",
+            "from": "Polina  Anikeychik",
+            "text": "Какая будет точная стоимость именно для гражданки Украины? 35 или 50 долларов?",
+            "date": "2026-08-01T22:03:40+0000"
+          },
+          {
+            "id": "m_qV8UZlqk8Mso0AwOPvCl3_zBe-zvuH5T-Tb_dcC4ez8LVg2j5do5FcgOz2G1YURUTLTeUQqzA0wvHNM0c97-gg",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-01T22:03:42+0000"
+          },
+          {
+            "id": "m_T9H-FNP1FJkYmjUGk276pfzBe-zvuH5T-Tb_dcC4ez8El63UcDMhf9onTsueBov949AygPZx2CGm1dXIG73MDA",
+            "from": "Polina  Anikeychik",
+            "text": "После оплаты 4 000 000 VND и оплаты визы Камбоджи будут ли ещё какие-либо обязательные платежи?",
+            "date": "2026-08-01T22:03:53+0000"
+          },
+          {
+            "id": "m_GLu9u25FVtctZ7bHsZDE6PzBe-zvuH5T-Tb_dcC4ez_NTiJl3KFVRWTGvSshKgqTSH6mc_hkdkL9ocjjj1z81A",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-01T22:03:56+0000"
+          },
+          {
+            "id": "m_R81uFa_TPnapCqMurmwOJvzBe-zvuH5T-Tb_dcC4ez-Q9--1THttmG9Dd_C5orgpZzJVkMhIZP2neB21Z_WEkA",
+            "from": "Polina  Anikeychik",
+            "text": "добрый вечер",
+            "date": "2026-08-02T11:52:48+0000"
+          },
+          {
+            "id": "m_XsixbVp-DxULvlo4smecpvzBe-zvuH5T-Tb_dcC4ez98vIiEBS45fNmUahzg-OXEBVJZPs9FwMx-CANYur75Ag",
+            "from": "Polina  Anikeychik",
+            "text": "хочу уточнить по поводу праздников с 29 по 3 во вьетнаме",
+            "date": "2026-08-02T11:53:30+0000"
+          },
+          {
+            "id": "m_yofKoGKs_t819vFiqpTQLPzBe-zvuH5T-Tb_dcC4ez9rpU-094QaVOUCzvpm-qxSgurLqaT4GQxI7XU0FRU9aQ",
+            "from": "Easy Trip & Visa",
+            "text": "Добрый вечер! 🌙\n\nВы спрашиваете о праздниках с 29 по 3? Уточните, пожалуйста, какие даты вас интересуют: с 29 апреля по 3 мая? Или с 29 мая по 3 июня? В любом случае, мы работаем в обычном режиме, и визараны выполняются по расписанию. 🚌\n\nЕсли вы планируете визаран, подскажите, пожалуйста, ваше гражданство и дату истечения визы, чтобы я мог рассчитать для вас оптимальную дату выезда. 😊",
+            "date": "2026-08-02T11:53:37+0000"
+          },
+          {
+            "id": "m_r-26qdQ4gkiv6p73oxd8ffzBe-zvuH5T-Tb_dcC4ez_sdiamd56TYAKg3RhGUr5YYdXwQE227yr5-B2fg1TKGA",
+            "from": "Easy Trip & Visa",
+            "text": "Добрый вечер! 🌆\n\nВы имеете в виду праздники с 29 апреля по 3 мая (День Победы и День труда)? В этот период многие офисы и госучреждения могут не работать, но наш автобусный сервис визарана работает в обычном режиме. 🚌\n\nПодскажите, пожалуйста, ваш вопрос касается визарана? Если да, то уточните, пожалуйста:\n\n1. Ваше гражданство (для выбора маршрута)\n2. Дату истечения вашей визы\n3. В каком городе вы находитесь (Нячанг или Дананг)\n4. Какой тип визы вам нужен (45 дней без визы или 90 дней E-visa)\n5. Ваш контактный номер (WhatsApp/Zalo/Telegram)\n\nМы поможем подобрать оптимальный вариант! 😊",
+            "date": "2026-08-02T11:53:37+0000"
+          },
+          {
+            "id": "m_3NJ4RZx1OcFF77cHr-qsv_zBe-zvuH5T-Tb_dcC4ez9N1SYbV3l48oiJcP2pvVx16DPXdL3qpu7vltV2EI42Gg",
+            "from": "Easy Trip & Visa",
+            "text": "Добрый вечер! Чем могу помочь? Если вас интересует визаран, подскажите, пожалуйста, ваше гражданство и дату истечения визы, чтобы я мог подобрать подходящий маршрут и дату отправления.",
+            "date": "2026-08-02T11:53:37+0000"
+          },
+          {
+            "id": "m_JHal0A_ozws4ely2nNR4ivzBe-zvuH5T-Tb_dcC4ez8D3o63VhgdlZbyi5Hty34YJHx6sAihQK5Auzl3QUcTXA",
+            "from": "Easy Trip & Visa",
+            "text": "Добрый вечер! 🌆\n\nВы имеете в виду праздники с 29 апреля по 3 мая? Это День Победы (30 апреля) и День Труда (1 мая) во Вьетнаме. В эти дни многие офисы и госучреждения не работают, но наш сервис визарана работает в обычном режиме, кроме случаев, когда выпадает на выходной. 🚌\n\nЕсли вы планируете визаран в эти даты, пожалуйста, уточните, какой у вас тип визы и когда она истекает, чтобы мы подобрали подходящий маршрут и дату отправления. 😊",
+            "date": "2026-08-02T11:53:37+0000"
+          },
+          {
+            "id": "m_ga7Hm0I57lWvwLzv0-3OZPzBe-zvuH5T-Tb_dcC4ez-9dHVqcvpOurxJaG9fBlPlWO4WO4IRXya-QX1hweK3XA",
+            "from": "Polina  Anikeychik",
+            "text": "у вас точно будет поездка 1 сентября?",
+            "date": "2026-08-02T11:53:49+0000"
+          },
+          {
+            "id": "m_ghbL9QJI9Re7LgTde4HEsvzBe-zvuH5T-Tb_dcC4ez_unzmluB-Gh-2C7mW4J2KtzDN-sQkFjwiMk7VD6Z6mWw",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-02T11:53:54+0000"
+          },
+          {
+            "id": "m_neOWlHK5MNr2Fe63K6djf_zBe-zvuH5T-Tb_dcC4ez8dujZAYRJdevtE2VO061DRTwZpPeZXjUPKLTOKVSY6VA",
+            "from": "Polina  Anikeychik",
+            "text": "1 сентября",
+            "date": "2026-08-02T11:54:24+0000"
+          },
+          {
+            "id": "m_OcIANVyYFALqyIMuYiQwiPzBe-zvuH5T-Tb_dcC4ez8WNB3i1r5meWHTFuLzzbWrnWyfnPrqDf0YCeuAoNElXA",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-02T11:54:30+0000"
+          },
+          {
+            "id": "m_qI4Jxvuip8qMJ0Jbx8wCU_zBe-zvuH5T-Tb_dcC4ez_iHVxzADJcT0aFLPu7DmG7AZb3joYse2hjpN2FIWH35g",
+            "from": "Polina  Anikeychik",
+            "text": "вот мой тип визы. мне нужно оформить еще 90 дней",
+            "date": "2026-08-02T11:56:31+0000"
+          },
+          {
+            "id": "m_TmUZYFeXsFcsiUOAhf1x3_zBe-zvuH5T-Tb_dcC4ez_xnceU7QRfvnVCthZwGUYjfzixRj7aeu14-DwHmV2rCw",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-02T11:56:34+0000"
+          },
+          {
+            "id": "m_vustFzqlHQZzsawTu5CuXvzBe-zvuH5T-Tb_dcC4ez8oOGcJgmYPtj77_KXI7Zz2fQ70YsshGz0bMfHNgQjUVQ",
+            "from": "Polina  Anikeychik",
+            "text": "запишите пожалуйста на 1 сентября",
+            "date": "2026-08-02T11:56:50+0000"
+          },
+          {
+            "id": "m_H-lQrUvABsPcixqltLvmMfzBe-zvuH5T-Tb_dcC4ez__AXKJ-VNfdHKUgMeIDI2qmEQvXqD0KzCqMJNLCKT4eQ",
+            "from": "Easy Trip & Visa",
+            "text": "Хорошо, записываю вас на **1 сентября**! 🚌\n\nНо мне нужно уточнить несколько деталей, чтобы правильно оформить бронирование:\n\n1. **Ваше гражданство** – для выбора маршрута (Лаос или Камбоджа)\n2. **Дата истечения текущей визы** – чтобы рассчитать правильную дату выезда\n3. **Город отправления** – Нячанг или Дананг?\n4. **Тип визы** – вы упомянули, что нужна 90-дневная E-visa, верно?\n5. **Ваш контактный номер** (WhatsApp/Zalo/Telegram)\n\nПожалуйста, предоставьте эти данные, и я сразу проверю наличие мест и забронирую для вас! 😊",
+            "date": "2026-08-02T11:56:56+0000"
+          },
+          {
+            "id": "m_ltRgYXWCBK8Ua9sRBHTCYfzBe-zvuH5T-Tb_dcC4ez9f5roUhXuroCWrjjcjahXciP9BoXFMKis2NpvqsXFKBA",
+            "from": "Polina  Anikeychik",
+            "text": "город нячанг Океанус",
+            "date": "2026-08-02T11:57:13+0000"
+          },
+          {
+            "id": "m_spAKn04VDcNBfAb8iR5vT_zBe-zvuH5T-Tb_dcC4ez_umrKVKIhajrnyd5LZptbG3NdObk2pZo4vf3hnvD1WmQ",
+            "from": "Polina  Anikeychik",
+            "text": "украина .",
+            "date": "2026-08-02T11:57:55+0000"
+          },
+          {
+            "id": "m_DZYhVsUAfAIinBEzD39T0_zBe-zvuH5T-Tb_dcC4ez_um5hd6VP4ffK4lBtXVdSPzHaccW5TVbUPaj7le-R0Tw",
+            "from": "Polina  Anikeychik",
+            "text": "+380505121144",
+            "date": "2026-08-02T11:58:40+0000"
+          },
+          {
+            "id": "m_ee1hZpZ6ZLjBrLTnO9BTo_zBe-zvuH5T-Tb_dcC4ez-Iryr5cw7xfH4q3R53J5__YnRpCLriMHG50ow4eqJZUg",
+            "from": "Polina  Anikeychik",
+            "text": "в Телеграм",
+            "date": "2026-08-02T11:58:55+0000"
+          },
+          {
+            "id": "m_yWfctZcNiCiTCtiGM91ClfzBe-zvuH5T-Tb_dcC4ez8AHf0hQTeEIWYjDHlo34udSrFH3i0s98TwxaZGrKPNkQ",
+            "from": "Polina  Anikeychik",
+            "text": "@polly8",
+            "date": "2026-08-02T11:59:25+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1443340067579335",
+        "name": "Yonadav Vinograd",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_c0EeowL8kSTbeegP_7CoQl4q4wKU5MBoeahtUPFk3LPSTxOaIszVfGZqt4SpAS3G2YcUhaqU78YmhCKuNJqZ1A",
+            "from": "Yonadav Vinograd",
+            "text": "Hello (:\nI want to ask about a visa run trip from danang, this Thursday 6/8.\nDo you have it?\nI want 3 months visa extension.\nI am from israel.",
+            "date": "2026-08-02T03:44:37+0000"
+          },
+          {
+            "id": "m_PyJmxOe2Y1WJC7ojF2ZFGl4q4wKU5MBoeahtUPFk3LMCcgw27FqGCd87c0KinlWheUlrOumTvM_o5t7esnaSIg",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! 😊 Thank you for reaching out to Easy Trip & Visa.\n\nWe do have a visa run from Da Nang to Cambodia (Moc Bai border) this Thursday, **06/08**. The bus departs at **21:30** from Da Nang.\n\nSince you are from Israel, you are not visa-exempt for Laos, so the Cambodia route is the right choice for you. The package for a **90-day E-visa** is **4,000,000 VND**, which includes the round-trip bus and the visa processing.\n\nPlease note that you will need to pay for your Cambodia visa at the border (approx. $35–$50) and the Vietnam exit/entry fees.\n\nTo confirm your booking, could you please provide the following details?\n- Your full name and date of birth\n- Your current visa expiry date (to ensure we depart on time)\n- Your phone number (WhatsApp/Zalo)\n- Your pickup location in Da Nang\n\nOnce I have these, I can check seat availability and send you the seat map. 🚌",
+            "date": "2026-08-02T03:44:48+0000"
+          },
+          {
+            "id": "m_Fe-GF-EhwLXYIbGQ_FkWkl4q4wKU5MBoeahtUPFk3LPqTZZsYiK_GrlCP0aIGPwks7a2vmSFBExN_N0y41sqbA",
+            "from": "Easy Trip & Visa",
+            "text": "We sincerely apologize, but due to current regulations, the E-visas for Israeli passport holders face very strict approval requirements and are unfortunately rarely granted. As a result, we regret to inform you that we are unable to process the E-visa application for you at this time.\nWe truly appreciate your understanding and deeply regret any inconvenience this may cause.",
+            "date": "2026-08-02T04:02:06+0000"
+          },
+          {
+            "id": "m_Ms2aG5rjywsDTBhiqmqOVV4q4wKU5MBoeahtUPFk3LMoJhvSYJR-CLWceLuA_WjrG06LdpOuhbFIIfWBvSvhJw",
+            "from": "Yonadav Vinograd",
+            "text": "As many of my israeli friends just did it, I know its not true..\n\nIf there is something else behind this decision, I will be happy to hear it out laud.",
+            "date": "2026-08-02T04:06:03+0000"
+          },
+          {
+            "id": "m_vwxVfW2fqdRqZLwoBLIfP14q4wKU5MBoeahtUPFk3LNuDdVso0RuMFXGyhgRk_r_V9GlYdROxdiLcBgclDo1_w",
+            "from": "Easy Trip & Visa",
+            "text": "Please be advised that there is approximately a 70% approval rate for the E-visa if you apply for a multiple-entry E-visa and depart from Vietnam by air.\nPlease let us know if you would like to proceed with this option.",
+            "date": "2026-08-02T04:20:56+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_2097895767785279",
+        "name": "Michael Liu",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_FAA8z0zZc-qAu6j4zkbtT75xJK25-RjzV6PIecfFx-KTTHSjK5EuMqj00sNVh4RRQXpDQFmyrSN4KdRQSk1sYg",
+            "from": "Easy Trip & Visa",
+            "text": "https://thithucdientu.gov.vn/e-visa/search\nE260731USAA0203845986\nadmin@easytripvisa.com",
+            "date": "2026-07-31T02:16:34+0000"
+          },
+          {
+            "id": "m_olSkecxpmknIcKJGLNhAd75xJK25-RjzV6PIecfFx-KFA43T48e0GMV4gpLpA4I0pid2hNYVZWukB3kN4tTsPA",
+            "from": "Easy Trip & Visa",
+            "text": "Good morning Mr. liu michael We have completed your initial registration.",
+            "date": "2026-07-31T02:17:06+0000"
+          },
+          {
+            "id": "m_4dxV99TgM_0AxStDMuv7_L5xJK25-RjzV6PIecfFx-JWwdCOGIhQjGRYeEXtn6B67-aiEQ_AbiTh-WN42zOlVA",
+            "from": "Easy Trip & Visa",
+            "text": "Good evening! I hope you're having a great day. Could you please let me know which day you'll be visiting our office so I can schedule your appointment? You mentioned yesterday that you'd let me know the time today",
+            "date": "2026-07-31T10:36:53+0000"
+          },
+          {
+            "id": "m_voO31Lh929hqngDO-Dx8Qb5xJK25-RjzV6PIecfFx-J_B_twW-ydj2qvNJb2n24kRThvR6ImLUQZEMcaJUoS9g",
+            "from": "Michael Liu",
+            "text": "hi would monday be ok?",
+            "date": "2026-07-31T10:44:07+0000"
+          },
+          {
+            "id": "m_HKcymYgUFVRuotURzksDB75xJK25-RjzV6PIecfFx-IYCczkDfuEYXh6l5nJkaBLaOXefmJcLzzuVNsRvCUBEw",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! 😊 Yes, Monday could work, but let me check the schedule for you. Could you please tell me your nationality and visa expiry date? This will help me confirm the exact departure day and route for your visa run. 🚌",
+            "date": "2026-07-31T10:44:44+0000"
+          },
+          {
+            "id": "m_3EgorZE9fALV8iGNODoNBr5xJK25-RjzV6PIecfFx-KE0H3SGKeScWStBLOfK_-F3FGROxvggaeMhWtqiRC1xA",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! 😊 Yes, Monday could work, but let me check the schedule for you. Could you tell me your nationality and visa expiry date? That way I can confirm the best departure day for your visa run. 🚌",
+            "date": "2026-07-31T10:44:44+0000"
+          },
+          {
+            "id": "m_TMPFjZ0soLWAhJywQaoX7b5xJK25-RjzV6PIecfFx-IgZUyc9tT-JmcXWTiH3U4Xf6RRulL7yrnBkfE3464GIw",
+            "from": "Michael Liu",
+            "text": "i think we already decided this yesterday, if you need me to come in sooner let me know, as its basically arranging transport",
+            "date": "2026-07-31T10:45:51+0000"
+          },
+          {
+            "id": "m_o9185HnfRmY_7XPTWxKAvb5xJK25-RjzV6PIecfFx-IMIIf1WelKZGRtB0aSrltlHs1cCg9ByGPi6RH5VdVKHQ",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-07-31T10:45:54+0000"
+          },
+          {
+            "id": "m_qJt3S6ArLwEHbY8ShGI1hr5xJK25-RjzV6PIecfFx-Kzi29RFGsgiy5cCb3wzDTa7PDj_twPJfFr-_24qg-F-g",
+            "from": "Easy Trip & Visa",
+            "text": "No worries at all, take your time! I was only asking because you mentioned yesterday that you’d decide and let me know today",
+            "date": "2026-07-31T10:51:34+0000"
+          },
+          {
+            "id": "m_t93oTfNRTv4ImtVWvmkK7b5xJK25-RjzV6PIecfFx-JJBGufuUxYh2Sima2Op4NE5w80TtlsBkp_hZf3ixeOQg",
+            "from": "Michael Liu",
+            "text": "If i can come in monday afternoon that would be best, please let me know if this works for you?",
+            "date": "2026-07-31T10:52:12+0000"
+          },
+          {
+            "id": "m_eNqFAePU3qFUcaIpFBp7fr5xJK25-RjzV6PIecfFx-IvWbLGsFzH3gD42uXKD3gkFZiE6_WWKrZcaJjAB8rvmA",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-07-31T10:52:17+0000"
+          },
+          {
+            "id": "m_QBhz093iUpZ-6-gVfq0gNb5xJK25-RjzV6PIecfFx-JeUuo94v02PFoBAxmpF6Lh5Tt3YHNcohh8ERuA0i3b0g",
+            "from": "Easy Trip & Visa",
+            "text": "yes sure of course sir",
+            "date": "2026-07-31T11:12:50+0000"
+          },
+          {
+            "id": "m_5Q7NOubuUeudPBywjgZTX75xJK25-RjzV6PIecfFx-L3gKDvFpey2Re5pWCDxAl12JP4WNom6x23HMgBSCebZQ",
+            "from": "Easy Trip & Visa",
+            "text": "have a wonderful night",
+            "date": "2026-07-31T11:16:00+0000"
+          },
+          {
+            "id": "m_QwKrRQIMOzSLhMzqWX1YAr5xJK25-RjzV6PIecfFx-L5iY4jFb3fgc6jNH1GULmLE4jWijc7XVvXondnPUq7tA",
+            "from": "Easy Trip & Visa",
+            "text": "Michael Liu replied to a post. View post(https://www.facebook.com/permalink.php?story_fbid=pfbid0owSJaCmxLQP1fPivHdftnhnHQzrXBsQQftxQe5peDZ8ujoKfxR7hQYKnAM9BnXyYl&id=61588647007889)",
+            "date": "2026-08-01T10:19:31+0000"
+          },
+          {
+            "id": "m_CbFTH1_mP8aV4fLZgrCJCL5xJK25-RjzV6PIecfFx-KzIakpmzasc5JhFhGrLFJBYk5f3zUbG2ORzdDbJ65dEA",
+            "from": "Michael Liu",
+            "text": "Hi, unfortunately i need cancel my booking as i cant do the 6th for departure now",
+            "date": "2026-08-01T10:19:31+0000"
+          },
+          {
+            "id": "m__3impKtSBrPT-ntlopeSI75xJK25-RjzV6PIecfFx-KxQCLnW9pUpREl9vOC2eB6qPi1SSbiUNLFdOw6K1ZMNA",
+            "from": "Easy Trip & Visa",
+            "text": "I'm sorry to hear that you need to cancel your booking. Could you please provide me with your booking details (name, phone number, or booking reference) so I can assist you with the cancellation process? If you have any questions or need help with rescheduling, feel free to ask.",
+            "date": "2026-08-01T10:19:35+0000"
+          },
+          {
+            "id": "m_UrgQS9lY7vVCwEuG7dNmlb5xJK25-RjzV6PIecfFx-L6CGTvGHXIdox90a6I5ArhVfDQYbq8TzSciWxgHZ43XA",
+            "from": "Easy Trip & Visa",
+            "text": "So, would you like to change the date, sir?",
+            "date": "2026-08-01T10:24:30+0000"
+          },
+          {
+            "id": "m_g9q6yH7uZK4kdtM9p4E_o75xJK25-RjzV6PIecfFx-I1RJMSn4BManO5qTYlL0cniEf0NJcQvDW5id_7L_MYZQ",
+            "from": "Michael Liu",
+            "text": "Ive had to make other arrangements, i will not do the bus run this time.",
+            "date": "2026-08-01T10:25:42+0000"
+          },
+          {
+            "id": "m_VXXjTnQhNA1iilJo-syP2r5xJK25-RjzV6PIecfFx-JLIsad3WjPCYVdvdgOIHsCIVxusZaKblitbx95jIpDUw",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-08-01T10:25:47+0000"
+          },
+          {
+            "id": "m_pGGROyHk8wQlja0PaM2Tub5xJK25-RjzV6PIecfFx-IyAE_jkBHyxRKUlH39AKUz9g6rcl5cni5iKzkLG9Q1Gg",
+            "from": "Easy Trip & Visa",
+            "text": "Hi",
+            "date": "2026-08-01T10:26:00+0000"
+          },
+          {
+            "id": "m_ae0m25o1kh1bC64IPs83rL5xJK25-RjzV6PIecfFx-IlkMcSL0x_Ky6zdbo_mG2JI8peV9ftoGWkPt62zyyd9A",
+            "from": "Easy Trip & Visa",
+            "text": "We noted sir",
+            "date": "2026-08-01T10:26:22+0000"
+          },
+          {
+            "id": "m_XxzHDvwMSUvhBrw8NCUZMb5xJK25-RjzV6PIecfFx-INAIc7Ajc5i5mZyGbnRSsCKuNKk2A-tqHcRgIOjEikWA",
+            "from": "Michael Liu",
+            "text": "Thank you, i will find you next time when i do the bus run",
+            "date": "2026-08-01T10:26:49+0000"
+          },
+          {
+            "id": "m_7Ic7uotf-xRQr9I33v3ty75xJK25-RjzV6PIecfFx-LMC7ETOeo6jKe-zXObWjOrSThk9smMcNlljSOnNv9VHQ",
+            "from": "Easy Trip & Visa",
+            "text": "See you at next time visa",
+            "date": "2026-08-01T10:26:49+0000"
+          },
+          {
+            "id": "m_5m8qtr8uawWbAv8FQr4-fL5xJK25-RjzV6PIecfFx-JJtrsBDjsy6LnaIywGAMwPD6adhtE9q4AFyRKgq0IhHA",
+            "from": "Easy Trip & Visa",
+            "text": "You're very welcome! We're sorry to see you go this time, but we completely understand that plans change. 😊\n\nWhenever you're ready for your next visa run, just reach out to us and we'll be happy to help you with the best route and schedule.\n\nSafe travels, and we look forward to seeing you again! 🚌✨",
+            "date": "2026-08-01T10:26:53+0000"
+          },
+          {
+            "id": "m_uBDAoTr2Ekb0_8h3NxJDCb5xJK25-RjzV6PIecfFx-KJPwSCECU4qxZV-V_MnMrXwqrbhr_AFYgA2z7RzS3o9Q",
+            "from": "Easy Trip & Visa",
+            "text": "Cancel done!",
+            "date": "2026-08-01T10:27:26+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_828794743650667",
+        "name": "Carol W Green",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_NfWKcDrElnUXtyBF9A-u9-r8tKY2niG0_PEjF_5zjCnMZ6Q0lSft1NV24ffgNssh69PxqkxB2m48pgYrsUjg2w",
+            "from": "Easy Trip & Visa",
+            "text": "Yes this one it’s good thank you",
+            "date": "2026-07-27T00:07:11+0000"
+          },
+          {
+            "id": "m_zA_SZqOQ2bGFFSVgqJsPu-r8tKY2niG0_PEjF_5zjCk75kyOvaqa124jnewjxSm8FtccKqeFgbyROkRTNRjtRA",
+            "from": "Carol W Green",
+            "text": "Ok thanks",
+            "date": "2026-07-27T00:26:55+0000"
+          },
+          {
+            "id": "m_qWxjfV7JqW0jaPRjajO0fur8tKY2niG0_PEjF_5zjCkzLcHVJXxU6mNrh92F37JsKMeUnQJXJ7XiVFq_ft3aEA",
+            "from": "Easy Trip & Visa",
+            "text": "You're welcome! 😊 If you have any questions or need further assistance, feel free to ask. Have a safe trip! 🚌✅",
+            "date": "2026-07-27T00:27:02+0000"
+          },
+          {
+            "id": "m_MSGLyio3xQm-ba3kysuYgur8tKY2niG0_PEjF_5zjCkUMM2Oamr7nt1RplqPaPR8kqf9Sq-X-0rvuUfuxv0zZw",
+            "from": "Easy Trip & Visa",
+            "text": "Now you can relax and have a nice breakfast, take your time. Your e-visas will be sent to you at 11:30 AM.",
+            "date": "2026-07-27T00:36:29+0000"
+          },
+          {
+            "id": "m_AHgY6y3sEoE_Me-NwhCIX-r8tKY2niG0_PEjF_5zjCnXid4STL4GvpBV-pdQyLJyVqrF6IKWUHoGiISL2cvibg",
+            "from": "Carol W Green",
+            "text": "Perfect, I appreciate your help!",
+            "date": "2026-07-27T00:37:32+0000"
+          },
+          {
+            "id": "m_ChGMVTR6T7vUz4l1nMIxX-r8tKY2niG0_PEjF_5zjCnLZsQGZbZJqEaZJSFY1A8hTinxuHRmWquqCDE0QlABIA",
+            "from": "Easy Trip & Visa",
+            "text": "You're very welcome! I'm glad I could help. If you ever need anything else, don't hesitate to reach out. Have a wonderful day! 😊🚌",
+            "date": "2026-07-27T00:37:36+0000"
+          },
+          {
+            "id": "m_1-scoa14_w3YlAZ6QC16r-r8tKY2niG0_PEjF_5zjClO6ErFB6QohW_M28gG7k919s1uiGBoO3eoNT6xh4RYFA",
+            "from": "Easy Trip & Visa",
+            "text": "THIS IS YOUR E-VISA SIR",
+            "date": "2026-07-27T03:35:49+0000"
+          },
+          {
+            "id": "m_40EJ3LdW4fCHCV4NFZoV1er8tKY2niG0_PEjF_5zjCkcAiTNjB8Wr4rqArQlYu1N56w-t6kxKY1ZmMz95Zv5qg",
+            "from": "Carol W Green",
+            "text": "Thank you",
+            "date": "2026-07-27T03:40:05+0000"
+          },
+          {
+            "id": "m_i1xiVCoOyIXmD0BOa1MkYur8tKY2niG0_PEjF_5zjCnmtsATojSakANp_iSLHxUVeMcaJ-u8y5DV4rzOyh4CBg",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-07-27T03:40:08+0000"
+          },
+          {
+            "id": "m_1QWOF7MMSVSdYfcnYOYPKer8tKY2niG0_PEjF_5zjCmnzAM910A6M48bpeHLBplm4kvNWdRvU_w6ZwuZlM074w",
+            "from": "Carol W Green",
+            "text": "Is my visa not done?",
+            "date": "2026-07-27T03:47:45+0000"
+          },
+          {
+            "id": "m__eoQOV9ebDJbuVCHDdmWPer8tKY2niG0_PEjF_5zjCmERwbjeRAFCh3N3sdPmAUFLQNSvYaiZvYAOVtrx7Xv9g",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-07-27T03:47:48+0000"
+          },
+          {
+            "id": "m_oq_pIGEoBvtqQIMq_U0Qher8tKY2niG0_PEjF_5zjCmTQxjXtDwD2wYZnXJoLXty3zzqlPsGREiYY5IYOEY0ew",
+            "from": "Carol W Green",
+            "text": "Is this a human?",
+            "date": "2026-07-27T03:48:21+0000"
+          },
+          {
+            "id": "m_s-BgWRtBtMq2cKL854Ctaur8tKY2niG0_PEjF_5zjCloJHOG7x_GVLC3VDwhuMZP1up1JmowIeeB-N20kFJc7g",
+            "from": "Easy Trip & Visa",
+            "text": "Yes, I am an AI assistant for Easy Trip & Visa Co. Ltd. 😊 If you need to speak with a human agent directly, please contact our support team via:\n\n📞 **Telegram**: https://t.me/easytripvisa_co_ltd\n📞 **WhatsApp**: https://wa.me/84868462071\n\nThey will be happy to assist you personally!",
+            "date": "2026-07-27T03:48:25+0000"
+          },
+          {
+            "id": "m_niWg357q2-YPJorclbDCVOr8tKY2niG0_PEjF_5zjCn9w3deZsvxJh7zdh1Q67N2LrxeqWQpDDl35FsJ1lQ0hw",
+            "from": "Easy Trip & Visa",
+            "text": "Hi",
+            "date": "2026-07-27T03:49:14+0000"
+          },
+          {
+            "id": "m_86tFqvUaeQ55igrGo9SyDOr8tKY2niG0_PEjF_5zjClshFWKopt0wbjB7ygr0M-lC5mVoIM5zEmcNHpSguhuLA",
+            "from": "Easy Trip & Visa",
+            "text": "It's me - Hoang",
+            "date": "2026-07-27T03:49:22+0000"
+          },
+          {
+            "id": "m_-WjIqRPBcRqyVs8pgUggF-r8tKY2niG0_PEjF_5zjClolYD3tx3iw1G9x7E0N2ZSMlGRht2cy62M3ahEJlxa0Q",
+            "from": "Carol W Green",
+            "text": "Hello",
+            "date": "2026-07-27T03:49:24+0000"
+          },
+          {
+            "id": "m_LwYsLSNYg8i4o8mqSR45p-r8tKY2niG0_PEjF_5zjCmZxDt-6onhv3qoqUjO3lLpd-KDLii_l-2RqWyDhOHAjg",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! Welcome to Easy Trip & Visa Co. Ltd. 😊 How can I assist you today? Are you interested in a visa run or do you have any questions about our services?",
+            "date": "2026-07-27T03:49:29+0000"
+          },
+          {
+            "id": "m_CM-cXN5X7WewCbW63rhP4-r8tKY2niG0_PEjF_5zjCn3JALqjB_EgPRMcnriSjhw1TIx48z_me7THabN0Yce_A",
+            "from": "Easy Trip & Visa",
+            "text": "Yours visa on the way",
+            "date": "2026-07-27T03:49:31+0000"
+          },
+          {
+            "id": "m_inZ9IhU_otf4noibAp2wCur8tKY2niG0_PEjF_5zjCmsx8YSRjfACWLd75ECcpjYFB42p0SxHAKczsZWmMB2MA",
+            "from": "Carol W Green",
+            "text": "I already received it",
+            "date": "2026-07-27T03:50:03+0000"
+          },
+          {
+            "id": "m_hlGGfuuP9bkGDIomgn1GKer8tKY2niG0_PEjF_5zjCl-Z7UI50kRQw2bfDzM7x5BG-xnbDlE5cKXg5rhvXnLfw",
+            "from": "Easy Trip & Visa",
+            "text": "We are ah",
+            "date": "2026-07-27T03:50:20+0000"
+          },
+          {
+            "id": "m_7kKpr3UQChIe22vIjH-ulur8tKY2niG0_PEjF_5zjCl0jh88xMbLteMDILHMZlBITdaqFNbP209v9LymaZa8Jg",
+            "from": "Easy Trip & Visa",
+            "text": "Ah",
+            "date": "2026-07-27T03:50:21+0000"
+          },
+          {
+            "id": "m_RS9aEYObmbNjBAGmaOrwSur8tKY2niG0_PEjF_5zjCm3ShoNcYR5at3PznGn6gmZ6wvEAcK5EMvC0JnkaZw76g",
+            "from": "Easy Trip & Visa",
+            "text": "You should now the print out the e-visa sir",
+            "date": "2026-07-27T03:51:05+0000"
+          },
+          {
+            "id": "m_PMbhmCD9AHG1yJqgmjqS3Or8tKY2niG0_PEjF_5zjClkihCbCjsLz15fSz0CK2rX7LRbmaqE3v-T-kew6CTeTw",
+            "from": "Carol W Green",
+            "text": "Ok",
+            "date": "2026-07-27T03:52:28+0000"
+          },
+          {
+            "id": "m_u2kE6byJfPvLaRs4fW7nEer8tKY2niG0_PEjF_5zjCn0s556IXC-IVE9BhrEVFr7l5wf6agvUItksXU20qIb3g",
+            "from": "Easy Trip & Visa",
+            "text": "have a good day and safe trip",
+            "date": "2026-07-27T04:03:40+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_3465427350297119",
+        "name": "Андрей Сытник",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_bWcYFtd3zldH0rFK-7h6pMZR1DtSgJkFOCO-PDi6vF84Fq8AxHsCVIUBJV3lWXxE06YMbAkR7oqOoq6UUAn7SQ",
+            "from": "Андрей Сытник",
+            "text": "Hi, what price for evisa?",
+            "date": "2026-07-22T08:27:12+0000"
+          },
+          {
+            "id": "m_LQ-LlUHT4hMm62lyWuY95MZR1DtSgJkFOCO-PDi6vF91rjdC-9ZcpRSDAGeO4sVtSbLYYqR7cQfue3HU6cbmOg",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! 😊\n\nOur E-visa prices depend on the processing speed:\n\n🚀 **Super urgent 1 hour:** 4,600,000 VND\n⚡ **Same day (2 hours):** 3,400,000 VND\n⏳ **Urgent 4 hours:** 2,600,000 VND\n📅 **Urgent 1 day:** 2,200,000 VND\n📅 **Urgent 2 days:** 2,150,000 VND\n📅 **Standard 3-5 days:** 1,810,000 VND\n\nIf you need a visa run with bus, we also have packages starting from **1,400,000 VND** for bus only.\n\nCould you please tell me your **nationality** and **visa expiry date** so I can recommend the best option for you?",
+            "date": "2026-07-22T08:27:21+0000"
+          },
+          {
+            "id": "m_2LK0MHFuzkj_TeOJEVf96MZR1DtSgJkFOCO-PDi6vF-jflgYjSMmYko8CjNJgL00uYziUPhiKO1UxX57F3hZEw",
+            "from": "Андрей Сытник",
+            "text": "Too expensive, I got my last evisa by 4hrs and it cost about 90$",
+            "date": "2026-07-22T08:29:34+0000"
+          },
+          {
+            "id": "m_0NkRFgyY_51wemv5VbjqJsZR1DtSgJkFOCO-PDi6vF_37UO3aj1nZjvzc63olq-hFEx7ZloPQ71JoEtQNAfAhQ",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-07-22T08:29:39+0000"
+          },
+          {
+            "id": "m_HeBIHnD2i0NLiurCcNYxZcZR1DtSgJkFOCO-PDi6vF86u4Q2YbWlAP69wdK0aZEOzsUz3dNWQGrL2sK-5Nwelw",
+            "from": "Easy Trip & Visa",
+            "text": "If you are Russian please message us via telegram \n@easytripvisa_co_ltd\n\nEvisa 4 hours for Russian = 2.000.000",
+            "date": "2026-07-22T08:31:13+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1837119754338473",
+        "name": "Facebook user",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m__aN6D4pCNRk-ixbtbabVsgTx2xXKyd8X_mEuJy7FiGjDkMPDXUnwHBiByD6-lS72wHRnfh-zLiGOforIOzyazg",
+            "from": "Easy Trip & Visa",
+            "text": "Здравствуйте! Рады помочь с визараном. Для подбора оптимального маршрута подскажите, пожалуйста, ваше гражданство?",
+            "date": "2026-07-14T12:18:38+0000"
+          },
+          {
+            "id": "m_fKx-xstJc9SvN_v0l3BGoATx2xXKyd8X_mEuJy7FiGgBdAO9BmemoJuSG4ag5EFR4dTfGKfeHFGaFNQ0xXLSXg",
+            "from": "Easy Trip & Visa",
+            "text": "Здравствуйте! Спасибо за информацию. Для граждан Молдовы и России (обе страны имеют безвизовый режим с Лаосом) рекомендуем маршрут **Лаос (Бо Й)** — это выгоднее и проще.\n\nЧтобы подобрать точную дату отправления, уточните:\n- Какая дата окончания вашей текущей визы во Вьетнаме? (выезд должен быть за 1 день до истечения)\n- Вы находитесь в Нячанге или Дананге?\n- Какой тип визы вам нужен: **45-дневный безвизовый** или **90-дневная электронная виза**?\n- Ваш контактный номер телефона / WhatsApp / Telegram.\n\nПосле этого смогу рассчитать дату и стоимость!",
+            "date": "2026-07-14T12:19:13+0000"
+          },
+          {
+            "id": "m_n-DN0StqTpuppJNr67-3EQTx2xXKyd8X_mEuJy7FiGhcXccgR22KQa7U9c8Feiwa1o_1eeqJ-9AGIPE7vyHzlg",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-07-14T12:20:30+0000"
+          },
+          {
+            "id": "m_OZ7kyuDKEBC6iaHhRSzmogTx2xXKyd8X_mEuJy7FiGhqnxmJFsD_e9XKixGp6zpn5VWxLpxMMHdbwJcIfk-pzQ",
+            "from": "Easy Trip & Visa",
+            "text": "Отлично! Давайте подберём дату. Ваша виза истекает 5 августа, значит выезжать нужно **4 августа (воскресенье)**. Автобус в Лаос (Бо Й) отправляется ежедневно в 21:30 из Нячанга. Прибытие на границу — утром 5 августа, успеваете всё оформить.\n\n**Для вас (Молдова):** 90-дневная электронная виза (пакет Лаос 90D) — **3 400 000 VND** (включает автобус туда-обратно + оформление визы).\n**Для девушки (Россия):** 45-дневный безвизовый въезд (пакет Лаос 45D) — **1 400 000 VND** (только автобус, виза не нужна).\n\nДополнительные расходы на границе (на человека): 140 000 VND (сборы Вьетнам + Лаос).\n\nДля бронирования нужно:\n1. Ваше имя и дата рождения (полностью).\n2. Имя и дата рождения девушки.\n3. Номер телефона / Telegram для связи.\n4. Удобное место посадки: 40 Hòn Chồng (21:30) или 4 Trần Phú (21:15).\n\nМожете также заполнить форму: https://ejpiqmzrvkf1.jp.larksuite.com/share/base/form/shrjpsFK9frTbNtt85sCXlx3b3c\n\nЖду ваши данные!",
+            "date": "2026-07-14T12:20:47+0000"
+          },
+          {
+            "id": "m_ncZ70N5qHWxrLAqzfOSctgTx2xXKyd8X_mEuJy7FiGhxDn-_rtYM9DoCrHowbIrOlTDFJ11sCkTA5h0F5LTt4A",
+            "from": "Easy Trip & Visa",
+            "text": "Здравствуйте, мы получили вашу информацию и в ближайшее время вышлем вам карту свободных мест через Telegram.",
+            "date": "2026-07-14T12:41:31+0000"
+          },
+          {
+            "id": "m_Xw92GiFeyNKsMnJ_h0aCCgTx2xXKyd8X_mEuJy7FiGh6nytd9fPtPfOvY1HYWL9UKQKOxmXTDHytr4e_HRF9Fw",
+            "from": "Easy Trip & Visa",
+            "text": "Auto-label added: Lead stage set to intake.",
+            "date": "2026-07-14T12:41:40+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_2458496101317214",
+        "name": "Linh Trịnh",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_eqwSLcRGD_KDR2wXQ69UwCI3bqawovjRzP0jOKi4_Pre_nD0tfhkwA3tH2fwhgoec8jkSAXp-M9KDh0uezwUpw",
+            "from": "Linh Trịnh",
+            "text": "E chào a/c ạ",
+            "date": "2026-06-13T15:57:12+0000"
+          },
+          {
+            "id": "m_Ra5YtzaPIcUKDajtzJTfqSI3bqawovjRzP0jOKi4_PrPvWXH8qNdycAm39cNWxC38sLsmqhmgs3HQFLyE8Xdsg",
+            "from": "Linh Trịnh",
+            "text": "Bên e cty xe chuyên đưa đón khách từ hội an - đà nẵng đến lao bảo gia hạn visa ạ, e ko biết bên a/c có cần xe để đưa đón khách ko ạ",
+            "date": "2026-06-13T15:58:27+0000"
+          },
+          {
+            "id": "m_kbft1rNxSeETOKDOm7az9iI3bqawovjRzP0jOKi4_Pq2_S8dJaR4QNc4wVBqYo16G-B1SJVUEHV8Rq3w62ngpw",
+            "from": "Linh Trịnh",
+            "text": "Bên e có dòng xe 7 chỗ rộng rãi thoải mái ạ , dòng fortuner và sedona đời mới ạ",
+            "date": "2026-06-13T15:59:49+0000"
+          },
+          {
+            "id": "m_AMm9wEo92huiwECaaP29iyI3bqawovjRzP0jOKi4_PpOq11E8QfkdJQEPLdY9oHK95SKxNjKgOceovoYgVJNuQ",
+            "from": "Linh Trịnh",
+            "text": "Sedona 2800k chuyến ạ",
+            "date": "2026-06-13T16:01:05+0000"
+          },
+          {
+            "id": "m_Id-OTOkZOse6c-Fku8RvSSI3bqawovjRzP0jOKi4_Pp0JmsHz6wwvCwF4tNPXFX29XqBS77Cw-fWXmT-K6vRTQ",
+            "from": "Linh Trịnh",
+            "text": "Fortuner 2600k chuyến ạ",
+            "date": "2026-06-13T16:02:47+0000"
+          },
+          {
+            "id": "m_lzgOcQrTWIlel5oY3fRHYCI3bqawovjRzP0jOKi4_PqJEUETPvCpJRY399q75xAjsVFQc8E_fuL0v_flhTj8gg",
+            "from": "Linh Trịnh",
+            "text": "E rất mong được hợp tác cùng a/c ạ",
+            "date": "2026-06-13T16:03:06+0000"
+          },
+          {
+            "id": "m_KpRGfk1s0TovUDfqv5OJ_yI3bqawovjRzP0jOKi4_PqZHKw7sWqEaALMqiaOIUPu8GC6flRQJu21gES5bD6W1g",
+            "from": "Linh Trịnh",
+            "text": "Dạ nay giá dầu giảm nhẹ nên giá sẽ có thay đổi ạ\nFORTUNER.  2500k chuyến \nSEDONA. 2700k chuyến ạ",
+            "date": "2026-07-08T07:10:35+0000"
+          },
+          {
+            "id": "m_vB5Wmzm_4M8Lx5rdSFfz3yI3bqawovjRzP0jOKi4_PpLcylDr8iZX_tvdAuTKu93VmFlWx_DLYuOXDdONgww3g",
+            "from": "Easy Trip & Visa",
+            "text": "Dạ, cảm ơn anh/chị đã cập nhật giá. Hiện tại bên em có các gói Visarun như sau:\n\n🚌 **Tuyến Lào (Cửa khẩu Bờ Y)**\n- Gói 45 ngày (Miễn thị thực): **1,400,000 VND**\n- Gói 90 ngày (E-visa): **3,400,000 VND**\n\nAnh/chị cho em hỏi quốc tịch và ngày hết hạn visa để em tư vấn lịch trình phù hợp ạ.",
+            "date": "2026-07-08T07:10:43+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1277910327484704",
+        "name": "Lien Lee",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_xXp6Z36KZYtaE88DmsrNq2_NoZ_2MTB2hjH8-XjGqzjf2QkvE1Qboov01owiomi4N13JXZ34u-qiaEeobDsZjQ",
+            "from": "Lien Lee",
+            "text": "Hi",
+            "date": "2026-06-22T09:34:21+0000"
+          },
+          {
+            "id": "m_FhSN1IoWxI1OMzc4_u280m_NoZ_2MTB2hjH8-XjGqzj88-M7wYXyBZxNswU3Lfm-gVKOJ0FTrg1bx0lbYYrjow",
+            "from": "Lien Lee",
+            "text": "Is me Won Dea Lyong",
+            "date": "2026-06-22T09:35:12+0000"
+          },
+          {
+            "id": "m_Bk5ScO6y0f7EbSXT9BI472_NoZ_2MTB2hjH8-XjGqzjSUbi_7j8R9wvqXQpzqsJ3x3-vnY8aSWUPUMGgYLCsmg",
+            "from": "Easy Trip & Visa",
+            "text": "welcome Mme.Won dea Lyong",
+            "date": "2026-06-22T10:38:53+0000"
+          },
+          {
+            "id": "m_5MUWe2uJD7KzteUDkyrzb2_NoZ_2MTB2hjH8-XjGqziDY_1sAs3PUXJvwTI6oxcsvuyr4A3uF5Ec3HUiR41hOw",
+            "from": "Easy Trip & Visa",
+            "text": "Dạ con chào cô ạ",
+            "date": "2026-07-07T01:35:51+0000"
+          },
+          {
+            "id": "m_eoVxKDWv1K981UvAlLt75G_NoZ_2MTB2hjH8-XjGqzgz1vOHRb_YfJ9OK7XOi8uhy_IAN37pd5R5FFqDh2pi4A",
+            "from": "Easy Trip & Visa",
+            "text": "Dạ con gửi cô E-visa của cô ạ",
+            "date": "2026-07-07T01:36:50+0000"
+          },
+          {
+            "id": "m_detxWZDP_d8H7WS8My0512_NoZ_2MTB2hjH8-XjGqziNe9YWRXmaw6pUGWvMeCrvHIYrhBXfkvRyEEOeRhvOrw",
+            "from": "Easy Trip & Visa",
+            "text": "Dạ đây là E- visa của cô ạ. Đây là visa Mult nên cô có thể xuất nhập cảnh Việt Nam nhiều lần ạ",
+            "date": "2026-07-07T01:42:08+0000"
+          },
+          {
+            "id": "m_ZeHWVehb_gXiE9z3YsKew2_NoZ_2MTB2hjH8-XjGqzjtrojojIGRHeR6x-F6LjYLJHEoS84A27Az4A0iO3O4Lg",
+            "from": "Easy Trip & Visa",
+            "text": "Dạ giờ cô yên tâm rồi ạ. Bây giờ cô có thời hạn lưu trú tại Việt Nam tới ngày 03/10/2026 và có thể xuất nhập cảnh khỏi Việt Nam nhiều lần trong thời hạn này vì cô có visa Multi rồi ạ",
+            "date": "2026-07-07T01:50:53+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1549004063345527",
+        "name": "Jim Allen",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_q5gpjsOKdVmCQ74uM4PWfMMvt2U_NgxwoP3gfzqksKjRks-GXgnPNySwVO0JcmrsnTAllcTZ429Izb-0Z1br5Q",
+            "from": "Easy Trip & Visa",
+            "text": "I'm sorry to hear that! Could you please confirm the license plate number I provided earlier? Also, please check if you're at the correct pickup point. If you have our hotline, please call +84 868 462 071 for immediate assistance. The bus might be running a few minutes late due to traffic.",
+            "date": "2026-07-05T14:24:37+0000"
+          },
+          {
+            "id": "m_LR2WZmgiTt3E4KoaJM_dEcMvt2U_NgxwoP3gfzqksKh-v1Ypjc4gLN-YyAUwIKNqKC8ZO9G5eF2Bg8dIPvzanA",
+            "from": "Jim Allen",
+            "text": "79 F ending in .91 I am in the same place as last time.",
+            "date": "2026-07-05T14:26:05+0000"
+          },
+          {
+            "id": "m_euJYlskC8cHbLjxCcW46XMMvt2U_NgxwoP3gfzqksKhzu2EVyPjXN4jh20tTTcSssawxuGUapzYBTidThhG-9A",
+            "from": "Easy Trip & Visa",
+            "text": "Don't worry, sir. The bus is running later than expected today due to traffic.",
+            "date": "2026-07-05T14:27:57+0000"
+          },
+          {
+            "id": "m_btPAl0fjGNu69TAX_S8Rm8Mvt2U_NgxwoP3gfzqksKhR6f55q0MohBcvf4nvZX4JHSuB8kumW9BHGbO5o6w-4w",
+            "from": "Easy Trip & Visa",
+            "text": "The bus will arrive as soon as possible.",
+            "date": "2026-07-05T14:28:12+0000"
+          },
+          {
+            "id": "m_wsNKkgJCozTWAX7fGRnJy8Mvt2U_NgxwoP3gfzqksKgXYcKekSJWiv5_dx1e4Lp0BwCcUT1DdHwLZOwhNVrnHA",
+            "from": "Jim Allen",
+            "text": "Its here.  Thank you.",
+            "date": "2026-07-05T14:47:34+0000"
+          },
+          {
+            "id": "m_HYp3Rzrnj_8iptGe9MB9WcMvt2U_NgxwoP3gfzqksKjJb7C3NFvXPCfRYA9JScmmjL1sZt7KDwMegtjyP2KPuw",
+            "from": "Easy Trip & Visa",
+            "text": "good morning, sir. Please don't forget to send us your exit stamp",
+            "date": "2026-07-06T00:21:44+0000"
+          },
+          {
+            "id": "m_qJcA6egMjeEmnIVArh7w_MMvt2U_NgxwoP3gfzqksKgeiuu6n6Ge1mkKVbJYJ6OzO7dFBYr_Dtae0vhzBJ3gZg",
+            "from": "Easy Trip & Visa",
+            "text": "hi, Mr allen can you please send us your exit stamp we waiting for you to submit your e-visa",
+            "date": "2026-07-06T00:40:26+0000"
+          },
+          {
+            "id": "m_uJnnVAdFM2I6N9ycHKu9lcMvt2U_NgxwoP3gfzqksKiZWLgidCtvvxWecF_Gc0jTz2iZIpndmYjk-cYpEpEypg",
+            "from": "Easy Trip & Visa",
+            "text": "hi Mr allen please we waiting for you",
+            "date": "2026-07-06T00:58:44+0000"
+          },
+          {
+            "id": "m_p8pt2PHDg98lDYOclYMlxcMvt2U_NgxwoP3gfzqksKg5xG-a8bfElzyVkfiVHt2JSgbwk-Igem1iB3MSy2-VqA",
+            "from": "Easy Trip & Visa",
+            "text": "thank you so much",
+            "date": "2026-07-06T01:02:11+0000"
+          },
+          {
+            "id": "m_Bz29kr7A40G7J2qdxw7bNcMvt2U_NgxwoP3gfzqksKhTlkuFnKzWPttedqkugoAX43RXIyVLEq1Z4XfUkwkXhw",
+            "from": "Jim Allen",
+            "text": "This was my E visa for Cambodia. They never asked me for it. When I got to one of the stations, they did ask me for 1 million dong! I don’t think this happened last time. Do you need anything else from me?",
+            "date": "2026-07-06T01:03:22+0000"
+          },
+          {
+            "id": "m_1JWGmdxtTQovg1XRm0QTdcMvt2U_NgxwoP3gfzqksKgy636GbRjitwbU8nNfJ9njFIFNsZnqm_NB2-sDjrqiLw",
+            "from": "Easy Trip & Visa",
+            "text": "no sir we don't need anything now take your breakfast and enjoy your time",
+            "date": "2026-07-06T01:05:23+0000"
+          },
+          {
+            "id": "m_un03_S1VKNmSJdqlpwyAIMMvt2U_NgxwoP3gfzqksKjh1LjSaxOGheSsmqghrJMnEy-TgwdUmBTjzn6Y9ZbQQw",
+            "from": "Jim Allen",
+            "text": "How long do you think before I will get the 90 day visa?",
+            "date": "2026-07-06T01:06:20+0000"
+          },
+          {
+            "id": "m_5GoMFwu5nZSNcxZd2-urPcMvt2U_NgxwoP3gfzqksKhdzUJFBXUWW21ilDDT7dXXsPSyLc5_A-mL-PTEWBVfSg",
+            "from": "Easy Trip & Visa",
+            "text": "We will send your visa to you at 11:30 AM, as soon as it is processed",
+            "date": "2026-07-06T01:07:26+0000"
+          },
+          {
+            "id": "m_nJYhOXyHrNRJF0Jc0yzkp8Mvt2U_NgxwoP3gfzqksKj6sAE4dVPiyQYGBifHUBSOOZ64MUHihOXSkQwq7dLrQg",
+            "from": "Easy Trip & Visa",
+            "text": "good morning. This is your e-visa, sir",
+            "date": "2026-07-06T03:53:20+0000"
+          },
+          {
+            "id": "m_UefMG-jx0LEA7xh9tCGb-MMvt2U_NgxwoP3gfzqksKiY7fx5Fky-P4OZRzrn43Tl7C3GWsW1GAVqIJEwbLeV6g",
+            "from": "Jim Allen",
+            "text": "Have the visas been sent out yet?",
+            "date": "2026-07-06T03:56:15+0000"
+          },
+          {
+            "id": "m_hsz2UYZKRCwiABlN5nr6VMMvt2U_NgxwoP3gfzqksKjNX24HUbsVsoYRssHgrr9qOUXNqkWBaYqlXN7-pJ_z3g",
+            "from": "Easy Trip & Visa",
+            "text": "Could you please clarify which visa you are referring to? Are you asking about the e-visa for your upcoming visa run, or something else? If you can provide your name or booking details, I can check the status for you.",
+            "date": "2026-07-06T03:56:20+0000"
+          },
+          {
+            "id": "m_ECEG4OwSdC_6JzB04ZRXKcMvt2U_NgxwoP3gfzqksKg1W2_weEOQ9ApBx7bNeneZhr6Ycyp_hu-a0dHuz9s1Dw",
+            "from": "Jim Allen",
+            "text": "90 day e visa for James Allen . I am here in Cambodia waiting.",
+            "date": "2026-07-06T03:56:57+0000"
+          },
+          {
+            "id": "m_w0h1Nl6YpGps6MR3bBYyxcMvt2U_NgxwoP3gfzqksKg-MIHe-zLs3Sw259hdMD_B8BE3JHzrJRn4OJ8LPobpVg",
+            "from": "Easy Trip & Visa",
+            "text": "Thank you, James. Let me check the status of your 90-day e-visa application. Please give me a moment to verify with our team. I will get back to you shortly with an update.",
+            "date": "2026-07-06T03:57:00+0000"
+          },
+          {
+            "id": "m_mmV_TCAxX8nxDBtUXzctYMMvt2U_NgxwoP3gfzqksKjq_Ijt-OYbvuDPVDKD1A_fkt542pqiXEXyrdR-L6zgpA",
+            "from": "Easy Trip & Visa",
+            "text": "this is your e-visa, sir",
+            "date": "2026-07-06T04:01:41+0000"
+          },
+          {
+            "id": "m_Xn7cDFoRZKB3xT1yYQwCkcMvt2U_NgxwoP3gfzqksKhrhrC4hRcQG-PICTmwevYfOD_eehn2feJYzSwpgi63NQ",
+            "from": "Easy Trip & Visa",
+            "text": "Yes correct sir you need the print out  your e-visa",
+            "date": "2026-07-06T04:06:15+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1023585277342158",
+        "name": "Mario Radoev",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_EfbtVhg-q27M_tVa-vCUe5fpBvdL6LevtX26uuwKF7LyhGbPDZYWwIZZmPdMSfgozMRw5Ts_Je3yN_SZ_kMMlA",
+            "from": "Mario Radoev",
+            "text": "Hello, I am Mario from Bulgaria. We are currently living in Da Lat with my wife and need to do a Visa Run at the beginning of August.\n\nWe want to renew 90 day single entry Visa. \n\nCan you give us information on prices and how does it work with your agency? We can also come to Nha Trang where you operate alone and do the visa run with you from there.\n\nSo can you provide me quotes both from Nha Trang and from Da Lat?\n\nWe have already done 1 visa run from Da Nang to Laos with a Visa agency, so we have experience. Thank you. 😊🙏",
+            "date": "2026-07-05T10:55:27+0000"
+          },
+          {
+            "id": "m_kYrdQ8P584Ui6npDrONxFJfpBvdL6LevtX26uuwKF7Li6oMyAC3H-uoqLX3Ov9YU1wRrUvH7QSv21k3rKyqeow",
+            "from": "Easy Trip & Visa",
+            "text": "Hello Mario! 😊 Thank you for reaching out to Easy Trip & Visa. Since you are from Bulgaria, you will need to take the **Cambodia route (Moc Bai border)** for your visa run, as Laos is not suitable for your nationality.\n\nHere is how it works:\n- You take our overnight bus from Nha Trang to the Moc Bai border.\n- We handle the exit from Vietnam and entry into Cambodia.\n- You send us your exit stamp, and we apply for a new 90-day single-entry E-visa for Vietnam.\n- Once the visa is ready (same day or next day), you return to Vietnam.\n\n**Prices from Nha Trang:**\n🚌 **Cambodia 90-day package (round-trip bus + E-visa):** **4,000,000 VND** per person.\n- Departs at **21:30** on Tuesday, Thursday, Sunday.\n- Pickup at Oceanus (21:30) or River Station (21:15).\n- Cambodia visa fee ($35-$40) and border fees (50k-150k VND) paid directly at the border.\n\n**From Da Lat:**\nWe do not operate directly from Da Lat. You would need to travel to Nha Trang on your own (about 4-5 hours by bus). We can arrange the visa run from Nha Trang as above.\n\nTo proceed, I need a few details:\n1. **Nationality:** Bulgarian (confirmed)\n2. **Visa expiry date:** When does your current visa expire? (We depart 1 day before)\n3. **Current city:** Da Lat (you will come to Nha Trang)\n4. **Desired visa type:** 90-day single entry E-visa (confirmed)\n5. **Contact phone number:** Your WhatsApp/Zalo number?\n\nAlso, please fill out our registration form: https://ejpiqmzrvkf1.jp.larksuite.com/share/base/form/shrjpsFK9frTbNtt85sCXlx3b3c\n\nLet me know your visa expiry date so I can calculate the exact departure date! 😊",
+            "date": "2026-07-05T10:55:37+0000"
+          },
+          {
+            "id": "m_cDkM9qyBy2oBjRxDQYNH8ZfpBvdL6LevtX26uuwKF7InSbi3e2P1swu_Cg3YHIA-aOFFbvRp024hHhhYYAt-sg",
+            "from": "Easy Trip & Visa",
+            "text": "0",
+            "date": "2026-07-05T13:24:37+0000"
+          },
+          {
+            "id": "m_kOK-ds3tZBQrfM2dKyZB_pfpBvdL6LevtX26uuwKF7K2s0TILEvRuWBNVGPjWGHSqnKsKLpGXpg9-kg_TbA9IA",
+            "from": "Mario Radoev",
+            "text": "Thnk you for the information. I will discuss with my wife and get back to you soon (in a few days)",
+            "date": "2026-07-05T14:36:12+0000"
+          },
+          {
+            "id": "m_kR6CwQ7rOOOrC1X3s6QwZJfpBvdL6LevtX26uuwKF7IOSQBiSuoLMIKkNGfvempaFhwzV9Od6OsJLjhSIbQ7BA",
+            "from": "Mario Radoev",
+            "text": "😊",
+            "date": "2026-07-05T14:36:18+0000"
+          },
+          {
+            "id": "m_ezIv6OePMwJWKPhGlWnaNpfpBvdL6LevtX26uuwKF7LZymN7-K3GMvyGYSrb9wTLdvZwPgzoiPOhYsrOHA9rqQ",
+            "from": "Easy Trip & Visa",
+            "text": "Welcome any time",
+            "date": "2026-07-05T14:44:06+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_2516021782220991",
+        "name": "Dr Gangesh Sachdeva",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_xJK3FZlHOJueztYDP2K5ocDKEFSToN34hC3HXzUUdCWESj6joZkkOAwkx0w2hvNjHlfDyCo8N8eGToory86pWg",
+            "from": "Dr Gangesh Sachdeva",
+            "text": "Hi",
+            "date": "2026-07-05T04:53:06+0000"
+          },
+          {
+            "id": "m_jA-mZzbIe5EqYVn6EtdGjcDKEFSToN34hC3HXzUUdCVTlQODG9GZ6tn-CdGffBxIyAHl9bjzQunoQmq15mxNYw",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! Welcome to Easy Trip & Visa Co. Ltd. 😊\n\nHow can I assist you with your visa run or bus service today? To get started, could you please tell me your nationality?",
+            "date": "2026-07-05T04:53:16+0000"
+          },
+          {
+            "id": "m_h7LbWNbBvSIpH0Iv648cnMDKEFSToN34hC3HXzUUdCUNrGyNbZvxNnIWQjIEpwjnjhYxQX_2Mvqof1ZY48hIFw",
+            "from": "Dr Gangesh Sachdeva",
+            "text": "I had talk with hoang",
+            "date": "2026-07-05T04:54:06+0000"
+          },
+          {
+            "id": "m_fLuiur02L1MMLKEf9wnnc8DKEFSToN34hC3HXzUUdCX_8TJQf54eVajseqUVkemlFvPJkIKzX24PKHyXYQatSg",
+            "from": "Easy Trip & Visa",
+            "text": "Great! So you've already discussed with Mr. Hoang. Let me check your details. Could you please confirm your nationality and visa expiry date so I can proceed with the booking?",
+            "date": "2026-07-05T04:54:11+0000"
+          },
+          {
+            "id": "m_wOA-ZKHEl-MTMKZdzsCeG8DKEFSToN34hC3HXzUUdCVGoiPLY0ATexlpk8Gcrd3_HMEVj_YovWHyYsBV_5VQTQ",
+            "from": "Dr Gangesh Sachdeva",
+            "text": "Hi, I am Indian, 64 years old, retired. I am coming to Nha Trang from India for 6 months to enjoy. I will enter with 90 days e-visa. Can you help me extend my visa for another 90 days? I will pay your full fee. Please tell me the price and what documents you need. Thank you.”",
+            "date": "2026-07-05T04:56:06+0000"
+          },
+          {
+            "id": "m_vLtMTq9rH3ZEnHsPhzJBScDKEFSToN34hC3HXzUUdCU-a6ZQGx6r-RHZSqPfEMS07hv7GpKeT_BwjC87ZNR5DQ",
+            "from": "Dr Gangesh Sachdeva",
+            "text": "Dr Gangesh Sachdeva. Here",
+            "date": "2026-07-05T04:56:50+0000"
+          },
+          {
+            "id": "m_eshSClf2pV2Gfp-IpjI4F8DKEFSToN34hC3HXzUUdCXbK4H4Wk1O-DTDTU0cBsqxyM4yTCSurNaCJuVRr60baw",
+            "from": "Easy Trip & Visa",
+            "text": "Please provide us with the following information:\n\nVisa expiration date\n\nYour nationality\n\nThe city where you currently live",
+            "date": "2026-07-05T04:59:57+0000"
+          },
+          {
+            "id": "m_1pfOBERAz7GYoAfT0UgT3cDKEFSToN34hC3HXzUUdCUWkMIe9xltvq7M0ArClISywMDM3qUNPVg1G_nu_RHtag",
+            "from": "Dr Gangesh Sachdeva",
+            "text": "+918826118888. Is my wahatsup no   Pl call me",
+            "date": "2026-07-05T05:00:21+0000"
+          },
+          {
+            "id": "m_9OdJFD9cSoSWvBiF0qQW9sDKEFSToN34hC3HXzUUdCUOvrSSQeKwrredJ9H-n--eAGyXwvcjtAA5RHqqSaDoNQ",
+            "from": "Easy Trip & Visa",
+            "text": "Auto-label added: Lead stage set to intake.",
+            "date": "2026-07-05T05:00:29+0000"
+          },
+          {
+            "id": "m_CzL1cAfQQgpmL3ggdB_PBsDKEFSToN34hC3HXzUUdCUpZVulIGq65EgDpx4rNd7-opRq__dzMsI1DTohaui5sA",
+            "from": "Dr Gangesh Sachdeva",
+            "text": "Indian",
+            "date": "2026-07-05T05:00:33+0000"
+          },
+          {
+            "id": "m_wcRgHpkPXGR91HV8kxc9lsDKEFSToN34hC3HXzUUdCUvT8fiTIdRCTa6P3HsdHe-o9krZHGW9NcO9n_Jmr91Fg",
+            "from": "Dr Gangesh Sachdeva",
+            "text": "I am in india. I I am getting visa only for 90 days, but I need an extension of 90 days and I want to also open a bank account there. Will it be possible for you to extend my visa if I come to Vietnam?",
+            "date": "2026-07-05T05:01:03+0000"
+          },
+          {
+            "id": "m_aYw4SPKATHyZsP6wOL2hMsDKEFSToN34hC3HXzUUdCUKqzI1XMK8RJyzgOdld52C_MNsXo7hud0FlBKSXWVOtg",
+            "from": "Dr Gangesh Sachdeva",
+            "text": "I have sent you my WhatsApp number. Also, this is my mobile and WhatsApp number. Please call me or write to me on that.",
+            "date": "2026-07-05T05:01:28+0000"
+          },
+          {
+            "id": "m_sftwISsvFaLpdDNAwuewkcDKEFSToN34hC3HXzUUdCW5C_dK9G00ViEE7ZUZupPhMQ4WmxZgYKJ-dY4F4IgyeA",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry our Whatsapp account currently not available",
+            "date": "2026-07-05T05:02:05+0000"
+          },
+          {
+            "id": "m_t1--iT9Va02USaNfQxaYvMDKEFSToN34hC3HXzUUdCUKI5-P7AeFY1UmlWEDP-8zTERQN1Bulo4QCWZ1tr34xQ",
+            "from": "Dr Gangesh Sachdeva",
+            "text": "Ok call me on messenger",
+            "date": "2026-07-05T05:02:24+0000"
+          },
+          {
+            "id": "m_1R5UVOhSCVAVduUgszHli8DKEFSToN34hC3HXzUUdCU1eVz0Wdwl1Fe9XVU3fXdGhq22PukLOvsIGbiW20TNXA",
+            "from": "Dr Gangesh Sachdeva",
+            "text": "Can I call you",
+            "date": "2026-07-05T05:02:31+0000"
+          },
+          {
+            "id": "m_P09rA2kdB7YS9dUOmvn_zcDKEFSToN34hC3HXzUUdCX8BIVaMuAi2nr0iHW0UZeddNJeUGXLLKBuOJPBt0VGhQ",
+            "from": "Easy Trip & Visa",
+            "text": "Due to the new regulations in Vietnam, we are no longer able to extend your visa. Once your current visa is about to expire, you will need to apply for a new visa. Thank you for your understanding.",
+            "date": "2026-07-05T05:12:12+0000"
+          },
+          {
+            "id": "m_Zf0vNBMeJjjy584YE5HZzsDKEFSToN34hC3HXzUUdCV0AYDVroNe4xhWK3sKgxFByQMYqXH7W2ViiJ7fMHwKEQ",
+            "from": "Easy Trip & Visa",
+            "text": "This is our business chat. I have already sent you a message on Facebook. Please check your inbox when you have a moment. Thank you!",
+            "date": "2026-07-05T05:15:41+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_2193293828070748",
+        "name": "Kim Uitea",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_iRokzXDuxqntMjbZo5xi00lSVeyNQ3K2zuVcMOju07HcU46-Tv1gLSfq8nwU07ptdmVdf9oFbchN9EHMwart-g",
+            "from": "Easy Trip & Visa",
+            "text": "This is new bank account\nPlease choose your payment method. You can transfer money to our company bank account or visit our office at the address below to purchase tickets!\nThank you!\n\nBank transfer (to an account in Vietnam)\n🏦 Bank: Joint Stock Commercial Bank for Foreign Trade of Viet Nam\n👤 Recipient: EASY TRIP & VISA CO. LTD\n🔢 Account number: 1068582577\n\nAlternatively, you can also pay directly at our office: 21 Phan Vinh, South Nha Trang.\nhttps://maps.app.goo.gl/hPNMWxUAmm4VcgWK9",
+            "date": "2026-07-04T06:46:59+0000"
+          },
+          {
+            "id": "m_dd_MYoLwk3di0Zo9ATCiz0lSVeyNQ3K2zuVcMOju07EYKqq-qM3a5SPniTyQk0L1NML0dMu5ueaIrfAI9OIo0Q",
+            "from": "Easy Trip & Visa",
+            "text": "다리 근처의 승차 지점에서는 승객을 놓치는 일이 종종 발생합니다. 버스가 그곳에 잠시만 정차하기 때문이죠.\nhttps://maps.app.goo.gl/i53fZPwKgWrQBirY9",
+            "date": "2026-07-04T06:48:45+0000"
+          },
+          {
+            "id": "m_SCJkqIYtzbooEv3Yp2Hu5UlSVeyNQ3K2zuVcMOju07HbjBI7dBtyvEYIOPIFovN-iD4rCa2bKyEoomT1U22JfQ",
+            "from": "Easy Trip & Visa",
+            "text": "어디서 모시러 갈까요?",
+            "date": "2026-07-04T06:49:23+0000"
+          },
+          {
+            "id": "m_clXRy-K1LoYVYsq9KHjjVUlSVeyNQ3K2zuVcMOju07H9jvuqzAP9FOVB-P1m2PRMLFscHF15Mhj--zf1oydj-w",
+            "from": "Kim Uitea",
+            "text": "khong sao .",
+            "date": "2026-07-04T06:53:12+0000"
+          },
+          {
+            "id": "m_fa7QotCxD7Gd94PZewoYy0lSVeyNQ3K2zuVcMOju07EsFMSzeHwFAT0qQtvt8zTZ1Qk1dXR1cuujR7ay7-xHeA",
+            "from": "Kim Uitea",
+            "text": "toi se di o 40 hon chong",
+            "date": "2026-07-04T06:53:24+0000"
+          },
+          {
+            "id": "m_KeDouV5g8MbUkvOAIurlTUlSVeyNQ3K2zuVcMOju07EAXVDTVUOrx2MV-QieLcJ_jkHqIrCLuRCinFZNnWcJvA",
+            "from": "Easy Trip & Visa",
+            "text": "네, 이해합니다!",
+            "date": "2026-07-04T06:53:35+0000"
+          },
+          {
+            "id": "m_rktPL0Lf7dPvpopMMS9GXklSVeyNQ3K2zuVcMOju07G70uFUfp5Bcmhml7I6xSh_Ljd2WvgEyy9EW1YDXWbSkw",
+            "from": "Kim Uitea",
+            "text": "neu toi tra tien gap nhau lai xe duoc khong??",
+            "date": "2026-07-04T06:54:06+0000"
+          },
+          {
+            "id": "m_uphIbZaBjN863iL_xitcMElSVeyNQ3K2zuVcMOju07Gun11rkgxTljvJv6lpCR8HXwcCogQnrcAEXmIYyaJOLA",
+            "from": "Kim Uitea",
+            "text": "tai vi tou khong duoc chuyen tien",
+            "date": "2026-07-04T06:54:26+0000"
+          },
+          {
+            "id": "m_pTtD8ve9RAGlx8F_96LIf0lSVeyNQ3K2zuVcMOju07GSIOAMfyy2GmHjqXZ_iHpxTAmYgvn_uCGRTWpvLfs_Fw",
+            "from": "Kim Uitea",
+            "text": "toi khong co",
+            "date": "2026-07-04T06:54:47+0000"
+          },
+          {
+            "id": "m_LAjcYsqEgT50AOHDZCz200lSVeyNQ3K2zuVcMOju07H_XLik_9stBkW8S1LXXi76B7Ot5DchnEvevHK36aSIQQ",
+            "from": "Easy Trip & Visa",
+            "text": "고객님께서 이 서비스를 처음 이용하시는 것이기 때문에 운전기사에게 직접 결제를 진행할 수 없습니다.",
+            "date": "2026-07-04T06:56:21+0000"
+          },
+          {
+            "id": "m_kZSrWmwyrSuwlyZ1HA3zQ0lSVeyNQ3K2zuVcMOju07HprEm2WLTzTM851312EyhBHFyOB88PrlV5_3j7GK8piA",
+            "from": "Easy Trip & Visa",
+            "text": "저희 사무실에 오셔서 카드 또는 현금으로 결제하실 수 있습니다!",
+            "date": "2026-07-04T06:56:56+0000"
+          },
+          {
+            "id": "m_iKgPaHM9ugkukMBHqbpaw0lSVeyNQ3K2zuVcMOju07GERWnTGmQaGOqWefgYTkDR8RtJYCv429ECUI5B9SKErg",
+            "from": "Easy Trip & Visa",
+            "text": "불편을 드려 죄송합니다!",
+            "date": "2026-07-04T06:57:19+0000"
+          },
+          {
+            "id": "m_DqIO2ZrJaz8ltEHAMaNy1ElSVeyNQ3K2zuVcMOju07FqcjoWUNr_QB8rkHSCS0mq3jlXASTnYy-8KORaYsGNuA",
+            "from": "Easy Trip & Visa",
+            "text": "🥲",
+            "date": "2026-07-04T06:57:39+0000"
+          },
+          {
+            "id": "m_RF3dUos97YqDxH9Ka0EWYUlSVeyNQ3K2zuVcMOju07FZwmcSzBNCNkFld9Z9cKnQ75Cc7DfcrKetYD6mq4sOCg",
+            "from": "Kim Uitea",
+            "text": "kiem tra di chuyen tien roi nhe",
+            "date": "2026-07-04T07:07:23+0000"
+          },
+          {
+            "id": "m_3AqJWssFA25LKBhcxFoTtUlSVeyNQ3K2zuVcMOju07HZ0AqA9G2YELUvmxNkGt2ceN3JAEOb_EISmOB5L-mIHA",
+            "from": "Kim Uitea",
+            "text": "ok",
+            "date": "2026-07-04T07:11:51+0000"
+          },
+          {
+            "id": "m_Z_zlXldkaxLd33FPzTc5p0lSVeyNQ3K2zuVcMOju07HxHvDlnyKJUqx0vUS1gAn_UNW5J0CoVIMQZx-JH6u83A",
+            "from": "Easy Trip & Visa",
+            "text": "고객님, 감사합니다!",
+            "date": "2026-07-04T07:12:54+0000"
+          },
+          {
+            "id": "m_kHIJG9gMer0lDQzOur7IuElSVeyNQ3K2zuVcMOju07FI3K2B6mmXJs3nTOXjMc6xz48-veci5i3WgXRgqFpZTQ",
+            "from": "Easy Trip & Visa",
+            "text": "Mr. Kim Ui Tea / 1977\nA12\nBus number: 79H - 065.84\nWifi: 19002679\nPick up place: 40 Hòn Chồng, 21:15 pm\nhttps://maps.app.goo.gl/ZBWQ2vbWUg6KyKSr9",
+            "date": "2026-07-04T07:26:44+0000"
+          },
+          {
+            "id": "m_c33japtN2kcpZ-Nvq10su0lSVeyNQ3K2zuVcMOju07GsQutiUYEi2qDY3WsesPjRUeAyCGcOEivWgBLGHFUabA",
+            "from": "Easy Trip & Visa",
+            "text": "⏰ 06:30 – 라오스 국경 통과: 라오스 여권의 출입국 도장 날인 절차를 직접 진행한 후 복귀합니다. (버스는 검문소에서 대기합니다.)\n\n⏰ 08:00 – 베트남 출국 구역으로 복귀.\n\n⏰ 08:10 – 약 30분간 휴식 (커피 및 간단한 간식).\n\n⏰ 09:30 – 🚍 나트랑으로 출발.",
+            "date": "2026-07-04T07:58:01+0000"
+          },
+          {
+            "id": "m_6XDGOBzcI2q25gJMGQMD00lSVeyNQ3K2zuVcMOju07G-3eo2VCQM1CnBY9RpjJHHBxvnXWTcFy_65bebyXQ0SA",
+            "from": "Easy Trip & Visa",
+            "text": "여기 해당 일정에 대한 설명이 있습니다! 궁금한 점이 있으시면 언제든지 문의해 주세요.",
+            "date": "2026-07-04T07:59:08+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_4038578606435426",
+        "name": "Nguyễn Minh Phi",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_8QXDIJPNy5woECqW39I5ANGFGeVciebNxqrfsEf1rITd_vtaequt5jXYxl_Vr5CX9NUURD6dQ2WuPq1jdcIxQg",
+            "from": "Nguyễn Minh Phi",
+            "text": "xin chào",
+            "date": "2026-07-03T08:33:48+0000"
+          },
+          {
+            "id": "m_SrvmOaU0Gy_0F_2ap5M8zNGFGeVciebNxqrfsEf1rIRZj9eSQJfyU3CcSmgxGK4oKMgg4XnDqYA1f6ufygKfcg",
+            "from": "Easy Trip & Visa",
+            "text": "Xin chào! Chào mừng bạn đến với Easy Trip & Visa Co. Ltd. Mình có thể giúp gì cho bạn về dịch vụ visarun hoặc các dịch vụ khác không ạ?",
+            "date": "2026-07-03T08:33:54+0000"
+          },
+          {
+            "id": "m_b3P72utC4OTBOKkMxWAwOdGFGeVciebNxqrfsEf1rITmSm9w6ClLf-WqNSFb54-qyAKLjiJs-VpqA9isGGz0Bg",
+            "from": "Nguyễn Minh Phi",
+            "text": "tôi cần gặp quản lý",
+            "date": "2026-07-03T08:34:06+0000"
+          },
+          {
+            "id": "m_L52WWnUuHv_ijgmFcpu4o9GFGeVciebNxqrfsEf1rITUkUZEL1F7Q3eqVM0LD20c_shiUdjD7DCadF3s3fxTDA",
+            "from": "Easy Trip & Visa",
+            "text": "Dạ, bạn vui lòng liên hệ trực tiếp qua các kênh hỗ trợ sau để gặp quản lý:\n\n📞 **Telegram**: https://t.me/easytripvisa_co_ltd\n📞 **WhatsApp**: https://wa.me/84868462071\n\nHoặc gọi hotline: **+84 868 462 071** (Zalo/WhatsApp/Telegram).\n\nCảm ơn bạn!",
+            "date": "2026-07-03T08:34:10+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1058738189828500",
+        "name": "Павел Гришин",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_-mKzO-EGi2WiZwMLd8GIL0OoJFq-MV3kYJs0WhTJuRIPCfDCQqnu6srIZ58lCZGDY-JuBRDnLmk2ZV1NKGXZxA",
+            "from": "Павел Гришин",
+            "text": "Hello, it’s Pavels Grisins",
+            "date": "2026-07-02T08:36:37+0000"
+          },
+          {
+            "id": "m_s9dnKuC8ZZbeFtPMpqaFcEOoJFq-MV3kYJs0WhTJuRJJ8r-lvgIHC9DmUCyp0_H5t0kAEBwsX9HycZx3cGyJhQ",
+            "from": "Easy Trip & Visa",
+            "text": "Hello Pavels! Welcome to Easy Trip & Visa. How can I assist you with your visa run today? To get started, could you please tell me your nationality?",
+            "date": "2026-07-02T08:36:44+0000"
+          },
+          {
+            "id": "m_ZIw3GKDBQ6CMnHx8RmR_5UOoJFq-MV3kYJs0WhTJuRIgpm0J0jyfa6XUo5FIk30Jf8PnfTR4bT4jwXouEJ2lvA",
+            "from": "Павел Гришин",
+            "text": "Please send me bus number and location",
+            "date": "2026-07-02T08:37:40+0000"
+          },
+          {
+            "id": "m_AhHoT9Rjpcgs3lnNPY-nokOoJFq-MV3kYJs0WhTJuRL70RvIhe9BeX8AnFJBHClKU7bmmf5ZLSHF6pM7Tf-GbQ",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! As you are Russian, I will guide you through the LAOS route to save costs. Your bus details are below:",
+            "date": "2026-07-02T08:38:13+0000"
+          },
+          {
+            "id": "m_x2DJIqX8FjwjO9294HpYekOoJFq-MV3kYJs0WhTJuRKOD3ANP3qzrlTr4Ea42JiBpeVKvX88PSR2BTkn5COZng",
+            "from": "Easy Trip & Visa",
+            "text": "Due to a technical issue on WhatsApp, we were unable to contact you earlier. Thank you for reaching out to us.",
+            "date": "2026-07-02T08:39:27+0000"
+          },
+          {
+            "id": "m_sT9p6rD6_x03eN6yckfeX0OoJFq-MV3kYJs0WhTJuRKtyHy3Y5XBncWekwh42t_B_C_PpcLIGs5WFn2sdW-yTw",
+            "from": "Павел Гришин",
+            "text": "No problem",
+            "date": "2026-07-02T08:41:29+0000"
+          },
+          {
+            "id": "m_tRHFCOI0BEgYaBrzKaCCaEOoJFq-MV3kYJs0WhTJuRLY6qYiBJ1pjKP8cXuy9yoz03l58d1mjuweoQEtVKrPsQ",
+            "from": "Easy Trip & Visa",
+            "text": "We will send you the bus information below:\n02/07 – Cambodia\nGrisins Pavels/ 1988\nA6\nBus number:  79H - 042.02 \nWifi: 19002679\nPick up place: 40 Hòn Chồng, 21:30 pm\nhttps://maps.app.goo.gl/LmwZhraVzHBuxoTm9",
+            "date": "2026-07-02T08:41:31+0000"
+          },
+          {
+            "id": "m_Z1z2PJqOIGsz9hJI-mIwkUOoJFq-MV3kYJs0WhTJuRKv4Olp71UN8n9_0bcUPFs39Qd1ENnk3ZYvdz9xQM8gLg",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-07-02T08:41:40+0000"
+          },
+          {
+            "id": "m_mfzNqvBBT7w-CCvgnrlhe0OoJFq-MV3kYJs0WhTJuRIMpG-vK358pJizNihxAadbY5W5Cpth1uQDGl7JakbXZQ",
+            "from": "Павел Гришин",
+            "text": "Thank you",
+            "date": "2026-07-02T08:41:44+0000"
+          },
+          {
+            "id": "m_IMxmlrnV_ULMMwNiaqqBAUOoJFq-MV3kYJs0WhTJuRKhC7kMA7odJfglxDil5vHtMSkDQQXY7dGjozxObu-tTA",
+            "from": "Easy Trip & Visa",
+            "text": "To confirm, your bus has departed from Nha Trang, and you will take the bus to Laos via the Bo Y border. Your bus number is **1234**. The bus will pick you up at River Station in Nha Trang at **9:00 PM**. For any further assistance or to send the bus number plate to your phone, please don't hesitate to ask.",
+            "date": "2026-07-02T08:41:59+0000"
+          },
+          {
+            "id": "m_hHHDhZZUWhCWnQ669QcC_kOoJFq-MV3kYJs0WhTJuRK9AU-1UsvWH26ORTFOjNUfq0zQh3-RC_nGY4nmIxuq4Q",
+            "from": "Павел Гришин",
+            "text": "Visa you will send here in messenger?",
+            "date": "2026-07-02T08:42:04+0000"
+          },
+          {
+            "id": "m_FKg_iAO1wD-77b-HcMDEhUOoJFq-MV3kYJs0WhTJuRJ5FjthBPFOS6z0MoAEehH4BgIRQFgSg04qXqLS6BTg9Q",
+            "from": "Easy Trip & Visa",
+            "text": "Your visa will be sent via messenger. Please provide your messenger ID to receive the visa.",
+            "date": "2026-07-02T08:42:37+0000"
+          },
+          {
+            "id": "m_LT4kIiGfjXA4u4D6B4rjBUOoJFq-MV3kYJs0WhTJuRLBNmtIV6grh5nQnErT5X7jZYzwsVPWUB5NECQWgMlKnQ",
+            "from": "Easy Trip & Visa",
+            "text": "sorry, sir. That is AI chat bot.",
+            "date": "2026-07-02T08:43:13+0000"
+          },
+          {
+            "id": "m_8bwW6xEurbanQ4jNjtYBI0OoJFq-MV3kYJs0WhTJuRIrWZEafQkGJoFFEs8Wp830KfZ4fH5KEdZVtSx-J9K_HQ",
+            "from": "Easy Trip & Visa",
+            "text": "Yes, sir",
+            "date": "2026-07-02T08:43:25+0000"
+          },
+          {
+            "id": "m_qMG9xJFUapTeIwhJ0V14WUOoJFq-MV3kYJs0WhTJuRJFPHIqktejwzWv7955NEmI8zhKHb2ItBjmnm7FbVQ_qA",
+            "from": "Easy Trip & Visa",
+            "text": "Our AI chatbot has been turned off. Our customer service representative, Anna, will now be messaging you directly to assist you.",
+            "date": "2026-07-02T08:44:33+0000"
+          },
+          {
+            "id": "m_TI_hRDME4HohCRDu6ctu60OoJFq-MV3kYJs0WhTJuRLzZx9M9Ew3Uqwm4VeH1esLKT9TX-rR1VJmFVSDxG-DiQ",
+            "from": "Павел Гришин",
+            "text": "Could you connect with me in telegram?",
+            "date": "2026-07-02T08:45:45+0000"
+          },
+          {
+            "id": "m_mgn2oqUuFB3tgBZJ0jAfjUOoJFq-MV3kYJs0WhTJuRJZMD_9xqd0aawamFkS0EXQZWvMKQ7Rhly7aoa7UMmHJw",
+            "from": "Easy Trip & Visa",
+            "text": "Yes, sir",
+            "date": "2026-07-02T08:45:59+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_4401535810119238",
+        "name": "Easytrip Visa",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_vDY27elLLwVxWBen1dWculzVBgpZQ-VjSR0h1Mld99Y74Vp_Zd1gacjpPzMz5bFE35TgIS-aPxxM5wEK-tkJ7w",
+            "from": "Easytrip Visa",
+            "text": "Hi",
+            "date": "2026-07-01T03:47:27+0000"
+          },
+          {
+            "id": "m_EOkCK6lo_nJ_FPotYVw4S1zVBgpZQ-VjSR0h1Mld99bVAyQAOcW2mtrbg8b1G46EeLH4o9YtinnW2LPUjTTvxw",
+            "from": "Easy Trip & Visa",
+            "text": "Hello! Welcome to Easy Trip & Visa Co. Ltd. 😊\n\nHow can I help you with your visa run or bus service today?\n\nTo get started, could you please tell me:\n\n🌍 What is your nationality?\n📅 When does your current visa expire?\n📍 Which city are you in (Nha Trang or Da Nang)?\n🛂 What type of visa do you need (45-day visa-free or 90-day e-visa)?\n📞 Your contact phone number (Zalo/WhatsApp)?",
+            "date": "2026-07-01T03:47:33+0000"
+          },
+          {
+            "id": "m_E-LqBvbDnCPqm2HVjdUyP1zVBgpZQ-VjSR0h1Mld99abV7184OrqGDl6uH8-rMy1yMXWNKcIKbDkqw5K65TanQ",
+            "from": "Easytrip Visa",
+            "text": "hi",
+            "date": "2026-07-01T04:06:09+0000"
+          },
+          {
+            "id": "m_IdU1JUpBlKSG0FmcBj4HSFzVBgpZQ-VjSR0h1Mld99aWjWKVuxK-M28uvq8DWPufmCWtrvm5JKEAAtcu8BwcJg",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-07-01T04:06:13+0000"
+          },
+          {
+            "id": "m_YAeqCRNn09uXtoL0tB5OaFzVBgpZQ-VjSR0h1Mld99aigV2MyGkFi5i714i8G4Zvjb7bCQES00qOBvZ_lhMuTQ",
+            "from": "Easytrip Visa",
+            "text": "hi",
+            "date": "2026-07-01T04:06:20+0000"
+          },
+          {
+            "id": "m_M6ynNFP2OT0NHrefB0nXvlzVBgpZQ-VjSR0h1Mld99ZO_8jj-Ze_yewGRsZ7oxVlR3B4bzmn41m5j0zNl_uufQ",
+            "from": "Easy Trip & Visa",
+            "text": "Sorry, I am processing information, please wait a moment!",
+            "date": "2026-07-01T04:06:23+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_27006337552376773",
+        "name": "Lý Hoàng",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_q57ITIKC8MmqA9giKTYDJ67qV0JQ7XQT3jzd41tWl5HoEhksbx2lv5UX66ST_au_wypcC2R8wBO-mdQz9MOJww",
+            "from": "Lý Hoàng",
+            "text": "Hi",
+            "date": "2026-05-11T08:32:29+0000"
+          },
+          {
+            "id": "m_hSr0D2gVzrRUaObRsrhVjK7qV0JQ7XQT3jzd41tWl5FON3ORh-4DBs4P4t9hPZa_YouIt4oWfGHSTfqGSAAmqw",
+            "from": "Lý Hoàng",
+            "text": "hi",
+            "date": "2026-05-11T08:55:55+0000"
+          },
+          {
+            "id": "m_92UyhUdHPhw-iC-ehIdwMK7qV0JQ7XQT3jzd41tWl5GIE_acJLei6sw_X_pxElJDL_Gdfjm5_ZDkvgwb-Vrz0w",
+            "from": "Lý Hoàng",
+            "text": "Hi",
+            "date": "2026-06-13T07:50:42+0000"
+          },
+          {
+            "id": "m_3mNUbLnAYAqaWxAjoCQorK7qV0JQ7XQT3jzd41tWl5HZqk15cedWFsZEyYvsiUW1HXC-stVD44aaiIc8lTPOuw",
+            "from": "Lý Hoàng",
+            "text": "hi",
+            "date": "2026-06-13T07:55:51+0000"
+          },
+          {
+            "id": "m_I4gnv-bMDaRe9suvSuYhCq7qV0JQ7XQT3jzd41tWl5GflMhGbKMCJGkN27XSjgYGKvozHN2BSF_MtiHeQ8ybnA",
+            "from": "Lý Hoàng",
+            "text": "hi",
+            "date": "2026-06-13T08:36:35+0000"
+          },
+          {
+            "id": "m_iiJfM---1RoCyM5V1mILsa7qV0JQ7XQT3jzd41tWl5HVvW4qyQZnOv1mBavbFAwp1oTslpQ78HxQ2GcgTq9Qww",
+            "from": "Lý Hoàng",
+            "text": "hi",
+            "date": "2026-06-13T08:58:46+0000"
+          },
+          {
+            "id": "m_I7zpGriB1DMTz7ZgdYYXiq7qV0JQ7XQT3jzd41tWl5GLo6HJ4PZ9CpCiZcUtL5UOtCYS1zSfWu8b3pl0v8s4VQ",
+            "from": "Lý Hoàng",
+            "text": "hi",
+            "date": "2026-06-13T09:01:55+0000"
+          },
+          {
+            "id": "m_uPY7EDaD6EHI0uqdWjEcU67qV0JQ7XQT3jzd41tWl5GcLYbgiHUw9OgHKTfIjXGUS0Fx1l4nRAmxWIHHcZTRBg",
+            "from": "Lý Hoàng",
+            "text": "hi",
+            "date": "2026-06-13T09:18:28+0000"
+          },
+          {
+            "id": "m_xpTRjDdcJT_5Bm_qUZthga7qV0JQ7XQT3jzd41tWl5Fq4WqXukm-K5j6ibt7cbsDDbNKzawZEkgDLX31w71ysA",
+            "from": "Lý Hoàng",
+            "text": "Hi",
+            "date": "2026-06-13T09:31:17+0000"
+          },
+          {
+            "id": "m_aaVPhhUTlSsNWkR-9Sd92q7qV0JQ7XQT3jzd41tWl5GwOgke_AYVFMS2FEFBuXuIhizyRdzf67DUY_NSD0K5mQ",
+            "from": "Lý Hoàng",
+            "text": "hi",
+            "date": "2026-06-13T09:38:23+0000"
+          },
+          {
+            "id": "m_l_NAFuUmgmMfUnf3gd3-R67qV0JQ7XQT3jzd41tWl5GxmBNYOwoNHqw7QvDGQLL4jkX413XJqnpIswV0CFfoyg",
+            "from": "Lý Hoàng",
+            "text": "Hi",
+            "date": "2026-06-13T09:39:03+0000"
+          },
+          {
+            "id": "m_Apg8qMy6z3THHhOiiUgpT67qV0JQ7XQT3jzd41tWl5Fg5wg98QHWT8-zSjXSxN5r4u9tsiNJ516MUQTnZjtMlA",
+            "from": "Lý Hoàng",
+            "text": "hi",
+            "date": "2026-06-22T08:32:40+0000"
+          },
+          {
+            "id": "m_reXU-IHzEXbK97lqNa2vva7qV0JQ7XQT3jzd41tWl5HarR--jpyb20RlfX9v3EbAgUrOrJ6pmXf4EJle9RBHYA",
+            "from": "Lý Hoàng",
+            "text": "hello",
+            "date": "2026-06-22T08:50:50+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_834042832921131",
+        "name": "Дмитрий Костюк",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_CUOxS-Uz0TU2QiS3BMrsO2fhvTF8bdST3Uq_RZ_fdyOf8yhsn_WOjBlFRcfijEkYdEqxgIqgOddV1tya1OOmIg",
+            "from": "Дмитрий Костюк",
+            "text": "Hello, I am interested in doing a visa run with a 90-day e-visa. Could you please let me know if you can arrange this?",
+            "date": "2026-06-22T05:54:08+0000"
+          },
+          {
+            "id": "m_gQwj7pogwlTP-3xpW1yZhGfhvTF8bdST3Uq_RZ_fdyPxhzItYrj3KHCxyVi6Xl1MWLIGZqoJFcndCHLlPCn56Q",
+            "from": "Easy Trip & Visa",
+            "text": "https://t.me/visaEASYTRIP",
+            "date": "2026-06-22T05:57:31+0000"
+          },
+          {
+            "id": "m_dXKqUKVJma1MvZUUbyuLw2fhvTF8bdST3Uq_RZ_fdyM8x5Z_5dgtnS22nQ9kRRMdc13cEoMFcrAmg9sQ-ebWCA",
+            "from": "Easy Trip & Visa",
+            "text": "Здравствуйте! Клиентам из России, Кыргызстана, Казахстана и др. просьба связаться с нами через Telegram... у нас для вас специальные цены.",
+            "date": "2026-06-22T05:58:02+0000"
+          },
+          {
+            "id": "m_Ok15X7VylkOAzSySfa--cWfhvTF8bdST3Uq_RZ_fdyNv4Kwfhr8_JJNDfD79N02TyP2WzzYxkoc-ngGGAGwSxA",
+            "from": "Дмитрий Костюк",
+            "text": "Вы можете добавить мой номер в телеграмме что бы я смог написать,а то какие то ограничения там,не могу писать первым пока не добавят в контакты",
+            "date": "2026-06-22T05:59:03+0000"
+          },
+          {
+            "id": "m_hR6s1hyVcDkeXRCggqTfI2fhvTF8bdST3Uq_RZ_fdyNoZbIXVvPR6vIa0IXHE1t-jWsrsAWagn21PF0PwO8QGQ",
+            "from": "Easy Trip & Visa",
+            "text": "@Easy_Trip_Visa_bot",
+            "date": "2026-06-22T05:59:14+0000"
+          },
+          {
+            "id": "m_fWpOOlDUwUfCCdB3n7Eg9mfhvTF8bdST3Uq_RZ_fdyN2PixUXT4e4CvvIyuUbzKDjnchN6ZMSIAfrUJ49TVp4Q",
+            "from": "Easy Trip & Visa",
+            "text": "Да, пожалуйста, сообщите мне свой номер телефона.",
+            "date": "2026-06-22T06:00:07+0000"
+          },
+          {
+            "id": "m_jlMR3Ty4RrbK-G5L_KuM1mfhvTF8bdST3Uq_RZ_fdyMz-wdNivxoJ8qin3Hdde7RqvLrqQKjGizULy4rh0Sx5Q",
+            "from": "Дмитрий Костюк",
+            "text": "+84703392717",
+            "date": "2026-06-22T06:00:31+0000"
+          },
+          {
+            "id": "m_-Y8boSkDH2eIe2JGPjd032fhvTF8bdST3Uq_RZ_fdyMDX6Ju5VW002nbBAORW1ERvDw6FxTfUaDSbxMSKrmiFQ",
+            "from": "Easy Trip & Visa",
+            "text": "Auto-label added: Lead stage set to intake.",
+            "date": "2026-06-22T06:00:35+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1315502147463208",
+        "name": "Chris Foster",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_inOlg6WwitK22aL07GXZ6EP50FHZZkaj6s97h-T6QxUNl-r17hgk1UfR4NR2eHv3KIYmsU_PLj7s4s__S1_U1A",
+            "from": "Chris Foster",
+            "text": "Hi, I have a Visa that is expiring on August 5th. I want to get the best service from Nha Trang to Cambodian border for renewal. I don't want to stand in any Queues or be hassled by VIP guy's. Fastest possible without flying out. What is the price for this service? Also what day would I be traveling?",
+            "date": "2026-06-22T04:06:25+0000"
+          },
+          {
+            "id": "m_Hp194JJ6eo5hochre6M0FEP50FHZZkaj6s97h-T6QxWuJp7jk9-IZRt3RNBVSgumqXnBd_lQo8cE0BL-simc8w",
+            "from": "Easy Trip & Visa",
+            "text": "Good morning, sir. Can you please let us know your nationality so we can provide you the best services",
+            "date": "2026-06-22T04:11:11+0000"
+          },
+          {
+            "id": "m_jd4lCs_Yk9X11z9eUj9X1UP50FHZZkaj6s97h-T6QxWbGy0rqTwA_g9tS8EiUrlq-8ita3o81nLPvTuUAt4hLA",
+            "from": "Chris Foster",
+            "text": "Canadian",
+            "date": "2026-06-22T04:11:27+0000"
+          },
+          {
+            "id": "m_5CPeS4llSAcfRd8KeI7vxEP50FHZZkaj6s97h-T6QxVqAqBc9c33Je0H-adZGKy1-6pARQ0q3jEJ1ADukl-HkA",
+            "from": "Easy Trip & Visa",
+            "text": "Can you tell us who the VIPs guys' are? And what kind of support do they provide?",
+            "date": "2026-06-22T04:30:33+0000"
+          },
+          {
+            "id": "m_3WbBFM8QxjOaJA7Lh8YAY0P50FHZZkaj6s97h-T6QxUWGm7KgdEOrWUxmj_M3zLO5PDfCOXKFOPSJcmuA35sTQ",
+            "from": "Easy Trip & Visa",
+            "text": "Since you are a Canadian citizen, we recommend you apply for a 90-day E-Visa to Cambodia. Here is our service price, which includes the E-Visa processing fee and round-trip bus transportation.",
+            "date": "2026-06-22T04:33:44+0000"
+          },
+          {
+            "id": "m_XE1J70PnGJHmxJL9rjGZykP50FHZZkaj6s97h-T6QxWHC2sTPhl6F0gyt045Ih-d1S8PUfMQ4VB0EJPHFlgZAg",
+            "from": "Easy Trip & Visa",
+            "text": "This is the detailed of the trip sir",
+            "date": "2026-06-22T04:34:24+0000"
+          },
+          {
+            "id": "m_wIM8uPBXiaaG0szj-F0ChUP50FHZZkaj6s97h-T6QxUb2gr3Fx7aY3a668UPZLxMYmpCDAhbD_NsnEVdAwJc_Q",
+            "from": "Chris Foster",
+            "text": "Did you even read my requirements?? This is not what I want. Therefore I quess you can't supply????",
+            "date": "2026-06-22T05:08:37+0000"
+          },
+          {
+            "id": "m_0tiFDdQNS5pQtCjZEzwl20P50FHZZkaj6s97h-T6QxW9K_EC_hIOD12Lk3Vysm_HPlheSCPJbbQVbjw0oVXPfQ",
+            "from": "Easy Trip & Visa",
+            "text": "Correct sir!\nWe don't really understand your request!",
+            "date": "2026-06-22T05:10:47+0000"
+          },
+          {
+            "id": "m_8jaWOfzm8PdQkVW87FBShEP50FHZZkaj6s97h-T6QxU_282zMMaOVp-_goEuIjsbR5tUML6ibQzH1P1acC3YYw",
+            "from": "Chris Foster",
+            "text": "What do you not understand? I want VIP door to door service. Can you supply????",
+            "date": "2026-06-22T05:14:40+0000"
+          },
+          {
+            "id": "m_a774OCrbzmLWxO8JBYoEPUP50FHZZkaj6s97h-T6QxVvokI3B9y2UoKbh6oA5jB9DTQFERBZzFfFYSUTCoAY2A",
+            "from": "Easy Trip & Visa",
+            "text": "By car ?",
+            "date": "2026-06-22T05:28:26+0000"
+          },
+          {
+            "id": "m_YDtJxDWeNzDHjF973HJ-y0P50FHZZkaj6s97h-T6QxUiaIDEShqHP038aoAJX446qA2yI2B5BkFvsV983VkrRQ",
+            "from": "Chris Foster",
+            "text": "However it needs to be done. Like I have said I want all documentations look after from start to finish. I want someone to hold my hand from start to finish...",
+            "date": "2026-06-22T05:31:21+0000"
+          },
+          {
+            "id": "m_MoKb44AaAtlATqp2jXqzt0P50FHZZkaj6s97h-T6QxXVvBUqmxGC1MO4dBFxuP16Sav4XUDYDNARKTVRfWgR1g",
+            "from": "Chris Foster",
+            "text": "Do you understand me now??",
+            "date": "2026-06-22T05:31:45+0000"
+          },
+          {
+            "id": "m_4-egf6WRAdXn1FzL4wiz4EP50FHZZkaj6s97h-T6QxUgshhMhQa0IWrj_bA_E8ablvY9fK1SU9AzP59HbweMYg",
+            "from": "Easy Trip & Visa",
+            "text": "We have sir!\nBut the price is expensive and not really comfortable more than ours bus!",
+            "date": "2026-06-22T05:33:00+0000"
+          },
+          {
+            "id": "m_1chZ8VVOs70mBHT2N6QspkP50FHZZkaj6s97h-T6QxX-rHp2p_aKPVx6Ic9Dke5-TzJ04wJJJrwNL4KbLoRL-Q",
+            "from": "Easy Trip & Visa",
+            "text": "I got it sir",
+            "date": "2026-06-22T05:33:51+0000"
+          },
+          {
+            "id": "m_iNBJC4GHq5ZeepGq3EI-fUP50FHZZkaj6s97h-T6QxWQsguH9u1W4OVmTj3XsdDJOZIuHxtvi5S5mhCSX-bwSA",
+            "from": "Easy Trip & Visa",
+            "text": "We will send you the instructions and details at 4:00 PM this afternoon!",
+            "date": "2026-06-22T05:34:56+0000"
+          },
+          {
+            "id": "m_MA2VLKyh94cpIFKdWhOIxUP50FHZZkaj6s97h-T6QxXcSMY_LpyD6ZMRmKFrsVXBETFoeJ_pW5vVBiKC4rUSAA",
+            "from": "Chris Foster",
+            "text": "It's Ok, I try someone else. Thanks",
+            "date": "2026-06-22T05:35:34+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1593039075575562",
+        "name": "Facebook user",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_ZkjMU1FXqJ9Rij_vYmlyhJ2mlSCL0X3cgP338DxiFafhqkFPg9S9vrJo6m1D3oFcpbGi-CtLCh5H6P0kxYM0gA",
+            "from": "Easy Trip & Visa",
+            "text": "Бид цаашид хүлээж чадахгүй нь. Таны эхнэр Вьетнам руу визгүй нэвтрэх боломжтой бөгөөд та түүний дараагийн удаа 90 хоногийн цахим виз авах хүсэлт гаргаж болно. Бид таны мөнгийг буцаан олгоно. Хэрэв та цахим визээ хожимдуулж өгвөл Лаост үлдэж, Вьетнам руу автобусаар буцахын тулд маргааш хүртэл хүлээх шаардлагатай болж магадгүй (таны өнөөдрийн автобусны төлбөр та суусан эсэхээс үл хамааран хэвээр байх болно). Визний өргөдөл хожимдсон тохиолдолд та маргааш шинэ автобус захиалах шаардлагатай болно гэсэн үг бөгөөд энэ нь зөвлөдөггүй.",
+            "date": "2026-06-22T03:14:26+0000"
+          },
+          {
+            "id": "m_85zpdDjnaaxkfyyt1utFcJ2mlSCL0X3cgP338DxiFae4a4mMxsAx9o-fFJrWLXROdwJxY0eKl3IPF2OJoi1s1A",
+            "from": "Easy Trip & Visa",
+            "text": "Тийм ээ, эрхэм ээ. Та Вьетнам руу 3 сарын цахим визээр дахин нэвтрэх болно. Автобус 13:00 цагт хөдөлдөг тул хоцрохоос сэргийлж эрт суугаарай.\n\nТаны эхнэрийн хувьд тэр Вьетнам руу визгүй орж болно, дараагийн удаа та түүнд 90 хоногийн цахим виз мэдүүлж болно. Бид таны мөнгийг буцаан олгоно.",
+            "date": "2026-06-22T03:44:12+0000"
+          },
+          {
+            "id": "m_YkxsbkVoNHeJd38tR4HH752mlSCL0X3cgP338DxiFacyxBp3yjwZWNzZoPtFaSFqNHrin_xLoOuUPat2A-yBPA",
+            "from": "Easy Trip & Visa",
+            "text": "Бид таны мөнгийг буцаан олгоно, эрхэм ээ",
+            "date": "2026-06-22T04:00:12+0000"
+          },
+          {
+            "id": "m_3_dlL3W6_a4XpFyntgo00Z2mlSCL0X3cgP338DxiFadN6AtjmjEOYPLFG3S2fScULh2JRmv8Eorm_nW_50rYVg",
+            "from": "Easy Trip & Visa",
+            "text": "?",
+            "date": "2026-06-22T04:11:28+0000"
+          },
+          {
+            "id": "m_CCftbgiMNLGdA89YiqktiZ2mlSCL0X3cgP338DxiFaeWhBfZkYXqbMwQS_WqmD2pJ6nMkml10cwYLJe6X31nhQ",
+            "from": "Easy Trip & Visa",
+            "text": "Okey sir!",
+            "date": "2026-06-22T04:11:51+0000"
+          },
+          {
+            "id": "m_fbehxxNJ7xsZ6h8hCDLdgJ2mlSCL0X3cgP338DxiFacM9rKKe3Vz5qT_PlXi6aSiTzzIQbhNr54R-ePJhqml3g",
+            "from": "Easy Trip & Visa",
+            "text": "Hi",
+            "date": "2026-06-22T05:27:24+0000"
+          },
+          {
+            "id": "m_eFG1hv6lSI5Srk5V4EzPIp2mlSCL0X3cgP338DxiFacnsSx4bObSo8_6PWPgkdSnxguaXe0UReYRWDlWTCPppw",
+            "from": "Easy Trip & Visa",
+            "text": "Everybody waiting you on the bus",
+            "date": "2026-06-22T05:27:49+0000"
+          },
+          {
+            "id": "m_8Fixlw9neTkfEc1ARzSp2p2mlSCL0X3cgP338DxiFaeAb1Txe0sbczqDUUZUNPkkxiJsIbf9llaPGyZjJ9NE_Q",
+            "from": "Easy Trip & Visa",
+            "text": "Pls come back the bus hurry up sir!",
+            "date": "2026-06-22T05:27:57+0000"
+          },
+          {
+            "id": "m_3v3qhSFQ3t7zQFFRxP1GzZ2mlSCL0X3cgP338DxiFaff0NPf5ZrZYO5aMi1drhhuWqIH03jkwNxus3mC50Yfiw",
+            "from": "Easy Trip & Visa",
+            "text": "can you please go now to the bus he is waiting for you",
+            "date": "2026-06-22T05:32:19+0000"
+          }
+        ]
+      },
+      {
+        "id": "t_1888345851845386",
+        "name": "Nelly Brown",
+        "type": "meta_page_inbox",
+        "messages": [
+          {
+            "id": "m_HwYf_KruaMiUYo4T5kn45ZeKtThEWjLBu9WI1mOWB5bXQb75jpELrvAeHAMvFVSKGdd9vaR844zvZNvfapEWlg",
+            "from": "Nelly Brown",
+            "text": "Hi",
+            "date": "2026-06-14T16:02:48+0000"
+          },
+          {
+            "id": "m__HNqsHfxvbcyZVTXlnlE-5eKtThEWjLBu9WI1mOWB5ZMO0oBkYWQwsTqmrWQRnecocOwTc707I7w0GFrkTxLDw",
+            "from": "Nelly Brown",
+            "text": "Do you do Vietnam e-visa",
+            "date": "2026-06-14T16:02:56+0000"
+          },
+          {
+            "id": "m_xyJYIu7K9cJjHCW9bZ4ywZeKtThEWjLBu9WI1mOWB5a6SKp8FugHaZ1x_G9zshbFVjjcbYDnGxgTUJoD0qJnTA",
+            "from": "Easy Trip & Visa",
+            "text": "Hi , Mr nelly",
+            "date": "2026-06-16T01:16:25+0000"
+          },
+          {
+            "id": "m_4k9cPYNIR6tTZ3eK-C0c1JeKtThEWjLBu9WI1mOWB5Y9Lxydu-OsK5QOquREDaufMDzfg1ob2dDeKAGJ0rx3PQ",
+            "from": "Easy Trip & Visa",
+            "text": "Yes sir  , please provide us with the following information:\n\nVisa expiration date\n\nYour nationality\n\nThe city where you currently live",
+            "date": "2026-06-16T01:17:03+0000"
+          },
+          {
+            "id": "m_gi-MC8IgzcAYHUaxhIKKZ5eKtThEWjLBu9WI1mOWB5ZxQxx4yLB7zmx6eAwdy7CM7OReJV8nkUESdsAb9RTN6g",
+            "from": "Nelly Brown",
+            "text": "My Visa expired on 7th of this month June 2026 I have left Vietnam before the expiration",
+            "date": "2026-06-16T05:44:21+0000"
+          },
+          {
+            "id": "m_0cZ7Amgd4oaHgrDLlZYCQJeKtThEWjLBu9WI1mOWB5Y9DcB4sCePdoC35L5vzQyNYM-GYalMp1IF3ljOODVfww",
+            "from": "Nelly Brown",
+            "text": "I'm from Africa Nigeria",
+            "date": "2026-06-16T05:44:32+0000"
+          },
+          {
+            "id": "m_fRwRF6SRc3UASwe2XH8SaZeKtThEWjLBu9WI1mOWB5aiejDs-1BTCh-tdjc1eFRLn7rcfzUnRCKjCG5caG5pJw",
+            "from": "Nelly Brown",
+            "text": "I stayed in Ho Chi Minh city Vietnam",
+            "date": "2026-06-16T05:44:41+0000"
+          },
+          {
+            "id": "m_M-2CZs2Zv7oZW6XdGi6XwpeKtThEWjLBu9WI1mOWB5axik3P8UZ-MkonPlXGGoXSJRMsVPOUz4AOt2T3HXr1Kg",
+            "from": "Nelly Brown",
+            "text": "Right now I'm in Benin Republic Cotonou",
+            "date": "2026-06-16T05:45:02+0000"
+          },
+          {
+            "id": "m_Ai9mfaIXI5BBQDLn-a2yW5eKtThEWjLBu9WI1mOWB5ZVO1aYhwYD5yKzZuEvMUfVzVA4_KaluDIjjnqdFbAGSg",
+            "from": "Easy Trip & Visa",
+            "text": "what type Of visa do you have before ?",
+            "date": "2026-06-16T07:13:55+0000"
+          },
+          {
+            "id": "m_HgxDHVinkZWmXq5-PQc9_peKtThEWjLBu9WI1mOWB5aAEWmOO_T7j8rvfVGZec59C15_RyYvWSp-ZKdlSdPHog",
+            "from": "Nelly Brown",
+            "text": "Single entry 90days",
+            "date": "2026-06-16T09:12:55+0000"
+          },
+          {
+            "id": "m_9mXlBEQxnfBSyVxyKDYQ3peKtThEWjLBu9WI1mOWB5ZkLlN_mmudYfWYG-RFjfcpOwPBwPXM_hX-AGlR214zzw",
+            "from": "Nelly Brown",
+            "text": "D1",
+            "date": "2026-06-16T09:12:58+0000"
+          },
+          {
+            "id": "m_BZQIvkrM-OTR3SLWw03mfZeKtThEWjLBu9WI1mOWB5Y0FrgX_F_5i3YUW0-Fj0Vhx7yG_ncMzhxh8YMs8KuBnQ",
+            "from": "Easy Trip & Visa",
+            "text": "Thank you for sharing these details with us.\nAfter reviewing your situation, we unfortunately regret to inform you that we are unable to process or assist with a new visa for you at this time. Since your previous visa has already expired and you are currently outside of Vietnam, the immigration regulations for your nationality require a different procedure that we cannot facilitate from here.\nWe are truly sorry we couldn't provide a more favorable answer, and we wish you all the best with your future travel plans",
+            "date": "2026-06-16T09:17:31+0000"
+          }
+        ]
+      }
+    ]
+  }
+}
