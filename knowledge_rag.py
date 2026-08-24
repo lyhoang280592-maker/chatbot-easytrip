@@ -24,6 +24,7 @@ QA_FILES = [
     BASE_DIR / "extracted_qa_meta.json",
     BASE_DIR / "extracted_qa_zalo_docx.json",
     BASE_DIR / "extracted_qa_excel.json",
+    BASE_DIR / "extracted_qa_from_crm.json",
 ]
 MANUAL_QA_FILE = BASE_DIR / "manual_qa.json"  # Admin tự thêm Q&A thủ công
 
