@@ -58,13 +58,15 @@ Giao diện được xây dựng bằng CSS thuần chất lượng cao, đồng
 ---
 
 ## 📑 Hệ Thống Tạo Hợp Đồng Tự Động (Contract Automation)
-Dự án bao gồm bộ công cụ tự động hóa toàn bộ quy trình tạo Hợp đồng dịch vụ tư vấn visa song ngữ Việt - Anh (7 trang chuẩn), tự động tách chữ ký từ Hộ chiếu và phân loại Khách Lẻ vs Đại Lý.
+Dự án bao gồm bộ công cụ tự động hóa toàn bộ quy trình tạo Hợp đồng dịch vụ tư vấn visa song ngữ Việt - Anh (7 trang chuẩn), tự động tách chữ ký từ Hộ chiếu, phân loại Khách Lẻ vs Đại Lý, và tự động theo dõi thay đổi dữ liệu CRM (Change Detection).
 
-👉 **Xem hướng dẫn chi tiết tại**: [HUONG_DAN_TAO_HOP_DONG.md](HUONG_DAN_TAO_HOP_DONG.md)
+👉 **Xem quy chuẩn nghiệp vụ & công thức chi phí**: [QUY_TRINH_XU_LY_HOP_DONG_CRM.md](QUY_TRINH_XU_LY_HOP_DONG_CRM.md)  
+👉 **Xem hướng dẫn thao tác & đồng bộ đa máy**: [HUONG_DAN_TAO_HOP_DONG.md](HUONG_DAN_TAO_HOP_DONG.md)  
+👉 **Xem nhật ký thay đổi hợp đồng**: [LICH_SU_THAY_DOI_HOP_DONG.md](LICH_SU_THAY_DOI_HOP_DONG.md)
 
 ### Các lệnh nhanh:
 ```bash
-# 1. Tạo hợp đồng hàng loạt theo mốc ngày kế toán (PDF + DOCX + Excel)
+# 1. Tạo hợp đồng hàng loạt theo mốc ngày kế toán (PDF + DOCX + Bảng kê 17 cột Excel + Theo dõi thay đổi)
 python batch_generate_by_accounting_date.py
 
 # 2. Tạo hợp đồng định dạng Word (.docx)
