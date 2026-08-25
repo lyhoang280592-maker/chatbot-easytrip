@@ -882,21 +882,44 @@ async def generate_contracts_by_accounting():
     agency_channels = {"bolot", "sergei", "arsenii"}
 
     matched = []
+    seen_customers = set()
+
     for it in all_records:
         f = it.get("fields", {})
         code_ev = f.get("Code EV")
         ev_file = f.get("EV")
         acc_ts = f.get("Accounting Date")
-        name_val = str(f.get("Tên khách (Name)", "") or "")
+        name_val = str(f.get("Tên khách (Name)", "") or "").strip()
+        note_val = str(f.get("Ghi chú", "") or "").strip()
+
+        # 1. Loại bỏ các hồ sơ bị hủy / cancel
+        is_canceled = ("cancel" in name_val.lower()) or ("hủy" in name_val.lower()) or ("huy" in name_val.lower()) or ("cancel" in note_val.lower())
+        if is_canceled:
+            print(f"🚫 Loại bỏ hồ sơ bị hủy: {name_val}")
+            continue
+
+        # 2. Điều kiện lọc: Thời gian + Đã có EV (hoặc hồ sơ Busby)
         if (code_ev or ev_file or "BUSBY" in name_val.upper()) and acc_ts and start_ts <= acc_ts <= end_ts:
+            clean_key = re.sub(r'[^a-zA-Z0-9]', '', name_val.upper())
+            if clean_key in seen_customers:
+                print(f"⚠️ Trùng khách hàng trong tháng 8, loại bỏ bản ghi trùng: {name_val}")
+                continue
+            seen_customers.add(clean_key)
             matched.append(f)
 
     # Sắp xếp theo Accounting Date giảm dần
     matched.sort(key=lambda x: x.get("Accounting Date") or 0, reverse=True)
-    print(f"📊 Tìm thấy {len(matched)} hồ sơ đủ điều kiện theo Accounting Date (01/08/2026 - 24/08/2026).")
+    print(f"📊 Tìm thấy {len(matched)} hồ sơ hợp lệ (đã lọc sạch trùng và hủy) (01/08/2026 - 24/08/2026).")
 
     # MỤC 6. CẤU TRÚC THƯ MỤC ĐẦU RA VÀ TÀI LIỆU LƯU TRỮ
     base_out_dir = "output_contracts_01_08_den_24_08"
+
+    # Dọn dẹp thư mục cũ để không còn file rác / file hủy
+    if os.path.exists(base_out_dir):
+        shutil.rmtree(base_out_dir, ignore_errors=True)
+    for d_clean in ["output_docx_contracts", "output_contracts"]:
+        if os.path.exists(d_clean):
+            shutil.rmtree(d_clean, ignore_errors=True)
     
     # Subfolders
     dir_pdf_kl_single = os.path.join(base_out_dir, "PDF", "Khach_Le", "Single")
@@ -908,6 +931,8 @@ async def generate_contracts_by_accounting():
     dir_docx_kl_single = os.path.join(base_out_dir, "DOCX", "Khach_Le", "Single")
     dir_docx_kl_multi = os.path.join(base_out_dir, "DOCX", "Khach_Le", "Multi")
     dir_docx_kl_cam = os.path.join(base_out_dir, "DOCX", "Khach_Le", "Visa_Campuchia")
+    dir_docx_dl_single = os.path.join(base_out_dir, "DOCX", "Dai_Ly", "Single")
+    dir_docx_dl_multi = os.path.join(base_out_dir, "DOCX", "Dai_Ly", "Multi")
     dir_docx_dl_single = os.path.join(base_out_dir, "DOCX", "Dai_Ly", "Single")
     dir_docx_dl_multi = os.path.join(base_out_dir, "DOCX", "Dai_Ly", "Multi")
 
