@@ -374,7 +374,7 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
         service_type = get_customer_service_type(data, history_text)
         
         dest = "cambodia" if service_type == "Cambodia" else "laos"
-        ngay_di = validate_and_adjust_departure(data.ngay_khoi_hanh, data.ngay_het_han_visa or "", data.loai_visa or "", dest)
+        ngay_di = validate_and_adjust_departure(data.ngay_khoi_hanh or "", data.ngay_het_han_visa or "", data.loai_visa or "", dest)
         if ngay_di:
             data.ngay_khoi_hanh = ngay_di
 
@@ -383,7 +383,7 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
             now = time.time()
             last_sent = scheme_history.get(ngay_di, 0)
             if (now - last_sent) > (15 * 60):
-                cmd = get_scheme_command(ngay_di, data.loai_visa, history_text)
+                cmd = get_scheme_command(ngay_di, data.loai_visa or "", history_text)
                 if cmd:
                     await send_to_bus_group(None, cmd, date=ngay_di, service=service_type)
                     scheme_history[ngay_di] = now
@@ -431,7 +431,7 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
                     f"📍 Điểm đón: {data.diem_don}\n"
                     f"⚠️ *Vui lòng đối tác đặt chỗ trên hệ thống của mình!*"
                 )
-                await send_to_bus_group(None, bus_msg, date=ngay_di, service=service_type)
+                await send_to_bus_group(None, bus_msg, date=ngay_di or "", service=service_type)
                 memory_store[notif_key] = True
                 print(f"📢 ({platform}) Đã gửi tin nhắn đặt chỗ {curr_seat} vào topic đối tác!")
 
@@ -595,7 +595,7 @@ async def admin_confirm_paid(record_id: str, request: Request):
 
 
 @app.get("/admin/orders")
-async def list_orders(status: str = None):
+async def list_orders(status: str | None = None):
     """Xem toàn bộ đơn hàng, có thể lọc: ?status=PENDING"""
     orders = await get_all_orders(status_filter=status)
     return {"orders": orders, "total": len(orders)}
@@ -801,7 +801,7 @@ async def send_manual_media(session_id: str, file: UploadFile = File(...)):
     if not os.path.exists(upload_dir):
         os.makedirs(upload_dir)
         
-    filename = file.filename
+    filename = file.filename or "upload_file"
     # Clean filename
     filename_clean = re.sub(r"[^a-zA-Z0-9_.-]", "_", filename)
     file_path = f"{upload_dir}/{int(time.time())}_{filename_clean}"
@@ -813,7 +813,7 @@ async def send_manual_media(session_id: str, file: UploadFile = File(...)):
     except Exception as e:
         return {"success": False, "message": f"Không thể lưu file: {str(e)}"}
         
-    is_image = file.content_type.startswith("image/")
+    is_image = bool(file.content_type and file.content_type.startswith("image/"))
     
     domain = os.getenv("RENDER_EXTERNAL_URL", "https://chatbot-easytrip.onrender.com").rstrip("/")
     file_url = f"{domain}/static/uploads/{os.path.basename(file_path)}"
@@ -1081,7 +1081,7 @@ async def upload_staff_media(file: UploadFile = File(...)):
     if not os.path.exists(upload_dir):
         os.makedirs(upload_dir)
         
-    filename = file.filename
+    filename = file.filename or "upload_file"
     # Clean filename
     filename_clean = re.sub(r"[^a-zA-Z0-9_.-]", "_", filename)
     file_path = f"{upload_dir}/{int(time.time())}_{filename_clean}"

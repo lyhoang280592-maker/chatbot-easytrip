@@ -1,16 +1,19 @@
 import os
+import sys
 import re
-import json
 import asyncio
 import httpx
 from datetime import datetime
 from dotenv import load_dotenv
 import docx
-from docx.shared import Inches, Pt, RGBColor, Cm
+from docx.shared import Pt, RGBColor, Cm
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
-from docx.oxml import OxmlElement, parse_xml
-from docx.oxml.ns import nsdecls, qn
+from docx.enum.table import WD_TABLE_ALIGNMENT
+from docx.oxml import parse_xml
+
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+if CURRENT_DIR not in sys.path:
+    sys.path.insert(0, CURRENT_DIR)
 
 from generate_contracts import (
     num_to_vietnamese_words,
@@ -57,8 +60,8 @@ def set_cell_margins(cell, top=100, bottom=100, left=150, right=150):
     tcPr.append(tcMar)
 
 
-def add_p(doc, text="", font_name="Arial", font_size=10, bold=False, italic=False, 
-          align=WD_ALIGN_PARAGRAPH.LEFT, space_before=0, space_after=2, line_spacing=1.15):
+def add_p(doc, text: str = "", font_name: str = "Arial", font_size: float | int = 10, bold: bool = False, italic: bool = False, 
+          align: WD_ALIGN_PARAGRAPH = WD_ALIGN_PARAGRAPH.LEFT, space_before: float | int = 0, space_after: float | int = 2, line_spacing: float | int = 1.15):
     """Helper to add styled paragraph with single run or base formatting"""
     p = doc.add_paragraph()
     p.alignment = align
@@ -282,9 +285,17 @@ def build_contract_docx(output_docx_path: str, data: dict):
     add_p(doc, "ARTICLE 2: CONTRACT VALUE AND PAYMENT METHOD", font_size=10, bold=True, space_after=4)
     add_p(doc, "2.1 Bảng chi tiết chi phí / Detailed Cost Breakdown:", font_size=9.5, space_after=6)
 
-    service_fee = int(data.get('service_fee', 757500))
+    total_amount = data.get('total_amount')
     state_fee = int(data.get('state_fee', 662500))
-    total_amount = service_fee + state_fee
+    transport_fee = int(data.get('transport_fee', 0))
+
+    if total_amount is not None:
+        combined_service_fee = int(total_amount) - state_fee
+        pure_consulting_fee = int(data.get('service_fee', combined_service_fee - transport_fee))
+    else:
+        pure_consulting_fee = int(data.get('service_fee', 1637500))
+        combined_service_fee = pure_consulting_fee + transport_fee
+        total_amount = combined_service_fee + state_fee
 
     # Table 2: Cost breakdown
     t2 = doc.add_table(rows=4, cols=5)
@@ -320,13 +331,13 @@ def build_contract_docx(output_docx_path: str, data: dict):
             r2.font.size = Pt(8.0)
             r2.font.italic = True
 
-    # Row 1: Phí dịch vụ
+    # Row 1: Phí dịch vụ gộp
     r1_items = [
         ("1", WD_ALIGN_PARAGRAPH.CENTER),
-        ("Phí dịch vụ tư vấn & làm hồ sơ Visa\nService fee for consulting & visa processing", WD_ALIGN_PARAGRAPH.LEFT),
+        ("Phí dịch vụ tư vấn, làm hồ sơ Visa và hỗ trợ vận tải\nService fee for consulting, visa processing & passenger transport support", WD_ALIGN_PARAGRAPH.LEFT),
         ("1", WD_ALIGN_PARAGRAPH.CENTER),
-        (f"{service_fee:,}".replace(",", "."), WD_ALIGN_PARAGRAPH.CENTER),
-        (f"{service_fee:,}".replace(",", "."), WD_ALIGN_PARAGRAPH.CENTER)
+        (f"{combined_service_fee:,}".replace(",", "."), WD_ALIGN_PARAGRAPH.CENTER),
+        (f"{combined_service_fee:,}".replace(",", "."), WD_ALIGN_PARAGRAPH.CENTER)
     ]
     for c_idx, (text_val, align_val) in enumerate(r1_items):
         cell = t2.cell(1, c_idx)
@@ -349,9 +360,11 @@ def build_contract_docx(output_docx_path: str, data: dict):
             r_sub.font.italic = True
 
     # Row 2: Lệ phí nhà nước
-    usd_val = int(round(state_fee / 26500))
-    if usd_val <= 0: usd_val = 25
-    r2_desc = f"Lệ phí nộp Nhà nước đăng ký cấp thị thực điện tử (Thu hộ - Chi hộ)\n(${usd_val} – tỷ giá 26.500VND)\nState fee for electronic visa registration (Collected & Paid on behalf)\n(${usd_val} – exchange rate 26,500 VND)"
+    usd_val = int(round(state_fee / 26500)) if state_fee > 0 else 0
+    if usd_val > 0:
+        r2_desc = f"Lệ phí nộp Nhà nước đăng ký cấp thị thực điện tử (Thu hộ - Chi hộ)\n(${usd_val} – tỷ giá 26.500VND)\nState fee for electronic visa registration (Collected & Paid on behalf)\n(${usd_val} – exchange rate 26,500 VND)"
+    else:
+        r2_desc = "Lệ phí nộp Nhà nước đăng ký cấp thị thực điện tử (Thu hộ - Chi hộ)\nState fee for electronic visa registration (Collected & Paid on behalf)"
 
     r2_items = [
         ("2", WD_ALIGN_PARAGRAPH.CENTER),
@@ -419,8 +432,8 @@ def build_contract_docx(output_docx_path: str, data: dict):
     p_wen.add_run(words_en)
 
     add_p(doc, "2.2 Thuế Giá trị gia tăng (VAT) / Value Added Tax (VAT):", font_size=9.5, bold=True, space_after=2)
-    add_p(doc, "- Đơn giá phí dịch vụ nêu trên đã bao gồm thuế GTGT theo quy định của pháp luật Việt Nam. Bên B có trách nhiệm lập và xuất hóa đơn điện tử giá trị gia tăng (GTGT) hợp pháp cho Bên A đối với phần Phí dịch vụ tư vấn & làm hồ sơ trong vòng 03 ngày làm việc kể từ ngày hoàn thành dịch vụ hoặc khi Bên A thanh toán đầy đủ, tùy điều kiện nào đến trước. Bên A có trách nhiệm cung cấp đầy đủ và chính xác thông tin xuất hóa đơn.", font_size=9.5, space_after=2)
-    add_p(doc, "- The service fee specified above is inclusive of VAT in accordance with Vietnamese tax laws. Party B is responsible for issuing a valid electronic Value Added Tax (VAT) invoice to Party A for the service fee component within 03 working days from the completion of the service or upon full payment by Party A, whichever comes first. Party A is responsible for providing complete and accurate billing information.", font_size=9, italic=True, space_after=4)
+    add_p(doc, "- Đơn giá phí dịch vụ nêu trên đã bao gồm thuế GTGT theo quy định của pháp luật Việt Nam. Bên B có trách nhiệm lập và xuất hóa đơn điện tử giá trị gia tăng (GTGT) hợp pháp cho Bên A đối với phần Phí dịch vụ tư vấn, làm hồ sơ Visa và hỗ trợ vận tải trong vòng 03 ngày làm việc kể từ ngày hoàn thành dịch vụ hoặc khi Bên A thanh toán đầy đủ, tùy điều kiện nào đến trước. Bên A có trách nhiệm cung cấp đầy đủ và chính xác thông tin xuất hóa đơn.", font_size=9.5, space_after=2)
+    add_p(doc, "- The service fee specified above is inclusive of VAT in accordance with Vietnamese tax laws. Party B is responsible for issuing a valid electronic Value Added Tax (VAT) invoice to Party A for the consulting, visa processing & transport support service fee component within 03 working days from the completion of the service or upon full payment by Party A, whichever comes first. Party A is responsible for providing complete and accurate billing information.", font_size=9, italic=True, space_after=4)
 
     # -------------------------------------------------------------
     # TRANG 4: ĐIỀU 3 & ĐIỀU 4
@@ -479,8 +492,8 @@ def build_contract_docx(output_docx_path: str, data: dict):
     add_p(doc, "- Lệ phí nộp Nhà nước đăng ký cấp thị thực điện tử sẽ không được hoàn lại (theo quy định của Bộ Công an và Thông tư số 28/2026/TT-BTC).", font_size=9.5, space_after=1)
     add_p(doc, "The State fee for electronic visa registration will not be refunded (in accordance with the Ministry of Public Security regulations and Circular No. 28/2026/TT-BTC).", font_size=9, italic=True, space_after=4)
 
-    add_p(doc, f"- Bên B sẽ hoàn trả lại 100% Phí dịch vụ tư vấn & làm hồ sơ ({service_fee:,} VNĐ) cho Bên A trong vòng 05 ngày làm việc kể từ ngày nhận được thông báo từ chối cấp thị thực.".replace(",", "."), font_size=9.5, space_after=1)
-    add_p(doc, f"Party B shall refund 100% of the Service Fee (VND {service_fee:,}) to Party A within 05 working days from the date of receiving the visa rejection notice.".replace(",", "."), font_size=9, italic=True, space_after=4)
+    add_p(doc, f"- Bên B sẽ hoàn trả lại 100% Phí dịch vụ tư vấn & làm hồ sơ ({pure_consulting_fee:,} VNĐ) cho Bên A trong vòng 05 ngày làm việc kể từ ngày nhận được thông báo từ chối cấp thị thực (không bao gồm Lệ phí nộp Nhà nước và Phí dịch vụ hỗ trợ vận tải).".replace(",", "."), font_size=9.5, space_after=1)
+    add_p(doc, f"Party B shall refund 100% of the Visa Consulting & Processing Service Fee (VND {pure_consulting_fee:,}) to Party A within 05 working days from the date of receiving the visa rejection notice (excluding the State fee and Passenger transport support fee).".replace(",", "."), font_size=9, italic=True, space_after=4)
 
     add_p(doc, "5.3 Trường hợp Bên A đơn phương hủy hợp đồng sau khi Bên B đã tiến hành xử lý hồ sơ hoặc nộp lệ phí, phí dịch vụ và Lệ phí nộp Nhà nước đăng ký cấp thị thực điện tử sẽ không được hoàn lại.", font_size=9.5, space_after=1)
     add_p(doc, "5.3 In case Party A unilaterally terminates the contract after Party B has commenced processing the dossier or paid the fees, the service fee and the State fee for electronic visa registration shall not be refunded.", font_size=9, italic=True, space_after=4)
@@ -565,10 +578,18 @@ def build_contract_docx(output_docx_path: str, data: dict):
     r_bh2.bold = True
     r_bh2.font.name = "Arial"
     r_bh2.font.size = Pt(9.5)
-    r_bh3 = p_bh.add_run("REPRESENTATIVE OF PARTY B\nEASY TRIP AND VISA CO., LTD")
+    r_bh3 = p_bh.add_run("REPRESENTATIVE OF PARTY B\nEASY TRIP AND VISA CO., LTD\n")
     r_bh3.italic = True
     r_bh3.font.name = "Arial"
     r_bh3.font.size = Pt(8.5)
+    r_bh4 = p_bh.add_run("GIÁM ĐỐC\n")
+    r_bh4.bold = True
+    r_bh4.font.name = "Arial"
+    r_bh4.font.size = Pt(9.5)
+    r_bh5 = p_bh.add_run("DIRECTOR")
+    r_bh5.italic = True
+    r_bh5.font.name = "Arial"
+    r_bh5.font.size = Pt(8.5)
 
     # Signature row
     c_a_sig = t_sig.cell(1, 0)
@@ -578,14 +599,7 @@ def build_contract_docx(output_docx_path: str, data: dict):
     p_as.paragraph_format.space_before = Pt(8)
     p_as.paragraph_format.space_after = Pt(8)
 
-    sig_path = data.get('signature_image_path')
-    if sig_path and os.path.exists(sig_path):
-        try:
-            p_as.add_run().add_picture(sig_path, width=Cm(3.8))
-        except Exception:
-            p_as.add_run("\n\n\n")
-    else:
-        p_as.add_run("\n\n\n")
+    p_as.add_run("\n\n\n")
 
     c_b_sig = t_sig.cell(1, 1)
     c_b_sig.width = col_widths_sig[1]
@@ -694,7 +708,7 @@ async def generate_all_86_docx(out_dir="output_docx_contracts"):
 
             try:
                 total_rev = int(str(c.get("Sales revenue", "0") or "0").replace(".", "").replace(",", ""))
-            except:
+            except (ValueError, TypeError):
                 total_rev = 0
 
             if total_rev <= state_fee:

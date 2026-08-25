@@ -66,10 +66,15 @@ def get_lang_code(nationality: str) -> str:
     if not nationality:
         return "en"
     
-    nat_lower = nationality.lower()
+    nat_lower = nationality.lower().strip()
     for code, keywords in NATIONALITY_MAP.items():
-        if any(kw in nat_lower for kw in keywords):
-            return code
+        for kw in keywords:
+            if len(kw) <= 2:
+                if re.search(r"\b" + re.escape(kw) + r"\b", nat_lower):
+                    return code
+            else:
+                if kw in nat_lower:
+                    return code
     return "en"
 
 def get_msg(key: str, lang_code: str = "en", **kwargs) -> str:

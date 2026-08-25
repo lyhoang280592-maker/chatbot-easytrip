@@ -40,9 +40,11 @@ def organize():
     # 3. Đọc danh sách file hộ chiếu từ downloads/passports
     pass_files = os.listdir(PASSPORTS_SRC_DIR)
 
-    # 4. Đọc file Excel 91 khách hàng theo Accounting Date
     wb = openpyxl.load_workbook(EXCEL_PATH)
     ws = wb.active
+    if ws is None:
+        print("❌ Không tìm thấy active sheet trong file Excel!")
+        return
 
     matched_orig_count = 0
     generated_new_count = 0
@@ -56,9 +58,18 @@ def organize():
         passport_no = str(ws.cell(row=r, column=3).value or '').strip()
         nationality = str(ws.cell(row=r, column=4).value or '').strip()
         acc_date = str(ws.cell(row=r, column=5).value or '').strip()
-        state_fee = int(ws.cell(row=r, column=12).value or 662500)
-        service_fee = int(ws.cell(row=r, column=13).value or 757500)
-        total_amount = int(ws.cell(row=r, column=14).value or (state_fee + service_fee))
+        try:
+            state_fee = int(float(str(ws.cell(row=r, column=12).value or 662500)))
+        except (ValueError, TypeError):
+            state_fee = 662500
+        try:
+            service_fee = int(float(str(ws.cell(row=r, column=13).value or 757500)))
+        except (ValueError, TypeError):
+            service_fee = 757500
+        try:
+            total_amount = int(float(str(ws.cell(row=r, column=14).value or (state_fee + service_fee))))
+        except (ValueError, TypeError):
+            total_amount = state_fee + service_fee
 
         safe_name = re.sub(r'[^a-zA-Z0-9_-]', '_', name)
         c_name = clean_str(name)

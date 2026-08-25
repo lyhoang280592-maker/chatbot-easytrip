@@ -1,6 +1,6 @@
 import os
 import time
-import gdown
+from gdown.download_folder import download_folder
 
 def download_folder_with_retry(url, output_dir="HD_Khach_le", max_retries=5):
     """
@@ -11,7 +11,7 @@ def download_folder_with_retry(url, output_dir="HD_Khach_le", max_retries=5):
     for attempt in range(1, max_retries + 1):
         print(f"📡 Đang tải thư mục Google Drive (Lần thử {attempt}/{max_retries})...")
         try:
-            res = gdown.download_folder(url=url, output=output_dir, quiet=False, use_cookies=False)
+            res = download_folder(url=url, output=output_dir, quiet=False, use_cookies=False)
             if res:
                 print(f"🎉 Tải thành công toàn bộ thư mục về: {output_dir}")
                 return True

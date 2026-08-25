@@ -5,7 +5,7 @@ import sys
 
 # Reconfigure stdout for UTF-8 on Windows
 if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8")
+    getattr(sys.stdout, "reconfigure")(encoding="utf-8")
 
 def sync():
     base_dir = "C:/Users/Admin/.gemini/antigravity/scratch/backend"

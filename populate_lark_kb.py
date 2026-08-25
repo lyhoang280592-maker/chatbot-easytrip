@@ -101,7 +101,7 @@ EXTREMELY IMPORTANT REQUIREMENTS:
             temperature=0.2,
             max_tokens=1500
         )
-        raw_json = response.choices[0].message.content
+        raw_json = response.choices[0].message.content or "{}"
         data = json.loads(raw_json)
         return data.get("faqs", [])
     except Exception as e:

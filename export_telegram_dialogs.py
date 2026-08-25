@@ -8,7 +8,7 @@ from telethon.tl.types import User, Channel, Chat
 from dotenv import load_dotenv
 
 if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8")
+    getattr(sys.stdout, "reconfigure")(encoding="utf-8")
 
 load_dotenv()
 
@@ -17,6 +17,10 @@ API_HASH = os.getenv("TELEGRAM_API_HASH")
 OUTPUT_FILE = "telegram_chat.json"
 
 async def export_chats(limit_per_chat: int = 300, max_chats: int = 150):
+    if not API_ID or not API_HASH:
+        print("❌ Lỗi: Chưa cấu hình TELEGRAM_API_ID / TELEGRAM_API_HASH trong .env!")
+        return
+
     client = TelegramClient('scraper_v2', int(API_ID), API_HASH)
     await client.connect()
 
@@ -25,7 +29,9 @@ async def export_chats(limit_per_chat: int = 300, max_chats: int = 150):
         return
 
     me = await client.get_me()
-    print(f"🚀 Bắt đầu quét và tải dữ liệu chat từ tài khoản: {me.first_name} (@{me.username or 'NoUsername'})")
+    me_first_name = getattr(me, "first_name", "") or "User"
+    me_username = getattr(me, "username", "") or "NoUsername"
+    print(f"🚀 Bắt đầu quét và tải dữ liệu chat từ tài khoản: {me_first_name} (@{me_username})")
     
     chats_data = []
     dialog_count = 0
@@ -63,7 +69,7 @@ async def export_chats(limit_per_chat: int = 300, max_chats: int = 150):
                     else:
                         sender_name = getattr(msg.sender, 'title', 'Group')
                 elif msg.out:
-                    sender_name = me.first_name or "Easy Trip"
+                    sender_name = getattr(me, "first_name", "Easy Trip") or "Easy Trip"
 
                 msg_obj = {
                     "id": msg.id,
@@ -73,7 +79,7 @@ async def export_chats(limit_per_chat: int = 300, max_chats: int = 150):
                     "text": msg.text.strip()
                 }
                 messages_list.append(msg_obj)
-        except Exception as e:
+        except Exception:
             # Bỏ qua nếu không có quyền đọc (ví dụ channel cấm đọc)
             pass
 
@@ -106,7 +112,7 @@ async def export_chats(limit_per_chat: int = 300, max_chats: int = 150):
         json.dump(output_payload, f, ensure_ascii=False, indent=2)
 
     print(f"💾 Dữ liệu thô đã được lưu vào file: {OUTPUT_FILE}")
-    await client.disconnect()
+    await client.disconnect()  # type: ignore
 
 if __name__ == "__main__":
     limit = 300

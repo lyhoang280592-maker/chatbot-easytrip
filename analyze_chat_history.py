@@ -14,7 +14,7 @@ from groq import AsyncGroq
 
 # Reconfigure stdout for Windows UTF-8
 if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8")
+    getattr(sys.stdout, "reconfigure")(encoding="utf-8")
 
 load_dotenv()
 

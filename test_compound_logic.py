@@ -121,6 +121,7 @@ class TestSeatMapGeneration(unittest.IsolatedAsyncioTestCase):
         # Gọi lại get_or_create_seat_map -> phải trả về thông tin sơ đồ
         res_45d_after = await get_or_create_seat_map("20/05", "45D")
         self.assertIsNotNone(res_45d_after)
+        assert res_45d_after is not None
         self.assertEqual(res_45d_after["url"], f"/static/map_20_05_45D.jpg")
 
         # Dọn dẹp

@@ -63,7 +63,10 @@ async def restore_data():
     # 1. TẠO FILE EXCEL DANH SÁCH
     wb = openpyxl.Workbook()
     ws = wb.active
-    ws.title = "Khach_Hang_Co_Evisa"
+    if ws is None:
+        ws = wb.create_sheet(title="Khach_Hang_Co_Evisa")
+    else:
+        ws.title = "Khach_Hang_Co_Evisa"
 
     ws.merge_cells("A1:J1")
     title_cell = ws["A1"]
@@ -116,7 +119,7 @@ async def restore_data():
         
         try:
             rev_val = int(str(c.get("Sales revenue", "0") or "0").replace(".", "").replace(",", ""))
-        except:
+        except (ValueError, TypeError):
             rev_val = 0
         total_revenue += rev_val
 
@@ -162,8 +165,10 @@ async def restore_data():
 
     for col in ws.columns:
         max_len = max(len(str(cell.value or "")) for cell in col)
-        col_letter = get_column_letter(col[0].column)
-        ws.column_dimensions[col_letter].width = max(max_len + 3, 12)
+        col_idx = col[0].column
+        if col_idx is not None:
+            col_letter = get_column_letter(int(col_idx))
+            ws.column_dimensions[col_letter].width = max(max_len + 3, 12)
 
     excel_path = "danh_sach_khach_hang_co_evisa_01_08_den_19_08.xlsx"
     wb.save(excel_path)

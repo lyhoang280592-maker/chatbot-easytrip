@@ -40,14 +40,16 @@ async def test_userbot():
             print("❌ UserBot chưa được ủy quyền (Phiên đăng nhập đã hết hạn). Cần đăng nhập lại.")
             return False
         me = await client.get_me()
-        username = f"@{me.username}" if me.username else "Không có username"
-        print(f"✅ UserBot hợp lệ! Đang kết nối với tài khoản: {me.first_name} ({username})")
+        u_name = getattr(me, "username", None)
+        f_name = getattr(me, "first_name", "")
+        username = f"@{u_name}" if u_name else "Không có username"
+        print(f"✅ UserBot hợp lệ! Đang kết nối với tài khoản: {f_name} ({username})")
         return True
     except Exception as e:
         print(f"❌ Lỗi UserBot: {repr(e)}")
         return False
     finally:
-        await client.disconnect()
+        await client.disconnect()  # type: ignore
 
 async def main():
     print("\n--- KIỂM TRA KẾT NỐI TELEGRAM ---")

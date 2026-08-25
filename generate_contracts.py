@@ -56,7 +56,7 @@ class NumberedCanvas(canvas.Canvas):
 
     def showPage(self):
         self._saved_page_states.append(dict(self.__dict__))
-        self._startPage()
+        getattr(self, "_startPage")()
 
     def save(self):
         num_pages = len(self._saved_page_states)
@@ -190,8 +190,9 @@ def extract_and_clean_signature(image_path: str, output_sig_path: str, crop_box=
         
         # Ngưỡng tách nét chữ (nét mực đậm < 140, nền giấy trắng > 140)
         for item in datas:
-            if item < 135:  # Nét chữ ký
-                alpha = int((135 - item) / 135 * 255)
+            val = int(item) if isinstance(item, (int, float)) else int(item[0])  # type: ignore
+            if val < 135:  # Nét chữ ký
+                alpha = int((135 - val) / 135 * 255)
                 # Đổi nét chữ thành màu xanh đen / đen tự nhiên
                 new_data.append((25, 30, 45, min(255, alpha * 2)))
             else:  # Nền trong suốt
@@ -465,9 +466,29 @@ def build_contract_pdf(output_pdf_path: str, data: dict):
     story.append(Paragraph("ARTICLE 2: CONTRACT VALUE AND PAYMENT METHOD", style_article_title))
     story.append(Paragraph("2.1 Bảng chi tiết chi phí / Detailed Cost Breakdown:", style_normal_vi))
 
-    service_fee = data.get('service_fee', 757500)
+    # Tính toán chi phí:
+    # 1. Lệ phí nhà nước (state_fee)
+    # 2. Phí vận tải (transport_fee: Bờ Y = 1.250.000, Mộc Bài = 1.290.000)
+    # 3. Phí tư vấn thuần hoàn lại (pure_consulting_fee = total_amount - transport_fee - state_fee)
+    # 4. Phí dịch vụ gộp hiển thị trên bảng (combined_service_fee = pure_consulting_fee + transport_fee = total_amount - state_fee)
+    
+    total_amount = data.get('total_amount')
     state_fee = data.get('state_fee', 662500)
-    total_amount = service_fee + state_fee
+    transport_fee = data.get('transport_fee', 0)
+    
+    if total_amount is not None:
+        combined_service_fee = total_amount - state_fee
+        pure_consulting_fee = data.get('service_fee', combined_service_fee - transport_fee)
+    else:
+        pure_consulting_fee = data.get('service_fee', 1637500)
+        combined_service_fee = pure_consulting_fee + transport_fee
+        total_amount = combined_service_fee + state_fee
+
+    usd_val = int(round(state_fee / 26500)) if state_fee > 0 else 0
+    if usd_val > 0:
+        r2_desc = f"Lệ phí nộp Nhà nước đăng ký cấp thị thực điện tử (Thu hộ - Chi hộ)<br/>(${usd_val} – tỷ giá 26.500VND)<br/><i>State fee for electronic visa registration (Collected & Paid on behalf)<br/>(${usd_val} – exchange rate 26,500 VND)</i>"
+    else:
+        r2_desc = "Lệ phí nộp Nhà nước đăng ký cấp thị thực điện tử (Thu hộ - Chi hộ)<br/><i>State fee for electronic visa registration (Collected & Paid on behalf)</i>"
 
     cost_table_data = [
         [
@@ -479,14 +500,14 @@ def build_contract_pdf(output_pdf_path: str, data: dict):
         ],
         [
             Paragraph("1", style_tbl_cell),
-            Paragraph("Phí dịch vụ tư vấn & làm hồ sơ Visa<br/><i>Service fee for consulting & visa processing</i>", style_tbl_cell_left),
+            Paragraph("Phí dịch vụ tư vấn, làm hồ sơ Visa và hỗ trợ vận tải<br/><i>Service fee for consulting, visa processing & passenger transport support</i>", style_tbl_cell_left),
             Paragraph("1", style_tbl_cell),
-            Paragraph(f"{service_fee:,}".replace(",", "."), style_tbl_cell),
-            Paragraph(f"{service_fee:,}".replace(",", "."), style_tbl_cell),
+            Paragraph(f"{combined_service_fee:,}".replace(",", "."), style_tbl_cell),
+            Paragraph(f"{combined_service_fee:,}".replace(",", "."), style_tbl_cell),
         ],
         [
             Paragraph("2", style_tbl_cell),
-            Paragraph("Lệ phí nộp Nhà nước đăng ký cấp thị thực điện tử (Thu hộ - Chi hộ)<br/>($25 – tỷ giá 26.500VND)<br/><i>State fee for electronic visa registration (Collected & Paid on behalf)<br/>($25 – exchange rate 26,500 VND)</i>", style_tbl_cell_left),
+            Paragraph(r2_desc, style_tbl_cell_left),
             Paragraph("1", style_tbl_cell),
             Paragraph(f"{state_fee:,}".replace(",", "."), style_tbl_cell),
             Paragraph(f"{state_fee:,}".replace(",", "."), style_tbl_cell),
@@ -518,8 +539,8 @@ def build_contract_pdf(output_pdf_path: str, data: dict):
 
     story.append(Spacer(1, 2*mm))
     story.append(Paragraph("2.2 Thuế Giá trị gia tăng (VAT) / Value Added Tax (VAT):", style_normal_vi))
-    story.append(Paragraph("- Đơn giá phí dịch vụ nêu trên đã bao gồm thuế GTGT theo quy định của pháp luật Việt Nam. Bên B có trách nhiệm lập và xuất hóa đơn điện tử giá trị gia tăng (GTGT) hợp pháp cho Bên A đối với phần Phí dịch vụ tư vấn & làm hồ sơ trong vòng 03 ngày làm việc kể từ ngày hoàn thành dịch vụ hoặc khi Bên A thanh toán đầy đủ, tùy điều kiện nào đến trước. Bên A có trách nhiệm cung cấp đầy đủ và chính xác thông tin xuất hóa đơn.", style_normal_vi))
-    story.append(Paragraph("- The service fee specified above is inclusive of VAT in accordance with Vietnamese tax laws. Party B is responsible for issuing a valid electronic Value Added Tax (VAT) invoice to Party A for the service fee component within 03 working days from the completion of the service or upon full payment by Party A, whichever comes first. Party A is responsible for providing complete and accurate billing information.", style_normal_en))
+    story.append(Paragraph("- Đơn giá phí dịch vụ nêu trên đã bao gồm thuế GTGT theo quy định của pháp luật Việt Nam. Bên B có trách nhiệm lập và xuất hóa đơn điện tử giá trị gia tăng (GTGT) hợp pháp cho Bên A đối với phần Phí dịch vụ tư vấn, làm hồ sơ Visa và hỗ trợ vận tải trong vòng 03 ngày làm việc kể từ ngày hoàn thành dịch vụ hoặc khi Bên A thanh toán đầy đủ, tùy điều kiện nào đến trước. Bên A có trách nhiệm cung cấp đầy đủ và chính xác thông tin xuất hóa đơn.", style_normal_vi))
+    story.append(Paragraph("- The service fee specified above is inclusive of VAT in accordance with Vietnamese tax laws. Party B is responsible for issuing a valid electronic Value Added Tax (VAT) invoice to Party A for the consulting, visa processing & transport support service fee component within 03 working days from the completion of the service or upon full payment by Party A, whichever comes first. Party A is responsible for providing complete and accurate billing information.", style_normal_en))
 
     # -------------------------------------------------------------
     # PAGE 4: ĐIỀU 3 & ĐIỀU 4
@@ -569,8 +590,8 @@ def build_contract_pdf(output_pdf_path: str, data: dict):
     story.append(Paragraph("5.2 Handling visa rejection due to objective reasons (rejection by the Immigration Department - Ministry of Public Security without fault of either Party):", style_normal_en))
     story.append(Paragraph("- Lệ phí nộp Nhà nước đăng ký cấp thị thực điện tử sẽ không được hoàn lại (theo quy định của Bộ Công an và Thông tư số 28/2026/TT-BTC).", style_normal_vi))
     story.append(Paragraph("The State fee for electronic visa registration will not be refunded (in accordance with the Ministry of Public Security regulations and Circular No. 28/2026/TT-BTC).", style_normal_en))
-    story.append(Paragraph(f"- Bên B sẽ hoàn trả lại 100% Phí dịch vụ tư vấn & làm hồ sơ ({service_fee:,} VNĐ) cho Bên A trong vòng 05 ngày làm việc kể từ ngày nhận được thông báo từ chối cấp thị thực.".replace(",", "."), style_normal_vi))
-    story.append(Paragraph(f"Party B shall refund 100% of the Service Fee (VND {service_fee:,}) to Party A within 05 working days from the date of receiving the visa rejection notice.".replace(",", "."), style_normal_en))
+    story.append(Paragraph(f"- Bên B sẽ hoàn trả lại 100% Phí dịch vụ tư vấn & làm hồ sơ ({pure_consulting_fee:,} VNĐ) cho Bên A trong vòng 05 ngày làm việc kể từ ngày nhận được thông báo từ chối cấp thị thực (không bao gồm Lệ phí nộp Nhà nước và Phí dịch vụ hỗ trợ vận tải).".replace(",", "."), style_normal_vi))
+    story.append(Paragraph(f"Party B shall refund 100% of the Visa Consulting & Processing Service Fee (VND {pure_consulting_fee:,}) to Party A within 05 working days from the date of receiving the visa rejection notice (excluding the State fee and Passenger transport support fee).".replace(",", "."), style_normal_en))
     story.append(Paragraph("5.3 Trường hợp Bên A đơn phương hủy hợp đồng sau khi Bên B đã tiến hành xử lý hồ sơ hoặc nộp lệ phí, phí dịch vụ và Lệ phí nộp Nhà nước đăng ký cấp thị thực điện tử sẽ không được hoàn lại.", style_normal_vi))
     story.append(Paragraph("5.3 In case Party A unilaterally terminates the contract after Party B has commenced processing the dossier or paid the fees, the service fee and the State fee for electronic visa registration shall not be refunded.", style_normal_en))
     story.append(Paragraph("5.4 Trường hợp Bên A cung cấp thông tin, tài liệu giả mạo hoặc sai sự thật dẫn đến việc hồ sơ bị từ chối hoặc bị xử lý theo pháp luật:", style_normal_vi))
@@ -618,20 +639,14 @@ def build_contract_pdf(output_pdf_path: str, data: dict):
 
     story.append(Spacer(1, 10*mm))
 
-    sig_img_path = data.get('signature_image_path')
-    sig_element = Spacer(1, 2.0*cm)
-    if sig_img_path and os.path.exists(sig_img_path):
-        # Giữ tỉ lệ nét chữ ký tự nhiên, nhỏ gọn 3.8cm x 1.6cm
-        sig_element = RLImage(sig_img_path, width=3.8*cm, height=1.6*cm)
-
-    # Bảng chữ ký 2 bên
+    # Bảng chữ ký 2 bên (Để trống phần ký tên cho Bên A và Bên B)
     sig_tbl_data = [
         [
             Paragraph("<b>ĐẠI DIỆN BÊN A</b><br/><i>REPRESENTATIVE OF PARTY A</i>", style_tbl_header),
-            Paragraph("<b>ĐẠI DIỆN BÊN B</b><br/><b>CÔNG TY TNHH CHUYẾN ĐI VÀ THỊ THỰC DỄ DÀNG</b><br/><i>REPRESENTATIVE OF PARTY B<br/>EASY TRIP AND VISA CO., LTD</i>", style_tbl_header)
+            Paragraph("<b>ĐẠI DIỆN BÊN B</b><br/><b>CÔNG TY TNHH CHUYẾN ĐI VÀ THỊ THỰC DỄ DÀNG</b><br/><i>REPRESENTATIVE OF PARTY B<br/>EASY TRIP AND VISA CO., LTD</i><br/><b>GIÁM ĐỐC</b><br/><i>DIRECTOR</i>", style_tbl_header)
         ],
         [
-            sig_element,
+            Spacer(1, 2.0*cm),
             Spacer(1, 2.0*cm)
         ],
         [

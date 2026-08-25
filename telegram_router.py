@@ -3,6 +3,7 @@ import time
 import re
 import json
 import traceback
+from typing import Any
 from datetime import datetime
 from fastapi import APIRouter, Request, Response
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
@@ -287,7 +288,7 @@ def validate_and_adjust_departure(ngay_khoi_hanh: str, ngay_het_han: str, loai_v
 
 
 
-async def send_to_bus_group(context, message: str, date: str = None, service: str = None):
+async def send_to_bus_group(context, message: str, date: str | None = None, service: str | None = None):
     if not BUS_GROUP_CHAT_ID: return
     try:
         topic_id = None
@@ -306,7 +307,7 @@ async def send_to_bus_group(context, message: str, date: str = None, service: st
     except Exception as e: print("Bus Group Error:", e)
 
 
-async def get_or_create_seat_map(ngay: str, service: str) -> dict:
+async def get_or_create_seat_map(ngay: str, service: str) -> dict | None:
     """
     Lấy thông tin sơ đồ ghế (file_id, url) cho ngày và dịch vụ cụ thể.
     Nếu chưa có sơ đồ chính thức trên đĩa, tự động tạo sơ đồ trống từ ảnh mẫu.
@@ -430,10 +431,12 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton("💬 Direct WhatsApp Support", url="https://wa.me/84868462071")]
     ])
     
-    await update.message.reply_text(welcome_text, reply_markup=keyboard, parse_mode="Markdown")
+    if update.message:
+        await update.message.reply_text(welcome_text, reply_markup=keyboard, parse_mode="Markdown")
 
 async def get_id_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text(f"📍 Chat ID: `{update.effective_chat.id}`\nType: {update.effective_chat.type}", parse_mode='Markdown')
+    if update.message and update.effective_chat:
+        await update.message.reply_text(f"📍 Chat ID: `{update.effective_chat.id}`\nType: {update.effective_chat.type}", parse_mode='Markdown')
 
 
 # ============================================================
@@ -489,13 +492,14 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
     memory_store[session_id].append({"role": "assistant", "content": reply})
     log_message(user_id, "Telegram", "Bot", reply)
     
-    target_msg = update.message or update.business_message or (update.callback_query.message if update.callback_query else None)
+    target_msg: Any = update.message or update.business_message or (update.callback_query.message if update.callback_query else None)
     conn_id = update.business_message.business_connection_id if update.business_message else None
     
-    if conn_id:
-        await target_msg.reply_text(reply, business_connection_id=conn_id)
-    else:
-        await target_msg.reply_text(reply)
+    if target_msg:
+        if conn_id:
+            await target_msg.reply_text(reply, business_connection_id=conn_id)  # type: ignore
+        else:
+            await target_msg.reply_text(reply)
 
     data = ai_response.extracted_data
     memory_store[f"{session_id}_data"] = data
@@ -518,7 +522,7 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
     service_type = get_customer_service_type(data, history_text)
     
     dest = "cambodia" if service_type == "Cambodia" else "laos"
-    ngay_di = validate_and_adjust_departure(data.ngay_khoi_hanh, data.ngay_het_han_visa or "", data.loai_visa or "", dest)
+    ngay_di = validate_and_adjust_departure(data.ngay_khoi_hanh or "", data.ngay_het_han_visa or "", data.loai_visa or "", dest)
     if ngay_di:
         data.ngay_khoi_hanh = ngay_di
 
@@ -526,7 +530,7 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
     if ai_response.current_phase == "SEAT_SELECTION" and ngay_di:
         now = time.time()
         if (now - scheme_history.get(ngay_di, 0)) > 900:
-            scheme_cmd = get_scheme_command(ngay_di, data.loai_visa, history_text)
+            scheme_cmd = get_scheme_command(ngay_di, data.loai_visa or "", history_text)
             if scheme_cmd:
                 await send_to_bus_group(context, scheme_cmd, date=ngay_di, service=service_type)
                 scheme_history[ngay_di] = now
@@ -555,19 +559,20 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
                 lang = get_lang_code(getattr(data, "quoc_tich", "")) if data else "en"
                 caption = get_msg("seat_map_caption", lang, date=ngay_di)
                 
-                if map_data.get("file_id"):
-                     if conn_id:
-                         await target_msg.reply_photo(photo=map_data["file_id"], caption=caption, business_connection_id=conn_id)
-                     else:
-                         await target_msg.reply_photo(photo=map_data["file_id"], caption=caption)
-                elif os.path.exists(map_data["url"].lstrip("/")):
+                if map_data.get("file_id") and target_msg:
+                    if conn_id:
+                        await target_msg.reply_photo(photo=map_data["file_id"], caption=caption, business_connection_id=conn_id)  # type: ignore
+                    else:
+                        await target_msg.reply_photo(photo=map_data["file_id"], caption=caption)
+                elif os.path.exists(map_data["url"].lstrip("/")) and target_msg:
                     with open(map_data["url"].lstrip("/"), "rb") as f:
                         if conn_id:
-                            msg = await target_msg.reply_photo(photo=f, caption=caption, business_connection_id=conn_id)
+                            msg = await target_msg.reply_photo(photo=f, caption=caption, business_connection_id=conn_id)  # type: ignore
                         else:
                             msg = await target_msg.reply_photo(photo=f, caption=caption)
-                        map_data["file_id"] = msg.photo[-1].file_id
-                        latest_seat_maps[f"{ngay_di}_{service_type}"] = map_data
+                        if msg and msg.photo:
+                            map_data["file_id"] = msg.photo[-1].file_id
+                            latest_seat_maps[f"{ngay_di}_{service_type}"] = map_data
 
     # --- 8. GỬI LỆNH ĐẶT GHẾ VÀO TOPIC ĐỐI TÁC KHI KHÁCH VỪA CHỌN GHẾ ---
     curr_seat = getattr(data, "ghe_chon", None)
@@ -578,11 +583,12 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
             if not getattr(data, "diem_don", None):
                 data.diem_don = "Oceanus"
             
-            if os.path.exists("qr_code.jpg"):
-                if conn_id:
-                    await target_msg.reply_photo(photo=open("qr_code.jpg", "rb"), caption=get_msg("please_pay", lang), business_connection_id=conn_id)
-                else:
-                    await target_msg.reply_photo(photo=open("qr_code.jpg", "rb"), caption=get_msg("please_pay", lang))
+            if os.path.exists("qr_code.jpg") and target_msg:
+                with open("qr_code.jpg", "rb") as qr_f:
+                    if conn_id:
+                        await target_msg.reply_photo(photo=qr_f, caption=get_msg("please_pay", lang), business_connection_id=conn_id)  # type: ignore
+                    else:
+                        await target_msg.reply_photo(photo=qr_f, caption=get_msg("please_pay", lang))
             
             bus_msg = (
                 f"🚌 **ĐẶT CHỖ MỚI**\n"
@@ -609,8 +615,10 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
 # ============================================================
 
 async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not update.effective_chat:
+        return
     chat_id = str(update.effective_chat.id)
-    message = update.message or update.business_message or (update.edited_business_message if update.edited_business_message else None)
+    message: Any = update.message or update.business_message or (update.edited_business_message if update.edited_business_message else None)
     if not message:
         return
     text = message.text or ""
@@ -619,7 +627,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.business_message:
         memory_store[f"{session_id}_business_connection_id"] = update.business_message.business_connection_id
     elif getattr(update, "edited_business_message", None):
-        memory_store[f"{session_id}_business_connection_id"] = update.edited_business_message.business_connection_id
+        memory_store[f"{session_id}_business_connection_id"] = getattr(update.edited_business_message, "business_connection_id", None)
 
     try:
         # ----- ADMIN COMMANDS (Reply to message) -----
@@ -705,19 +713,24 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if client_session_key:
                 session_data = memory_store.get(f"{client_session_key}_data")
                 uid = client_session_key.replace("telegram_", "")
-                reg_cmd = f"✅ ĐÃ THANH TOÁN\n{session_data.ho_ten} - {session_data.ghe_chon}"
-                await send_to_bus_group(context, reg_cmd, date=session_data.ngay_khoi_hanh)
+                if session_data:
+                    ho_ten = getattr(session_data, "ho_ten", "")
+                    ghe_chon = getattr(session_data, "ghe_chon", "")
+                    ngay_kh = getattr(session_data, "ngay_khoi_hanh", "")
+                    reg_cmd = f"✅ ĐÃ THANH TOÁN\n{ho_ten} - {ghe_chon}"
+                    await send_to_bus_group(context, reg_cmd, date=ngay_kh)
                 if "telegram_" in client_session_key: 
                     data = memory_store.get(f"{client_session_key}_data")
                     lang = get_lang_code(getattr(data, "quoc_tich", "")) if data else "en"
                     conn_id = memory_store.get(f"{client_session_key}_business_connection_id")
-                    await context.bot.send_message(chat_id=uid, text=get_msg("payment_confirmed", lang), business_connection_id=conn_id)
+                    await context.bot.send_message(chat_id=uid, text=get_msg("payment_confirmed", lang), business_connection_id=conn_id)  # type: ignore
                 await message.reply_text(f"Đã xử lý thanh toán cho {customer_name}")
             return
 
         # ----- BUS GROUP HANDLER -----
         if update.effective_chat.type in ["group", "supergroup"] and chat_id == BUS_GROUP_CHAT_ID:
-            thread_id = update.effective_message.message_thread_id
+            eff_msg = update.effective_message
+            thread_id = eff_msg.message_thread_id if eff_msg else None
             
             # 1. HỖ TRỢ LỆNH /link <ngày> <loại hình>
             if text.startswith("/link"):
@@ -746,8 +759,8 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 return
 
             # Tự động parse ngày + dịch vụ khi admin tạo topic mới
-            if update.effective_message.forum_topic_created:
-                topic_name = update.effective_message.forum_topic_created.name
+            if eff_msg and getattr(eff_msg, "forum_topic_created", None):
+                topic_name = getattr(eff_msg.forum_topic_created, "name", "")
                 t_date, t_service = parse_topic_name(topic_name)
                 if t_date and t_service:
                     key = f"{t_date}_{t_service}"
@@ -761,7 +774,7 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             # Tìm xem topic này thuộc về Ngày + Dịch vụ nào (tự động đăng ký động nếu thiếu)
             bot_instance = context.bot if context else tg_app.bot
-            key = await get_or_register_topic_key(bot_instance, thread_id)
+            key = await get_or_register_topic_key(bot_instance, thread_id) if thread_id is not None else None
             
             # Tách ghế (e.g. A1, B2)
             seat_pattern = r"\b[AB]\d{1,2}\b"
@@ -805,7 +818,8 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
 
         # ----- CUSTOMER FLOW -----
-        if update.effective_chat.type != "private": return
+        if not update.effective_chat or update.effective_chat.type != "private" or not update.effective_user:
+            return
         user_id = str(update.effective_user.id)
         await process_customer_text_message(update, context, user_id, text)
 
@@ -818,12 +832,13 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await send_to_admin_group(context, f"🔴 SYSTEM ERROR: {error_msg}")
         
         # Professional fallback for user
-        session_id = f"telegram_{update.effective_chat.id}"
+        chat_id_val = update.effective_chat.id if update.effective_chat else "unknown"
+        session_id = f"telegram_{chat_id_val}"
         data = memory_store.get(f"{session_id}_data")
         lang = get_lang_code(getattr(data, "quoc_tich", "")) if data else "en"
         conn_id = memory_store.get(f"{session_id}_business_connection_id")
         if conn_id:
-            await message.reply_text(get_msg("system_busy", lang), business_connection_id=conn_id)
+            await message.reply_text(get_msg("system_busy", lang), business_connection_id=conn_id)  # type: ignore
         else:
             await message.reply_text(get_msg("system_busy", lang))
 
@@ -832,8 +847,10 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # HANDLER: XỬ LÝ ẢNH
 # ============================================================
 async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if not update.effective_chat:
+        return
     chat_id = str(update.effective_chat.id)
-    message = update.message or update.business_message
+    message: Any = update.message or update.business_message
     if not message:
         return
         
@@ -844,11 +861,12 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         # ----- LUỒNG ĐỐI TÁC XE BUÝT: GỬI SƠ ĐỒ GHẾ VÀO TOPIC ĐỐI TÁC -----
         if update.effective_chat.type in ["group", "supergroup"] and chat_id == BUS_GROUP_CHAT_ID:
-            thread_id = update.effective_message.message_thread_id
+            eff_msg = update.effective_message
+            thread_id = eff_msg.message_thread_id if eff_msg else None
             
             # 1. Tìm key liên kết (e.g. "04/06_Cambodia" hoặc "04/06") từ topic id (tự động đăng ký động nếu thiếu)
             bot_instance = context.bot if context else tg_app.bot
-            linked_key = await get_or_register_topic_key(bot_instance, thread_id)
+            linked_key = await get_or_register_topic_key(bot_instance, thread_id) if thread_id is not None else None
             
             ngay = None
             service = "45D"  # Mặc định
@@ -871,8 +889,9 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
                     service = "90D"
             
             # 3. Nếu vẫn không có ngày, thử lấy từ forum_topic_created
-            if not ngay and update.effective_message.reply_to_message and update.effective_message.reply_to_message.forum_topic_created:
-                topic_name = update.effective_message.reply_to_message.forum_topic_created.name
+            reply_msg = eff_msg.reply_to_message if eff_msg else None
+            if not ngay and reply_msg and getattr(reply_msg, "forum_topic_created", None):
+                topic_name = getattr(reply_msg.forum_topic_created, "name", "")
                 parsed_date, parsed_service = parse_topic_name(topic_name)
                 if parsed_date:
                     ngay = parsed_date
@@ -929,7 +948,7 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                 try:
                                     if platform == "Telegram":
                                         conn_id = memory_store.get(f"{session_id}_business_connection_id")
-                                        await tg_app.bot.send_photo(chat_id=uid, photo=file_id, caption=caption, business_connection_id=conn_id)
+                                        await tg_app.bot.send_photo(chat_id=uid, photo=file_id, caption=caption, business_connection_id=conn_id)  # type: ignore
                                     elif platform == "Zalo":
                                         from main import send_zalo_image, send_zalo_message
                                         domain = os.getenv("RENDER_EXTERNAL_URL", "https://chatbot-easytrip.onrender.com").rstrip("/")
@@ -941,7 +960,7 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
             return
 
         # ----- LUỒNG KHÁCH HÀNG: GỬI ẢNH (HỘ CHIẾU/HOÁ ĐƠN THANH TOÁN) -----
-        if update.effective_chat.type != "private": return
+        if not update.effective_chat or update.effective_chat.type != "private": return
         photo_file = await message.photo[-1].get_file()
         file_path = f"temp_{photo_file.file_id}.jpg"
         await photo_file.download_to_drive(file_path)
@@ -971,7 +990,7 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         lang = get_lang_code(nationality) if data else "en"
         conn_id = update.business_message.business_connection_id if update.business_message else None
         if conn_id:
-            await message.reply_text(get_msg("image_received", lang, img_type=img_type), business_connection_id=conn_id)
+            await message.reply_text(get_msg("image_received", lang, img_type=img_type), business_connection_id=conn_id)  # type: ignore
         else:
             await message.reply_text(get_msg("image_received", lang, img_type=img_type))
     except Exception as e:
@@ -982,6 +1001,8 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # ============================================================
 async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     query = update.callback_query
+    if not query:
+        return
     await query.answer()
     try:
         parts = (query.data or "").split("|")
@@ -990,6 +1011,8 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # 1. Xử lý các nút bấm dịch vụ từ phía Khách Hàng
         if parts[0] == "service":
             service_key = parts[1]
+            if not update.effective_user:
+                return
             user_id = str(update.effective_user.id)
             session_id = f"telegram_{user_id}"
             
@@ -1003,7 +1026,9 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             user_text = service_texts.get(service_key, "Service Inquiry")
             
             # Gửi tin nhắn xác nhận nút đã chọn
-            await query.message.reply_text(f"👉 You selected: **{user_text}**", parse_mode="Markdown")
+            if query.message:
+                q_msg: Any = query.message
+                await q_msg.reply_text(f"👉 You selected: **{user_text}**", parse_mode="Markdown")
             
             # Xử lý tin nhắn giả lập bằng AI Agent
             await process_customer_text_message(update, context, user_id, user_text)
@@ -1017,13 +1042,14 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         uid = order_meta.get("user_id", "")
         lang = get_lang_code(getattr(order_data, "quoc_tich", "")) if order_data else "en"
 
+        q_msg_text = getattr(query.message, "text", "") or ""
         if action == "paid":
             await update_order_status(record_id, "PAID")
             confirm_msg = get_msg("payment_confirmed", lang)
             try:
                 if platform == "Telegram":
                     conn_id = memory_store.get(f"{session_id}_business_connection_id")
-                    await context.bot.send_message(chat_id=uid, text=confirm_msg, business_connection_id=conn_id)
+                    await context.bot.send_message(chat_id=uid, text=confirm_msg, business_connection_id=conn_id)  # type: ignore
                 elif platform == "Zalo": 
                     from main import send_zalo_message
                     await send_zalo_message(uid, confirm_msg)
@@ -1033,11 +1059,11 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 from google_sheet_sync import sync_order_to_sheet
                 await sync_order_to_sheet({"Order ID": order_meta.get("order_id", ""), "Status": "PAID", "Full Name": getattr(order_data, 'ho_ten', 'Customer'), "Agent": getattr(order_data, 'agent', 'Direct')})
             except: pass
-            await query.edit_message_text(text=query.message.text + "\n\n✅ Đã xác nhận PAID!")
+            await query.edit_message_text(text=q_msg_text + "\n\n✅ Đã xác nhận PAID!")
 
         elif action == "cancel":
             await update_order_status(record_id, "CANCELLED")
-            await query.edit_message_text(text=query.message.text + "\n\n❌ Đã huỷ đơn.")
+            await query.edit_message_text(text=q_msg_text + "\n\n❌ Đã huỷ đơn.")
     except Exception as e:
         print(f"❌ CALLBACK ERROR: {e}")
 

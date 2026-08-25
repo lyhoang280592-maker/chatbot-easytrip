@@ -60,7 +60,7 @@ async def test_call():
         print("Calling Groq...")
         response = await client.chat.completions.create(
             model="llama-3.3-70b-versatile",
-            messages=messages,
+            messages=messages,  # type: ignore
             response_format={"type": "json_object"},
             temperature=0.3,
             max_tokens=1024

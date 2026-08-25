@@ -18,7 +18,7 @@ async def main():
     client = TelegramClient('scraper_v2', int(API_ID), API_HASH)
     
     # Khởi động và yêu cầu SĐT, OTP
-    await client.start()
+    await client.start()  # type: ignore
     
     print("\n✅ Đăng nhập thành công! Hệ thống đã tạo file 'scraper_v2.session'.")
     print("Bây giờ bạn có thể khởi động server FastAPI bình thường.")

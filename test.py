@@ -1,4 +1,5 @@
 import urllib.request
+import urllib.error
 import json
 req = urllib.request.Request('https://chatbot-easytrip.onrender.com/chat', data=json.dumps({'messages': [{'role': 'user', 'content': 'hi'}]}).encode('utf-8'), headers={'Content-Type': 'application/json'})
 try:

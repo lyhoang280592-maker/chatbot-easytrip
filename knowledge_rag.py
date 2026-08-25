@@ -13,7 +13,7 @@ from pathlib import Path
 
 # Cấu hình encoding UTF-8 cho Windows stdout
 if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8")
+    getattr(sys.stdout, "reconfigure")(encoding="utf-8")
 
 # =====================================================================
 # Cấu hình đường dẫn

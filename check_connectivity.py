@@ -15,9 +15,9 @@ import sys
 import json
 from dotenv import load_dotenv
 
-if sys.platform.startswith("win"):
+if hasattr(sys.stdout, "reconfigure"):
     try:
-        sys.stdout.reconfigure(encoding="utf-8")
+        getattr(sys.stdout, "reconfigure")(encoding="utf-8")
     except Exception:
         pass
 
@@ -66,9 +66,9 @@ async def check_gemini():
         print("  ⚠️  Chưa có GEMINI_API_KEY trong .env (hoặc để trống)")
         return False
     try:
-        import google.generativeai as genai
-        genai.configure(api_key=GEMINI_API_KEY.strip())
-        model = genai.GenerativeModel("gemini-3.6-flash")
+        import google.generativeai as genai  # type: ignore
+        genai.configure(api_key=GEMINI_API_KEY.strip())  # type: ignore
+        model = genai.GenerativeModel("gemini-3.6-flash")  # type: ignore
         response = await model.generate_content_async("Trả lời: OK")
         reply = response.text.strip()
         print(f"  ✅ Gemini AI (gemini-3.6-flash): HOẠT ĐỘNG TỐT (Phản hồi: '{reply}')")

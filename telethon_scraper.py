@@ -57,7 +57,7 @@ async def rewrite_content(original_text: str) -> str:
             temperature=0.7,
             max_tokens=1024
         )
-        return response.choices[0].message.content
+        return response.choices[0].message.content or ""
     except Exception as e:
         print("Gemini rewrite error:", e)
         return "Lỗi khi dùng AI xào bài."
@@ -96,7 +96,7 @@ async def start_scraper():
         print("⚠️ CẢNH BÁO: UserBot chưa được đăng nhập!")
         print("Tính năng tự động cào bài đối thủ đang tạm tắt.")
         print("Vui lòng mở Terminal mới và chạy: python login_scraper.py để đăng nhập.")
-        await scraper_client.disconnect()
+        await scraper_client.disconnect()  # type: ignore
         return
         
     print("🚀 Telethon Scraper Started! Đang lắng nghe 4 kênh đối thủ...")

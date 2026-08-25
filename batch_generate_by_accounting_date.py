@@ -139,8 +139,9 @@ def extract_and_clean_signature(image_path: str, output_sig_path: str, crop_box=
         datas = gray.getdata()
         new_data = []
         for item in datas:
-            if item < 135:
-                alpha = int((135 - item) / 135 * 255)
+            val = int(item) if isinstance(item, (int, float)) else int(item[0])  # type: ignore
+            if val < 135:
+                alpha = int((135 - val) / 135 * 255)
                 new_data.append((25, 30, 45, min(255, alpha * 2)))
             else:
                 new_data.append((255, 255, 255, 0))
@@ -189,8 +190,8 @@ def set_cell_margins(cell, top=100, bottom=100, left=150, right=150):
     tcPr.append(tcMar)
 
 
-def add_p(doc, text="", font_name="Arial", font_size=10, bold=False, italic=False, 
-          align=WD_ALIGN_PARAGRAPH.LEFT, space_before=0, space_after=2, line_spacing=1.15):
+def add_p(doc, text: str = "", font_name: str = "Arial", font_size: float | int = 10, bold: bool = False, italic: bool = False, 
+          align: WD_ALIGN_PARAGRAPH = WD_ALIGN_PARAGRAPH.LEFT, space_before: float | int = 0, space_after: float | int = 2, line_spacing: float | int = 1.15):
     """Helper to add styled paragraph"""
     p = doc.add_paragraph()
     p.alignment = align
@@ -414,9 +415,17 @@ def build_contract_docx(output_docx_path: str, data: dict):
     add_p(doc, "ARTICLE 2: CONTRACT VALUE AND PAYMENT METHOD", font_size=10, bold=True, space_after=4)
     add_p(doc, "2.1 Bảng chi tiết chi phí / Detailed Cost Breakdown:", font_size=9.5, space_after=6)
 
-    service_fee = int(data.get('service_fee', 757500))
+    total_amount = data.get('total_amount')
     state_fee = int(data.get('state_fee', 662500))
-    total_amount = service_fee + state_fee
+    transport_fee = int(data.get('transport_fee', 0))
+
+    if total_amount is not None:
+        combined_service_fee = int(total_amount) - state_fee
+        pure_consulting_fee = int(data.get('service_fee', combined_service_fee - transport_fee))
+    else:
+        pure_consulting_fee = int(data.get('service_fee', 1637500))
+        combined_service_fee = pure_consulting_fee + transport_fee
+        total_amount = combined_service_fee + state_fee
 
     # Table 2: Cost breakdown
     t2 = doc.add_table(rows=4, cols=5)
@@ -452,13 +461,13 @@ def build_contract_docx(output_docx_path: str, data: dict):
             r2.font.size = Pt(8.0)
             r2.font.italic = True
 
-    # Row 1: Phí dịch vụ
+    # Row 1: Phí dịch vụ gộp
     r1_items = [
         ("1", WD_ALIGN_PARAGRAPH.CENTER),
-        ("Phí dịch vụ tư vấn & làm hồ sơ Visa\nService fee for consulting & visa processing", WD_ALIGN_PARAGRAPH.LEFT),
+        ("Phí dịch vụ tư vấn, làm hồ sơ Visa và hỗ trợ vận tải\nService fee for consulting, visa processing & passenger transport support", WD_ALIGN_PARAGRAPH.LEFT),
         ("1", WD_ALIGN_PARAGRAPH.CENTER),
-        (f"{service_fee:,}".replace(",", "."), WD_ALIGN_PARAGRAPH.CENTER),
-        (f"{service_fee:,}".replace(",", "."), WD_ALIGN_PARAGRAPH.CENTER)
+        (f"{combined_service_fee:,}".replace(",", "."), WD_ALIGN_PARAGRAPH.CENTER),
+        (f"{combined_service_fee:,}".replace(",", "."), WD_ALIGN_PARAGRAPH.CENTER)
     ]
     for c_idx, (text_val, align_val) in enumerate(r1_items):
         cell = t2.cell(1, c_idx)
@@ -551,8 +560,8 @@ def build_contract_docx(output_docx_path: str, data: dict):
     p_wen.add_run(words_en)
 
     add_p(doc, "2.2 Thuế Giá trị gia tăng (VAT) / Value Added Tax (VAT):", font_size=9.5, bold=True, space_after=2)
-    add_p(doc, "- Đơn giá phí dịch vụ nêu trên đã bao gồm thuế GTGT theo quy định của pháp luật Việt Nam. Bên B có trách nhiệm lập và xuất hóa đơn điện tử giá trị gia tăng (GTGT) hợp pháp cho Bên A đối với phần Phí dịch vụ tư vấn & làm hồ sơ trong vòng 03 ngày làm việc kể từ ngày hoàn thành dịch vụ hoặc khi Bên A thanh toán đầy đủ, tùy điều kiện nào đến trước. Bên A có trách nhiệm cung cấp đầy đủ và chính xác thông tin xuất hóa đơn.", font_size=9.5, space_after=2)
-    add_p(doc, "- The service fee specified above is inclusive of VAT in accordance with Vietnamese tax laws. Party B is responsible for issuing a valid electronic Value Added Tax (VAT) invoice to Party A for the service fee component within 03 working days from the completion of the service or upon full payment by Party A, whichever comes first. Party A is responsible for providing complete and accurate billing information.", font_size=9, italic=True, space_after=4)
+    add_p(doc, "- Đơn giá phí dịch vụ nêu trên đã bao gồm thuế GTGT theo quy định của pháp luật Việt Nam. Bên B có trách nhiệm lập và xuất hóa đơn điện tử giá trị gia tăng (GTGT) hợp pháp cho Bên A đối với phần Phí dịch vụ tư vấn, làm hồ sơ Visa và hỗ trợ vận tải trong vòng 03 ngày làm việc kể từ ngày hoàn thành dịch vụ hoặc khi Bên A thanh toán đầy đủ, tùy điều kiện nào đến trước. Bên A có trách nhiệm cung cấp đầy đủ và chính xác thông tin xuất hóa đơn.", font_size=9.5, space_after=2)
+    add_p(doc, "- The service fee specified above is inclusive of VAT in accordance with Vietnamese tax laws. Party B is responsible for issuing a valid electronic Value Added Tax (VAT) invoice to Party A for the consulting, visa processing & transport support service fee component within 03 working days from the completion of the service or upon full payment by Party A, whichever comes first. Party A is responsible for providing complete and accurate billing information.", font_size=9, italic=True, space_after=4)
 
     # -------------------------------------------------------------
     # TRANG 4: ĐIỀU 3 & ĐIỀU 4
@@ -611,8 +620,8 @@ def build_contract_docx(output_docx_path: str, data: dict):
     add_p(doc, "- Lệ phí nộp Nhà nước đăng ký cấp thị thực điện tử sẽ không được hoàn lại (theo quy định của Bộ Công an và Thông tư số 28/2026/TT-BTC).", font_size=9.5, space_after=1)
     add_p(doc, "The State fee for electronic visa registration will not be refunded (in accordance with the Ministry of Public Security regulations and Circular No. 28/2026/TT-BTC).", font_size=9, italic=True, space_after=4)
 
-    add_p(doc, f"- Bên B sẽ hoàn trả lại 100% Phí dịch vụ tư vấn & làm hồ sơ ({service_fee:,} VNĐ) cho Bên A trong vòng 05 ngày làm việc kể từ ngày nhận được thông báo từ chối cấp thị thực.".replace(",", "."), font_size=9.5, space_after=1)
-    add_p(doc, f"Party B shall refund 100% of the Service Fee (VND {service_fee:,}) to Party A within 05 working days from the date of receiving the visa rejection notice.".replace(",", "."), font_size=9, italic=True, space_after=4)
+    add_p(doc, f"- Bên B sẽ hoàn trả lại 100% Phí dịch vụ tư vấn & làm hồ sơ ({pure_consulting_fee:,} VNĐ) cho Bên A trong vòng 05 ngày làm việc kể từ ngày nhận được thông báo từ chối cấp thị thực (không bao gồm Lệ phí nộp Nhà nước và Phí dịch vụ hỗ trợ vận tải).".replace(",", "."), font_size=9.5, space_after=1)
+    add_p(doc, f"Party B shall refund 100% of the Visa Consulting & Processing Service Fee (VND {pure_consulting_fee:,}) to Party A within 05 working days from the date of receiving the visa rejection notice (excluding the State fee and Passenger transport support fee).".replace(",", "."), font_size=9, italic=True, space_after=4)
 
     add_p(doc, "5.3 Trường hợp Bên A đơn phương hủy hợp đồng sau khi Bên B đã tiến hành xử lý hồ sơ hoặc nộp lệ phí, phí dịch vụ và Lệ phí nộp Nhà nước đăng ký cấp thị thực điện tử sẽ không được hoàn lại.", font_size=9.5, space_after=1)
     add_p(doc, "5.3 In case Party A unilaterally terminates the contract after Party B has commenced processing the dossier or paid the fees, the service fee and the State fee for electronic visa registration shall not be refunded.", font_size=9, italic=True, space_after=4)
@@ -697,10 +706,18 @@ def build_contract_docx(output_docx_path: str, data: dict):
     r_bh2.bold = True
     r_bh2.font.name = "Arial"
     r_bh2.font.size = Pt(9.5)
-    r_bh3 = p_bh.add_run("REPRESENTATIVE OF PARTY B\nEASY TRIP AND VISA CO., LTD")
+    r_bh3 = p_bh.add_run("REPRESENTATIVE OF PARTY B\nEASY TRIP AND VISA CO., LTD\n")
     r_bh3.italic = True
     r_bh3.font.name = "Arial"
     r_bh3.font.size = Pt(8.5)
+    r_bh4 = p_bh.add_run("GIÁM ĐỐC\n")
+    r_bh4.bold = True
+    r_bh4.font.name = "Arial"
+    r_bh4.font.size = Pt(9.5)
+    r_bh5 = p_bh.add_run("DIRECTOR")
+    r_bh5.italic = True
+    r_bh5.font.name = "Arial"
+    r_bh5.font.size = Pt(8.5)
 
     # Signature row
     c_a_sig = t_sig.cell(1, 0)
@@ -710,14 +727,7 @@ def build_contract_docx(output_docx_path: str, data: dict):
     p_as.paragraph_format.space_before = Pt(8)
     p_as.paragraph_format.space_after = Pt(8)
 
-    sig_path = data.get('signature_image_path')
-    if sig_path and os.path.exists(sig_path):
-        try:
-            p_as.add_run().add_picture(sig_path, width=Cm(3.8))
-        except Exception:
-            p_as.add_run("\n\n\n")
-    else:
-        p_as.add_run("\n\n\n")
+    p_as.add_run("\n\n\n")
 
     c_b_sig = t_sig.cell(1, 1)
     c_b_sig.width = col_widths_sig[1]
@@ -842,19 +852,31 @@ async def generate_contracts_by_accounting():
             except:
                 sales_crm = 0
 
+            # Xác định phí vận tải nếu có tuyến đi cửa khẩu
+            srv_lower = srv_type.lower()
+            note_lower = note_str.lower()
+            if "bo y" in srv_lower or "bờ y" in srv_lower or "bo y" in note_lower or "bờ y" in note_lower:
+                transport_fee = 1250000
+            elif "moc bai" in srv_lower or "mộc bài" in srv_lower or "moc bai" in note_lower or "mộc bài" in note_lower:
+                transport_fee = 1290000
+            else:
+                transport_fee = 0
+
             # Tính tổng tiền và phí dịch vụ:
             # Đại lý: Total = sales_crm * 108%
             # Khách lẻ: Total = sales_crm
             if is_agency:
-                total_amount = int(round(sales_crm * 1.08)) if sales_crm > 0 else (757500 + state_fee)
+                total_amount = int(round(sales_crm * 1.08)) if sales_crm > 0 else (757500 + state_fee + transport_fee)
             else:
-                total_amount = sales_crm if sales_crm > 0 else (757500 + state_fee)
+                total_amount = sales_crm if sales_crm > 0 else (757500 + state_fee + transport_fee)
 
-            if total_amount <= state_fee:
-                service_fee = 757500
-                total_amount = service_fee + state_fee
+            if total_amount <= (state_fee + transport_fee):
+                pure_consulting_fee = 757500
+                combined_service_fee = pure_consulting_fee + transport_fee
+                total_amount = combined_service_fee + state_fee
             else:
-                service_fee = total_amount - state_fee
+                combined_service_fee = total_amount - state_fee
+                pure_consulting_fee = max(0, combined_service_fee - transport_fee)
 
             acc_ts = c.get("Accounting Date")
             if acc_ts:
@@ -906,7 +928,9 @@ async def generate_contracts_by_accounting():
                 "passport_no": passport_no,
                 "date_of_issue": "20/05/2022",
                 "nationality": nat,
-                "service_fee": service_fee,
+                "total_amount": total_amount,
+                "service_fee": pure_consulting_fee,
+                "transport_fee": transport_fee,
                 "state_fee": state_fee,
                 "signature_image_path": sig_path if os.path.exists(sig_path) else None
             }
@@ -932,7 +956,9 @@ async def generate_contracts_by_accounting():
                 "code_ev": code_ev,
                 "sales_crm": sales_crm,
                 "state_fee": state_fee,
-                "service_fee": service_fee,
+                "transport_fee": transport_fee,
+                "service_fee": pure_consulting_fee,
+                "combined_service_fee": combined_service_fee,
                 "total_amount": total_amount,
                 "filename": filename
             })
@@ -944,7 +970,7 @@ async def generate_contracts_by_accounting():
     # -------------------------------------------------------------
     excel_path = "danh_sach_khach_hang_theo_accounting_date_01_08_den_19_08.xlsx"
     wb = openpyxl.Workbook()
-    ws = wb.active
+    ws = wb.active if wb.active is not None else wb.create_sheet()
     ws.title = "Danh_Sach_Accounting_Date"
 
     # Title
@@ -1019,7 +1045,7 @@ async def generate_contracts_by_accounting():
     # Auto-adjust column widths
     for col in ws.columns:
         max_len = max(len(str(cell.value or '')) for cell in col)
-        col_letter = get_column_letter(col[0].column)
+        col_letter = get_column_letter(int(col[0].column or 1))
         ws.column_dimensions[col_letter].width = max(max_len + 3, 12)
 
     wb.save(excel_path)

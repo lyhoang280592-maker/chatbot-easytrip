@@ -6,7 +6,7 @@ import asyncio
 from datetime import datetime
 
 if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8")
+    getattr(sys.stdout, "reconfigure")(encoding="utf-8")
 
 PAGE_TOKEN = "EAAUeesZAub7ABSVfFdaZBwAaps6rkEUYAoqLTkTEerc06wfYDZCJjgZC0A5glicvLoY5YVwbaXUfmmlgnOfQEPckE7gf05CPeuQhq3mhQp7EOZBL11Rxiy1PBXsFunMryhTPbsfuoYwXXSB4AN15LMAos3cZBkfXMJGq8LZBZCHODgLhe9hnVcZCy1LP3HSfA3ZBwSUEMX449PA4IKT9gUj7Q1aNz9vtlRBpZB5PiUJRCIEQh1dINQ0HzhkFlJUCA8HJnPdDEc6QZAkzm8NrykGZCSmznWFKkPUFScypTCrSaBAZDZD"
 OUTPUT_FILE = "meta_chat.json"

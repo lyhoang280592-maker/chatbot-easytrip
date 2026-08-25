@@ -42,17 +42,22 @@ class ChatResponse(BaseModel):
     is_complete: bool = False
 
     @classmethod
-    def model_validate_json(cls, json_data):
+    def model_validate_json(cls, json_data: str | bytes | bytearray, *args, **kwargs):
         import json
         import re
 
+        if isinstance(json_data, (bytes, bytearray)):
+            json_str = json_data.decode("utf-8")
+        else:
+            json_str = json_data
+
         try:
             # 1. Trích xuất phần JSON giữa cặp ngoặc nhọn đầu tiên và cuối cùng
-            match_json = re.search(r"(\{.*\})", json_data, re.DOTALL)
+            match_json = re.search(r"(\{.*\})", json_str, re.DOTALL)
             if match_json:
                 clean_data = match_json.group(1).strip()
             else:
-                clean_data = json_data.strip()
+                clean_data = json_str.strip()
 
             # 2. Làm sạch Markdown nếu vẫn còn
             if "```" in clean_data:
@@ -72,18 +77,18 @@ class ChatResponse(BaseModel):
             ):
                 data["extracted_data"] = {}
 
-            return cls.model_validate(data)
+            return cls.model_validate(data, *args, **kwargs)
         except Exception as e:
             print(f"⚠️ JSON Parse Fallback triggered: {e}")
             # PHƯƠNG ÁN CỨU HỘ CUỐI CÙNG: Nếu JSON lỗi hoàn toàn, lấy text thô làm reply_message
             msg_match = re.search(
-                r'"reply_message"\s*:\s*"(.*?)"', json_data, re.DOTALL
+                r'"reply_message"\s*:\s*"(.*?)"', json_str, re.DOTALL
             )
             if msg_match:
                 msg = msg_match.group(1)
             else:
                 # Nếu không tìm thấy trường reply_message nhưng có chữ thô, lấy chữ thô đó
-                stripped = json_data.strip()
+                stripped = json_str.strip()
                 if len(stripped) > 10 and not stripped.startswith("{"):
                     msg = stripped
                 else:

@@ -3,7 +3,7 @@ sys.path.insert(0, r'C:\Users\Admin\.gemini\antigravity\scratch\backend')
 import knowledge_rag
 
 if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8")
+    getattr(sys.stdout, "reconfigure")(encoding="utf-8")
 
 print("=== VERIFYING FINAL RAG INDEX ===")
 knowledge_rag.rebuild()

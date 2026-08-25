@@ -6,8 +6,9 @@ from datetime import datetime
 from dotenv import load_dotenv
 import openpyxl
 from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
+from openpyxl.utils import get_column_letter
 
-from generate_contracts import build_contract_pdf
+from generate_contracts import build_contract_pdf, extract_and_clean_signature
 
 load_dotenv("/Users/phamtranthuyvy/Projects/chatbot-easytrip/.env")
 
@@ -88,7 +89,10 @@ def export_to_excel(customers, output_file="danh_sach_doi_soat_khach_hang.xlsx")
     """Xuất danh sách khách hàng đã đối soát ra tệp Excel định dạng chuẩn đẹp"""
     wb = openpyxl.Workbook()
     ws = wb.active
-    ws.title = "Doi_Soat_KH_2026"
+    if ws is None:
+        ws = wb.create_sheet(title="Doi_Soat_KH_2026")
+    else:
+        ws.title = "Doi_Soat_KH_2026"
 
     # Header style
     header_fill = PatternFill(start_color="1F4E79", end_color="1F4E79", fill_type="solid")
@@ -126,11 +130,13 @@ def export_to_excel(customers, output_file="danh_sach_doi_soat_khach_hang.xlsx")
         # Tiền tệ
         try:
             state_fee = int(str(c.get("Visa VN", "0")).replace(".", "").replace(",", ""))
-        except: state_fee = 0
+        except (ValueError, TypeError):
+            state_fee = 0
         
         try:
             total_rev = int(str(c.get("Sales revenue", "0")).replace(".", "").replace(",", ""))
-        except: total_rev = 0
+        except (ValueError, TypeError):
+            total_rev = 0
         
         service_fee = max(0, total_rev - state_fee)
 
@@ -164,7 +170,7 @@ def export_to_excel(customers, output_file="danh_sach_doi_soat_khach_hang.xlsx")
     ws.cell(row=last_row, column=3).alignment = Alignment(horizontal="center", vertical="center")
     
     for col_num in [6, 7, 8]:
-        col_letter = openpyxl.utils.get_column_letter(col_num)
+        col_letter = get_column_letter(col_num)
         cell = ws.cell(row=last_row, column=col_num, value=f"=SUM({col_letter}2:{col_letter}{last_row-1})")
         cell.font = Font(name="Arial", size=10, bold=True)
         cell.number_format = '#,##0'
@@ -178,14 +184,14 @@ def export_to_excel(customers, output_file="danh_sach_doi_soat_khach_hang.xlsx")
     # Tự động căn chỉnh độ rộng cột
     for col in ws.columns:
         max_len = max(len(str(cell.value or '')) for cell in col)
-        col_letter = openpyxl.utils.get_column_letter(col[0].column)
-        ws.column_dimensions[col_letter].width = max(max_len + 3, 13)
+        col_idx = col[0].column
+        if col_idx is not None:
+            col_letter = get_column_letter(int(col_idx))
+            ws.column_dimensions[col_letter].width = max(max_len + 3, 13)
 
     wb.save(output_file)
     print(f"📊 Đã xuất file Excel đối soát thành công: {output_file}")
     return output_file
-
-from generate_contracts import build_contract_pdf, extract_and_clean_signature
 
 async def download_and_extract_signatures(customers, sig_dir="extracted_signatures", passport_dir="downloads/passports"):
     """

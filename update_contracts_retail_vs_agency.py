@@ -231,10 +231,11 @@ def run_all_updates():
         stt_match = re.match(r'^(\d+)_Hop_Dong_', filename)
         stt_key = f"STT_{int(stt_match.group(1)):02d}" if stt_match else None
         
+        clean_fn = re.sub(r'^\d+_Hop_Dong_', '', filename.replace('.docx', ''))
+        clean_fn = re.sub(r'(_chuacochuky|_kocochuky|_chukybikhuat|_cancel_kocochuky)', '', clean_fn)
+        
         cust_info = mapping.get(stt_key)
         if not cust_info:
-            clean_fn = re.sub(r'^\d+_Hop_Dong_', '', filename.replace('.docx', ''))
-            clean_fn = re.sub(r'(_chuacochuky|_kocochuky|_chukybikhuat|_cancel_kocochuky)', '', clean_fn)
             clean_key = re.sub(r'[^a-zA-Z0-9]', '', clean_fn.upper())
             for k, v in mapping.items():
                 if k in clean_key or clean_key in k:

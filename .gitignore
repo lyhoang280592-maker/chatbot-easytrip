@@ -16,12 +16,15 @@ __pycache__/
 fleet_video.mov
 downloads/
 fb_export/
+output_contracts/
+output_contracts_*/
 output_docx_contracts/
 output_ho_chieu_khach_hang/
 extracted_signatures/
 HD_Khach_le/
 zalo_images/
 temp_*.jpg
+*.xlsx
 
 # OS & IDE
 .vscode/

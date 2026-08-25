@@ -83,7 +83,8 @@ async def analyze_text_chunk(text: str, idx: int, total_chunks: int):
             response_format={"type": "json_object"},
             temperature=0.1
         )
-        data = json.loads(response.choices[0].message.content)
+        content = response.choices[0].message.content or "{}"
+        data = json.loads(content)
         pairs = data.get("qa_pairs", [])
         print(f"  Batch {idx}/{total_chunks}: {len(pairs)} Q&A")
         return pairs

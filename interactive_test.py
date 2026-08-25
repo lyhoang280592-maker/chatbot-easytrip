@@ -9,7 +9,7 @@ import os
 from dotenv import load_dotenv
 
 if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8")
+    getattr(sys.stdout, "reconfigure")(encoding="utf-8")
 
 load_dotenv()
 
@@ -17,6 +17,7 @@ from ai_agent import process_chat, process_staff_chat
 import knowledge_rag
 
 async def main():
+    knowledge_rag.rebuild()
     print("=" * 65)
     print("🤖 CHƯƠNG TRÌNH TEST TRỰC TIẾP AI CHATBOT EASY TRIP & VISA")
     print(f"📚 Kho tri thức hiện tại: {len(knowledge_rag._rag_index.qa_pairs)} cặp Q&A (Tele + Zalo + Meta + Excel)")

@@ -3,8 +3,8 @@ import sys
 from PIL import Image, ImageDraw, ImageFont
 
 # Sửa lỗi in tiếng Việt trên Terminal Windows
-if sys.stdout.encoding.lower() != 'utf-8':
-    sys.stdout.reconfigure(encoding='utf-8')
+if hasattr(sys.stdout, "reconfigure"):
+    getattr(sys.stdout, "reconfigure")(encoding="utf-8")
 
 # Đảm bảo nhận dạng chính xác sơ đồ gốc của bạn
 TEMPLATE_PATH = "seat_map_template.jpg"

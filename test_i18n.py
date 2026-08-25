@@ -2,8 +2,8 @@ from i18n import get_lang_code, get_msg
 import sys
 
 # Đảm bảo in được ký tự Unicode trên Windows console
-if sys.stdout.encoding != 'utf-8':
-    sys.stdout.reconfigure(encoding='utf-8')
+if hasattr(sys.stdout, "reconfigure"):
+    getattr(sys.stdout, "reconfigure")(encoding="utf-8")
 
 def test_i18n():
     test_cases = [

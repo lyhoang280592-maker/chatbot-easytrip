@@ -246,7 +246,7 @@ async def update_order_status(
         return False
 
 
-async def get_all_orders(status_filter: str = None) -> list:
+async def get_all_orders(status_filter: str | None = None) -> list:
     """Lấy danh sách đơn hàng từ Lark, có thể lọc theo status"""
     token = await get_tenant_access_token()
     url = f"https://open.larksuite.com/open-apis/bitable/v1/apps/{LARK_APP_TOKEN}/tables/{ORDERS_TABLE_ID}/records"

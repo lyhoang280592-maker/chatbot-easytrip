@@ -3,7 +3,7 @@ import asyncio
 import sys
 # Cấu hình encoding UTF-8 cho Windows stdout
 if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8")
+    getattr(sys.stdout, "reconfigure")(encoding="utf-8")
 
 from groq import AsyncGroq
 from dotenv import load_dotenv

@@ -100,7 +100,7 @@ Yêu cầu trả về kết quả dưới dạng JSON chuẩn xác 100% như sau
         max_tokens=3000
     )
     
-    raw_json = response.choices[0].message.content
+    raw_json = response.choices[0].message.content or "{}"
     try:
         data = json.loads(raw_json)
         return data.get("faqs", [])
