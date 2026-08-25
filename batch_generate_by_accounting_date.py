@@ -1241,6 +1241,121 @@ async def generate_contracts_by_accounting():
 
     wb.save(excel_path)
     print(f"📊 Đã tạo file Excel đối soát 17 cột: '{excel_path}'")
+
+    # -------------------------------------------------------------
+    # MỤC 7. TỰ ĐỘNG PHÁT HIỆN THAY ĐỔI DỮ LIỆU CRM (CHANGE DETECTION)
+    # -------------------------------------------------------------
+    snapshot_path = "contract_snapshot.json"
+    changelog_path = "LICH_SU_THAY_DOI_HOP_DONG.md"
+
+    prev_snapshot = {}
+    if os.path.exists(snapshot_path):
+        try:
+            with open(snapshot_path, "r", encoding="utf-8") as f_snap:
+                prev_snapshot = json.load(f_snap)
+        except Exception:
+            prev_snapshot = {}
+
+    current_snapshot = {row["name"]: row for row in processed_data}
+
+    new_contracts = []
+    modified_contracts = []
+    removed_contracts = []
+
+    if prev_snapshot:
+        for name, cur_data in current_snapshot.items():
+            if name not in prev_snapshot:
+                new_contracts.append(cur_data)
+            else:
+                old_data = prev_snapshot[name]
+                changes = []
+                if cur_data["sales_crm"] != old_data.get("sales_crm"):
+                    changes.append(f"Doanh thu CRM: {old_data.get('sales_crm', 0):,}đ -> {cur_data['sales_crm']:,}đ".replace(",", "."))
+                if cur_data["passport_no"] != old_data.get("passport_no"):
+                    changes.append(f"Số hộ chiếu: {old_data.get('passport_no')} -> {cur_data['passport_no']}")
+                if cur_data["nationality"] != old_data.get("nationality"):
+                    changes.append(f"Quốc tịch: {old_data.get('nationality')} -> {cur_data['nationality']}")
+                if cur_data["visa_type"] != old_data.get("visa_type"):
+                    changes.append(f"Loại Visa: {old_data.get('visa_type')} -> {cur_data['visa_type']}")
+                if cur_data["channel"] != old_data.get("channel"):
+                    changes.append(f"Kênh nguồn: {old_data.get('channel')} -> {cur_data['channel']}")
+                if cur_data["total_amount"] != old_data.get("total_amount"):
+                    changes.append(f"Tổng tiền HĐ: {old_data.get('total_amount', 0):,}đ -> {cur_data['total_amount']:,}đ".replace(",", "."))
+                if cur_data["refund_amount"] != old_data.get("refund_amount"):
+                    changes.append(f"Hoàn phí Điều 5.2: {old_data.get('refund_amount', 0):,}đ -> {cur_data['refund_amount']:,}đ".replace(",", "."))
+
+                if changes:
+                    modified_contracts.append({"name": name, "changes": changes, "pdf": cur_data["pdf_filename"]})
+
+        for name, old_data in prev_snapshot.items():
+            if name not in current_snapshot:
+                removed_contracts.append(old_data)
+
+    print("\n" + "="*75)
+    print("📢 BÁO CÁO THAY ĐỔI DỮ LIỆU SO VỚI LẦN TRƯỚC (CHANGE DETECTION)")
+    print("="*75)
+    if not prev_snapshot:
+        print("ℹ️ Đây là lần khởi tạo snapshot đầu tiên. Đã ghi nhận 114 hồ sơ gốc.")
+    else:
+        if not new_contracts and not modified_contracts and not removed_contracts:
+            print("✅ Không có thay đổi nào về dữ liệu so với lần tạo trước. Dữ liệu khớp 100%!")
+        else:
+            if new_contracts:
+                print(f"\n🟢 CÁC HỢP ĐỒNG THÊM MỚI ({len(new_contracts)} hồ sơ):")
+                for nc in new_contracts:
+                    print(f"  + {nc['name']} | Kênh: {nc['channel']} | Visa: {nc['visa_type']} | Doanh thu: {nc['sales_crm']:,}đ | File: {nc['pdf_filename']}".replace(",", "."))
+            if modified_contracts:
+                print(f"\n🟡 CÁC HỢP ĐỒNG ĐÃ ĐƯỢC CHỈNH SỬA DỮ LIỆU ({len(modified_contracts)} hồ sơ):")
+                for mc in modified_contracts:
+                    print(f"  * {mc['name']} ({mc['pdf']}):")
+                    for chg in mc["changes"]:
+                        print(f"     - {chg}")
+            if removed_contracts:
+                print(f"\n🔴 CÁC HỢP ĐỒNG BỊ LOẠI BỎ / HỦY / KHÔNG CÒN EV ({len(removed_contracts)} hồ sơ):")
+                for rc in removed_contracts:
+                    print(f"  - {rc['name']} (Hộ chiếu: {rc.get('passport_no')}, Doanh thu: {rc.get('sales_crm', 0):,}đ)".replace(",", "."))
+    print("="*75)
+
+    # Ghi nhật ký vào file Markdown CHANGELOG
+    timestamp_str = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    log_content = f"\n\n## 🕒 Cập nhật ngày {timestamp_str}\n"
+    log_content += f"- **Tổng số hợp đồng hợp lệ**: {len(processed_data)} (Khách lẻ: {sum(1 for x in processed_data if x['channel_type'] == 'Khách lẻ')} | Đại lý: {sum(1 for x in processed_data if x['channel_type'] == 'Đại lý')})\n"
+    if not prev_snapshot:
+        log_content += "- Khởi tạo cơ sở dữ liệu snapshot ban đầu với 114 hợp đồng.\n"
+    elif not new_contracts and not modified_contracts and not removed_contracts:
+        log_content += "- Dữ liệu CRM không thay đổi so với lần chạy trước.\n"
+    else:
+        if new_contracts:
+            log_content += f"### 🟢 Hợp đồng mới thêm ({len(new_contracts)}):\n"
+            for nc in new_contracts:
+                log_content += f"- **{nc['name']}** | Kênh: `{nc['channel']}` | Visa: `{nc['visa_type']}` | Doanh thu: `{nc['sales_crm']:,}đ` | File: `{nc['pdf_filename']}`\n".replace(",", ".")
+        if modified_contracts:
+            log_content += f"### 🟡 Hợp đồng đã chỉnh sửa dữ liệu ({len(modified_contracts)}):\n"
+            for mc in modified_contracts:
+                log_content += f"- **{mc['name']}** (`{mc['pdf']}`):\n"
+                for chg in mc["changes"]:
+                    log_content += f"  * {chg}\n"
+        if removed_contracts:
+            log_content += f"### 🔴 Hợp đồng bị loại bỏ / hủy ({len(removed_contracts)}):\n"
+            for rc in removed_contracts:
+                log_content += f"- **{rc['name']}** (Lý do: Bị hủy hoặc không có EV trên CRM)\n"
+
+    # Ghi nối tiếp vào changelog
+    if not os.path.exists(changelog_path):
+        header_md = "# 📜 NHẬT KÝ THEO DÕI THAY ĐỔI DỮ LIỆU HỢP ĐỒNG (AUDIT LOG & CHANGELOG)\n*(Tự động ghi nhận mỗi khi dữ liệu CRM thay đổi và hợp đồng được cập nhật)*\n"
+        with open(changelog_path, "w", encoding="utf-8") as f_cl:
+            f_cl.write(header_md + log_content)
+    else:
+        with open(changelog_path, "a", encoding="utf-8") as f_cl:
+            f_cl.write(log_content)
+
+    # Lưu snapshot mới nhất
+    with open(snapshot_path, "w", encoding="utf-8") as f_snap:
+        json.dump(current_snapshot, f_snap, ensure_ascii=False, indent=2)
+
+    print(f"📝 Đã ghi nhận lịch sử thay đổi vào: '{changelog_path}'")
+    print(f"💾 Đã lưu snapshot mới nhất vào: '{snapshot_path}'")
+
     return processed_data
 
 
