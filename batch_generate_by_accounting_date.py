@@ -874,10 +874,12 @@ async def generate_contracts_by_accounting():
             if not data_res.get("has_more"): break
             page_token = data_res.get("page_token")
 
+    # MỤC 1. TIÊU CHÍ LỌC DỮ LIỆU TỪ CRM LARK BASE
     start_ts = datetime(2026, 8, 1, 0, 0, 0).timestamp() * 1000
-    end_ts = datetime(2026, 8, 25, 23, 59, 59).timestamp() * 1000
+    end_ts = datetime(2026, 8, 24, 23, 59, 59).timestamp() * 1000
 
-    agency_channels = {"sergei", "bolot", "mr.vong", "iuliia sotckaia", "alex"}
+    # MỤC 3. QUY TẮC PHÂN LOẠI: Đại lý chỉ gồm đúng 3 đại lý: Bolot, Sergei, Arsenii
+    agency_channels = {"bolot", "sergei", "arsenii"}
 
     matched = []
     for it in all_records:
@@ -891,15 +893,29 @@ async def generate_contracts_by_accounting():
 
     # Sắp xếp theo Accounting Date giảm dần
     matched.sort(key=lambda x: x.get("Accounting Date") or 0, reverse=True)
-    print(f"📊 Tìm thấy {len(matched)} khách hàng theo Accounting Date (01/08/2026 - 25/08/2026).")
+    print(f"📊 Tìm thấy {len(matched)} hồ sơ đủ điều kiện theo Accounting Date (01/08/2026 - 24/08/2026).")
 
-    out_docx_dir = "output_docx_contracts"
-    out_pdf_dir = "output_contracts_01_08_den_24_08"
-    out_pdf_dir_main = "output_contracts"
-    hd_khach_le_dir = os.path.join("HD_Khach_le", "HĐ_Khách lẻ")
+    # MỤC 6. CẤU TRÚC THƯ MỤC ĐẦU RA VÀ TÀI LIỆU LƯU TRỮ
+    base_out_dir = "output_contracts_01_08_den_24_08"
+    
+    # Subfolders
+    dir_pdf_kl_single = os.path.join(base_out_dir, "PDF", "Khach_Le", "Single")
+    dir_pdf_kl_multi = os.path.join(base_out_dir, "PDF", "Khach_Le", "Multi")
+    dir_pdf_kl_cam = os.path.join(base_out_dir, "PDF", "Khach_Le", "Visa_Campuchia")
+    dir_pdf_dl_single = os.path.join(base_out_dir, "PDF", "Dai_Ly", "Single")
+    dir_pdf_dl_multi = os.path.join(base_out_dir, "PDF", "Dai_Ly", "Multi")
 
-    # Tạo các thư mục đầu ra
-    for d in [out_docx_dir, out_pdf_dir, out_pdf_dir_main, hd_khach_le_dir, "downloads/passports", "extracted_signatures"]:
+    dir_docx_kl_single = os.path.join(base_out_dir, "DOCX", "Khach_Le", "Single")
+    dir_docx_kl_multi = os.path.join(base_out_dir, "DOCX", "Khach_Le", "Multi")
+    dir_docx_kl_cam = os.path.join(base_out_dir, "DOCX", "Khach_Le", "Visa_Campuchia")
+    dir_docx_dl_single = os.path.join(base_out_dir, "DOCX", "Dai_Ly", "Single")
+    dir_docx_dl_multi = os.path.join(base_out_dir, "DOCX", "Dai_Ly", "Multi")
+
+    for d in [
+        dir_pdf_kl_single, dir_pdf_kl_multi, dir_pdf_kl_cam, dir_pdf_dl_single, dir_pdf_dl_multi,
+        dir_docx_kl_single, dir_docx_kl_multi, dir_docx_kl_cam, dir_docx_dl_single, dir_docx_dl_multi,
+        "output_docx_contracts", "output_contracts", "downloads/passports", "extracted_signatures"
+    ]:
         os.makedirs(d, exist_ok=True)
 
     processed_data = []
@@ -910,64 +926,85 @@ async def generate_contracts_by_accounting():
             ch_list = c.get("Nguồn( Channel)", ["Direct"]) or ["Direct"]
             ch_raw = str(ch_list[0] if ch_list else "Direct").strip()
             ch_lower = ch_raw.lower()
-            is_agency = ch_lower in agency_channels
+            
+            # 1. Phân loại Khách hàng (Mục 3)
+            is_agency = any(a in ch_lower for a in agency_channels)
             channel_type = "Đại lý" if is_agency else "Khách lẻ"
 
             code_ev = str(c.get("Code EV", "") or "").strip()
             nat = normalize_nationality(c.get("Quốc tịch (National)"), name, code_ev)
 
-            # Xác định loại visa và lệ phí nhà nước
+            # 2. Phân loại Loại Visa (Mục 3: Cấu trúc 3 nhóm)
             srv_type = str(c.get("Loại dịch vụ (type)", [""])[0] if c.get("Loại dịch vụ (type)") else "")
+            srv_list = [str(s).lower() for s in (c.get("Loại dịch vụ (type)") or [])]
             note_str = str(c.get("Ghi chú", "") or "")
-            visa_cam_val = c.get("Visa Cam")
+            
+            fee_cam_ai = c.get("Lệ phí visa Cam for AI")
             fee_cam_real = c.get("Lệ phí Visa Cam thực tế")
-
-            is_cam = ("cambodia" in srv_type.lower()) or ("cam" in srv_type.lower()) or (visa_cam_val is not None) or (fee_cam_real is not None) or ("BUSBY" in name.upper())
-            is_multi = ("multi" in note_str.lower()) or ("multi" in srv_type.lower())
+            is_cam = (any("visa cambodia" in s or "visa cam" in s for s in srv_list) and (fee_cam_ai is not None or fee_cam_real is not None)) or ("BUSBY" in name.upper())
+            is_multi = ("multi" in note_str.lower()) or any("multi" in s for s in srv_list)
+            is_free_vn = ("free visa" in srv_type.lower()) or ("BUSBY" in name.upper())
 
             if is_cam:
-                if fee_cam_real:
-                    try: state_fee = int(fee_cam_real)
-                    except: state_fee = 795000
-                else:
-                    state_fee = 30 * 26500  # 795.000 VNĐ
+                visa_group = "Visa_Campuchia"
                 visa_type_label = "Visa Campuchia"
             elif is_multi:
-                state_fee = 50 * 26500  # 1.325.000 VNĐ
-                visa_type_label = "E-Visa Multi"
+                visa_group = "Multi"
+                visa_type_label = "Multi"
             else:
-                state_fee = 25 * 26500  # 662.500 VNĐ
-                visa_type_label = "E-Visa Single"
+                visa_group = "Single"
+                visa_type_label = "Single"
 
+            # 3. Tính toán Chi phí theo 6 bước (Mục 4)
+            # Bước 1: Doanh thu CRM & Tổng tiền HĐ
             try:
                 sales_crm = int(str(c.get("Sales revenue", "0") or "0").replace(".", "").replace(",", ""))
             except:
                 sales_crm = 0
 
-            # Xác định phí vận tải nếu có tuyến đi cửa khẩu
-            srv_lower = srv_type.lower()
+            if is_agency:
+                total_amount = int(round(sales_crm * 1.08)) if sales_crm > 0 else 0
+            else:
+                total_amount = sales_crm
+
+            # Bước 2: Lệ phí Nhà nước Việt Nam (Mục 2)
+            if is_free_vn:
+                state_fee_vn = 0
+            elif is_multi:
+                state_fee_vn = 1325000  # $50
+            else:
+                state_fee_vn = 662500   # $25
+
+            # Bước 3: Lệ phí Visa Campuchia
+            if is_cam:
+                if fee_cam_ai is not None:
+                    try: fee_cam = int(str(fee_cam_ai).replace(".", "").replace(",", ""))
+                    except: fee_cam = 1000000
+                elif fee_cam_real is not None:
+                    try: fee_cam = int(str(fee_cam_real).replace(".", "").replace(",", ""))
+                    except: fee_cam = 1000000
+                else:
+                    fee_cam = 1000000
+            else:
+                fee_cam = 0
+
+            # Bước 4: Chi phí Vận tải (Phí xe)
             note_lower = note_str.lower()
-            if "bo y" in srv_lower or "bờ y" in srv_lower or "bo y" in note_lower or "bờ y" in note_lower:
+            if any(k in srv_list for k in ["90d - bo y", "free visa - bo y", "bờ y", "bo y"]) or "bo y" in note_lower or "bờ y" in note_lower:
                 transport_fee = 1250000
-            elif "moc bai" in srv_lower or "mộc bài" in srv_lower or "moc bai" in note_lower or "mộc bài" in note_lower or is_cam:
+            elif any(k in srv_list for k in ["90d - cambodia", "hcm > cam", "free visa - cam", "mộc bài", "moc bai"]) or "mộc bài" in note_lower or "moc bai" in note_lower:
                 transport_fee = 1290000
             else:
                 transport_fee = 0
 
-            # Tính tổng tiền và phí dịch vụ:
-            if is_agency:
-                total_amount = int(round(sales_crm * 1.08)) if sales_crm > 0 else (757500 + state_fee + transport_fee)
-            else:
-                total_amount = sales_crm if sales_crm > 0 else (757500 + state_fee + transport_fee)
+            # Bước 5: Phí Dịch vụ gộp (Dòng 1 trong Hợp đồng)
+            service_fee_gross = total_amount - state_fee_vn
 
-            if total_amount <= (state_fee + transport_fee):
-                pure_consulting_fee = 757500
-                combined_service_fee = pure_consulting_fee + transport_fee
-                total_amount = combined_service_fee + state_fee
-            else:
-                combined_service_fee = total_amount - state_fee
-                pure_consulting_fee = max(0, combined_service_fee - transport_fee)
+            # Bước 6: Số tiền hoàn lại khi rớt Visa (Điều 5.2)
+            # Hoàn phí Điều 5.2 = Phí dịch vụ gộp (Mục 1) - Phí vận tải - Lệ phí Visa Cam
+            refund_amount = max(0, service_fee_gross - transport_fee - fee_cam)
 
+            # Format ngày hạch toán
             acc_ts = c.get("Accounting Date")
             if acc_ts:
                 dt = datetime.fromtimestamp(acc_ts / 1000)
@@ -979,16 +1016,10 @@ async def generate_contracts_by_accounting():
                 date_en = "August 16, 2026"
                 date_str = ""
 
-            app_ts = c.get("Apply Date")
-            app_str = datetime.fromtimestamp(app_ts / 1000).strftime("%d/%m/%Y") if app_ts else ""
-
-            ev_ts = c.get("Event Date")
-            ev_str = datetime.fromtimestamp(ev_ts / 1000).strftime("%d/%m/%Y") if ev_ts else ""
-
             safe_name = re.sub(r'[^a-zA-Z0-9_-]', '_', name.strip())
             passport_no = extract_passport_no(c, name, code_ev)
 
-            # Tải ảnh hộ chiếu và trích xuất chữ ký (nếu có)
+            # Tải ảnh hộ chiếu và trích xuất chữ ký
             sig_path = os.path.join("extracted_signatures", f"{safe_name}_{passport_no}_sig.png")
             passports = c.get("Ảnh hộ chiếu")
             if not os.path.exists(sig_path) and passports and isinstance(passports, list) and len(passports) > 0:
@@ -1018,59 +1049,73 @@ async def generate_contracts_by_accounting():
                 "date_of_issue": "20/05/2022",
                 "nationality": nat,
                 "total_amount": total_amount,
-                "service_fee": pure_consulting_fee,
+                "service_fee": refund_amount,
                 "transport_fee": transport_fee,
-                "state_fee": state_fee,
+                "state_fee": state_fee_vn,
                 "signature_image_path": sig_path if os.path.exists(sig_path) else None
             }
 
             prefix_type = "Khach_Le" if not is_agency else "Dai_Ly"
-            docx_filename = f"{idx:02d}_Hop_Dong_{prefix_type}_{safe_name}.docx"
-            pdf_filename = f"Hop_Dong_{prefix_type}_{safe_name}.pdf"
+            docx_filename = f"{idx:03d}_Hop_Dong_{prefix_type}_{safe_name}.docx"
+            pdf_filename = f"{idx:03d}_Hop_Dong_{prefix_type}_{safe_name}.pdf"
 
-            docx_path_1 = os.path.join(out_docx_dir, docx_filename)
-            pdf_path_1 = os.path.join(out_pdf_dir, pdf_filename)
-            pdf_path_2 = os.path.join(out_pdf_dir_main, pdf_filename)
+            # Xác định thư mục con theo Mục 6
+            if not is_agency:
+                if is_cam:
+                    target_pdf_dir = dir_pdf_kl_cam
+                    target_docx_dir = dir_docx_kl_cam
+                elif is_multi:
+                    target_pdf_dir = dir_pdf_kl_multi
+                    target_docx_dir = dir_docx_kl_multi
+                else:
+                    target_pdf_dir = dir_pdf_kl_single
+                    target_docx_dir = dir_docx_kl_single
+            else:
+                if is_multi:
+                    target_pdf_dir = dir_pdf_dl_multi
+                    target_docx_dir = dir_docx_dl_multi
+                else:
+                    target_pdf_dir = dir_pdf_dl_single
+                    target_docx_dir = dir_docx_dl_single
+
+            docx_target_path = os.path.join(target_docx_dir, docx_filename)
+            pdf_target_path = os.path.join(target_pdf_dir, pdf_filename)
 
             # 1. Tạo file Word .docx
-            build_contract_docx(docx_path_1, contract_data)
-            if not is_agency:
-                shutil.copyfile(docx_path_1, os.path.join(hd_khach_le_dir, docx_filename))
+            build_contract_docx(docx_target_path, contract_data)
+            shutil.copyfile(docx_target_path, os.path.join("output_docx_contracts", docx_filename))
 
             # 2. Tạo file PDF .pdf
             try:
-                build_contract_pdf(pdf_path_1, contract_data)
-                shutil.copyfile(pdf_path_1, pdf_path_2)
+                build_contract_pdf(pdf_target_path, contract_data)
+                shutil.copyfile(pdf_target_path, os.path.join("output_contracts", pdf_filename))
             except Exception as e_pdf:
                 print(f"⚠️ Lỗi tạo PDF cho {name}: {e_pdf}")
 
             processed_data.append({
-                "stt": idx,
+                "stt": f"{idx:03d}",
                 "name": name.upper(),
                 "passport_no": passport_no,
                 "nationality": nat,
                 "accounting_date": date_str,
-                "apply_date": app_str,
-                "event_date": ev_str,
                 "channel": ch_raw,
                 "channel_type": channel_type,
                 "visa_type": visa_type_label,
                 "service": srv_type or visa_type_label,
-                "code_ev": code_ev or (f"EV_PDF_{passport_no}" if c.get("EV") else ""),
                 "sales_crm": sales_crm,
-                "state_fee": state_fee,
-                "transport_fee": transport_fee,
-                "service_fee": pure_consulting_fee,
-                "combined_service_fee": combined_service_fee,
                 "total_amount": total_amount,
-                "docx_filename": docx_filename,
+                "state_fee_vn": state_fee_vn,
+                "service_fee_gross": service_fee_gross,
+                "transport_fee": transport_fee,
+                "fee_cam": fee_cam,
+                "refund_amount": refund_amount,
                 "pdf_filename": pdf_filename
             })
 
-    print(f"🎉 Đã tạo thành công {len(processed_data)} hợp đồng .docx và .pdf!")
+    print(f"🎉 Đã tạo thành công {len(processed_data)} hợp đồng .docx và .pdf theo đúng cấu trúc thư mục PDF/DOCX!")
 
     # -------------------------------------------------------------
-    # TẠO FILE EXCEL TỔNG HỢP DANH SÁCH ĐỐI SOÁT MASTER
+    # MỤC 6. TẠO FILE EXCEL ĐỐI SOÁT 17 CỘT CHUẨN XÁC 100%
     # -------------------------------------------------------------
     excel_path = "danh_sach_hop_dong_01_08_den_24_08.xlsx"
     wb = openpyxl.Workbook()
@@ -1078,29 +1123,44 @@ async def generate_contracts_by_accounting():
     ws.title = "Danh_Sach_Hop_Dong"
 
     # Title
-    ws.merge_cells("A1:N1")
+    ws.merge_cells("A1:Q1")
     t_cell = ws["A1"]
-    t_cell.value = "BẢNG TỔNG HỢP HỢP ĐỒNG KHÁCH LẺ VÀ ĐẠI LÝ (01/08/2026 - 24/08/2026)"
+    t_cell.value = "BẢNG TỔNG HỢP ĐỐI SOÁT HỢP ĐỒNG KHÁCH LẺ VÀ ĐẠI LÝ (01/08/2026 - 24/08/2026)"
     t_cell.font = Font(name="Arial", size=13, bold=True, color="FFFFFF")
     t_cell.alignment = Alignment(horizontal="center", vertical="center")
     t_cell.fill = PatternFill(start_color="1F4E79", end_color="1F4E79", fill_type="solid")
     ws.row_dimensions[1].height = 35
 
-    ws.merge_cells("A2:N2")
+    ws.merge_cells("A2:Q2")
     s_cell = ws["A2"]
-    s_cell.value = f"Tổng số: {len(processed_data)} hợp đồng | Khách lẻ: {sum(1 for x in processed_data if x['channel_type'] == 'Khách lẻ')} | Đại lý: {sum(1 for x in processed_data if x['channel_type'] == 'Đại lý')} | Xuất ngày: {datetime.now().strftime('%d/%m/%Y %H:%M')}"
+    s_cell.value = f"Tổng số: {len(processed_data)} hồ sơ | Khách lẻ: {sum(1 for x in processed_data if x['channel_type'] == 'Khách lẻ')} | Đại lý: {sum(1 for x in processed_data if x['channel_type'] == 'Đại lý')} | Xuất ngày: {datetime.now().strftime('%d/%m/%Y %H:%M')}"
     s_cell.font = Font(name="Arial", size=10, italic=True, color="333333")
     s_cell.alignment = Alignment(horizontal="center", vertical="center")
     ws.row_dimensions[2].height = 20
 
-    headers = [
-        "STT", "Họ và tên khách", "Số hộ chiếu", "Quốc tịch", "Ngày hạch toán",
-        "Kênh nguồn", "Nhóm khách", "Loại Visa", "Tuyến / Dịch vụ",
-        "Doanh thu Sales (VNĐ)", "Lệ Phí Nhà Nước", "Phí Dịch Vụ", "Tổng Tiền HĐ (VNĐ)", "Tên File Hợp Đồng"
+    # 17 CỘT CHUẨN XÁC THEO MỤC 6 CỦA PDF
+    headers_17 = [
+        "STT",
+        "Họ và tên Bên A",
+        "Số Hộ Chiếu",
+        "Quốc Tịch",
+        "Ngày Hạch Toán",
+        "Kênh Nguồn",
+        "Phân Loại Khách Hàng",
+        "Phân Loại Visa",
+        "Tuyến / Dịch Vụ",
+        "Doanh Thu CRM (VNĐ)",
+        "Tổng Tiền HĐ (VNĐ)",
+        "Lệ Phí Nhà Nước VN (Mục 2)",
+        "Phí Dịch Vụ Gộp (Mục 1)",
+        "Chi Phí Vận Tải (Phí xe)",
+        "Lệ Phí Visa Cam",
+        "Số Tiền Hoàn Lại Khi Rớt Visa (Điều 5.2)",
+        "Tên File Hợp Đồng"
     ]
 
-    ws.row_dimensions[3].height = 28
-    for col_idx, h in enumerate(headers, 1):
+    ws.row_dimensions[3].height = 30
+    for col_idx, h in enumerate(headers_17, 1):
         c_hdr = ws.cell(row=3, column=col_idx, value=h)
         c_hdr.font = Font(name="Arial", size=9.5, bold=True, color="FFFFFF")
         c_hdr.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
@@ -1126,9 +1186,12 @@ async def generate_contracts_by_accounting():
             row["visa_type"],
             row["service"],
             row["sales_crm"],
-            row["state_fee"],
-            row["service_fee"],
             row["total_amount"],
+            row["state_fee_vn"],
+            row["service_fee_gross"],
+            row["transport_fee"],
+            row["fee_cam"],
+            row["refund_amount"],
             row["pdf_filename"]
         ]
 
@@ -1139,7 +1202,7 @@ async def generate_contracts_by_accounting():
             
             if col_idx in [1, 3, 4, 5, 6, 7, 8]:
                 cell.alignment = Alignment(horizontal="center", vertical="center")
-            elif col_idx in [10, 11, 12, 13]:
+            elif col_idx in [10, 11, 12, 13, 14, 15, 16]:
                 cell.alignment = Alignment(horizontal="right", vertical="center")
                 cell.number_format = "#,##0"
             else:
@@ -1152,10 +1215,7 @@ async def generate_contracts_by_accounting():
         ws.column_dimensions[col_letter].width = max(max_len + 3, 12)
 
     wb.save(excel_path)
-    print(f"📊 Đã tạo file Excel danh sách tổng hợp: '{excel_path}'")
-
-    # Lưu thêm 1 bản sao danh_sach_khach_hang_theo_accounting_date_01_08_den_19_08.xlsx nếu cần
-    shutil.copyfile(excel_path, "danh_sach_khach_hang_theo_accounting_date_01_08_den_19_08.xlsx")
+    print(f"📊 Đã tạo file Excel đối soát 17 cột: '{excel_path}'")
     return processed_data
 
 
