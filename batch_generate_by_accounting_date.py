@@ -898,8 +898,8 @@ async def generate_contracts_by_accounting():
             print(f"🚫 Loại bỏ hồ sơ bị hủy: {name_val}")
             continue
 
-        # 2. Điều kiện lọc: Thời gian + Đã có EV (hoặc hồ sơ Busby)
-        if (code_ev or ev_file or "BUSBY" in name_val.upper()) and acc_ts and start_ts <= acc_ts <= end_ts:
+        # 2. Điều kiện lọc: Thời gian + Bắt buộc Đã có EV (Code EV hoặc file EV)
+        if (code_ev or ev_file) and acc_ts and start_ts <= acc_ts <= end_ts:
             clean_key = re.sub(r'[^a-zA-Z0-9]', '', name_val.upper())
             if clean_key in seen_customers:
                 print(f"⚠️ Trùng khách hàng trong tháng 8, loại bỏ bản ghi trùng: {name_val}")
