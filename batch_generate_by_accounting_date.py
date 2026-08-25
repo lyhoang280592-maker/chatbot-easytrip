@@ -16,8 +16,9 @@ from openpyxl.styles import Font, Alignment, PatternFill, Border, Side
 from openpyxl.utils import get_column_letter
 
 from PIL import Image, ImageOps
+from generate_contracts import build_contract_pdf
 
-load_dotenv("c:/Projects/chatbot-easytrip/.env")
+load_dotenv()
 
 LARK_APP_ID = os.getenv("LARK_APP_ID")
 LARK_APP_SECRET = os.getenv("LARK_APP_SECRET")
@@ -761,6 +762,94 @@ def build_contract_docx(output_docx_path: str, data: dict):
     return output_docx_path
 
 
+def normalize_nationality(nat_val, name="", code_ev=""):
+    if "BUSBY" in name.upper():
+        return "Vương Quốc Anh / United Kingdom"
+    if nat_val:
+        if isinstance(nat_val, list):
+            n_str = str(nat_val[0]).strip()
+        else:
+            n_str = str(nat_val).strip()
+        
+        n_lower = n_str.lower()
+        if n_lower in ["uk", "united kingdom", "anh", "british"]:
+            return "Vương Quốc Anh / United Kingdom"
+        elif any(k in n_lower for k in ["russia", "nga", "rus"]):
+            return "Nga / Russian"
+        elif any(k in n_lower for k in ["korea", "hàn", "kor"]):
+            return "Hàn Quốc / Korean"
+        elif any(k in n_lower for k in ["usa", "mỹ", "american"]):
+            return "Mỹ / USA"
+        elif any(k in n_lower for k in ["german", "đức", "deu"]):
+            return "Đức / Germany"
+        elif any(k in n_lower for k in ["australia", "úc", "aus"]):
+            return "Úc / Australia"
+        elif any(k in n_lower for k in ["turkey", "thổ"]):
+            return "Thổ Nhĩ Kỳ / Turkey"
+        elif "slovak" in n_lower:
+            return "Slovakia / Slovak Republic"
+        elif "uzbek" in n_lower:
+            return "Uzbekistan"
+        elif "ukrain" in n_lower:
+            return "Ukraine / Ukrainian"
+        elif "kyrgyz" in n_lower:
+            return "Kyrgyzstan"
+        elif "moldova" in n_lower:
+            return "Moldova"
+        elif "kazakh" in n_lower:
+            return "Kazakhstan"
+        elif "brazil" in n_lower:
+            return "Brazil"
+        elif any(k in n_lower for k in ["netherland", "hà lan", "dutch"]):
+            return "Hà Lan / Netherlands"
+        elif "belarus" in n_lower:
+            return "Belarus"
+        elif any(k in n_lower for k in ["france", "pháp"]):
+            return "Pháp / France"
+        elif any(k in n_lower for k in ["china", "trung"]):
+            return "Trung Quốc / China"
+        return n_str
+    
+    # Fallback from code_ev
+    if "RUS" in code_ev: return "Nga / Russian"
+    if "KOR" in code_ev: return "Hàn Quốc / Korean"
+    if "USA" in code_ev: return "Mỹ / USA"
+    if "DEU" in code_ev or "GER" in code_ev: return "Đức / Germany"
+    if "GBR" in code_ev or "UK" in code_ev: return "Vương Quốc Anh / United Kingdom"
+    if "SVK" in code_ev: return "Slovakia / Slovak Republic"
+    if "TUR" in code_ev: return "Thổ Nhĩ Kỳ / Turkey"
+    if "UZB" in code_ev: return "Uzbekistan"
+    if "UKR" in code_ev: return "Ukraine / Ukrainian"
+    if "KGZ" in code_ev: return "Kyrgyzstan"
+    if "MDA" in code_ev: return "Moldova"
+    if "KAZ" in code_ev: return "Kazakhstan"
+    if "BRA" in code_ev: return "Brazil"
+    if "NLD" in code_ev: return "Hà Lan / Netherlands"
+    if "AUS" in code_ev: return "Úc / Australia"
+    if "BLR" in code_ev: return "Belarus"
+    
+    return "Nga / Russian"
+
+
+def extract_passport_no(c, name, code_ev):
+    if "BUSBY" in name.upper():
+        return "127294028"
+    if code_ev:
+        m = re.search(r'[A-Za-z0-9]{7,9}$', code_ev)
+        if m:
+            return m.group(0)
+    ev_files = c.get("EV")
+    if ev_files and isinstance(ev_files, list) and len(ev_files) > 0:
+        ev_fname = str(ev_files[0].get("name", "") or "")
+        m_ev = re.search(r'([A-Za-z0-9]{7,9})\.pdf', ev_fname)
+        if m_ev:
+            return m_ev.group(1)
+        m_num = re.search(r'\d{7,9}', ev_fname)
+        if m_num:
+            return m_num.group(0)
+    return code_ev.replace("E26", "")[:9] if code_ev else "767587433"
+
+
 async def generate_contracts_by_accounting():
     url = "https://open.larksuite.com/open-apis/auth/v3/tenant_access_token/internal"
     async with httpx.AsyncClient(timeout=15) as client:
@@ -786,7 +875,7 @@ async def generate_contracts_by_accounting():
             page_token = data_res.get("page_token")
 
     start_ts = datetime(2026, 8, 1, 0, 0, 0).timestamp() * 1000
-    end_ts = datetime(2026, 8, 19, 23, 59, 59).timestamp() * 1000
+    end_ts = datetime(2026, 8, 25, 23, 59, 59).timestamp() * 1000
 
     agency_channels = {"sergei", "bolot", "mr.vong", "iuliia sotckaia", "alex"}
 
@@ -796,24 +885,22 @@ async def generate_contracts_by_accounting():
         code_ev = f.get("Code EV")
         ev_file = f.get("EV")
         acc_ts = f.get("Accounting Date")
-        if (code_ev or ev_file) and acc_ts and start_ts <= acc_ts <= end_ts:
+        name_val = str(f.get("Tên khách (Name)", "") or "")
+        if (code_ev or ev_file or "BUSBY" in name_val.upper()) and acc_ts and start_ts <= acc_ts <= end_ts:
             matched.append(f)
 
     # Sắp xếp theo Accounting Date giảm dần
     matched.sort(key=lambda x: x.get("Accounting Date") or 0, reverse=True)
-    print(f"📊 Tìm thấy {len(matched)} khách hàng theo Accounting Date (01/08/2026 - 19/08/2026).")
+    print(f"📊 Tìm thấy {len(matched)} khách hàng theo Accounting Date (01/08/2026 - 25/08/2026).")
 
-    out_dir = "output_docx_contracts"
+    out_docx_dir = "output_docx_contracts"
+    out_pdf_dir = "output_contracts_01_08_den_24_08"
+    out_pdf_dir_main = "output_contracts"
     hd_khach_le_dir = os.path.join("HD_Khach_le", "HĐ_Khách lẻ")
 
-    # Xóa sạch thư mục hợp đồng cũ để làm mới hoàn toàn
-    for d in [out_dir, hd_khach_le_dir]:
-        if os.path.exists(d):
-            shutil.rmtree(d)
+    # Tạo các thư mục đầu ra
+    for d in [out_docx_dir, out_pdf_dir, out_pdf_dir_main, hd_khach_le_dir, "downloads/passports", "extracted_signatures"]:
         os.makedirs(d, exist_ok=True)
-
-    os.makedirs("downloads/passports", exist_ok=True)
-    os.makedirs("extracted_signatures", exist_ok=True)
 
     processed_data = []
 
@@ -826,19 +913,24 @@ async def generate_contracts_by_accounting():
             is_agency = ch_lower in agency_channels
             channel_type = "Đại lý" if is_agency else "Khách lẻ"
 
-            nat = c.get("Quốc tịch (National)", ["Nga / Russian"])[0] if c.get("Quốc tịch (National)") else "Nga / Russian"
             code_ev = str(c.get("Code EV", "") or "").strip()
+            nat = normalize_nationality(c.get("Quốc tịch (National)"), name, code_ev)
 
             # Xác định loại visa và lệ phí nhà nước
             srv_type = str(c.get("Loại dịch vụ (type)", [""])[0] if c.get("Loại dịch vụ (type)") else "")
             note_str = str(c.get("Ghi chú", "") or "")
             visa_cam_val = c.get("Visa Cam")
+            fee_cam_real = c.get("Lệ phí Visa Cam thực tế")
 
-            is_cam = ("cambodia" in srv_type.lower()) or (visa_cam_val is not None)
+            is_cam = ("cambodia" in srv_type.lower()) or ("cam" in srv_type.lower()) or (visa_cam_val is not None) or (fee_cam_real is not None) or ("BUSBY" in name.upper())
             is_multi = ("multi" in note_str.lower()) or ("multi" in srv_type.lower())
 
             if is_cam:
-                state_fee = 30 * 26500  # 795.000 VNĐ
+                if fee_cam_real:
+                    try: state_fee = int(fee_cam_real)
+                    except: state_fee = 795000
+                else:
+                    state_fee = 30 * 26500  # 795.000 VNĐ
                 visa_type_label = "Visa Campuchia"
             elif is_multi:
                 state_fee = 50 * 26500  # 1.325.000 VNĐ
@@ -857,14 +949,12 @@ async def generate_contracts_by_accounting():
             note_lower = note_str.lower()
             if "bo y" in srv_lower or "bờ y" in srv_lower or "bo y" in note_lower or "bờ y" in note_lower:
                 transport_fee = 1250000
-            elif "moc bai" in srv_lower or "mộc bài" in srv_lower or "moc bai" in note_lower or "mộc bài" in note_lower:
+            elif "moc bai" in srv_lower or "mộc bài" in srv_lower or "moc bai" in note_lower or "mộc bài" in note_lower or is_cam:
                 transport_fee = 1290000
             else:
                 transport_fee = 0
 
             # Tính tổng tiền và phí dịch vụ:
-            # Đại lý: Total = sales_crm * 108%
-            # Khách lẻ: Total = sales_crm
             if is_agency:
                 total_amount = int(round(sales_crm * 1.08)) if sales_crm > 0 else (757500 + state_fee + transport_fee)
             else:
@@ -896,8 +986,7 @@ async def generate_contracts_by_accounting():
             ev_str = datetime.fromtimestamp(ev_ts / 1000).strftime("%d/%m/%Y") if ev_ts else ""
 
             safe_name = re.sub(r'[^a-zA-Z0-9_-]', '_', name.strip())
-            passport_match = re.search(r'[A-Za-z0-9]{7,9}$', code_ev)
-            passport_no = passport_match.group(0) if passport_match else (code_ev.replace("E26", "")[:9] if code_ev else "767587433")
+            passport_no = extract_passport_no(c, name, code_ev)
 
             # Tải ảnh hộ chiếu và trích xuất chữ ký (nếu có)
             sig_path = os.path.join("extracted_signatures", f"{safe_name}_{passport_no}_sig.png")
@@ -935,12 +1024,25 @@ async def generate_contracts_by_accounting():
                 "signature_image_path": sig_path if os.path.exists(sig_path) else None
             }
 
-            filename = f"{idx:02d}_Hop_Dong_{safe_name}.docx"
-            file_path_1 = os.path.join(out_dir, filename)
-            file_path_2 = os.path.join(hd_khach_le_dir, filename)
+            prefix_type = "Khach_Le" if not is_agency else "Dai_Ly"
+            docx_filename = f"{idx:02d}_Hop_Dong_{prefix_type}_{safe_name}.docx"
+            pdf_filename = f"Hop_Dong_{prefix_type}_{safe_name}.pdf"
 
-            build_contract_docx(file_path_1, contract_data)
-            shutil.copyfile(file_path_1, file_path_2)
+            docx_path_1 = os.path.join(out_docx_dir, docx_filename)
+            pdf_path_1 = os.path.join(out_pdf_dir, pdf_filename)
+            pdf_path_2 = os.path.join(out_pdf_dir_main, pdf_filename)
+
+            # 1. Tạo file Word .docx
+            build_contract_docx(docx_path_1, contract_data)
+            if not is_agency:
+                shutil.copyfile(docx_path_1, os.path.join(hd_khach_le_dir, docx_filename))
+
+            # 2. Tạo file PDF .pdf
+            try:
+                build_contract_pdf(pdf_path_1, contract_data)
+                shutil.copyfile(pdf_path_1, pdf_path_2)
+            except Exception as e_pdf:
+                print(f"⚠️ Lỗi tạo PDF cho {name}: {e_pdf}")
 
             processed_data.append({
                 "stt": idx,
@@ -953,30 +1055,32 @@ async def generate_contracts_by_accounting():
                 "channel": ch_raw,
                 "channel_type": channel_type,
                 "visa_type": visa_type_label,
-                "code_ev": code_ev,
+                "service": srv_type or visa_type_label,
+                "code_ev": code_ev or (f"EV_PDF_{passport_no}" if c.get("EV") else ""),
                 "sales_crm": sales_crm,
                 "state_fee": state_fee,
                 "transport_fee": transport_fee,
                 "service_fee": pure_consulting_fee,
                 "combined_service_fee": combined_service_fee,
                 "total_amount": total_amount,
-                "filename": filename
+                "docx_filename": docx_filename,
+                "pdf_filename": pdf_filename
             })
 
-    print(f"🎉 Đã tạo thành công {len(processed_data)} hợp đồng .docx trong '{out_dir}' và '{hd_khach_le_dir}'.")
+    print(f"🎉 Đã tạo thành công {len(processed_data)} hợp đồng .docx và .pdf!")
 
     # -------------------------------------------------------------
-    # TẠO FILE EXCEL TỔNG HỢP DANH SÁCH HỘ CHIẾU & DOANH THU MỚI
+    # TẠO FILE EXCEL TỔNG HỢP DANH SÁCH ĐỐI SOÁT MASTER
     # -------------------------------------------------------------
-    excel_path = "danh_sach_khach_hang_theo_accounting_date_01_08_den_19_08.xlsx"
+    excel_path = "danh_sach_hop_dong_01_08_den_24_08.xlsx"
     wb = openpyxl.Workbook()
     ws = wb.active if wb.active is not None else wb.create_sheet()
-    ws.title = "Danh_Sach_Accounting_Date"
+    ws.title = "Danh_Sach_Hop_Dong"
 
     # Title
     ws.merge_cells("A1:N1")
     t_cell = ws["A1"]
-    t_cell.value = "DANH SÁCH HỘ CHIẾU & HỢP ĐỒNG KHÁCH HÀNG (THEO ACCOUNTING DATE 01/08 - 19/08/2026)"
+    t_cell.value = "BẢNG TỔNG HỢP HỢP ĐỒNG KHÁCH LẺ VÀ ĐẠI LÝ (01/08/2026 - 24/08/2026)"
     t_cell.font = Font(name="Arial", size=13, bold=True, color="FFFFFF")
     t_cell.alignment = Alignment(horizontal="center", vertical="center")
     t_cell.fill = PatternFill(start_color="1F4E79", end_color="1F4E79", fill_type="solid")
@@ -984,31 +1088,31 @@ async def generate_contracts_by_accounting():
 
     ws.merge_cells("A2:N2")
     s_cell = ws["A2"]
-    s_cell.value = f"Tổng số: {len(processed_data)} hồ sơ | Khách lẻ: {sum(1 for x in processed_data if x['channel_type'] == 'Khách lẻ')} | Đại lý: {sum(1 for x in processed_data if x['channel_type'] == 'Đại lý')} | Xuất ngày: {datetime.now().strftime('%d/%m/%Y %H:%M')}"
+    s_cell.value = f"Tổng số: {len(processed_data)} hợp đồng | Khách lẻ: {sum(1 for x in processed_data if x['channel_type'] == 'Khách lẻ')} | Đại lý: {sum(1 for x in processed_data if x['channel_type'] == 'Đại lý')} | Xuất ngày: {datetime.now().strftime('%d/%m/%Y %H:%M')}"
     s_cell.font = Font(name="Arial", size=10, italic=True, color="333333")
     s_cell.alignment = Alignment(horizontal="center", vertical="center")
     ws.row_dimensions[2].height = 20
 
     headers = [
-        "STT", "Họ và Tên Khách", "Số Hộ Chiếu", "Quốc Tịch", "Ngày Hạch Toán",
-        "Ngày Nộp (Apply)", "Ngày Sự Kiện", "Kênh Nguồn", "Phân Loại", "Loại Visa",
-        "Mã E-Visa", "Lệ Phí Nhà Nước", "Phí Dịch Vụ", "Tổng Tiền HĐ (VNĐ)", "Tên File Hợp Đồng"
+        "STT", "Họ và tên khách", "Số hộ chiếu", "Quốc tịch", "Ngày hạch toán",
+        "Kênh nguồn", "Nhóm khách", "Loại Visa", "Tuyến / Dịch vụ",
+        "Doanh thu Sales (VNĐ)", "Lệ Phí Nhà Nước", "Phí Dịch Vụ", "Tổng Tiền HĐ (VNĐ)", "Tên File Hợp Đồng"
     ]
 
-    ws.row_dimensions[4].height = 28
+    ws.row_dimensions[3].height = 28
     for col_idx, h in enumerate(headers, 1):
-        c = ws.cell(row=4, column=col_idx, value=h)
-        c.font = Font(name="Arial", size=9.5, bold=True, color="FFFFFF")
-        c.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
-        c.fill = PatternFill(start_color="2E75B6", end_color="2E75B6", fill_type="solid")
-        c.border = Border(top=Side(style="thin", color="000000"), bottom=Side(style="thin", color="000000"),
-                          left=Side(style="thin", color="000000"), right=Side(style="thin", color="000000"))
+        c_hdr = ws.cell(row=3, column=col_idx, value=h)
+        c_hdr.font = Font(name="Arial", size=9.5, bold=True, color="FFFFFF")
+        c_hdr.alignment = Alignment(horizontal="center", vertical="center", wrap_text=True)
+        c_hdr.fill = PatternFill(start_color="2E75B6", end_color="2E75B6", fill_type="solid")
+        c_hdr.border = Border(top=Side(style="thin", color="000000"), bottom=Side(style="thin", color="000000"),
+                              left=Side(style="thin", color="000000"), right=Side(style="thin", color="000000"))
 
     thin_border = Border(top=Side(style="thin", color="D9D9D9"), bottom=Side(style="thin", color="D9D9D9"),
                          left=Side(style="thin", color="D9D9D9"), right=Side(style="thin", color="D9D9D9"))
 
     for idx, row in enumerate(processed_data, 1):
-        r_idx = 4 + idx
+        r_idx = 3 + idx
         ws.row_dimensions[r_idx].height = 20
 
         values = [
@@ -1017,16 +1121,15 @@ async def generate_contracts_by_accounting():
             row["passport_no"],
             row["nationality"],
             row["accounting_date"],
-            row["apply_date"],
-            row["event_date"],
             row["channel"],
             row["channel_type"],
             row["visa_type"],
-            row["code_ev"],
+            row["service"],
+            row["sales_crm"],
             row["state_fee"],
             row["service_fee"],
             row["total_amount"],
-            row["filename"]
+            row["pdf_filename"]
         ]
 
         for col_idx, v in enumerate(values, 1):
@@ -1034,9 +1137,9 @@ async def generate_contracts_by_accounting():
             cell.font = Font(name="Arial", size=9)
             cell.border = thin_border
             
-            if col_idx in [1, 3, 5, 6, 7, 9, 10]:
+            if col_idx in [1, 3, 4, 5, 6, 7, 8]:
                 cell.alignment = Alignment(horizontal="center", vertical="center")
-            elif col_idx in [12, 13, 14]:
+            elif col_idx in [10, 11, 12, 13]:
                 cell.alignment = Alignment(horizontal="right", vertical="center")
                 cell.number_format = "#,##0"
             else:
@@ -1050,8 +1153,12 @@ async def generate_contracts_by_accounting():
 
     wb.save(excel_path)
     print(f"📊 Đã tạo file Excel danh sách tổng hợp: '{excel_path}'")
+
+    # Lưu thêm 1 bản sao danh_sach_khach_hang_theo_accounting_date_01_08_den_19_08.xlsx nếu cần
+    shutil.copyfile(excel_path, "danh_sach_khach_hang_theo_accounting_date_01_08_den_19_08.xlsx")
     return processed_data
 
 
 if __name__ == "__main__":
     asyncio.run(generate_contracts_by_accounting())
+
