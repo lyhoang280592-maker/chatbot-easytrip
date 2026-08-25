@@ -54,3 +54,23 @@ Giao diện được xây dựng bằng CSS thuần chất lượng cao, đồng
 * Nền tối huyền ảo (Deep Obsidian) `#060913`
 * Các khối kính mờ (Glassmorphism) kết hợp đổ bóng sâu premium.
 * Các hiệu ứng chuyển động vi mô (Micro-animations), hiệu ứng sóng xung mạch (Avatar pulse) đem lại cảm giác sống động, chuyên nghiệp vượt bậc!
+
+---
+
+## 📑 Hệ Thống Tạo Hợp Đồng Tự Động (Contract Automation)
+Dự án bao gồm bộ công cụ tự động hóa toàn bộ quy trình tạo Hợp đồng dịch vụ tư vấn visa song ngữ Việt - Anh (7 trang chuẩn), tự động tách chữ ký từ Hộ chiếu và phân loại Khách Lẻ vs Đại Lý.
+
+👉 **Xem hướng dẫn chi tiết tại**: [HUONG_DAN_TAO_HOP_DONG.md](HUONG_DAN_TAO_HOP_DONG.md)
+
+### Các lệnh nhanh:
+```bash
+# 1. Tạo hợp đồng hàng loạt theo mốc ngày kế toán (PDF + DOCX + Excel)
+python batch_generate_by_accounting_date.py
+
+# 2. Tạo hợp đồng định dạng Word (.docx)
+python generate_docx_contracts.py
+
+# 3. Tạo hợp đồng định dạng PDF (.pdf)
+python batch_process_contracts.py
+```
+
