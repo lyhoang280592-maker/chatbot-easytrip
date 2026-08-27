@@ -19,7 +19,7 @@ from reportlab.pdfgen import canvas
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 
-load_dotenv("/Users/phamtranthuyvy/Projects/chatbot-easytrip/.env")
+load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
 
 # Register system fonts for Vietnamese Unicode
 FONT_REGULAR = "Arial"
@@ -28,23 +28,38 @@ FONT_ITALIC = "Arial-Italic"
 FONT_BOLD_ITALIC = "Arial-BoldItalic"
 
 def register_fonts():
-    font_paths = {
-        FONT_REGULAR: "/System/Library/Fonts/Supplemental/Arial.ttf",
-        FONT_BOLD: "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
-        FONT_ITALIC: "/System/Library/Fonts/Supplemental/Arial Italic.ttf",
-        FONT_BOLD_ITALIC: "/System/Library/Fonts/Supplemental/Arial Bold Italic.ttf",
-    }
-    for name, path in font_paths.items():
-        if os.path.exists(path):
-            try:
-                pdfmetrics.registerFont(TTFont(name, path))
-            except Exception as e:
-                print(f"Font register error {name}: {e}")
-        else:
-            # Fallback to Times
-            fallback = "/System/Library/Fonts/Supplemental/Times New Roman.ttf"
-            if os.path.exists(fallback):
-                pdfmetrics.registerFont(TTFont(name, fallback))
+    candidates = [
+        # Windows
+        {
+            FONT_REGULAR: "C:/Windows/Fonts/arial.ttf",
+            FONT_BOLD: "C:/Windows/Fonts/arialbd.ttf",
+            FONT_ITALIC: "C:/Windows/Fonts/ariali.ttf",
+            FONT_BOLD_ITALIC: "C:/Windows/Fonts/arialbi.ttf",
+        },
+        # macOS
+        {
+            FONT_REGULAR: "/System/Library/Fonts/Supplemental/Arial.ttf",
+            FONT_BOLD: "/System/Library/Fonts/Supplemental/Arial Bold.ttf",
+            FONT_ITALIC: "/System/Library/Fonts/Supplemental/Arial Italic.ttf",
+            FONT_BOLD_ITALIC: "/System/Library/Fonts/Supplemental/Arial Bold Italic.ttf",
+        },
+        # Linux
+        {
+            FONT_REGULAR: "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf",
+            FONT_BOLD: "/usr/share/fonts/truetype/msttcorefonts/Arial_Bold.ttf",
+            FONT_ITALIC: "/usr/share/fonts/truetype/msttcorefonts/Arial_Italic.ttf",
+            FONT_BOLD_ITALIC: "/usr/share/fonts/truetype/msttcorefonts/Arial_Bold_Italic.ttf",
+        }
+    ]
+    for font_set in candidates:
+        if os.path.exists(font_set[FONT_REGULAR]):
+            for name, path in font_set.items():
+                if os.path.exists(path):
+                    try:
+                        pdfmetrics.registerFont(TTFont(name, path))
+                    except Exception as e:
+                        print(f"Font register error {name}: {e}")
+            return
 
 register_fonts()
 
@@ -396,9 +411,9 @@ def build_contract_pdf(output_pdf_path: str, data: dict):
     story.append(PageBreak())
     story.append(Paragraph("BÊN B: BÊN CUNG CẤP DỊCH VỤ", style_party_title))
     story.append(Paragraph("PARTY B: SERVICE PROVIDER", style_party_title))
-    story.append(Paragraph("Tên đơn vị / Company Name: <b>CÔNG TY TNHH CHUYẾN ĐI VÀ THỊ THỰC DỄ DÀNG</b>", style_normal_vi))
-    story.append(Paragraph("English Name: EASY TRIP AND VISA COMPANY LIMITED", style_normal_en))
-    story.append(Paragraph("Mã số thuế / Tax Code: 4202051389", style_normal_vi))
+    story.append(Paragraph("Tên đơn vị / Company Name: <b>CÔNG TY TNHH DU LỊCH QUỐC TẾ EASYTRIP</b>", style_normal_vi))
+    story.append(Paragraph("English Name: EASYTRIP INTERNATIONAL TOURISM COMPANY LIMITED", style_normal_en))
+    story.append(Paragraph("Mã số thuế / Tax Code: 0318042456", style_normal_vi))
     story.append(Paragraph("Địa chỉ / Address: 21 Phan Vinh, Phường Vĩnh Nguyên, TP. Nha Trang, tỉnh Khánh Hòa, Việt Nam", style_normal_vi))
     story.append(Paragraph("Đại diện / Represented by: Ông/Bà <b>LÝ VIỆT HOÀNG</b> (Mr./Ms. LY VIET HOANG)", style_normal_vi))
     story.append(Paragraph("Chức vụ / Position: Giám đốc / Director", style_normal_vi))
@@ -643,7 +658,7 @@ def build_contract_pdf(output_pdf_path: str, data: dict):
     sig_tbl_data = [
         [
             Paragraph("<b>ĐẠI DIỆN BÊN A</b><br/><i>REPRESENTATIVE OF PARTY A</i>", style_tbl_header),
-            Paragraph("<b>ĐẠI DIỆN BÊN B</b><br/><b>CÔNG TY TNHH CHUYẾN ĐI VÀ THỊ THỰC DỄ DÀNG</b><br/><i>REPRESENTATIVE OF PARTY B<br/>EASY TRIP AND VISA CO., LTD</i><br/><b>GIÁM ĐỐC</b><br/><i>DIRECTOR</i>", style_tbl_header)
+            Paragraph("<b>ĐẠI DIỆN BÊN B</b><br/><b>CÔNG TY TNHH DU LỊCH QUỐC TẾ EASYTRIP</b><br/><i>REPRESENTATIVE OF PARTY B<br/>EASYTRIP INTERNATIONAL TOURISM CO., LTD</i><br/><b>GIÁM ĐỐC / DIRECTOR</b>", style_tbl_header)
         ],
         [
             Spacer(1, 2.0*cm),
