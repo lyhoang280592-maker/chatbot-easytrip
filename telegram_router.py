@@ -1212,8 +1212,33 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
             print(f"🎯 OCR đã nhận diện Khách Cũ từ ảnh vé: {matched_cust.get('full_name')}")
             if matched_cust.get("customer_id") and user_id:
                 customer_memory.link_telegram_to_customer(matched_cust["customer_id"], user_id)
-            # Cho AI phản hồi trực tiếp dựa trên nội dung ảnh đã đọc
-            await process_customer_text_message(update, context, user_id, ocr_text)
+            
+            cust_name = matched_cust.get("full_name") or "Quý khách"
+            cust_nat = matched_cust.get("nationality") or "Korea"
+            old_route = matched_cust.get("preferred_route") or "45D Laos (Miễn thị thực / Free Visa)"
+            old_seat = matched_cust.get("preferred_seat") or "A12"
+            old_pickup = matched_cust.get("preferred_pickup") or "40 Hòn Chồng (Nha Trang)"
+            past_trips = matched_cust.get("past_trips") or []
+            last_trip_desc = f"{old_route}, ngày {past_trips[0].get('departure_date')}, ghế {old_seat}, đón {old_pickup}" if past_trips else f"{old_route}, ghế {old_seat}, đón {old_pickup}"
+
+            prompt_msg = (
+                f"📸 [XÁC THỰC KHÁCH QUEN TỪ ẢNH BIÊN NHẬN/VÉ CŨ]\n"
+                f"Tôi vừa gửi ảnh vé cũ để xác thực là khách quen. "
+                f"Hệ thống đã nhận diện hồ sơ của tôi trong CRM:\n"
+                f"- Họ tên: {cust_name}\n"
+                f"- Quốc tịch: {cust_nat}\n"
+                f"- Chuyến đi cũ trong quá khứ: {last_trip_desc}\n\n"
+                f"🎯 Hãy trả lời tôi theo đúng quy trình:\n"
+                f"1. Chào mừng tôi quay lại bằng ngôn ngữ phù hợp kèm tên của tôi ({cust_name}).\n"
+                f"2. Xác nhận đã tìm thấy thông tin vé cũ của tôi trong hệ thống.\n"
+                f"3. HỎI TÔI CÓ MUỐN ĐẶT LẠI DỊCH VỤ CŨ KHÔNG: Hỏi tôi có muốn đặt lại chuyến đi ({old_route}) cho chuyến đi tiếp theo không, và hỏi tôi dự kiến đi vào ngày nào sắp tới.\n"
+                f"4. Hỏi tôi có muốn tiếp tục giữ vị trí ghế quen thuộc ({old_seat}) và điểm đón quen thuộc ({old_pickup}) không.\n"
+                f"5. BÁO GIÁ ƯU ĐÃI KHÁCH CŨ: Tuyến 45 ngày Lào miễn visa giá ưu đãi khách cũ chỉ 1.300.000 VNĐ (tiết kiệm 100.000 VNĐ so với giá mới 1.400.000 VNĐ) / hoặc mức giá ưu đãi tương ứng cho quốc tịch của tôi.\n"
+                f"⚠️ TUYỆT ĐỐI KHÔNG tự động chốt lịch hoặc xác nhận đặt vé cho ngày khởi hành cũ trên tờ vé (vì ngày trên vé là chuyến đi trong quá khứ)!"
+            )
+            
+            # Cho AI phản hồi trực tiếp
+            await process_customer_text_message(update, context, user_id, prompt_msg)
             return
 
         # 2. Nếu khách đang trong luồng chọn Khách Cũ HOẶC gửi ảnh biên nhận/vé nhưng không tìm thấy trên CRM
@@ -1226,7 +1251,10 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "────────────────────\n"
                 "ℹ️ **Мы не нашли информацию о вашем бронировании в нашей базе данных.**\n"
                 "Поэтому для вашей поездки будет действовать **стандартный тариф, указанный на нашем сайте**.\n\n"
-                "👉 Пожалуйста, напишите **желаемую дату поездки или интересующий тип визы**!"
+                "👉 Пожалуйста, напишите **желаемую дату поездки или интересующий тип визы**!\n\n"
+                "────────────────────\n"
+                "ℹ️ **저희 데이터베이스에서 이전 예약 정보를 찾을 수 없어, 웹사이트에 게시된 표준 요금이 적용됩니다.**\n\n"
+                "👉 원하시는 **출발 날짜나 비자 종류**를 말씀해 주시면 바로 안내해 드리겠습니다!"
             )
             if conn_id:
                 await message.reply_text(not_found_photo_msg, parse_mode="Markdown", business_connection_id=conn_id)  # type: ignore

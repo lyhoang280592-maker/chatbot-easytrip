@@ -556,6 +556,17 @@ def find_customer_by_booking_text(text: str) -> Optional[Dict[str, Any]]:
         best_match["total_trips"] = max(best_match.get("total_trips") or 1, 1)
         if not best_match.get("nationality") and is_slavic_name(best_match.get("full_name", "")):
             best_match["nationality"] = "Russia"
+        try:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM trip_history 
+                WHERE customer_id = ? 
+                ORDER BY trip_id DESC LIMIT 5
+            """, (best_match["customer_id"],))
+            trips = [dict(t) for t in cursor.fetchall()]
+            best_match["past_trips"] = trips
+        except Exception:
+            pass
         return best_match
         
     return None
@@ -676,6 +687,7 @@ The customer previously selected 'Returning Customer' or provided old booking in
    - Example statement: "{notice_sample}"
 3. **STRICTLY APPLY STANDARD WEBSITE LISTED PRICING (NEW / RETAIL)**:
    - Russian citizens: Visarun 90D Single: **3,400,000 VND** / Multi: **4,400,000 VND** / Free Visa 45D: **1,400,000 VND**
+   - Korea / Japan citizens (Visa-free 45D Laos): **1,400,000 VND**
    - Other nationalities: Cambodia 90D: **4,000,000 VND** / Free Visa 45D: **1,400,000 VND**
    - DO NOT offer returning customer discounts.
 4. **POLITELY ASK FOR NEXT TRIP DETAILS**:
@@ -698,7 +710,7 @@ The customer previously selected 'Returning Customer' or provided old booking in
     last_trip_info = "Chưa có chuyến đi trước đó"
     if past_trips:
         latest = past_trips[0]
-        last_trip_info = f"Chuyến {latest.get('route', '')} ngày {latest.get('departure_date', '')} (Ghế {latest.get('seat_number', '')})"
+        last_trip_info = f"Chuyến {latest.get('route', '')} ngày {latest.get('departure_date', '')} (Ghế {latest.get('seat_number', '')}, Điểm đón {latest.get('pickup_location', '')})"
 
     visa_exp = profile.get("visa_expiry_date") or "Chưa rõ (hãy hỏi lại lịch sự)"
     
@@ -709,7 +721,7 @@ The customer previously selected 'Returning Customer' or provided old booking in
     elif any(k in nat_lower for k in ["vietnam", "vietnamese", "việt nam"]):
         lang_directive = "MANDATORY LANGUAGE: VIETNAMESE (Tiếng Việt). You MUST reply in VIETNAMESE!"
     elif any(k in nat_lower for k in ["korea", "korean", "hàn quốc"]):
-        lang_directive = "MANDATORY LANGUAGE: KOREAN (한국어). You MUST reply in KOREAN!"
+        lang_directive = "MANDATORY LANGUAGE: KOREAN (한국어). You MUST reply in KOREAN (e.g. '안녕하세요, {full_name} 고객님! Easy Trip & Visa를 다시 찾아주셔서 감사합니다...')."
     elif any(k in nat_lower for k in ["china", "chinese", "trung quốc"]):
         lang_directive = "MANDATORY LANGUAGE: CHINESE (中文). You MUST reply in CHINESE!"
     else:
@@ -730,23 +742,22 @@ Customer Profile:
 - Preferred Route: {pref_route}
 - Personal Notes & Habits: {notes or 'Khách hàng thân thiết, ưu tiên tư vấn nhanh chóng'}
 
-🎯 CRITICAL LANGUAGE & PRICING REQUIREMENTS:
+🎯 CRITICAL WORKFLOW & PRICING REQUIREMENTS:
 1. {lang_directive}
 
-2. **WARM WELCOME AS A VALUED RETURNING FRIEND**:
+2. **WARM WELCOME & ACKNOWLEDGE PAST TRIP**:
    - Greet the customer warmly by their name ({full_name}) in their native language!
-   - Acknowledge that they are a returning customer (e.g. 'С возвращением!' in Russian or 'Welcome back!').
-   - Politely ask how their previous trip was.
+   - Acknowledge that they are a returning customer and confirm you have found their past trip details ({last_trip_info}).
+   - ⚠️ NOTE: The date on the previous ticket is a PAST trip. DO NOT confirm booking for that old date!
 
-3. **ZERO REDUNDANCY (DO NOT ASK KNOWN DETAILS)**:
-   - DO NOT ask for their nationality again (you already know they are from {nationality}).
-   - DO NOT re-explain basic visa run rules from scratch unless they explicitly ask.
+3. **ASK IF THEY WANT TO RE-BOOK THEIR PREVIOUS SERVICE (HỎI ĐẶT LẠI DỊCH VỤ CŨ)**:
+   - Proactively ask: "Would you like to re-book the same service ({pref_route}) for your next upcoming trip?"
+   - Ask what date they plan to travel next (or when their visa expires).
+   - Ask if they would like to keep their favorite seat ({pref_seat}) and pickup point ({pref_pickup}).
 
-4. **PROACTIVE SCHEDULING & PREFERENCES**:
-   - Ask for their new visa expiry date or departure date to arrange the next trip.
-   - Mention that you will reserve their favorite seat ({pref_seat}) and pick them up at {pref_pickup}.
-
-5. **SPECIAL PRICING & BENEFITS (APPLY RETURNING DISCOUNT ACCURATELY)**:
+4. **SPECIAL RETURNING PRICING & BENEFITS (BÁO GIÁ ƯU ĐÃI KHÁCH CŨ)**:
+   - **If customer is Korean / Japan / Visa-free 45-day Laos (như khách {full_name})**:
+     * Visarun Free Visa 45-Day Laos (Bo Y): **1,300,000 VND** (Special returning rate, discounted from new customer price 1,400,000 VND!)
    - **If customer is Russian / CIS citizen (Công dân Nga)**:
      * Visarun 90-day E-visa Single Entry (4 hours): **3,000,000 VND** (Special returning rate, discounted from new customer price 3,400,000 VND)
      * Visarun 90-day E-visa Multi Entry (4 hours): **4,000,000 VND** (Single + 1,000,000 VND, discounted from new customer price 4,400,000 VND)
@@ -756,7 +767,7 @@ Customer Profile:
      * Visarun Free Visa (45 days Bo Y / Moc Bai): **1,300,000 VND** (Discounted from new customer 1,400,000 VND)
    - Always emphasize that as a Valued Returning Customer ({tier}), they receive **Free Priority Seat Reservation ({pref_seat})** and dedicated fast check-in assistance!
 
-6. **TONE STYLE**:
+5. **TONE STYLE**:
    - Extremely natural, warm, enthusiastic, attentive, and professional.
 ======================================================================
 """
