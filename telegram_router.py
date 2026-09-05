@@ -447,24 +447,25 @@ async def send_new_customer_welcome_menu(chat_id: str | int, target_msg, conn_id
 
 async def send_returning_customer_request(chat_id: str | int, target_msg, conn_id=None):
     returning_prompt = (
-        "🌟 **XÁC NHẬN KHÁCH HÀNG THÂN THIẾT / RETURNING CUSTOMER**\n\n"
-        "Để áp dụng **chính sách giá ưu đãi đặc biệt** dành riêng cho khách hàng cũ và giữ vị trí ghế quen/điểm đón quen của bạn:\n"
-        "👉 Bạn vui lòng gửi lại **nội dung tin nhắn booking gần nhất** hoặc **ảnh chụp vé / tin nhắn đón xe cũ** như mẫu dưới đây nhé:\n\n"
+        "🌟 **RETURNING CUSTOMER LOYALTY DISCOUNT**\n\n"
+        "To apply your **exclusive loyalty discount** and personal preferences, please send your **previous booking confirmation message, ticket screenshot, or your Full Passport Name / Phone number**.\n\n"
+        "📌 **Example Booking Format:**\n"
         "```text\n"
-        "10/09-90D- Laos\n"
-        "TSARENKO EKATERINA\n"
-        "B10\n"
-        "RODICHEV DMITRY\n"
-        "A12\n"
-        "40 Hon Chong - 9:30PM\n"
-        "```\n"
-        "*(Hoặc bạn chỉ cần nhắn Họ & Tên đầy đủ trên hộ chiếu / Số điện thoại đã từng đặt)*\n\n"
+        "10/09 - 90D - Laos\n"
+        "FULL NAME (As on Passport)\n"
+        "Seat: B10\n"
+        "Pickup: 40 Hon Chong - 9:30 PM\n"
+        "```\n\n"
         "────────────────────\n"
-        "🌟 **RETURNING CUSTOMER LOYALTY DISCOUNT**\n"
-        "To apply your **exclusive loyalty discount** and personal preferences, please send your **previous booking message, ticket screenshot, or your Full Passport Name / Phone number**.\n\n"
-        "────────────────────\n"
-        "🌟 **СПЕЦИАЛЬНАЯ ЦЕНА ДЛЯ ПОСТОЯННЫХ КЛИЕНТОВ**\n"
-        "Чтобы получить **специальную цену постоянного клиента** и сохранить любимые места, отправьте, пожалуйста, **текст вашего предыдущего бронирования, скриншот билета или ваши ФИО на латинице (по загранпаспорту)**."
+        "🌟 **СПЕЦИАЛЬНАЯ ЦЕНА ДЛЯ ПОСТОЯННЫХ КЛИЕНТОВ**\n\n"
+        "Чтобы получить **специальную цену постоянного клиента** и сохранить любимые места, отправьте, пожалуйста, **текст вашего предыдущего бронирования, скриншот билета или ваши ФИО на латинице (по загранпаспорту) / номер телефона**.\n\n"
+        "📌 **Пример формата бронирования:**\n"
+        "```text\n"
+        "10/09 - 90D - Laos\n"
+        "ФИО (по загранпаспорту)\n"
+        "Место: B10\n"
+        "Посадка: 40 Hon Chong - 21:30\n"
+        "```"
     )
     if target_msg:
         if conn_id:
@@ -488,8 +489,6 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         del memory_store[f"{session_id}_awaiting_old_booking"]
 
     welcome_question = (
-        "👋 **Xin chào bạn! Chào mừng bạn đến với Easy Trip & Visa.**\n"
-        "Bạn đã từng đặt dịch vụ bên mình trước đây chưa?\n\n"
         "👋 **Welcome to Easy Trip & Visa!**\n"
         "Have you booked any service with us before?\n\n"
         "👋 **Здравствуйте! Добро пожаловать в Easy Trip & Visa.**\n"
@@ -497,8 +496,8 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     )
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🌟 Khách Cũ (Ưu đãi) / Returning / Постоянный клиент", callback_data="cust_type|returning")],
-        [InlineKeyboardButton("🆕 Khách Mới / New Customer / Новый клиент", callback_data="cust_type|new")],
+        [InlineKeyboardButton("🌟 Returning Customer (Loyalty Discount) / Постоянный клиент", callback_data="cust_type|returning")],
+        [InlineKeyboardButton("🆕 New Customer / Новый клиент", callback_data="cust_type|new")],
         [InlineKeyboardButton("💬 Direct Telegram Support", url="https://t.me/easytripvisa_co_ltd")],
         [InlineKeyboardButton("💬 Direct WhatsApp Support", url="https://wa.me/84868462071")]
     ])
@@ -506,6 +505,7 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     target_msg: Any = update.message or (update.callback_query.message if update.callback_query else None)
     if target_msg:
         await target_msg.reply_text(welcome_question, reply_markup=keyboard, parse_mode="Markdown")
+
 
 async def get_id_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message and update.effective_chat:
@@ -1146,15 +1146,13 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if memory_store.get(f"{session_id}_awaiting_old_booking"):
             memory_store.pop(f"{session_id}_awaiting_old_booking", None)
             confirm_photo_msg = (
-                "✅ **Đã nhận hình ảnh booking chuyến đi cũ của bạn!**\n"
-                "Easy Trip & Visa đang tiến hành đối soát thông tin của bạn trên hệ thống CRM để kích hoạt chính sách giá ưu đãi Khách hàng thân thiết.\n\n"
-                "👉 Trong lúc này, bạn vui lòng cho mình biết **ngày bạn dự kiến khởi hành chuyến đi tiếp theo** hoặc loại visa bạn cần nhé!\n\n"
-                "────────────────────\n"
                 "✅ **Previous booking image received!**\n"
-                "We are verifying your loyalty profile on our CRM. Please let us know your **intended departure date or preferred visa type** for your next trip!\n\n"
+                "Easy Trip & Visa is verifying your loyalty profile on our CRM to apply your returning customer discount.\n\n"
+                "👉 Please let us know your **intended departure date or preferred visa type** for your next trip!\n\n"
                 "────────────────────\n"
                 "✅ **Фото предыдущего бронирования получено!**\n"
-                "Мы проверяем ваши данные в CRM для применения скидки постоянного клиента. Пожалуйста, напишите **желаемую дату следующей поездки или тип визы**!"
+                "Мы проверяем ваши данные в CRM для применения специальной цены постоянного клиента.\n\n"
+                "👉 Пожалуйста, напишите **желаемую дату следующей поездки или тип визы**!"
             )
             if conn_id:
                 await message.reply_text(confirm_photo_msg, business_connection_id=conn_id)  # type: ignore
