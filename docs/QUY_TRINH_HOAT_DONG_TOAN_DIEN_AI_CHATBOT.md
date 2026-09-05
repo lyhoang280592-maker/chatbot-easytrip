@@ -49,10 +49,11 @@ flowchart TD
 
 ### 📍 Giai đoạn 1: Tiếp Nhận Tin Nhắn & Nhận Diện Khách Hàng
 1. **Phát tín hiệu "Đang soạn tin nhắn..." (Typing indicator)** ngay khi nhận tin nhắn để khách hàng an tâm.
-2. **Quét cơ sở dữ liệu SQLite**:
-   * Kiểm tra qua `telegram_id`, `phone_number`, `zalo_id` hoặc `facebook_id`.
-   * **Nếu là Khách Mới**: Gán phân hạng `NEW`, chuẩn bị quy trình thu thập 5 thông tin.
-   * **Nếu là Khách Cũ**: Tải toàn bộ hồ sơ (Họ tên, Quốc tịch, Ghế quen như `A1`, Điểm đón quen như `Oceanus Nha Trang`, Lịch sử đi).
+2. **Khảo sát phân loại ban đầu (`/start`)**:
+   * Khi khách bấm `🌟 Returning Customer / Friend Booked Before`: Bot yêu cầu gửi thông tin/ảnh booking cũ để đối soát CRM.
+   * **Tra soát CSDL CRM (936 hồ sơ)**:
+     - **Nếu tìm thấy thông tin trên CRM**: Gán nhãn `RETURNING`, áp dụng mức giá tri ân khách cũ và cá nhân hóa phong cách xưng hô theo tên thật.
+     - **Nếu KHÔNG tìm thấy trên CRM**: Bot lập tức thông báo rõ ràng: *"Chúng tôi không tìm thấy thông tin của bạn trên cơ sở dữ liệu của chúng tôi, vì vậy chúng ta sẽ áp dụng giá niêm yết trên website"* và chuyển sang báo giá niêm yết website (giá khách mới).
 3. **Phát hiện ngôn ngữ**: Tự động nhận diện chữ viết (Tiếng Nga, Tiếng Anh, Tiếng Việt, Tiếng Hàn, Tiếng Trung) để phản hồi chuẩn ngôn ngữ mẹ đẻ của khách.
 
 ---

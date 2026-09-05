@@ -545,6 +545,8 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
         cust_profile = customer_memory.get_or_create_customer("telegram", user_id, full_name=full_name_tg)
         if is_awaiting_old:
             memory_store.pop(f"{session_id}_awaiting_old_booking", None)
+            if cust_profile:
+                cust_profile["unverified_returning_attempt"] = True
 
     cust_id = cust_profile.get("customer_id") if cust_profile else None
 
@@ -1175,19 +1177,20 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await process_customer_text_message(update, context, user_id, ocr_text)
                 return
 
-            confirm_photo_msg = (
-                "✅ **Previous booking image received!**\n"
-                "Easy Trip & Visa is verifying your loyalty profile on our CRM to apply your returning customer discount.\n\n"
-                "👉 Please let us know your **intended departure date or preferred visa type** for your next trip!\n\n"
+            # Nếu không tìm thấy thông tin trên CRM
+            not_found_photo_msg = (
+                "ℹ️ **We could not find your booking information in our database.**\n"
+                "Therefore, our **standard website listed prices** will apply to your booking.\n\n"
+                "👉 Please let us know your **intended departure date or preferred visa type** to proceed!\n\n"
                 "────────────────────\n"
-                "✅ **Фото предыдущего бронирования получено!**\n"
-                "Мы проверяем ваши данные в CRM для применения специальной цены постоянного клиента.\n\n"
-                "👉 Пожалуйста, напишите **желаемую дату следующей поездки или тип визы**!"
+                "ℹ️ **Мы не нашли информацию о вашем бронировании в нашей базе данных.**\n"
+                "Поэтому для вашей поездки будет действовать **стандартный тариф, указанный на нашем сайте**.\n\n"
+                "👉 Пожалуйста, напишите **желаемую дату поездки или интересующий тип визы**!"
             )
             if conn_id:
-                await message.reply_text(confirm_photo_msg, business_connection_id=conn_id)  # type: ignore
+                await message.reply_text(not_found_photo_msg, parse_mode="Markdown", business_connection_id=conn_id)  # type: ignore
             else:
-                await message.reply_text(confirm_photo_msg)
+                await message.reply_text(not_found_photo_msg, parse_mode="Markdown")
             return
 
         lang = get_lang_code(nationality) if data else "en"

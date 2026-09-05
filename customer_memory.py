@@ -465,42 +465,7 @@ def find_customer_by_booking_text(text: str) -> Optional[Dict[str, Any]]:
             best_cust["nationality"] = "Russia"
         return best_cust
         
-    # 3. Phân tích dự phòng: Nếu text có cấu trúc booking cũ (tên viết hoa, tuyến Laos/Bo Y/Cambodia, ghế A/B)
-    lines = [line.strip() for line in text.split('\n') if line.strip()]
-    candidate_names = []
-    seat_match = re.search(r'\b([AB]\d{1,2})\b', text.upper())
-    pref_seat = seat_match.group(1) if seat_match else "A4"
-    
-    is_laos = any(k in text.lower() for k in ['laos', 'lào', 'bo y', 'bờ y'])
-    is_cambodia = any(k in text.lower() for k in ['cambodia', 'campuchia', 'moc bai', 'mộc bài'])
-    route_name = "90D Laos Bo Y" if is_laos else "Cambodia Moc Bai" if is_cambodia else "Visa Run"
-    
-    pickup_loc = "40 Hon Chong" if "hon chong" in text.lower() else "Oceanus Nha Trang"
-    
-    for line in lines:
-        cleaned_line = re.sub(r'[^a-zA-Z\s]', '', line).strip()
-        words = cleaned_line.split()
-        if len(words) >= 2 and all(w.isupper() or w.istitle() for w in words):
-            if not any(k in cleaned_line.upper() for k in ['LAOS', 'BO Y', 'HON CHONG', 'CAMBODIA', 'SINGLE', 'ENTRY', 'EXIT', 'PERSON', 'VISA', 'MAPS', 'PLAIN', 'TEXT']):
-                candidate_names.append(cleaned_line.upper())
-                
-    if candidate_names:
-        primary_name = candidate_names[0]
-        is_slav = is_slavic_name(primary_name) or is_laos
-        nat = "Russia" if is_slav else "International"
-        
-        return {
-            "customer_id": None,
-            "full_name": primary_name,
-            "nationality": nat,
-            "customer_tier": "RETURNING",
-            "total_trips": 1,
-            "preferred_seat": pref_seat,
-            "preferred_pickup": pickup_loc,
-            "preferred_route": route_name,
-            "customer_notes": f"Tự động nhận diện từ thông tin booking cũ: {text[:100]}..."
-        }
-        
+    # Không tìm thấy thông tin trên CRM
     return None
 
 
@@ -592,6 +557,41 @@ def format_customer_profile_for_prompt(profile: Optional[Dict[str, Any]]) -> str
     total_trips = int(profile.get("total_trips") or 0)
     past_trips = profile.get("past_trips") or []
     
+    # Nếu là trường hợp chọn khách cũ nhưng không tìm thấy trong CRM
+    if profile.get("unverified_returning_attempt"):
+        full_name = profile.get("full_name") or ""
+        nat_lower = (profile.get("nationality") or "").lower()
+        is_ru = any(k in nat_lower for k in ["russia", "russian", "nga", "belarus", "kazakh", "ukrain"]) or is_slavic_name(full_name)
+        if is_ru:
+            notice_sample = "Мы не нашли информацию о вашем предыдущем бронировании в нашей базе данных, поэтому для вашей поездки будет действовать стандартный тариф, указанный на нашем сайте."
+            lang_dir = "MANDATORY LANGUAGE: RUSSIAN (Русский язык). You MUST reply completely in RUSSIAN!"
+        elif any(k in nat_lower for k in ["vietnam", "vietnamese", "việt nam"]):
+            notice_sample = "Chúng tôi không tìm thấy thông tin của bạn trên cơ sở dữ liệu của chúng tôi, vì vậy chúng ta sẽ áp dụng giá niêm yết trên website."
+            lang_dir = "MANDATORY LANGUAGE: VIETNAMESE (Tiếng Việt)."
+        else:
+            notice_sample = "We could not find your previous booking information in our database, so standard website listed prices will apply to your booking."
+            lang_dir = "MANDATORY LANGUAGE: ENGLISH."
+
+        directive = f"""
+======================================================================
+⚠️ CRITICAL DIRECTIVE: NOT FOUND IN CRM DATABASE (USE STANDARD WEBSITE PRICE)
+======================================================================
+The customer previously selected 'Returning Customer' or provided old booking info, BUT their information was NOT found in our CRM database.
+
+🎯 MANDATORY INSTRUCTIONS:
+1. {lang_dir}
+2. **CLEAR NOTICE TO CUSTOMER**: You MUST state clearly at the very beginning of your response that we could not find their information in our database, so standard website prices will apply:
+   - Example statement: "{notice_sample}"
+3. **STRICTLY APPLY STANDARD WEBSITE LISTED PRICING (NEW / RETAIL)**:
+   - Russian citizens: Visarun 90D Single: **3,400,000 VND** / Multi: **4,400,000 VND** / Free Visa 45D: **1,400,000 VND**
+   - Other nationalities: Cambodia 90D: **4,000,000 VND** / Free Visa 45D: **1,400,000 VND**
+   - DO NOT offer returning customer discounts.
+4. **POLITELY ASK FOR NEXT TRIP DETAILS**:
+   - Ask for their intended departure date or preferred visa type to proceed.
+======================================================================
+"""
+        return directive
+
     # Chỉ áp dụng khi là khách cũ có hồ sơ
     if tier not in ["RETURNING", "VIP"] and total_trips <= 0 and len(past_trips) == 0:
         return ""
