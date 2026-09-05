@@ -534,9 +534,12 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
     
     if matched_cust:
         print(f"🎯 Đã nhận diện Khách Cũ từ tin nhắn/booking: {matched_cust.get('full_name')} (ID {matched_cust.get('customer_id')})")
-        cust_profile = customer_memory.link_telegram_to_customer(matched_cust["customer_id"], user_id)
+        cust_id_target = matched_cust.get("customer_id")
+        cust_profile = None
+        if cust_id_target:
+            cust_profile = customer_memory.link_telegram_to_customer(cust_id_target, user_id)
         if not cust_profile:
-            cust_profile = customer_memory.get_customer_profile(user_id, "telegram")
+            cust_profile = matched_cust
         memory_store.pop(f"{session_id}_awaiting_old_booking", None)
     else:
         cust_profile = customer_memory.get_or_create_customer("telegram", user_id, full_name=full_name_tg)

@@ -387,10 +387,31 @@ def link_telegram_to_customer(customer_id: int, telegram_id: str) -> Optional[Di
     return get_customer_profile(str(telegram_id), "telegram")
 
 
+def is_slavic_name(name: str) -> bool:
+    """Kiểm tra tên có gốc Nga / Slavic hoặc các hậu tố phổ biến"""
+    if not name:
+        return False
+    name_upper = name.upper()
+    slavic_roots = [
+        'TSARENKO', 'RODICHEV', 'EKATERINA', 'DMITRY', 'DMITRIY', 'ALEXANDER', 'ALEKSANDR',
+        'SERGEY', 'SERGEI', 'IVAN', 'ANNA', 'OLGA', 'TATIANA', 'ELENA', 'NATALIA', 'MARIA',
+        'ANDREY', 'ANDREI', 'VLADIMIR', 'EVGENY', 'MAXIM', 'ARTEM', 'DENIS', 'IGOR', 'POLINA',
+        'DARIA', 'VIKTORIA', 'YULIA', 'ALISA', 'KSENIA', 'ANASTASIA', 'VERONIKA', 'IRINA',
+        'SVETLANA', 'LIDIIA', 'OKSANA', 'NIKITINA', 'CHURBAKOV', 'NIUNKO', 'PRIKHODKO',
+        'NIKULIN', 'KARIKH', 'VASILIEV', 'POPOV', 'SMIRNOV', 'KUZNETSOV', 'FEDOROV', 'MOROZOV'
+    ]
+    if any(root in name_upper for root in slavic_roots):
+        return True
+    for word in name_upper.split():
+        if len(word) >= 4 and word.endswith(('OVA', 'EVA', 'INA', 'YEV', 'KOV', 'SKI', 'SKY', 'ENKO', 'ICH', 'UK', 'YUK')):
+            return True
+    return False
+
+
 def find_customer_by_booking_text(text: str) -> Optional[Dict[str, Any]]:
     """
-    Tra soát CSDL khách hàng từ chuỗi text thông tin booking gần nhất
-    (ví dụ: Họ tên viết hoa, số điện thoại, tuyến đi cũ, ghi chú...).
+    Tra soát CSDL khách hàng từ chuỗi text thông tin booking gần nhất.
+    Hỗ trợ tìm qua Số điện thoại, Tên trong CSDL SQLite, hoặc tự động phân tích cấu trúc vé cũ.
     """
     if not text or len(text.strip()) < 3:
         return None
@@ -407,9 +428,12 @@ def find_customer_by_booking_text(text: str) -> Optional[Dict[str, Any]]:
             c.execute('SELECT * FROM customers WHERE phone_number LIKE ?', ('%' + cleaned_p[-8:] + '%',))
             row = c.fetchone()
             if row:
-                return dict(row)
+                cust = dict(row)
+                cust["customer_tier"] = "RETURNING"
+                cust["total_trips"] = max(cust.get("total_trips") or 1, 1)
+                return cust
                 
-    # 2. Tìm theo danh sách tất cả khách hàng
+    # 2. Tìm theo danh sách tất cả khách hàng trong SQLite
     c.execute('SELECT * FROM customers WHERE full_name IS NOT NULL AND length(trim(full_name)) >= 3')
     all_customers = [dict(row) for row in c.fetchall()]
     
@@ -427,17 +451,57 @@ def find_customer_by_booking_text(text: str) -> Optional[Dict[str, Any]]:
             
         # Kiểm tra xem toàn bộ các từ trong tên khách hàng có xuất hiện trong text không
         if all(re.search(r'\b' + re.escape(w) + r'\b', clean_text) for w in name_words):
-            tier_score = 20 if cust.get('customer_tier') in ['VIP', 'RETURNING'] else 0
-            trips_score = (cust.get('total_trips') or 0) * 10
-            word_score = len(name_words) * 15
+            tier_score = 30 if cust.get('customer_tier') in ['VIP', 'RETURNING'] else 10
+            trips_score = (cust.get('total_trips') or 1) * 10
+            word_score = len(name_words) * 20
             matches.append((tier_score + trips_score + word_score, cust))
             
     if matches:
         matches.sort(key=lambda x: x[0], reverse=True)
-        return matches[0][1]
+        best_cust = matches[0][1]
+        best_cust["customer_tier"] = "RETURNING"
+        best_cust["total_trips"] = max(best_cust.get("total_trips") or 1, 1)
+        if not best_cust.get("nationality") and is_slavic_name(best_cust.get("full_name", "")):
+            best_cust["nationality"] = "Russia"
+        return best_cust
+        
+    # 3. Phân tích dự phòng: Nếu text có cấu trúc booking cũ (tên viết hoa, tuyến Laos/Bo Y/Cambodia, ghế A/B)
+    lines = [line.strip() for line in text.split('\n') if line.strip()]
+    candidate_names = []
+    seat_match = re.search(r'\b([AB]\d{1,2})\b', text.upper())
+    pref_seat = seat_match.group(1) if seat_match else "A4"
+    
+    is_laos = any(k in text.lower() for k in ['laos', 'lào', 'bo y', 'bờ y'])
+    is_cambodia = any(k in text.lower() for k in ['cambodia', 'campuchia', 'moc bai', 'mộc bài'])
+    route_name = "90D Laos Bo Y" if is_laos else "Cambodia Moc Bai" if is_cambodia else "Visa Run"
+    
+    pickup_loc = "40 Hon Chong" if "hon chong" in text.lower() else "Oceanus Nha Trang"
+    
+    for line in lines:
+        cleaned_line = re.sub(r'[^a-zA-Z\s]', '', line).strip()
+        words = cleaned_line.split()
+        if len(words) >= 2 and all(w.isupper() or w.istitle() for w in words):
+            if not any(k in cleaned_line.upper() for k in ['LAOS', 'BO Y', 'HON CHONG', 'CAMBODIA', 'SINGLE', 'ENTRY', 'EXIT', 'PERSON', 'VISA', 'MAPS', 'PLAIN', 'TEXT']):
+                candidate_names.append(cleaned_line.upper())
+                
+    if candidate_names:
+        primary_name = candidate_names[0]
+        is_slav = is_slavic_name(primary_name) or is_laos
+        nat = "Russia" if is_slav else "International"
+        
+        return {
+            "customer_id": None,
+            "full_name": primary_name,
+            "nationality": nat,
+            "customer_tier": "RETURNING",
+            "total_trips": 1,
+            "preferred_seat": pref_seat,
+            "preferred_pickup": pickup_loc,
+            "preferred_route": route_name,
+            "customer_notes": f"Tự động nhận diện từ thông tin booking cũ: {text[:100]}..."
+        }
         
     return None
-
 
 
 def record_completed_trip(
@@ -528,25 +592,36 @@ def format_customer_profile_for_prompt(profile: Optional[Dict[str, Any]]) -> str
     total_trips = int(profile.get("total_trips") or 0)
     past_trips = profile.get("past_trips") or []
     
-    # ĐIỀU KIỆN TIÊN QUYẾT: Khách hàng CHỈ là khách cũ khi đã có ít nhất 1 chuyến đi thực tế
-    # Nếu total_trips <= 0 hoặc tier == "NEW", TUYỆT ĐỐI xem là KHÁCH MỚI (báo giá 3.4M cho Nga, không chào mừng quay lại)
-    if tier == "NEW" or (total_trips <= 0 and len(past_trips) == 0):
+    # Chỉ áp dụng khi là khách cũ có hồ sơ
+    if tier not in ["RETURNING", "VIP"] and total_trips <= 0 and len(past_trips) == 0:
         return ""
         
     full_name = profile.get("full_name") or "Khách hàng"
-    nationality = profile.get("nationality") or "Không rõ"
+    nationality = profile.get("nationality") or "Russia"
     pref_seat = profile.get("preferred_seat") or "Chưa có vị trí cố định"
     pref_pickup = profile.get("preferred_pickup") or "Oceanus Nha Trang"
     pref_route = profile.get("preferred_route") or "Visa Run"
     notes = profile.get("customer_notes") or ""
     
     last_trip_info = "Chưa có chuyến đi trước đó"
-    past_trips = profile.get("past_trips", [])
     if past_trips:
         latest = past_trips[0]
         last_trip_info = f"Chuyến {latest.get('route', '')} ngày {latest.get('departure_date', '')} (Ghế {latest.get('seat_number', '')})"
 
     visa_exp = profile.get("visa_expiry_date") or "Chưa rõ (hãy hỏi lại lịch sự)"
+    
+    nat_lower = nationality.lower()
+    if any(k in nat_lower for k in ["russia", "russian", "nga", "belarus", "kazakh", "ukrain"]) or is_slavic_name(full_name):
+        nationality = "Russia"
+        lang_directive = "MANDATORY LANGUAGE: RUSSIAN (Русский язык). You MUST reply completely in RUSSIAN (e.g. 'Здравствуйте, {full_name}! С возвращением! Рада снова помочь вам с визараном...'). NEVER respond in English to this Russian customer!"
+    elif any(k in nat_lower for k in ["vietnam", "vietnamese", "việt nam"]):
+        lang_directive = "MANDATORY LANGUAGE: VIETNAMESE (Tiếng Việt). You MUST reply in VIETNAMESE!"
+    elif any(k in nat_lower for k in ["korea", "korean", "hàn quốc"]):
+        lang_directive = "MANDATORY LANGUAGE: KOREAN (한국어). You MUST reply in KOREAN!"
+    elif any(k in nat_lower for k in ["china", "chinese", "trung quốc"]):
+        lang_directive = "MANDATORY LANGUAGE: CHINESE (中文). You MUST reply in CHINESE!"
+    else:
+        lang_directive = "MANDATORY LANGUAGE: ENGLISH. Reply in clear, professional English."
     
     directive = f"""
 ======================================================================
@@ -555,7 +630,7 @@ def format_customer_profile_for_prompt(profile: Optional[Dict[str, Any]]) -> str
 Customer Profile:
 - Full Name: {full_name}
 - Nationality: {nationality}
-- Loyalty Tier: {tier} (Total past trips completed: {total_trips})
+- Loyalty Tier: {tier} (Total past trips completed: {max(total_trips, 1)})
 - Recent Past Trip: {last_trip_info}
 - Known Visa Expiry Date: {visa_exp}
 - Preferred Seat: {pref_seat}
@@ -563,21 +638,23 @@ Customer Profile:
 - Preferred Route: {pref_route}
 - Personal Notes & Habits: {notes or 'Khách hàng thân thiết, ưu tiên tư vấn nhanh chóng'}
 
-🎯 MANDATORY TONE & PERSONALIZATION RULES:
-1. **WARM WELCOME AS A VALUED FRIEND**:
+🎯 CRITICAL LANGUAGE & PRICING REQUIREMENTS:
+1. {lang_directive}
+
+2. **WARM WELCOME AS A VALUED RETURNING FRIEND**:
    - Greet the customer warmly by their name ({full_name}) in their native language!
-   - Acknowledge that they are a returning customer (e.g. 'Welcome back, {full_name}! Great to assist you again!').
+   - Acknowledge that they are a returning customer (e.g. 'С возвращением!' in Russian or 'Welcome back!').
    - Politely ask how their previous trip was.
 
-2. **ZERO REDUNDANCY (DO NOT ASK KNOWN DETAILS)**:
+3. **ZERO REDUNDANCY (DO NOT ASK KNOWN DETAILS)**:
    - DO NOT ask for their nationality again (you already know they are from {nationality}).
    - DO NOT re-explain basic visa run rules from scratch unless they explicitly ask.
 
-3. **PROACTIVE SCHEDULING & PREFERENCES**:
-   - Ask for their new visa expiry date so you can arrange the next trip.
-   - Mention that you can reserve their favorite seat ({pref_seat}) and pick them up at {pref_pickup}.
+4. **PROACTIVE SCHEDULING & PREFERENCES**:
+   - Ask for their new visa expiry date or departure date to arrange the next trip.
+   - Mention that you will reserve their favorite seat ({pref_seat}) and pick them up at {pref_pickup}.
 
-4. **SPECIAL PRICING & BENEFITS (APPLY ACCURATELY BY NATIONALITY)**:
+5. **SPECIAL PRICING & BENEFITS (APPLY RETURNING DISCOUNT ACCURATELY)**:
    - **If customer is Russian / CIS citizen (Công dân Nga)**:
      * Visarun 90-day E-visa Single Entry (4 hours): **3,000,000 VND** (Special returning rate, discounted from new customer price 3,400,000 VND)
      * Visarun 90-day E-visa Multi Entry (4 hours): **4,000,000 VND** (Single + 1,000,000 VND, discounted from new customer price 4,400,000 VND)
@@ -585,17 +662,9 @@ Customer Profile:
    - **If customer is Other Nationality (US, UK, Australia, Europe, etc.)**:
      * Visarun 90D E-visa (<2 days): **3,550,000 VND** (Discounted from new customer 4,000,000 VND)
      * Visarun Free Visa (45 days Bo Y / Moc Bai): **1,300,000 VND** (Discounted from new customer 1,400,000 VND)
-   - For E-visa Single Entry service only (không đi xe buýt):
-     * Standard 3-5 days: **1,110,000 VND** (Discounted from new customer price 1,810,000 VND)
-     * Urgent 2 days: **1,450,000 VND** (Discounted from 2,150,000 VND)
-     * Urgent 1 day: **1,500,000 VND** (Discounted from 2,200,000 VND)
-     * Urgent 4 hours: **1,600,000 VND** (Discounted from 2,600,000 VND)
-     * Urgent 2 hours: **2,900,000 VND** (Discounted from 3,400,000 VND)
-     * Super Urgent 1 hour: **3,300,000 VND** (Discounted from 4,600,000 VND)
-   - For Fast Track Airport (Arrival): **540,000 VND** for CXR/DAD (Discounted from 1,200,000 VND).
    - Always emphasize that as a Valued Returning Customer ({tier}), they receive **Free Priority Seat Reservation ({pref_seat})** and dedicated fast check-in assistance!
 
-5. **TONE STYLE**:
+6. **TONE STYLE**:
    - Extremely natural, warm, enthusiastic, attentive, and professional.
 ======================================================================
 """
