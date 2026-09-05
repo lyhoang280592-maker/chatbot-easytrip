@@ -1238,11 +1238,14 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
             
             cust_name = matched_cust.get("full_name") or "Valued Customer"
             cust_nat = matched_cust.get("nationality") or "Russia"
-            old_route = matched_cust.get("preferred_route") or "45D Laos (Visa-free 45 days)"
-            old_seat = matched_cust.get("preferred_seat") or "A12"
-            old_pickup = matched_cust.get("preferred_pickup") or "40 Hon Chong (Nha Trang)"
+            old_route = matched_cust.get("preferred_route") or "90D - Cambodia"
+            accompanying = matched_cust.get("accompanying_passengers") or []
+            group_seats = matched_cust.get("group_seats") or []
+            old_seat = ", ".join(group_seats) if group_seats else (matched_cust.get("preferred_seat") or "A1")
+            old_pickup = matched_cust.get("preferred_pickup") or "77 Thái Nguyên"
             past_trips = matched_cust.get("past_trips") or []
             last_trip_desc = f"{old_route}, date {past_trips[0].get('departure_date')}, seat {old_seat}, pickup {old_pickup}" if past_trips else f"{old_route}, seat {old_seat}, pickup {old_pickup}"
+            group_desc = f" (Accompanying Passengers: {', '.join(accompanying)})" if accompanying else ""
 
             nat_lower = cust_nat.lower()
             if any(k in nat_lower for k in ["russia", "russian", "nga", "belarus", "kazakh", "ukrain"]) or customer_memory.is_slavic_name(cust_name):
@@ -1256,14 +1259,16 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             prompt_msg = (
                 f"[RETURNING CUSTOMER VERIFIED VIA TICKET PHOTO]\n"
-                f"Customer Name: {cust_name}\n"
+                f"Customer Name: {cust_name}{group_desc}\n"
                 f"Nationality: {cust_nat}\n"
                 f"Verified Past Trip: {last_trip_desc}\n\n"
                 f"🎯 MANDATORY INSTRUCTIONS FOR RESPONSE:\n"
                 f"1. YOU MUST WRITE YOUR ENTIRE RESPONSE IN {target_lang}!\n"
-                f"2. Warmly greet the customer by name ({cust_name}) in {target_lang} and confirm that we have verified their past ticket in our database.\n"
+                f"2. Warmly greet the customer by name ({cust_name}) in {target_lang}"
+                + (f" and their group/family ({', '.join(accompanying)})" if accompanying else "")
+                + f" and confirm that we have verified their past ticket in our database.\n"
                 f"3. ASK IF THEY WANT TO RE-BOOK THEIR PREVIOUS SERVICE: Ask if they would like to re-book the same service ({old_route}) for their next upcoming trip, and ask what new departure date they plan to travel.\n"
-                f"4. Ask if they want to keep their favorite seat ({old_seat}) and pickup location ({old_pickup}).\n"
+                f"4. Ask if they want to keep their favorite seats ({old_seat}) and pickup location ({old_pickup}).\n"
                 f"5. QUOTE RETURNING CUSTOMER DISCOUNTED PRICE: Mention the discounted returning rate (e.g. 1,300,000 VND for 45D Free Visa Laos / 3,000,000 VND for Russian 90D Single / 3,550,000 VND for Cambodia 90D) and priority seat booking!\n"
                 f"⚠️ NEVER confirm the old date from the previous ticket because it is a past completed trip."
             )

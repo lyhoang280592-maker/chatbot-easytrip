@@ -439,106 +439,166 @@ def find_customer_by_booking_text(text: str) -> Optional[Dict[str, Any]]:
     for k, v in charmap.items():
         normalized_text = normalized_text.replace(k, v)
         
-    excluded_names = {'EASYTRIP VISA', 'EASY TRIP', 'EASYTRIP', 'ADMIN', 'BOT', 'USER', 'TEST'}
+    excluded_names = {
+        'NO NAME', 'UNKNOWN', 'TEST', 'ADMIN', 'BOT', 'USER', 'CUSTOMER', 
+        'EASYTRIP', 'EASY TRIP', 'EASYTRIP VISA', 'EASYTRIP VISA ASSISTANT'
+    }
+    common_words = {
+        'DATE', 'TIME', 'NAME', 'SEAT', 'SERVICE', 'VISA', 'PASSENGER', 'RECEIPT', 
+        'PAYMENT', 'BOT', 'USER', 'ASSISTANT', 'EASYTRIP', 'PLACE', 'PICK', 'DROP', 
+        'METHOD', 'CASHIER', 'TRANSFER', 'AMOUNT', 'TYPES', 'ENTRY', 'URGENT', 'HOURS',
+        'LAOS', 'CAMBODIA', 'VIETNAM', 'NHA', 'TRANG', 'BO', 'Y', 'MOC', 'BAI', 'BUS',
+        'PAID', 'FAST', 'TRACK', 'PEOPLE', 'DAYS', 'DAY', 'SINGLE', 'MULTI'
+    }
+
+    import unicodedata
     
+    def strip_accents(s: str) -> str:
+        if not s:
+            return ""
+        nfkd_form = unicodedata.normalize('NFKD', s)
+        return ''.join([c for c in nfkd_form if not unicodedata.combining(c)]).replace('đ', 'd').replace('Đ', 'D')
+
+    normalized_text = strip_accents(normalized_text)
+
     # 2. Trích xuất Tên và Năm sinh từ nội dung / vé / biên nhận
     name_extracted = None
-    m_name = re.search(r'(?:Name|Tên|ФИО|Passenger|Khách)\s*[:：]\s*([^\n\r,]+)', normalized_text, re.IGNORECASE)
+    m_name = re.search(r'(?:Name|Tên|ФИО|Passenger|Khách)[ \t]*[:：][ \t]*([^\n\r]+)', normalized_text, re.IGNORECASE)
     if m_name:
-        name_extracted = re.sub(r'[^a-zA-Z\s]', '', m_name.group(1)).strip().upper()
+        val = re.sub(r'[^a-zA-Z\s,]', '', m_name.group(1)).strip().upper()
+        if val and len(val) >= 3 and val not in common_words:
+            name_extracted = val
         
     year_extracted = None
-    m_year = re.search(r'(?:Year\s*of\s*birth|Năm\s*sinh|Год\s*рождения|Birth\s*year|YOB|DOB|Birth)\s*[:：]?\s*(\d{4})', normalized_text, re.IGNORECASE)
+    m_year = re.search(r'(?:Year\s*of\s*birth|Năm\s*sinh|Год\s*рождения|Birth\s*year|YOB|DOB|Birth)[ \t]*[:：]?[ \t]*(\d{4})', normalized_text, re.IGNORECASE)
     if m_year:
         year_extracted = m_year.group(1)
     else:
-        # Tìm 4 chữ số năm sinh (1940-2020)
         m_year_alt = re.search(r'\b(19\d{2}|20[0-2]\d)\b', normalized_text)
         if m_year_alt:
             year_extracted = m_year_alt.group(1)
-        
-    # 3. Tra soát Khách hàng theo Tên và Năm Sinh (nếu có)
-    c.execute('SELECT * FROM customers WHERE full_name IS NOT NULL AND length(trim(full_name)) >= 3')
-    all_customers = [dict(row) for row in c.fetchall() if dict(row)['full_name'].strip().upper() not in excluded_names]
-    
-    clean_text = ' ' + re.sub(r'[^a-zA-Z0-9\s]', ' ', normalized_text.upper()) + ' '
+
+    def is_invalid_customer_name(name: str) -> bool:
+        if not name or len(name.strip()) < 3:
+            return True
+        nu = name.strip().upper()
+        # Loại trừ nếu chứa chữ số (VD: Happy888, 03/05 - 90D Laos, 24/08) hoặc từ khoá trạng thái đơn hàng
+        if re.search(r'\d', nu) or '- PAID' in nu or 'PAID' in nu.split() or 'PEOPLE' in nu.split():
+            return True
+        system_patterns = [
+            'NO NAME', 'UNKNOWN', 'TEST', 'ADMIN', 'BOT', 'USER', 'CUSTOMER',
+            'EASY TRIP', 'EASYTRIP', 'ASIA MIX', 'FAST TRACK',
+            'НЯЧАНГ', 'NYACHANG', 'NHATRANG', 'NHA TRANG', 'ЧАТ', 'CHAT', 
+            'ОБЪЯВЛЕНИЯ', 'БАРАХОЛКА', 'ТУСА', 'АФИША', 'ЭКСКУРСИИ', 'ОНЛАЙН',
+            'GROUP', 'HOTEL', 'RESORT', 'TOUR', 'VISA OPERATION'
+        ]
+        if any(s in nu for s in system_patterns):
+            if re.search(r'^[A-Z\s]{4,}\s*\(', nu):
+                return False
+            return True
+        return False
+
+    clean_text = ' ' + re.sub(r'[^A-Z0-9\s]', ' ', normalized_text.upper()) + ' '
     text_words = [w for w in clean_text.split() if len(w) >= 2]
-    
-    best_match = None
-    best_score = 0.0
+
+    def match_name_in_window(cust_name_words: List[str], target_words: List[str]) -> float:
+        n = len(cust_name_words)
+        if n == 0 or len(target_words) < n:
+            return 0.0
+        best_score = 0.0
+        # Kiểm tra cả thứ tự xuôi (Họ Tên) và ngược (Tên Họ)
+        for words_to_try in [cust_name_words, list(reversed(cust_name_words))]:
+            for i in range(len(target_words) - n + 1):
+                window = target_words[i:i + n]
+                # Bắt buộc TẤT CẢ các từ trong cụm tên đều phải khớp tối thiểu 75%
+                word_ratios = [difflib.SequenceMatcher(None, words_to_try[k], window[k]).ratio() for k in range(n)]
+                if min(word_ratios) >= 0.75 and (sum(word_ratios) / n) >= 0.85:
+                    score = sum(word_ratios) / n
+                    if score > best_score:
+                        best_score = score
+        return best_score
+
+    c.execute('SELECT * FROM customers WHERE full_name IS NOT NULL AND length(trim(full_name)) >= 3')
+    all_customers = [dict(row) for row in c.fetchall() if not is_invalid_customer_name(dict(row)['full_name'])]
+
+    matched_candidates = []
     
     for cust in all_customers:
         cust_name = cust['full_name'].strip().upper()
-        clean_cust_name = re.sub(r'[^A-Z\s]', '', cust_name).strip()
-        cust_words = [w for w in re.split(r'\s+', clean_cust_name) if len(w) >= 2 and not w.isdigit()]
+        if cust_name in excluded_names:
+            continue
+        clean_cust_name = strip_accents(cust_name)
+        clean_cust_name = re.sub(r'[^A-Z\s]', '', clean_cust_name.upper()).strip()
+        cust_words = [w for w in re.split(r'\s+', clean_cust_name) if len(w) >= 2 and not w.isdigit() and w not in common_words]
         if not cust_words:
             continue
             
-        score = 0.0
-        # So khớp với tên trích xuất từ biên lai (VD: Name: Choi Hae Joon, Passenger: Melnikova Anastasia)
+        # A. So khớp cụm từ liền kề qua cửa sổ trượt (Sliding window matching)
+        score_text = match_name_in_window(cust_words, text_words)
+
+        # B. So khớp với trường Name trích xuất nếu có
+        score_field = 0.0
         if name_extracted and len(name_extracted) >= 4:
             clean_extracted_name = re.sub(r'[^A-Z\s]', '', name_extracted).strip()
             ratio_direct = difflib.SequenceMatcher(None, clean_cust_name, clean_extracted_name).ratio()
-            # So khớp đảo thứ tự từ (Họ Tên vs Tên Họ)
             words_cust_sorted = ' '.join(sorted(clean_cust_name.split()))
             words_ext_sorted = ' '.join(sorted(clean_extracted_name.split()))
             ratio_sorted = difflib.SequenceMatcher(None, words_cust_sorted, words_ext_sorted).ratio()
-            score = max(ratio_direct, ratio_sorted)
-        else:
-            # So khớp chuỗi từ khóa trong nội dung text nếu không có nhãn Name rõ ràng
-            if len(cust_words) >= 2:
-                if all(re.search(r'\b' + re.escape(w) + r'\b', clean_text) for w in cust_words):
-                    score = 0.95
-                else:
-                    word_scores = []
-                    for cw in cust_words:
-                        max_w_sim = max([difflib.SequenceMatcher(None, cw, tw).ratio() for tw in text_words], default=0.0)
-                        word_scores.append(max_w_sim)
-                    if min(word_scores) >= 0.65 and (sum(word_scores) / len(word_scores)) >= 0.75:
-                        score = sum(word_scores) / len(word_scores)
-            elif len(cust_words) == 1 and len(clean_cust_name) >= 5:
-                if re.search(r'\b' + re.escape(clean_cust_name) + r'\b', clean_text):
-                    score = 0.90
+            score_field = max(ratio_direct, ratio_sorted)
+
+        final_score = max(score_text, score_field)
 
         # RÀNG BUỘC NĂM SINH (NẾU CÓ):
-        if score >= 0.65 and year_extracted:
+        if final_score >= 0.65 and year_extracted:
             cust_birth = cust.get("birth_year")
             if cust_birth:
                 if str(cust_birth).strip() == str(year_extracted).strip():
-                    score = min(1.0, score + 0.15)  # Trùng cả Tên + Năm sinh -> Gia tăng độ tin cậy
+                    final_score = min(1.0, final_score + 0.15)  # Trùng cả Tên + Năm sinh -> Gia tăng độ tin cậy
                 else:
-                    score = score * 0.3  # Khác năm sinh -> Trùng tên nhưng khác người, loại trừ
+                    final_score = final_score * 0.3  # Khác năm sinh -> Trùng tên nhưng khác người, loại trừ
                     
-        if score > best_score:
-            best_score = score
-            best_match = cust
+        if final_score >= 0.80:
+            matched_candidates.append((final_score, cust))
                     
-    if best_match and best_score >= 0.70:
-        # Nếu tìm thấy khách và trên vé có năm sinh nhưng trong DB chưa có -> Cập nhật năm sinh
-        if year_extracted and not best_match.get("birth_year"):
-            try:
-                c.execute("UPDATE customers SET birth_year = ? WHERE customer_id = ?", (year_extracted, best_match["customer_id"]))
-                conn.commit()
-                best_match["birth_year"] = year_extracted
-            except Exception:
-                pass
+    if not matched_candidates:
+        return None
+        
+    matched_candidates.sort(key=lambda x: x[0], reverse=True)
+    best_score, best_match = matched_candidates[0]
+    
+    # Gom danh sách hành khách đi cùng nếu là vé đoàn / gia đình
+    other_members = [c['full_name'] for sc, c in matched_candidates[1:]]
+    group_seats = [c.get('preferred_seat') for sc, c in matched_candidates if c.get('preferred_seat')]
+    if other_members:
+        best_match['accompanying_passengers'] = other_members
+    if group_seats:
+        best_match['group_seats'] = list(dict.fromkeys(group_seats))
 
-        best_match["customer_tier"] = "RETURNING"
-        best_match["total_trips"] = max(best_match.get("total_trips") or 1, 1)
-        if not best_match.get("nationality") and is_slavic_name(best_match.get("full_name", "")):
-            best_match["nationality"] = "Russia"
+    # Nếu tìm thấy khách và trên vé có năm sinh nhưng trong DB chưa có -> Cập nhật năm sinh
+    if year_extracted and not best_match.get("birth_year"):
         try:
-            cursor = conn.cursor()
-            cursor.execute("""
-                SELECT * FROM trip_history 
-                WHERE customer_id = ? 
-                ORDER BY trip_id DESC LIMIT 5
-            """, (best_match["customer_id"],))
-            trips = [dict(t) for t in cursor.fetchall()]
-            best_match["past_trips"] = trips
+            c.execute("UPDATE customers SET birth_year = ? WHERE customer_id = ?", (year_extracted, best_match["customer_id"]))
+            conn.commit()
+            best_match["birth_year"] = year_extracted
         except Exception:
             pass
-        return best_match
+
+    best_match["customer_tier"] = "RETURNING"
+    best_match["total_trips"] = max(best_match.get("total_trips") or 1, 1)
+    if not best_match.get("nationality") and is_slavic_name(best_match.get("full_name", "")):
+        best_match["nationality"] = "Russia"
+    try:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT * FROM trip_history 
+            WHERE customer_id = ? 
+            ORDER BY trip_id DESC LIMIT 5
+        """, (best_match["customer_id"],))
+        trips = [dict(t) for t in cursor.fetchall()]
+        best_match["past_trips"] = trips
+    except Exception:
+        pass
+    return best_match
         
     return None
 
