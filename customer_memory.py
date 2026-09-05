@@ -410,18 +410,37 @@ def is_slavic_name(name: str) -> bool:
 
 def find_customer_by_booking_text(text: str) -> Optional[Dict[str, Any]]:
     """
-    Tra soát CSDL khách hàng từ chuỗi text thông tin booking gần nhất.
-    Hỗ trợ tìm qua Số điện thoại, Tên trong CSDL SQLite, hoặc tự động phân tích cấu trúc vé cũ.
+    Tra soát CSDL khách hàng từ chuỗi text thông tin booking gần nhất hoặc kết quả đọc OCR từ ảnh vé.
+    Hỗ trợ:
+    1. Tìm theo Số điện thoại chính xác.
+    2. Chuẩn hóa ký tự Cyrillic/Latin và trích xuất trường Name từ mẫu vé.
+    3. Đối soát chuyến đi theo Ngày khởi hành + Số ghế (Date + Seat) có xác nhận họ tên tương đồng.
+    4. Đối soát tên khách hàng đa tầng (Exact match & Fuzzy similarity) loại trừ bot/admin dummy.
     """
     if not text or len(text.strip()) < 3:
         return None
         
     import re
+    import difflib
+    
     conn = get_db_connection()
     c = conn.cursor()
     
-    # 1. Tìm theo số điện thoại nếu có
-    phone_matches = re.findall(r'(\+?\d[\d\s\-\.]{7,15}\d)', text)
+    # 1. Chuẩn hóa các ký tự Cyrillic hay bị OCR nhầm sang Latin
+    charmap = {
+        'а': 'a', 'А': 'A', 'с': 'c', 'С': 'C', 'е': 'e', 'Е': 'E',
+        'о': 'o', 'О': 'O', 'р': 'p', 'Р': 'P', 'х': 'x', 'Х': 'X',
+        'у': 'y', 'У': 'Y', 'В': 'B', 'М': 'M', 'Т': 'T', 'К': 'K',
+        'Н': 'H'
+    }
+    normalized_text = text
+    for k, v in charmap.items():
+        normalized_text = normalized_text.replace(k, v)
+        
+    excluded_names = {'EASYTRIP VISA', 'EASY TRIP', 'EASYTRIP', 'ADMIN', 'BOT', 'USER', 'TEST'}
+    
+    # 2. Tìm theo số điện thoại nếu có
+    phone_matches = re.findall(r'(\+?\d[\d\s\-\.]{7,15}\d)', normalized_text)
     for p in phone_matches:
         cleaned_p = re.sub(r'[^\d+]', '', p)
         if len(cleaned_p) >= 8:
@@ -429,43 +448,117 @@ def find_customer_by_booking_text(text: str) -> Optional[Dict[str, Any]]:
             row = c.fetchone()
             if row:
                 cust = dict(row)
-                cust["customer_tier"] = "RETURNING"
-                cust["total_trips"] = max(cust.get("total_trips") or 1, 1)
-                return cust
+                if cust.get('full_name', '').strip().upper() not in excluded_names:
+                    cust["customer_tier"] = "RETURNING"
+                    cust["total_trips"] = max(cust.get("total_trips") or 1, 1)
+                    return cust
                 
-    # 2. Tìm theo danh sách tất cả khách hàng trong SQLite
-    c.execute('SELECT * FROM customers WHERE full_name IS NOT NULL AND length(trim(full_name)) >= 3')
-    all_customers = [dict(row) for row in c.fetchall()]
-    
-    clean_text = ' ' + re.sub(r'[^a-zA-Z0-9\s]', ' ', text.upper()) + ' '
-    
-    matches = []
-    for cust in all_customers:
-        name = cust['full_name'].strip().upper()
-        if len(name) < 3:
-            continue
-            
-        name_words = [w for w in re.split(r'\s+', name) if len(w) > 1 and not w.isdigit()]
-        if not name_words:
-            continue
-            
-        # Kiểm tra xem toàn bộ các từ trong tên khách hàng có xuất hiện trong text không
-        if all(re.search(r'\b' + re.escape(w) + r'\b', clean_text) for w in name_words):
-            tier_score = 30 if cust.get('customer_tier') in ['VIP', 'RETURNING'] else 10
-            trips_score = (cust.get('total_trips') or 1) * 10
-            word_score = len(name_words) * 20
-            matches.append((tier_score + trips_score + word_score, cust))
-            
-    if matches:
-        matches.sort(key=lambda x: x[0], reverse=True)
-        best_cust = matches[0][1]
-        best_cust["customer_tier"] = "RETURNING"
-        best_cust["total_trips"] = max(best_cust.get("total_trips") or 1, 1)
-        if not best_cust.get("nationality") and is_slavic_name(best_cust.get("full_name", "")):
-            best_cust["nationality"] = "Russia"
-        return best_cust
+    # 3. Trích xuất tên từ các mẫu biên nhận / vé xe
+    name_extracted = None
+    m_name = re.search(r'(?:Name|Tên|ФИО|Passenger|Khách)\s*[:：]\s*([^\n\r,]+)', normalized_text, re.IGNORECASE)
+    if m_name:
+        name_extracted = re.sub(r'[^a-zA-Z\s]', '', m_name.group(1)).strip().upper()
         
-    # Không tìm thấy thông tin trên CRM
+    # 4. Đối soát qua Lịch sử chuyến đi: Số ghế + Ngày khởi hành (Date + Seat)
+    # Xử lý các lỗi OCR ký tự ghế phổ biến (VD: 4l2 -> A12, 412 -> A12, Bl -> B1)
+    clean_seat_text = normalized_text.upper().replace('4L2', 'A12').replace('412', 'A12').replace('BL', 'B1')
+    seat_m = re.search(r'\b([AB]\d{1,2})\b', clean_seat_text)
+    seat = seat_m.group(1) if seat_m else None
+    
+    date_matches = re.findall(r'(\d{1,2})[/.-](\d{1,2})(?:[/.-](\d{2,4}))?', normalized_text)
+    normalized_dates = []
+    for d, m, y in date_matches:
+        day = f'{int(d):02d}'
+        month = f'{int(m):02d}'
+        if y:
+            year = f'20{y}' if len(y) == 2 else y
+            normalized_dates.append(f'{year}-{month}-{day}')
+            normalized_dates.append(f'{day}/{month}/{year}')
+        normalized_dates.append(f'{day}/{month}')
+        normalized_dates.append(f'{month}-{day}')
+        
+    if seat and normalized_dates:
+        for dt_str in normalized_dates:
+            c.execute('''
+                SELECT c.* FROM trip_history t 
+                JOIN customers c ON t.customer_id = c.customer_id 
+                WHERE t.seat_number = ? AND (t.departure_date LIKE ? OR t.departure_date LIKE ?)
+            ''', (seat, f'%{dt_str}%', f'%{dt_str.replace("/", "-")}%'))
+            row = c.fetchone()
+            if row:
+                cust = dict(row)
+                cust_full = cust.get('full_name', '').strip().upper()
+                if cust_full not in excluded_names:
+                    # Kiểm tra đối chiếu tên để tránh nhận nhầm khách khác từng ngồi cùng số ghế vào ngày khác
+                    if name_extracted:
+                        sim = difflib.SequenceMatcher(None, cust_full, name_extracted).ratio()
+                        if sim >= 0.50:
+                            cust["customer_tier"] = "RETURNING"
+                            cust["total_trips"] = max(cust.get("total_trips") or 1, 1)
+                            return cust
+                    else:
+                        cust_words = [w for w in re.split(r'\s+', cust_full) if len(w) >= 2]
+                        if any(w in normalized_text.upper() for w in cust_words):
+                            cust["customer_tier"] = "RETURNING"
+                            cust["total_trips"] = max(cust.get("total_trips") or 1, 1)
+                            return cust
+
+    # 5. Tra soát Tên khách hàng (Exact & Fuzzy Sequence Matching)
+    c.execute('SELECT * FROM customers WHERE full_name IS NOT NULL AND length(trim(full_name)) >= 3')
+    all_customers = [dict(row) for row in c.fetchall() if dict(row)['full_name'].strip().upper() not in excluded_names]
+    
+    clean_text = ' ' + re.sub(r'[^a-zA-Z0-9\s]', ' ', normalized_text.upper()) + ' '
+    text_words = [w for w in clean_text.split() if len(w) >= 2]
+    
+    best_match = None
+    best_score = 0.0
+    
+    for cust in all_customers:
+        cust_name = cust['full_name'].strip().upper()
+        cust_words = [w for w in re.split(r'\s+', cust_name) if len(w) >= 2 and not w.isdigit()]
+        if not cust_words:
+            continue
+            
+        # So khớp trực tiếp với tên trích xuất từ biên lai (VD: Name: Choi Hac Jaun)
+        if name_extracted and len(name_extracted) >= 4:
+            direct_sim = difflib.SequenceMatcher(None, cust_name, name_extracted).ratio()
+            if direct_sim >= 0.70 and direct_sim > best_score:
+                best_score = direct_sim
+                best_match = cust
+                continue
+                
+        # So khớp chuỗi từ khóa trong nội dung text
+        if len(cust_words) >= 2:
+            if all(re.search(r'\b' + re.escape(w) + r'\b', clean_text) for w in cust_words):
+                score = 0.95
+                if score > best_score:
+                    best_score = score
+                    best_match = cust
+            else:
+                # Kiểm tra độ tương đồng từng từ (phòng trường hợp OCR sai 1-2 ký tự)
+                word_scores = []
+                for cw in cust_words:
+                    max_w_sim = max([difflib.SequenceMatcher(None, cw, tw).ratio() for tw in text_words], default=0.0)
+                    word_scores.append(max_w_sim)
+                if min(word_scores) >= 0.65 and (sum(word_scores) / len(word_scores)) >= 0.75:
+                    score = sum(word_scores) / len(word_scores)
+                    if score > best_score:
+                        best_score = score
+                        best_match = cust
+        elif len(cust_words) == 1 and len(cust_name) >= 5:
+            if re.search(r'\b' + re.escape(cust_name) + r'\b', clean_text):
+                score = 0.90
+                if score > best_score:
+                    best_score = score
+                    best_match = cust
+                    
+    if best_match and best_score >= 0.70:
+        best_match["customer_tier"] = "RETURNING"
+        best_match["total_trips"] = max(best_match.get("total_trips") or 1, 1)
+        if not best_match.get("nationality") and is_slavic_name(best_match.get("full_name", "")):
+            best_match["nationality"] = "Russia"
+        return best_match
+        
     return None
 
 
