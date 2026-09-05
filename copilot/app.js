@@ -1364,14 +1364,15 @@ function calculateOps() {
 
     if (finalVisaType.startsWith('visarun-')) {
         const isExempt = finalVisaType.endsWith('-45d');
-        const standardAdultPackPrice = finalVisaType === 'visarun-cambodia-90d' ? 4000000 : (finalVisaType === 'visarun-laos-90d' ? 3400000 : 1400000);
+        const standardAdultPackPrice = isExempt ? (isLoyalty ? 1300000 : 1400000) : (isLoyalty ? 3550000 : 4000000);
+        const busTicketPrice = isLoyalty ? 1300000 : 1400000;
         
         // Adult Price calculation
         if (transport === 'no') {
             if (isExempt) {
                 adultPrice = 0;
             } else {
-                adultPrice = isCIS ? 2000000 : (standardAdultPackPrice - 1400000);
+                adultPrice = isCIS ? 2000000 : (standardAdultPackPrice - busTicketPrice);
             }
         } else {
             adultPrice = standardAdultPackPrice;
@@ -1381,18 +1382,18 @@ function calculateOps() {
         if (isExempt) {
             childPrice = 0;
         } else {
-            childPrice = isCIS ? 2000000 : (standardAdultPackPrice - 1400000);
+            childPrice = isCIS ? 2000000 : (standardAdultPackPrice - busTicketPrice);
         }
         
         basePrice = (adults * adultPrice) + (children * childPrice);
     } else {
         // E-Visa khẩn cấp / tiêu chuẩn (không có đi xe buýt, tính giá giống nhau cho cả người lớn & trẻ em)
         const pricingTable = {
-            'ev-1h': { standard: 4600000, loyalty: 4600000 },
-            'ev-2h': { standard: 3400000, loyalty: 3400000 },
-            'ev-3h': { standard: 3000000, loyalty: 3000000 },
-            'ev-4h': { standard: 2600000, loyalty: 2000000 },
-            'ev-8h': { standard: 2200000, loyalty: 1500000 },
+            'ev-1h': { standard: 4600000, loyalty: 3300000 },
+            'ev-2h': { standard: 3400000, loyalty: 2900000 },
+            'ev-3h': { standard: 3000000, loyalty: 2500000 },
+            'ev-4h': { standard: 2600000, loyalty: 1600000 },
+            'ev-8h': { standard: 2900000, loyalty: 1900000 },
             'ev-1d': { standard: 2200000, loyalty: 1500000 },
             'ev-2d': { standard: 2150000, loyalty: 1450000 },
             'ev-std': { standard: 1810000, loyalty: 1110000 }
@@ -1419,7 +1420,10 @@ function calculateOps() {
     }
     
     if (fasttrack !== 'none') {
-        surchargeFasttrack = ((fasttrack === 'SGN') ? 1200000 : 1000000) * totalPax;
+        const ftPrice = (fasttrack === 'SGN' || fasttrack === 'HAN') 
+            ? (isLoyalty ? 675000 : 1200000) 
+            : (isLoyalty ? 540000 : 1200000);
+        surchargeFasttrack = ftPrice * totalPax;
     }
 
     total = basePrice + surchargeNation + surchargeMulti + surchargeFasttrack;

@@ -8,9 +8,14 @@ if hasattr(sys.stdout, "reconfigure"):
     getattr(sys.stdout, "reconfigure")(encoding="utf-8")
 
 def sync():
-    base_dir = "C:/Users/Admin/.gemini/antigravity/scratch/backend"
-    excel_path = os.path.join(base_dir, "easytrip_qa_master.xlsx")
-    json_path = os.path.join(base_dir, "extracted_qa_excel.json")
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+    data_dir = os.path.join(root_dir, "data", "training_knowledge")
+    
+    excel_path = os.path.join(data_dir, "easytrip_qa_master.xlsx")
+    if not os.path.exists(excel_path):
+        excel_path = os.path.join(root_dir, "easytrip_qa_master.xlsx")
+        
+    json_path = os.path.join(data_dir, "extracted_qa_excel.json")
     
     if not os.path.exists(excel_path):
         print(f"Error: Excel master file not found at '{excel_path}'")
@@ -57,7 +62,7 @@ def sync():
     print(f"Successfully saved to: {json_path}")
     
     # Rebuild RAG index
-    sys.path.append(base_dir)
+    sys.path.insert(0, root_dir)
     try:
         import knowledge_rag
         knowledge_rag.rebuild()

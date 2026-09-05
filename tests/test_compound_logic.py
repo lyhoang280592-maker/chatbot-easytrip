@@ -4,8 +4,8 @@ import sys
 import unittest
 from unittest.mock import AsyncMock, patch
 
-# Thêm đường dẫn hiện tại vào sys.path để import
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+# Thêm đường dẫn thư mục gốc vào sys.path để import
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 from telegram_router import (
     parse_topic_name,

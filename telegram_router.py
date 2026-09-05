@@ -3,7 +3,7 @@ import time
 import re
 import json
 import traceback
-from typing import Any
+from typing import Any, Optional, Dict, List
 from datetime import datetime
 from fastapi import APIRouter, Request, Response
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
@@ -16,7 +16,8 @@ from telegram.ext import (
     ContextTypes,
 )
 
-from memory_store import memory_store
+from memory_store import memory_store, load_session_history
+import customer_memory
 from ai_agent import process_chat, identify_image_type
 from lark_api import create_customer_record, upload_image_to_lark, update_customer_image, update_order_status, create_order
 from i18n import get_lang_code, get_msg
@@ -51,7 +52,7 @@ except Exception as e:
 # ============================================================
 # CÁC HÀM HELPER
 # ============================================================
-def log_message(user_id, platform, role, content):
+def log_message(user_id, platform, role, content, customer_id: Optional[int] = None):
     log_entry = {
         "timestamp": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
         "user_id": str(user_id),
@@ -59,9 +60,13 @@ def log_message(user_id, platform, role, content):
         "role": role,
         "content": content,
     }
+    if customer_id is not None:
+        log_entry["customer_id"] = customer_id
     try:
         with open("chat_history.json", "a", encoding="utf-8") as f:
             f.write(json.dumps(log_entry, ensure_ascii=False) + "\n")
+        session_id = f"{platform.lower()}_{user_id}"
+        customer_memory.save_chat_message(session_id, platform.lower(), role.lower(), content, customer_id=customer_id)
     except Exception:
         pass
 
@@ -444,8 +449,21 @@ async def get_id_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # ============================================================
 async def process_customer_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE, user_id: str, text: str):
     session_id = f"telegram_{user_id}"
-    log_message(user_id, "Telegram", "User", text)
-    if session_id not in memory_store: memory_store[session_id] = []
+    
+    # 0. Bắn tín hiệu "Đang soạn tin nhắn..." (Typing Indicator) tức thì
+    try:
+        target_chat_id = update.effective_chat.id if update.effective_chat else int(user_id)
+        await context.bot.send_chat_action(chat_id=target_chat_id, action="typing")
+    except Exception:
+        pass
+
+    # 1. Truy xuất / Tạo hồ sơ khách hàng bền vững từ SQLite
+    full_name_tg = update.effective_user.full_name if update.effective_user else None
+    cust_profile = customer_memory.get_or_create_customer("telegram", user_id, full_name=full_name_tg)
+    cust_id = cust_profile.get("customer_id") if cust_profile else None
+
+    log_message(user_id, "Telegram", "User", text, customer_id=cust_id)
+    load_session_history(session_id)
     
     # Ghi nhận tên hiển thị & thời gian cập nhật cuối
     if update.effective_user:
@@ -463,7 +481,7 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
         # Chế độ Co-pilot, tạo tin nhắn nháp và thông báo cho admin duyệt
         memory_store[session_id].append({"role": "user", "content": text})
         try:
-            ai_response = await process_chat(memory_store[session_id])
+            ai_response = await process_chat(memory_store[session_id], customer_profile=cust_profile)
             reply = ai_response.reply_message
             memory_store[f"{session_id}_draft"] = reply
             memory_store[f"{session_id}_draft_data"] = ai_response.extracted_data
@@ -487,10 +505,11 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
 
     memory_store[session_id].append({"role": "user", "content": text})
 
-    ai_response = await process_chat(memory_store[session_id])
+    # Gọi AI Agent kèm hồ sơ khách cũ để cá nhân hóa ngữ điệu
+    ai_response = await process_chat(memory_store[session_id], customer_profile=cust_profile)
     reply = ai_response.reply_message
     memory_store[session_id].append({"role": "assistant", "content": reply})
-    log_message(user_id, "Telegram", "Bot", reply)
+    log_message(user_id, "Telegram", "Bot", reply, customer_id=cust_id)
     
     target_msg: Any = update.message or update.business_message or (update.callback_query.message if update.callback_query else None)
     conn_id = update.business_message.business_connection_id if update.business_message else None
@@ -501,8 +520,40 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
         else:
             await target_msg.reply_text(reply)
 
+        # Tự động gửi ảnh sơ đồ ghế nếu khách hỏi hoặc AI đề cập sơ đồ ghế
+        seat_keywords = ["sơ đồ", "seat map", "seatmap", "схема", "chọn ghế", "xem ghế", "chỗ ngồi", "ghế trống"]
+        if any(kw in text.lower() for kw in seat_keywords) or any(kw in reply.lower() for kw in ["sơ đồ", "seat map", "схема"]):
+            try:
+                target_chat_id = update.effective_chat.id if update.effective_chat else int(user_id)
+                out_seat_img = f"seat_map_{user_id}.jpg"
+                booked_seats = ["B1", "A3", "B5"]
+                generate_seat_map(booked_seats, output_path=out_seat_img)
+                if os.path.exists(out_seat_img):
+                    with open(out_seat_img, "rb") as photo_file:
+                        caption_map = "🚌 Sơ đồ ghế xe EasyTrip (Ghế có dấu X màu vàng là đã có khách đặt)"
+                        if conn_id:
+                            await context.bot.send_photo(chat_id=target_chat_id, photo=photo_file, caption=caption_map, business_connection_id=conn_id)  # type: ignore
+                        else:
+                            await context.bot.send_photo(chat_id=target_chat_id, photo=photo_file, caption=caption_map)
+            except Exception as e_map:
+                print(f"⚠️ Lỗi gửi ảnh sơ đồ ghế: {e_map}")
+
     data = ai_response.extracted_data
     memory_store[f"{session_id}_data"] = data
+
+    # Tự động cập nhật hồ sơ khách hàng vào Database SQLite
+    if cust_id:
+        profile_updates = {}
+        if getattr(data, "ho_ten", None): profile_updates["full_name"] = data.ho_ten
+        if getattr(data, "quoc_tich", None): profile_updates["nationality"] = data.quoc_tich
+        if getattr(data, "so_dien_thoai", None):
+            profile_updates["phone_number"] = str(data.so_dien_thoai)
+            customer_memory.link_platform_by_phone(str(data.so_dien_thoai), "telegram", str(user_id))
+        if getattr(data, "ghe_chon", None): profile_updates["preferred_seat"] = data.ghe_chon
+        if getattr(data, "diem_don", None): profile_updates["preferred_pickup"] = data.diem_don
+        if getattr(data, "ngay_het_han_visa", None): profile_updates["visa_expiry_date"] = data.ngay_het_han_visa
+        if profile_updates:
+            customer_memory.update_customer_profile(cust_id, **profile_updates)
 
     # Tự động báo Admin Group khi khách nói đã chuyển tiền / thanh toán
     text_lower = text.lower()
@@ -607,6 +658,23 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
         order_res = await create_order(data, channel="Telegram")
         record_id = order_res.get("record_id")
         memory_store[f"{session_id}_record_id"] = record_id
+        
+        # Lưu chuyến đi vào SQLite trip_history
+        if cust_id:
+            try:
+                customer_memory.record_completed_trip(
+                    customer_id=cust_id,
+                    departure_date=ngay_di or data.ngay_khoi_hanh or datetime.now().strftime("%d/%m"),
+                    route=service_type,
+                    visa_type=data.loai_visa,
+                    seat_number=data.ghe_chon,
+                    pickup_location=data.diem_don,
+                    price_paid=4000000 if service_type == "Cambodia" else 2000000,
+                    order_id=record_id
+                )
+            except Exception as e_trip:
+                print(f"⚠️ Lỗi lưu trip_history vào SQLite: {e_trip}")
+
         await send_to_admin_group(context, f"Có khách mới đã hoàn thành thông tin: {data.ho_ten}")
         memory_store[f"{session_id}_completed"] = True
 
@@ -1067,8 +1135,29 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         print(f"❌ CALLBACK ERROR: {e}")
 
+async def check_visa_reminders_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Lệnh Admin: Quét và gửi nhắc nhở hết hạn visa thủ công ngay lập tức"""
+    if not update.effective_message:
+        return
+    status_msg = await update.effective_message.reply_text("⏳ Đang quét cơ sở dữ liệu và gửi nhắc nhở hết hạn visa (trước 10 ngày)...")
+    try:
+        from visa_reminder import check_and_send_daily_reminders
+        report = await check_and_send_daily_reminders(bot=context.bot)
+        found = report.get("total_found", 0)
+        sent = report.get("reminders_sent", 0)
+        await status_msg.edit_text(
+            f"✅ **HOÀN TẤT QUÉT NHẮC NHỞ VISA**\n\n"
+            f"📊 Tìm thấy: {found} khách sắp hết hạn (trong 9-11 ngày tới)\n"
+            f"📤 Đã gửi qua Telegram Bot: {sent}\n"
+            f"🔔 Báo cáo chi tiết đã được gửi vào Admin Group!"
+        )
+    except Exception as e:
+        await status_msg.edit_text(f"❌ Lỗi khi quét nhắc nhở: {e}")
+
 tg_app.add_handler(CommandHandler("start", start_command))
 tg_app.add_handler(CommandHandler("getid", get_id_command))
+tg_app.add_handler(CommandHandler("check_visa_reminders", check_visa_reminders_command))
+tg_app.add_handler(CommandHandler("remind_visa", check_visa_reminders_command))
 tg_app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
 tg_app.add_handler(MessageHandler(filters.UpdateType.BUSINESS_MESSAGE & filters.TEXT, handle_text))
 tg_app.add_handler(MessageHandler(filters.UpdateType.EDITED_BUSINESS_MESSAGE & filters.TEXT, handle_text))

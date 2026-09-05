@@ -11,6 +11,8 @@ __pycache__/
 *.env
 *.session
 *.session-journal
+*.db-wal
+*.db-shm
 
 # Large Media & Temporary Output
 fleet_video.mov

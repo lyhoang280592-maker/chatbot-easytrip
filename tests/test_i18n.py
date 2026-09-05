@@ -1,5 +1,10 @@
-from i18n import get_lang_code, get_msg
 import sys
+import os
+
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+sys.path.insert(0, ROOT_DIR)
+
+from i18n import get_lang_code, get_msg
 
 # Đảm bảo in được ký tự Unicode trên Windows console
 if hasattr(sys.stdout, "reconfigure"):

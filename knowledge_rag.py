@@ -16,17 +16,26 @@ if hasattr(sys.stdout, "reconfigure"):
     getattr(sys.stdout, "reconfigure")(encoding="utf-8")
 
 # =====================================================================
-# Cấu hình đường dẫn
+# Cấu hình đường dẫn Tri thức & Huấn luyện
 # =====================================================================
 BASE_DIR = Path(__file__).parent
+DATA_KB_DIR = BASE_DIR / "data" / "training_knowledge"
+
+def resolve_kb_file(filename: str) -> Path:
+    """Tìm file trong thư mục data/training_knowledge hoặc thư mục gốc"""
+    p_kb = DATA_KB_DIR / filename
+    if p_kb.exists():
+        return p_kb
+    return BASE_DIR / filename
+
 QA_FILES = [
-    BASE_DIR / "extracted_qa_telegram.json",
-    BASE_DIR / "extracted_qa_meta.json",
-    BASE_DIR / "extracted_qa_zalo_docx.json",
-    BASE_DIR / "extracted_qa_excel.json",
-    BASE_DIR / "extracted_qa_from_crm.json",
+    resolve_kb_file("extracted_qa_telegram.json"),
+    resolve_kb_file("extracted_qa_meta.json"),
+    resolve_kb_file("extracted_qa_zalo_docx.json"),
+    resolve_kb_file("extracted_qa_excel.json"),
+    resolve_kb_file("extracted_qa_from_crm.json"),
 ]
-MANUAL_QA_FILE = BASE_DIR / "manual_qa.json"  # Admin tự thêm Q&A thủ công
+MANUAL_QA_FILE = resolve_kb_file("manual_qa.json")  # Admin tự thêm Q&A thủ công
 
 # =====================================================================
 # TF-IDF thuần Python (không cần scikit-learn)

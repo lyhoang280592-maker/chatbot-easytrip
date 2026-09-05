@@ -6,6 +6,7 @@ from pydantic import BaseModel, Field, ConfigDict
 from dotenv import load_dotenv
 from i18n import get_lang_code, get_msg
 import knowledge_rag
+import customer_memory
 
 load_dotenv()
 
@@ -15,7 +16,7 @@ GROQ_API_KEYS = [
     k.strip() for k in os.getenv("GROQ_API_KEYS", "").split(",") if k.strip()
 ]
 DEEPSEEK_MODEL = "deepseek-chat"
-GROQ_MODEL = "llama-3.1-8b-instant"
+GROQ_MODEL = "groq/compound"
 
 
 # === DATA MODELS (Linh hoạt tối đa) ===
@@ -104,11 +105,20 @@ class ChatResponse(BaseModel):
 
 # === KNOWLEDGE BASE ===
 def load_knowledge():
-    try:
-        with open("knowledge.txt", "r", encoding="utf-8") as f:
-            return f.read()
-    except Exception:
-        return ""
+    candidates = [
+        os.path.join(os.path.dirname(__file__), "data", "training_knowledge", "knowledge.txt"),
+        os.path.join(os.path.dirname(__file__), "knowledge.txt"),
+        "data/training_knowledge/knowledge.txt",
+        "knowledge.txt",
+    ]
+    for p in candidates:
+        if os.path.exists(p):
+            try:
+                with open(p, "r", encoding="utf-8") as f:
+                    return f.read()
+            except Exception:
+                pass
+    return ""
 
 
 KNOWLEDGE_BASE = load_knowledge()
@@ -243,7 +253,7 @@ async def call_deepseek(messages):
         "response_format": {"type": "json_object"},
         "temperature": 0.3,
     }
-    async with httpx.AsyncClient(timeout=30) as client:
+    async with httpx.AsyncClient(timeout=15) as client:
         try:
             r = await client.post(url, json=payload, headers=headers)
             if r.status_code == 200:
@@ -269,7 +279,7 @@ async def call_groq_fallback(messages):
             "Authorization": f"Bearer {key}",
             "Content-Type": "application/json",
         }
-        async with httpx.AsyncClient(timeout=25) as client:
+        async with httpx.AsyncClient(timeout=15) as client:
             try:
                 r = await client.post(url, json=payload, headers=headers)
                 if r.status_code == 200:
@@ -362,11 +372,18 @@ def extract_date_and_nationality_from_history(history_messages: list[dict]):
     return expiry_date, destination, visa_type
 
 
-async def process_chat(history_messages: list[dict]) -> ChatResponse:
+async def process_chat(history_messages: list[dict], customer_profile: dict | None = None) -> ChatResponse:
     recent_history = history_messages[-8:]
 
     # 1. Tìm ngày hết hạn visa và tính ngày đi bằng Python
     expiry_date, destination, visa_type = extract_date_and_nationality_from_history(history_messages)
+    
+    # Kế thừa thông tin từ hồ sơ khách cũ nếu tin nhắn hiện tại chưa đề cập
+    if customer_profile:
+        prof_nat = (customer_profile.get("nationality") or "").lower()
+        if not destination or destination == "laos":
+            if any(k in prof_nat for k in ["us", "uk", "american", "british", "french", "german", "canadian", "australian", "mỹ", "anh", "pháp", "đức"]):
+                destination = "cambodia"
     
     smart_departure_context = ""
     route_directive_context = ""
@@ -415,18 +432,32 @@ async def process_chat(history_messages: list[dict]) -> ChatResponse:
                 f"- YOU MUST propose exactly the date '{smart_dep}' ({day_name_en}) as their departure date in your response! Do NOT suggest any other date. Clearly state this date to the customer and explain that the bus departs on this day."
             )
 
-    # 2. Đoán ngôn ngữ đích bằng Python dựa trên quốc tịch / tin nhắn
-    lang_code = get_lang_code(destination)
+    # 2. Đoán ngôn ngữ đích bằng Python dựa trên quốc tịch / tin nhắn / hồ sơ khách cũ
     user_text = " ".join([m["content"] for m in history_messages if m.get("role") == "user"])
     user_text_lower = user_text.lower()
     
-    # Kiểm tra xem khách có sử dụng bảng chữ cái tiếng Nga hoặc gõ tiếng Việt hay không
+    # Kiểm tra ngôn ngữ từ ký tự thực tế
     if re.search(r'[а-яё]', user_text_lower):
         lang_code = "ru"
-    elif any(w in user_text_lower for w in ["chào", "xin chào", "giá", "vé", "lào", "bao nhiêu", "đi", "xe"]):
-        lang_code = "vi"
-    elif "kor" in user_text_lower or "hàn" in user_text_lower:
+    elif re.search(r'[\uac00-\ud7a3]', user_text_lower):
         lang_code = "ko"
+    elif re.search(r'[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]', user_text_lower) or any(w in user_text_lower for w in ["chào", "xin chào", "giá", "vé", "lào", "bao nhiêu", "đi", "xe", "tôi", "cho tôi", "sơ đồ", "ghế", "hết hạn", "ngày", "đón", "ở đâu"]):
+        lang_code = "vi"
+    elif re.search(r'[\u4e00-\u9fff]', user_text_lower):
+        lang_code = "zh"
+    elif customer_profile:
+        # Nếu là khách cũ đã lưu quốc tịch / ngôn ngữ
+        prof_nat = (customer_profile.get("nationality") or "").lower()
+        if any(r in prof_nat for r in ["nga", "russia", "belarus", "kazakh", "ukrain"]):
+            lang_code = "ru"
+        elif any(k in prof_nat for k in ["korea", "hàn"]):
+            lang_code = "ko"
+        elif customer_profile.get("preferred_lang"):
+            lang_code = str(customer_profile.get("preferred_lang") or "en")
+        else:
+            lang_code = get_lang_code(destination) or "en"
+    else:
+        lang_code = get_lang_code(destination) or "en"
         
     lang_names = {
         "en": "ENGLISH",
@@ -457,10 +488,20 @@ async def process_chat(history_messages: list[dict]) -> ChatResponse:
         except Exception as e:
             print(f"⚠️ RAG search error: {e}")
 
+    # === CUSTOMER PROFILE CONTEXT (Hồ sơ Khách cũ & Cá nhân hóa) ===
+    customer_context_prompt = ""
+    if customer_profile:
+        try:
+            customer_context_prompt = customer_memory.format_customer_profile_for_prompt(customer_profile)
+        except Exception as e:
+            print(f"⚠️ Lỗi định dạng profile khách cũ: {e}")
+
     # Inject contexts into system prompt
     dynamic_prompt = SYSTEM_PROMPT
+    if customer_context_prompt:
+        dynamic_prompt = dynamic_prompt + "\n\n" + customer_context_prompt
     if rag_context:
-        dynamic_prompt = SYSTEM_PROMPT + "\n\n" + rag_context
+        dynamic_prompt = dynamic_prompt + "\n\n" + rag_context
     if route_directive_context:
         dynamic_prompt = dynamic_prompt + "\n\n" + route_directive_context
     if smart_departure_context:

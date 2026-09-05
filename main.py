@@ -27,7 +27,8 @@ from telegram_router import (
     get_customer_service_type,
     get_or_create_seat_map,
 )
-from memory_store import memory_store, log_message, get_recent_logs
+from memory_store import memory_store, log_message, get_recent_logs, load_session_history
+import customer_memory
 from i18n import get_lang_code, get_msg
 
 import time
@@ -95,8 +96,13 @@ async def webhook_guardian():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     import asyncio
+    from visa_reminder import start_daily_reminder_loop
+    
     await tg_app.initialize()
     await tg_app.start()
+    
+    # Khởi động tiến trình nhắc nhở hết hạn visa tự động hàng ngày
+    reminder_task = asyncio.create_task(start_daily_reminder_loop(tg_app.bot, run_hour_utc=2))
     
     # Thiết lập webhook Telegram tự động khi chạy trên Render
     render_url = os.getenv("RENDER_EXTERNAL_URL")
@@ -127,6 +133,13 @@ async def lifespan(app: FastAPI):
         guardian_task.cancel()
         try:
             await guardian_task
+        except asyncio.CancelledError:
+            pass
+            
+    if reminder_task:
+        reminder_task.cancel()
+        try:
+            await reminder_task
         except asyncio.CancelledError:
             pass
             
@@ -314,9 +327,12 @@ async def send_facebook_image(user_id: str, image_url: str):
 
 # === LUỒNG XỬ LÝ CHUNG CHO MỌI KÊNH ===
 async def process_omnichannel_logic(user_id, platform, user_text, session_id, agent="Direct"):
-    log_message(user_id, platform, "User", user_text)
-    if session_id not in memory_store:
-        memory_store[session_id] = []
+    # 1. Truy xuất hoặc tạo mới hồ sơ khách hàng từ SQLite
+    cust_profile = customer_memory.get_or_create_customer(platform.lower(), str(user_id))
+    cust_id = cust_profile.get("customer_id") if cust_profile else None
+
+    log_message(user_id, platform, "User", user_text, customer_id=cust_id)
+    load_session_history(session_id)
         
     # Lấy trạng thái trước đó để so sánh thay đổi
     prev_data = memory_store.get(f"{session_id}_data")
@@ -327,7 +343,8 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
     
     # Ghi nhận tên hiển thị nếu chưa có
     if not memory_store.get(f"{session_id}_name"):
-        memory_store[f"{session_id}_name"] = f"Khách {platform} ({str(user_id)[:6]})"
+        cust_name_db = cust_profile.get("full_name") if cust_profile else None
+        memory_store[f"{session_id}_name"] = cust_name_db or f"Khách {platform} ({str(user_id)[:6]})"
 
     # Kiểm tra chế độ Bot
     mode = memory_store.get(f"{session_id}_mode", "auto")
@@ -338,7 +355,7 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
     if mode == "copilot":
         # Chế độ Co-pilot: Bot tạo tin nhắn nháp nhưng không tự động gửi
         try:
-            ai_response = await process_chat(memory_store[session_id])
+            ai_response = await process_chat(memory_store[session_id], customer_profile=cust_profile)
             reply = ai_response.reply_message
             memory_store[f"{session_id}_draft"] = reply
             memory_store[f"{session_id}_draft_data"] = ai_response.extracted_data
@@ -358,16 +375,31 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
         return None, None
 
     try:
-        ai_response = await process_chat(memory_store[session_id])
+        # Gọi AI Agent kèm hồ sơ khách cũ để cá nhân hóa ngữ điệu
+        ai_response = await process_chat(memory_store[session_id], customer_profile=cust_profile)
         reply = ai_response.reply_message
         memory_store[session_id].append({"role": "assistant", "content": reply})
-        log_message(user_id, platform, "Bot", reply)
+        log_message(user_id, platform, "Bot", reply, customer_id=cust_id)
 
         data = ai_response.extracted_data
         # Inject agent from URL param if not set by AI
         if agent and agent != "Direct" and not getattr(data, "agent", None):
             data.agent = agent
         memory_store[f"{session_id}_data"] = data
+
+        # Tự động cập nhật hồ sơ khách hàng vào Database SQLite
+        if cust_id:
+            profile_updates = {}
+            if getattr(data, "ho_ten", None): profile_updates["full_name"] = data.ho_ten
+            if getattr(data, "quoc_tich", None): profile_updates["nationality"] = data.quoc_tich
+            if getattr(data, "so_dien_thoai", None):
+                profile_updates["phone_number"] = str(data.so_dien_thoai)
+                customer_memory.link_platform_by_phone(str(data.so_dien_thoai), platform.lower(), str(user_id))
+            if getattr(data, "ghe_chon", None): profile_updates["preferred_seat"] = data.ghe_chon
+            if getattr(data, "diem_don", None): profile_updates["preferred_pickup"] = data.diem_don
+            if getattr(data, "ngay_het_han_visa", None): profile_updates["visa_expiry_date"] = data.ngay_het_han_visa
+            if profile_updates:
+                customer_memory.update_customer_profile(cust_id, **profile_updates)
 
         # Xác định ngày đi và loại dịch vụ của khách
         history_text = " ".join([m["content"] for m in memory_store[session_id]])
@@ -450,6 +482,22 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
                     "user_id": user_id,
                     "platform": platform,
                 }
+
+                # Lưu chuyến đi vào SQLite trip_history
+                if cust_id:
+                    try:
+                        customer_memory.record_completed_trip(
+                            customer_id=cust_id,
+                            departure_date=ngay_di or data.ngay_khoi_hanh or datetime.now().strftime("%d/%m"),
+                            route=service_type,
+                            visa_type=data.loai_visa,
+                            seat_number=data.ghe_chon,
+                            pickup_location=data.diem_don,
+                            price_paid=price,
+                            order_id=record_id
+                        )
+                    except Exception as e_trip:
+                        print(f"⚠️ Lỗi lưu trip_history vào SQLite ({platform}): {e_trip}")
 
                 # Gửi thông báo Admin với Inline Keyboard
                 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
@@ -672,7 +720,13 @@ async def save_teach_knowledge(question: str, answer: str):
     answer = answer.strip()
     if not question or not answer:
         return False
-    filepath = os.path.join(os.path.dirname(__file__), "manual_qa.json")
+    base_dir = os.path.dirname(__file__)
+    kb_dir = os.path.join(base_dir, "data", "training_knowledge")
+    os.makedirs(kb_dir, exist_ok=True)
+    filepath = os.path.join(kb_dir, "manual_qa.json")
+    if not os.path.exists(filepath) and os.path.exists(os.path.join(base_dir, "manual_qa.json")):
+        filepath = os.path.join(base_dir, "manual_qa.json")
+        
     data = []
     if os.path.exists(filepath):
         try:
@@ -1056,7 +1110,11 @@ async def api_sync_excel():
     import subprocess
     import sys
     try:
-        script_path = os.path.join(os.path.dirname(__file__), "sync_excel_kb.py")
+        base_dir = os.path.dirname(__file__)
+        script_path = os.path.join(base_dir, "scripts", "training", "sync_excel_kb.py")
+        if not os.path.exists(script_path):
+            script_path = os.path.join(base_dir, "sync_excel_kb.py")
+            
         if not os.path.exists(script_path):
             return {"success": False, "message": f"Không tìm thấy file kịch bản đồng bộ tại {script_path}."}
             
@@ -1136,6 +1194,39 @@ async def api_staff_chat(request: Request):
         return {"success": True, "answer": answer}
     except Exception as e:
         return {"success": False, "message": str(e)}
+
+
+@app.post("/admin/trigger-visa-reminders")
+async def trigger_visa_reminders_api():
+    """API kích hoạt quét và gửi nhắc nhở hết hạn visa trước 10 ngày"""
+    try:
+        from visa_reminder import check_and_send_daily_reminders
+        report = await check_and_send_daily_reminders(bot=tg_app.bot)
+        return {"success": True, "report": report}
+    except Exception as e:
+        return {"success": False, "message": str(e)}
+
+
+@app.get("/admin/visa-reminders-preview")
+async def preview_visa_reminders_api():
+    """API xem trước danh sách khách hàng sắp hết hạn visa trong 10 ngày tới"""
+    from customer_memory import get_customers_needing_visa_reminder
+    from visa_reminder import generate_reminder_message, format_display_date
+    
+    customers = get_customers_needing_visa_reminder(days_before=10, window_days=2)
+    preview_list = []
+    for c in customers:
+        preview_list.append({
+            "customer_id": c["customer_id"],
+            "full_name": c["full_name"],
+            "nationality": c["nationality"],
+            "preferred_lang": c["preferred_lang"],
+            "visa_expiry_date": format_display_date(c["visa_expiry_date"]),
+            "telegram_id": c["telegram_id"],
+            "phone_number": c["phone_number"],
+            "sample_message": generate_reminder_message(c, days_left=10)
+        })
+    return {"total": len(preview_list), "customers": preview_list}
 
 
 app.include_router(telegram_router)

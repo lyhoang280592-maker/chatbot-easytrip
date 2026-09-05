@@ -1,18 +1,26 @@
 import os
 import asyncio
+from typing import Any, List, Dict
 from groq import AsyncGroq
 from dotenv import load_dotenv
 
 load_dotenv()
 
-# We know Key 2 is valid. Let's extract it:
-api_keys_str = os.getenv("GROQ_API_KEYS") or ""
+# Extract Groq key safely
+api_keys_str = os.getenv("GROQ_API_KEYS") or os.getenv("GROQ_API_KEY") or ""
 groq_keys = [k.strip() for k in api_keys_str.split(",") if k.strip()]
-key2 = groq_keys[1]
+key2 = groq_keys[1] if len(groq_keys) > 1 else (groq_keys[0] if groq_keys else "")
+
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+knowledge_file = os.path.join(ROOT_DIR, "data", "training_knowledge", "knowledge.txt")
+if not os.path.exists(knowledge_file):
+    knowledge_file = os.path.join(ROOT_DIR, "knowledge.txt")
 
 # Load knowledge
-with open("knowledge.txt", "r", encoding="utf-8") as f:
-    knowledge_base = f.read()
+knowledge_base = ""
+if os.path.exists(knowledge_file):
+    with open(knowledge_file, "r", encoding="utf-8") as f:
+        knowledge_base = f.read()
 
 system_instruction = f"""Bạn là một trợ lý tư vấn khách hàng thân thiện và chuyên nghiệp của công ty Easy Trip & Visa.
 
@@ -51,22 +59,26 @@ BẮT BUỘC trả về JSON với đúng cấu trúc sau (không thêm text bê
 }}"""
 
 async def test_call():
+    if not key2:
+        print("⚠️ Không tìm thấy GROQ_API_KEYS trong .env")
+        return
     client = AsyncGroq(api_key=key2)
-    messages = [
+    messages: Any = [
         {"role": "system", "content": system_instruction},
         {"role": "user", "content": "tôi muốn visarun"}
     ]
     try:
         print("Calling Groq...")
         response = await client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=messages,  # type: ignore
+            model="groq/compound",
+            messages=messages,
             response_format={"type": "json_object"},
             temperature=0.3,
             max_tokens=1024
         )
         print("Response received:")
-        print(response.choices[0].message.content)
+        if response.choices and len(response.choices) > 0 and response.choices[0].message:
+            print(response.choices[0].message.content)
     except Exception as e:
         print(f"Error occurred: {e}")
 

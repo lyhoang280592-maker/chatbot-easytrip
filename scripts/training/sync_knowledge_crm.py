@@ -13,7 +13,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 if hasattr(sys.stdout, "reconfigure"):
-    sys.stdout.reconfigure(encoding="utf-8")
+    getattr(sys.stdout, "reconfigure")(encoding="utf-8")
 
 load_dotenv()
 
