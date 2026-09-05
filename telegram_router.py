@@ -1236,28 +1236,36 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if matched_cust.get("customer_id") and user_id:
                 customer_memory.link_telegram_to_customer(matched_cust["customer_id"], user_id)
             
-            cust_name = matched_cust.get("full_name") or "Quý khách"
-            cust_nat = matched_cust.get("nationality") or "Korea"
-            old_route = matched_cust.get("preferred_route") or "45D Laos (Miễn thị thực / Free Visa)"
+            cust_name = matched_cust.get("full_name") or "Valued Customer"
+            cust_nat = matched_cust.get("nationality") or "Russia"
+            old_route = matched_cust.get("preferred_route") or "45D Laos (Visa-free 45 days)"
             old_seat = matched_cust.get("preferred_seat") or "A12"
-            old_pickup = matched_cust.get("preferred_pickup") or "40 Hòn Chồng (Nha Trang)"
+            old_pickup = matched_cust.get("preferred_pickup") or "40 Hon Chong (Nha Trang)"
             past_trips = matched_cust.get("past_trips") or []
-            last_trip_desc = f"{old_route}, ngày {past_trips[0].get('departure_date')}, ghế {old_seat}, đón {old_pickup}" if past_trips else f"{old_route}, ghế {old_seat}, đón {old_pickup}"
+            last_trip_desc = f"{old_route}, date {past_trips[0].get('departure_date')}, seat {old_seat}, pickup {old_pickup}" if past_trips else f"{old_route}, seat {old_seat}, pickup {old_pickup}"
+
+            nat_lower = cust_nat.lower()
+            if any(k in nat_lower for k in ["russia", "russian", "nga", "belarus", "kazakh", "ukrain"]) or customer_memory.is_slavic_name(cust_name):
+                target_lang = "RUSSIAN (Русский язык)"
+            elif any(k in nat_lower for k in ["korea", "korean", "hàn quốc"]):
+                target_lang = "KOREAN (한국어)"
+            elif any(k in nat_lower for k in ["vietnam", "vietnamese", "việt nam"]):
+                target_lang = "VIETNAMESE (Tiếng Việt)"
+            else:
+                target_lang = "ENGLISH"
 
             prompt_msg = (
-                f"📸 [XÁC THỰC KHÁCH QUEN TỪ ẢNH BIÊN NHẬN/VÉ CŨ]\n"
-                f"Tôi vừa gửi ảnh vé cũ để xác thực là khách quen. "
-                f"Hệ thống đã nhận diện hồ sơ của tôi trong CRM:\n"
-                f"- Họ tên: {cust_name}\n"
-                f"- Quốc tịch: {cust_nat}\n"
-                f"- Chuyến đi cũ trong quá khứ: {last_trip_desc}\n\n"
-                f"🎯 Hãy trả lời tôi theo đúng quy trình:\n"
-                f"1. Chào mừng tôi quay lại bằng ngôn ngữ phù hợp kèm tên của tôi ({cust_name}).\n"
-                f"2. Xác nhận đã tìm thấy thông tin vé cũ của tôi trong hệ thống.\n"
-                f"3. HỎI TÔI CÓ MUỐN ĐẶT LẠI DỊCH VỤ CŨ KHÔNG: Hỏi tôi có muốn đặt lại chuyến đi ({old_route}) cho chuyến đi tiếp theo không, và hỏi tôi dự kiến đi vào ngày nào sắp tới.\n"
-                f"4. Hỏi tôi có muốn tiếp tục giữ vị trí ghế quen thuộc ({old_seat}) và điểm đón quen thuộc ({old_pickup}) không.\n"
-                f"5. BÁO GIÁ ƯU ĐÃI KHÁCH CŨ: Tuyến 45 ngày Lào miễn visa giá ưu đãi khách cũ chỉ 1.300.000 VNĐ (tiết kiệm 100.000 VNĐ so với giá mới 1.400.000 VNĐ) / hoặc mức giá ưu đãi tương ứng cho quốc tịch của tôi.\n"
-                f"⚠️ TUYỆT ĐỐI KHÔNG tự động chốt lịch hoặc xác nhận đặt vé cho ngày khởi hành cũ trên tờ vé (vì ngày trên vé là chuyến đi trong quá khứ)!"
+                f"[RETURNING CUSTOMER VERIFIED VIA TICKET PHOTO]\n"
+                f"Customer Name: {cust_name}\n"
+                f"Nationality: {cust_nat}\n"
+                f"Verified Past Trip: {last_trip_desc}\n\n"
+                f"🎯 MANDATORY INSTRUCTIONS FOR RESPONSE:\n"
+                f"1. YOU MUST WRITE YOUR ENTIRE RESPONSE IN {target_lang}!\n"
+                f"2. Warmly greet the customer by name ({cust_name}) in {target_lang} and confirm that we have verified their past ticket in our database.\n"
+                f"3. ASK IF THEY WANT TO RE-BOOK THEIR PREVIOUS SERVICE: Ask if they would like to re-book the same service ({old_route}) for their next upcoming trip, and ask what new departure date they plan to travel.\n"
+                f"4. Ask if they want to keep their favorite seat ({old_seat}) and pickup location ({old_pickup}).\n"
+                f"5. QUOTE RETURNING CUSTOMER DISCOUNTED PRICE: Mention the discounted returning rate (e.g. 1,300,000 VND for 45D Free Visa Laos / 3,000,000 VND for Russian 90D Single / 3,550,000 VND for Cambodia 90D) and priority seat booking!\n"
+                f"⚠️ NEVER confirm the old date from the previous ticket because it is a past completed trip."
             )
             
             # Cho AI phản hồi trực tiếp
@@ -1271,6 +1279,9 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "ℹ️ **We could not find your booking information in our database.**\n"
                 "Therefore, our **standard website listed prices** will apply to your booking.\n\n"
                 "👉 Please let us know your **intended departure date or preferred visa type** to proceed!\n\n"
+                "────────────────────\n"
+                "ℹ️ **Chúng tôi không tìm thấy thông tin của bạn trên cơ sở dữ liệu của chúng tôi, vì vậy chúng ta sẽ áp dụng giá niêm yết trên website.**\n\n"
+                "👉 Vui lòng cho chúng tôi biết **ngày dự kiến khởi hành hoặc loại visa bạn quan tâm**!\n\n"
                 "────────────────────\n"
                 "ℹ️ **Мы не нашли информацию о вашем бронировании в нашей базе данных.**\n"
                 "Поэтому для вашей поездки будет действовать **стандартный тариф, указанный на нашем сайте**.\n\n"

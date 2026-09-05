@@ -459,50 +459,7 @@ def find_customer_by_booking_text(text: str) -> Optional[Dict[str, Any]]:
     if m_name:
         name_extracted = re.sub(r'[^a-zA-Z\s]', '', m_name.group(1)).strip().upper()
         
-    # 4. Đối soát qua Lịch sử chuyến đi: Số ghế + Ngày khởi hành (Date + Seat)
-    # Xử lý các lỗi OCR ký tự ghế phổ biến (VD: 4l2 -> A12, 412 -> A12, Bl -> B1, 4l -> A1, Al2 -> A12)
-    clean_seat_text = normalized_text.upper().replace('4L2', 'A12').replace('412', 'A12').replace('AL2', 'A12').replace('BL', 'B1')
-    seat_m = re.search(r'\b([AB]\d{1,2})\b', clean_seat_text)
-    seat = seat_m.group(1) if seat_m else None
-    
-    date_matches = re.findall(r'(\d{1,2})[/.-](\d{1,2})(?:[/.-](\d{2,4}))?', normalized_text)
-    normalized_dates = []
-    for d, m, y in date_matches:
-        day = f'{int(d):02d}'
-        month = f'{int(m):02d}'
-        if y:
-            year = f'20{y}' if len(y) == 2 else y
-            normalized_dates.append(f'{year}-{month}-{day}')
-            normalized_dates.append(f'{day}/{month}/{year}')
-        normalized_dates.append(f'{day}/{month}')
-        normalized_dates.append(f'{month}-{day}')
-        
-    if seat and normalized_dates:
-        for dt_str in normalized_dates:
-            c.execute('''
-                SELECT c.*, t.route, t.pickup_location FROM trip_history t 
-                JOIN customers c ON t.customer_id = c.customer_id 
-                WHERE t.seat_number = ? AND (t.departure_date LIKE ? OR t.departure_date LIKE ?)
-            ''', (seat, f'%{dt_str}%', f'%{dt_str.replace("/", "-")}%'))
-            for row in c.fetchall():
-                cust = dict(row)
-                cust_full = cust.get('full_name', '').strip().upper()
-                if cust_full in excluded_names:
-                    continue
-                # Xác thực tên hoặc bối cảnh tuyến đường / điểm đón
-                if name_extracted:
-                    sim = difflib.SequenceMatcher(None, cust_full, name_extracted).ratio()
-                    if sim >= 0.35:
-                        cust["customer_tier"] = "RETURNING"
-                        cust["total_trips"] = max(cust.get("total_trips") or 1, 1)
-                        return cust
-                route_lower = (cust.get('route') or '').lower()
-                if ('laos' in normalized_text.lower() and 'laos' in route_lower) or ('cambodia' in normalized_text.lower() and 'cambodia' in route_lower) or ('hon chong' in normalized_text.lower() and 'hòn chồng' in (cust.get('pickup_location') or '').lower()):
-                    cust["customer_tier"] = "RETURNING"
-                    cust["total_trips"] = max(cust.get("total_trips") or 1, 1)
-                    return cust
-
-    # 5. Tra soát Tên khách hàng (Exact & Fuzzy Sequence Matching)
+    # 4. Tra soát Tên khách hàng (Exact & Fuzzy Sequence Matching)
     c.execute('SELECT * FROM customers WHERE full_name IS NOT NULL AND length(trim(full_name)) >= 3')
     all_customers = [dict(row) for row in c.fetchall() if dict(row)['full_name'].strip().upper() not in excluded_names]
     
