@@ -364,7 +364,80 @@ def link_platform_by_phone(phone_number: str, platform: str, user_id: str) -> Op
             cursor.execute("SELECT * FROM customers WHERE customer_id = ?", (cust_id,))
             return dict(cursor.fetchone())
             
+def link_telegram_to_customer(customer_id: int, telegram_id: str) -> Optional[Dict[str, Any]]:
+    """Gán telegram_id cho hồ sơ khách hàng cũ và dọn dẹp các hồ sơ tạm không có chuyến đi"""
+    if not customer_id or not telegram_id:
+        return None
+    conn = get_db_connection()
+    with conn:
+        # Xóa telegram_id ở bất kỳ bản ghi tạm nào chưa có chuyến đi
+        conn.execute("""
+            UPDATE customers 
+            SET telegram_id = NULL 
+            WHERE telegram_id = ? AND customer_id != ? AND total_trips = 0
+        """, (str(telegram_id), customer_id))
+        
+        # Gán telegram_id cho bản ghi khách cũ
+        conn.execute("""
+            UPDATE customers 
+            SET telegram_id = ?, updated_at = CURRENT_TIMESTAMP 
+            WHERE customer_id = ?
+        """, (str(telegram_id), customer_id))
+        
+    return get_customer_profile(str(telegram_id), "telegram")
+
+
+def find_customer_by_booking_text(text: str) -> Optional[Dict[str, Any]]:
+    """
+    Tra soát CSDL khách hàng từ chuỗi text thông tin booking gần nhất
+    (ví dụ: Họ tên viết hoa, số điện thoại, tuyến đi cũ, ghi chú...).
+    """
+    if not text or len(text.strip()) < 3:
+        return None
+        
+    import re
+    conn = get_db_connection()
+    c = conn.cursor()
+    
+    # 1. Tìm theo số điện thoại nếu có
+    phone_matches = re.findall(r'(\+?\d[\d\s\-\.]{7,15}\d)', text)
+    for p in phone_matches:
+        cleaned_p = re.sub(r'[^\d+]', '', p)
+        if len(cleaned_p) >= 8:
+            c.execute('SELECT * FROM customers WHERE phone_number LIKE ?', ('%' + cleaned_p[-8:] + '%',))
+            row = c.fetchone()
+            if row:
+                return dict(row)
+                
+    # 2. Tìm theo danh sách tất cả khách hàng
+    c.execute('SELECT * FROM customers WHERE full_name IS NOT NULL AND length(trim(full_name)) >= 3')
+    all_customers = [dict(row) for row in c.fetchall()]
+    
+    clean_text = ' ' + re.sub(r'[^a-zA-Z0-9\s]', ' ', text.upper()) + ' '
+    
+    matches = []
+    for cust in all_customers:
+        name = cust['full_name'].strip().upper()
+        if len(name) < 3:
+            continue
+            
+        name_words = [w for w in re.split(r'\s+', name) if len(w) > 1 and not w.isdigit()]
+        if not name_words:
+            continue
+            
+        # Kiểm tra xem toàn bộ các từ trong tên khách hàng có xuất hiện trong text không
+        if all(re.search(r'\b' + re.escape(w) + r'\b', clean_text) for w in name_words):
+            tier_score = 20 if cust.get('customer_tier') in ['VIP', 'RETURNING'] else 0
+            trips_score = (cust.get('total_trips') or 0) * 10
+            word_score = len(name_words) * 15
+            matches.append((tier_score + trips_score + word_score, cust))
+            
+    if matches:
+        matches.sort(key=lambda x: x[0], reverse=True)
+        return matches[0][1]
+        
     return None
+
 
 
 def record_completed_trip(

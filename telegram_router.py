@@ -413,20 +413,11 @@ async def send_to_admin_group(context, message: str):
 # ============================================================
 # KHỞI TẠO BOT
 # ============================================================
+# KHỞI TẠO BOT
+# ============================================================
 tg_app = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
 
-async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    user_id = str(update.effective_user.id) if update.effective_user else ""
-    session_id = f"telegram_{user_id}"
-    
-    # Reset phiên chat trong bộ nhớ khi /start
-    memory_store[session_id] = []
-    memory_store[f"{session_id}_mode"] = "auto"
-    if f"{session_id}_data" in memory_store:
-        del memory_store[f"{session_id}_data"]
-    if f"{session_id}_draft" in memory_store:
-        del memory_store[f"{session_id}_draft"]
-
+async def send_new_customer_welcome_menu(chat_id: str | int, target_msg, conn_id=None):
     welcome_text = (
         "Welcome to Easy Trip & Visa. I'm here to help you with your Visarun trip. \n"
         "Could you please tell me: \n"
@@ -447,8 +438,74 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton("💬 Direct WhatsApp Support", url="https://wa.me/84868462071")]
     ])
     
-    if update.message:
-        await update.message.reply_text(welcome_text, reply_markup=keyboard, parse_mode="Markdown")
+    if target_msg:
+        if conn_id:
+            await target_msg.reply_text(welcome_text, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=conn_id)  # type: ignore
+        else:
+            await target_msg.reply_text(welcome_text, reply_markup=keyboard, parse_mode="Markdown")
+
+
+async def send_returning_customer_request(chat_id: str | int, target_msg, conn_id=None):
+    returning_prompt = (
+        "🌟 **XÁC NHẬN KHÁCH HÀNG THÂN THIẾT / RETURNING CUSTOMER**\n\n"
+        "Để áp dụng **chính sách giá ưu đãi đặc biệt** dành riêng cho khách hàng cũ và giữ vị trí ghế quen/điểm đón quen của bạn:\n"
+        "👉 Bạn vui lòng gửi lại **nội dung tin nhắn booking gần nhất** hoặc **ảnh chụp vé / tin nhắn đón xe cũ** như mẫu dưới đây nhé:\n\n"
+        "```text\n"
+        "10/09-90D- Laos\n"
+        "TSARENKO EKATERINA\n"
+        "B10\n"
+        "RODICHEV DMITRY\n"
+        "A12\n"
+        "40 Hon Chong - 9:30PM\n"
+        "```\n"
+        "*(Hoặc bạn chỉ cần nhắn Họ & Tên đầy đủ trên hộ chiếu / Số điện thoại đã từng đặt)*\n\n"
+        "────────────────────\n"
+        "🌟 **RETURNING CUSTOMER LOYALTY DISCOUNT**\n"
+        "To apply your **exclusive loyalty discount** and personal preferences, please send your **previous booking message, ticket screenshot, or your Full Passport Name / Phone number**.\n\n"
+        "────────────────────\n"
+        "🌟 **СПЕЦИАЛЬНАЯ ЦЕНА ДЛЯ ПОСТОЯННЫХ КЛИЕНТОВ**\n"
+        "Чтобы получить **специальную цену постоянного клиента** и сохранить любимые места, отправьте, пожалуйста, **текст вашего предыдущего бронирования, скриншот билета или ваши ФИО на латинице (по загранпаспорту)**."
+    )
+    if target_msg:
+        if conn_id:
+            await target_msg.reply_text(returning_prompt, parse_mode="Markdown", business_connection_id=conn_id)  # type: ignore
+        else:
+            await target_msg.reply_text(returning_prompt, parse_mode="Markdown")
+
+
+async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = str(update.effective_user.id) if update.effective_user else ""
+    session_id = f"telegram_{user_id}"
+    
+    # Reset phiên chat trong bộ nhớ khi /start
+    memory_store[session_id] = []
+    memory_store[f"{session_id}_mode"] = "auto"
+    if f"{session_id}_data" in memory_store:
+        del memory_store[f"{session_id}_data"]
+    if f"{session_id}_draft" in memory_store:
+        del memory_store[f"{session_id}_draft"]
+    if f"{session_id}_awaiting_old_booking" in memory_store:
+        del memory_store[f"{session_id}_awaiting_old_booking"]
+
+    welcome_question = (
+        "👋 **Xin chào bạn! Chào mừng bạn đến với Easy Trip & Visa.**\n"
+        "Bạn đã từng đặt dịch vụ bên mình trước đây chưa?\n\n"
+        "👋 **Welcome to Easy Trip & Visa!**\n"
+        "Have you booked any service with us before?\n\n"
+        "👋 **Здравствуйте! Добро пожаловать в Easy Trip & Visa.**\n"
+        "Вы уже пользовались нашими услугами ранее?"
+    )
+    
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("🌟 Khách Cũ (Ưu đãi) / Returning / Постоянный клиент", callback_data="cust_type|returning")],
+        [InlineKeyboardButton("🆕 Khách Mới / New Customer / Новый клиент", callback_data="cust_type|new")],
+        [InlineKeyboardButton("💬 Direct Telegram Support", url="https://t.me/easytripvisa_co_ltd")],
+        [InlineKeyboardButton("💬 Direct WhatsApp Support", url="https://wa.me/84868462071")]
+    ])
+    
+    target_msg: Any = update.message or (update.callback_query.message if update.callback_query else None)
+    if target_msg:
+        await target_msg.reply_text(welcome_question, reply_markup=keyboard, parse_mode="Markdown")
 
 async def get_id_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message and update.effective_chat:
@@ -468,10 +525,26 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
     except Exception:
         pass
 
-    # 1. Truy xuất / Tạo hồ sơ khách hàng bền vững từ SQLite
+    # 1. Truy xuất / Tra soát hồ sơ khách hàng bền vững từ SQLite & CRM
     full_name_tg = update.effective_user.full_name if update.effective_user else None
-    cust_profile = customer_memory.get_or_create_customer("telegram", user_id, full_name=full_name_tg)
+    is_awaiting_old = memory_store.get(f"{session_id}_awaiting_old_booking", False)
+    
+    # Tra soát xem tin nhắn có chứa thông tin booking cũ / tên khách cũ không
+    matched_cust = customer_memory.find_customer_by_booking_text(text)
+    
+    if matched_cust:
+        print(f"🎯 Đã nhận diện Khách Cũ từ tin nhắn/booking: {matched_cust.get('full_name')} (ID {matched_cust.get('customer_id')})")
+        cust_profile = customer_memory.link_telegram_to_customer(matched_cust["customer_id"], user_id)
+        if not cust_profile:
+            cust_profile = customer_memory.get_customer_profile(user_id, "telegram")
+        memory_store.pop(f"{session_id}_awaiting_old_booking", None)
+    else:
+        cust_profile = customer_memory.get_or_create_customer("telegram", user_id, full_name=full_name_tg)
+        if is_awaiting_old:
+            memory_store.pop(f"{session_id}_awaiting_old_booking", None)
+
     cust_id = cust_profile.get("customer_id") if cust_profile else None
+
 
     log_message(user_id, "Telegram", "User", text, customer_id=cust_id)
     load_session_history(session_id)
@@ -1058,13 +1131,34 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         # Báo cáo lập tức cho Admin Group kèm link chat trực tiếp
         admin_notif_msg = (
-            f"📸 **KHÁCH HÀNG GỬI ẢNH MỚI (HỘ CHIẾU/HOÁ ĐƠN)**\n"
+            f"📸 **KHÁCH HÀNG GỬI ẢNH MỚI (HỘ CHIẾU/HOÁ ĐƠN/VÉ CŨ)**\n"
             f"👤 Tên: {customer_name} ({nationality})\n"
             f"📞 SĐT: {phone}\n"
             f"📂 Thể loại nhận diện: {img_type}\n"
             f"👉 [Admin vui lòng kiểm tra và xử lý giao dịch!](https://t.me/easytripvisa_co_ltd)"
         )
         await send_to_admin_group(context, admin_notif_msg)
+
+        # Nếu khách đang trong luồng gửi ảnh booking cũ
+        if memory_store.get(f"{session_id}_awaiting_old_booking"):
+            memory_store.pop(f"{session_id}_awaiting_old_booking", None)
+            confirm_photo_msg = (
+                "✅ **Đã nhận hình ảnh booking chuyến đi cũ của bạn!**\n"
+                "Easy Trip & Visa đang tiến hành đối soát thông tin của bạn trên hệ thống CRM để kích hoạt chính sách giá ưu đãi Khách hàng thân thiết.\n\n"
+                "👉 Trong lúc này, bạn vui lòng cho mình biết **ngày bạn dự kiến khởi hành chuyến đi tiếp theo** hoặc loại visa bạn cần nhé!\n\n"
+                "────────────────────\n"
+                "✅ **Previous booking image received!**\n"
+                "We are verifying your loyalty profile on our CRM. Please let us know your **intended departure date or preferred visa type** for your next trip!\n\n"
+                "────────────────────\n"
+                "✅ **Фото предыдущего бронирования получено!**\n"
+                "Мы проверяем ваши данные в CRM для применения скидки постоянного клиента. Пожалуйста, напишите **желаемую дату следующей поездки или тип визы**!"
+            )
+            if conn_id:
+                await message.reply_text(confirm_photo_msg, business_connection_id=conn_id)  # type: ignore
+            else:
+                await message.reply_text(confirm_photo_msg)
+            return
+
         
         lang = get_lang_code(nationality) if data else "en"
         conn_id = update.business_message.business_connection_id if update.business_message else None
@@ -1087,6 +1181,25 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         parts = (query.data or "").split("|")
         if len(parts) < 2: return
         
+        # 0. Xử lý lựa chọn Khách Cũ vs Khách Mới
+        if parts[0] == "cust_type":
+            cust_choice = parts[1]
+            if not update.effective_user:
+                return
+            user_id = str(update.effective_user.id)
+            session_id = f"telegram_{user_id}"
+            conn_id = memory_store.get(f"{session_id}_business_connection_id")
+            target_msg = query.message
+            
+            if cust_choice == "new":
+                memory_store[f"{session_id}_customer_tier"] = "NEW"
+                memory_store.pop(f"{session_id}_awaiting_old_booking", None)
+                await send_new_customer_welcome_menu(user_id, target_msg, conn_id=conn_id)
+            elif cust_choice == "returning":
+                memory_store[f"{session_id}_awaiting_old_booking"] = True
+                await send_returning_customer_request(user_id, target_msg, conn_id=conn_id)
+            return
+
         # 1. Xử lý các nút bấm dịch vụ từ phía Khách Hàng
         if parts[0] == "service":
             service_key = parts[1]
