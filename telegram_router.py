@@ -602,13 +602,26 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
     log_message(user_id, "Telegram", "Bot", reply, customer_id=cust_id)
     
     target_msg: Any = update.message or update.business_message or (update.callback_query.message if update.callback_query else None)
-    conn_id = update.business_message.business_connection_id if update.business_message else None
+    conn_id = update.business_message.business_connection_id if update.business_message else memory_store.get(f"{session_id}_business_connection_id")
+    target_chat_id = update.effective_chat.id if update.effective_chat else int(user_id)
     
-    if target_msg:
-        if conn_id:
-            await target_msg.reply_text(reply, business_connection_id=conn_id)  # type: ignore
+    try:
+        if target_msg:
+            if conn_id:
+                await target_msg.reply_text(reply, business_connection_id=conn_id)  # type: ignore
+            else:
+                await target_msg.reply_text(reply)
         else:
-            await target_msg.reply_text(reply)
+            if conn_id:
+                await context.bot.send_message(chat_id=target_chat_id, text=reply, business_connection_id=conn_id)  # type: ignore
+            else:
+                await context.bot.send_message(chat_id=target_chat_id, text=reply)
+    except Exception as e_send:
+        print(f"⚠️ Lỗi reply_text, chuyển sang fallback send_message: {e_send}")
+        try:
+            await context.bot.send_message(chat_id=target_chat_id, text=reply)
+        except Exception as e_direct:
+            print(f"❌ Fallback send_message thất bại: {e_direct}")
 
         # Tự động gửi ảnh sơ đồ ghế nếu khách hỏi hoặc AI đề cập sơ đồ ghế
         seat_keywords = ["sơ đồ", "seat map", "seatmap", "схема", "chọn ghế", "xem ghế", "chỗ ngồi", "ghế trống"]
@@ -1015,19 +1028,21 @@ def get_ocr_reader():
             _easyocr_reader = False
     return _easyocr_reader if _easyocr_reader is not False else None
 
-def extract_text_from_image(image_path: str) -> str:
+async def extract_text_from_image(image_path: str) -> str:
     """Trích xuất văn bản từ hình ảnh vé/tin nhắn bằng Cloud OCR và EasyOCR (hỗ trợ Tiếng Anh, Tiếng Nga, Hàn, Việt)"""
     # 1. Primary: Fast Cloud OCR (0 MB RAM, không tốn RAM máy chủ, độ chính xác cao)
     try:
         with open(image_path, 'rb') as f:
-            files = {'file': f}
-            data = {
-                'apikey': 'K88574768888957',
-                'language': 'eng',
-                'isOverlayRequired': False,
-                'OCREngine': '2'
-            }
-            r = httpx.post('https://api.ocr.space/parse/image', files=files, data=data, timeout=12)
+            file_bytes = f.read()
+        files = {'file': ('image.jpg', file_bytes, 'image/jpeg')}
+        data = {
+            'apikey': 'K88574768888957',
+            'language': 'eng',
+            'isOverlayRequired': False,
+            'OCREngine': '2'
+        }
+        async with httpx.AsyncClient(timeout=15) as client:
+            r = await client.post('https://api.ocr.space/parse/image', files=files, data=data)
             if r.status_code == 200:
                 res = r.json()
                 parsed = res.get('ParsedResults', [])
@@ -1042,7 +1057,8 @@ def extract_text_from_image(image_path: str) -> str:
     try:
         reader = get_ocr_reader()
         if reader:
-            results = reader.readtext(image_path, detail=0)
+            loop = asyncio.get_event_loop()
+            results = await loop.run_in_executor(None, reader.readtext, image_path, 0)
             return " \n".join(results)
     except Exception as e:
         print(f"⚠️ Local OCR Error: {e}")
@@ -1131,8 +1147,6 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await message.reply_text(f"✅ Đã đồng bộ sơ đồ ngày {ngay} ({service})!")
 
                 # --- TỰ ĐỘNG CHUYỂN TIẾP CHO KHÁCH HÀNG ĐANG ĐỢI ---
-                # Quét memory_store để tìm các khách hàng đang ở phase SEAT_SELECTION,
-                # chưa chọn ghế, và đi đúng ngày + dịch vụ này để chủ động gửi sơ đồ mới nhất!
                 for key_session, messages_history in memory_store.items():
                     if key_session.endswith("_data"):
                         customer_data = messages_history
@@ -1166,8 +1180,16 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                     print(f"Lỗi chuyển tiếp sơ đồ cho {uid}: {e_forward}")
             return
 
-        # ----- LUỒNG KHÁCH HÀNG: GỬI ẢNH (HỘ CHIẾU/HOÁ ĐƠN THANH TOÁN) -----
+        # ----- LUỒNG KHÁCH HÀNG: GỬI ẢNH (HỘ CHIẾU/HOÁ ĐƠN THANH TOÁN/VÉ CŨ) -----
         if not update.effective_chat or update.effective_chat.type != "private": return
+        
+        # Bắn tín hiệu typing tức thì
+        try:
+            target_chat_id = update.effective_chat.id
+            await context.bot.send_chat_action(chat_id=target_chat_id, action="typing")
+        except Exception:
+            pass
+
         photo_file = await message.photo[-1].get_file()
         file_path = f"temp_{photo_file.file_id}.jpg"
         await photo_file.download_to_drive(file_path)
@@ -1180,6 +1202,7 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await update_customer_image(record_id, img_type if img_type != "Exit Stamp" else "Exit stamp", token)
         
         conn_id = update.business_message.business_connection_id if update.business_message else memory_store.get(f"{session_id}_business_connection_id")
+        is_awaiting_old = memory_store.get(f"{session_id}_awaiting_old_booking", False)
         data = memory_store.get(f"{session_id}_data")
         customer_name = getattr(data, "ho_ten", "Khách hàng") if data else "Khách hàng"
         nationality = getattr(data, "quoc_tich", "") if data else ""
@@ -1196,11 +1219,11 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await send_to_admin_group(context, admin_notif_msg)
 
         # 1. Trích xuất OCR từ ảnh để tự động kiểm tra vé cũ / thông tin booking
-        ocr_text = extract_text_from_image(file_path)
+        ocr_text = await extract_text_from_image(file_path)
         matched_cust = customer_memory.find_customer_by_booking_text(ocr_text) if ocr_text else None
         
         # Nhận diện nếu ảnh là vé / biên nhận / thông tin đặt xe cũ
-        is_ticket_or_receipt = any(kw in ocr_text.upper() for kw in [
+        is_ticket_or_receipt = any(kw in (ocr_text or "").upper() for kw in [
             "RECEIPT", "PAYMENT", "DATE OF", "SERVICE TYPES", "SEAT NUMBER", 
             "PICK UP", "DEPARTURE DATE", "E-VISA", "VISARUN", "VISA RUN", "HON CHONG", "40 HON CHONG"
         ]) if ocr_text else False
@@ -1269,6 +1292,10 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await message.reply_text(get_msg("image_received", lang, img_type=img_type))
     except Exception as e:
         print(f"❌ PHOTO ERROR: {e}")
+        try:
+            await message.reply_text("Received your photo! We are processing your request. Please wait a moment.")
+        except Exception:
+            pass
 
 # ============================================================
 # CALLBACK & WEBHOOK
