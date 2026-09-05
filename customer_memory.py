@@ -448,13 +448,20 @@ def get_recent_logs_from_db(limit: int = 200) -> List[Dict[str, Any]]:
 
 def format_customer_profile_for_prompt(profile: Optional[Dict[str, Any]]) -> str:
     """Tạo chỉ dẫn ngữ điệu & thông tin khách cũ cho System Prompt của AI Agent"""
-    if not profile or profile.get("customer_tier") == "NEW" or (profile.get("total_trips", 0) == 0 and not profile.get("full_name")):
+    if not profile:
+        return ""
+        
+    tier = str(profile.get("customer_tier") or "NEW").upper()
+    total_trips = int(profile.get("total_trips") or 0)
+    past_trips = profile.get("past_trips") or []
+    
+    # ĐIỀU KIỆN TIÊN QUYẾT: Khách hàng CHỈ là khách cũ khi đã có ít nhất 1 chuyến đi thực tế
+    # Nếu total_trips <= 0 hoặc tier == "NEW", TUYỆT ĐỐI xem là KHÁCH MỚI (báo giá 3.4M cho Nga, không chào mừng quay lại)
+    if tier == "NEW" or (total_trips <= 0 and len(past_trips) == 0):
         return ""
         
     full_name = profile.get("full_name") or "Khách hàng"
     nationality = profile.get("nationality") or "Không rõ"
-    total_trips = profile.get("total_trips", 0)
-    tier = profile.get("customer_tier", "RETURNING")
     pref_seat = profile.get("preferred_seat") or "Chưa có vị trí cố định"
     pref_pickup = profile.get("preferred_pickup") or "Oceanus Nha Trang"
     pref_route = profile.get("preferred_route") or "Visa Run"

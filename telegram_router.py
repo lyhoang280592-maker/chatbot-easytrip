@@ -416,6 +416,17 @@ async def send_to_admin_group(context, message: str):
 tg_app = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_id = str(update.effective_user.id) if update.effective_user else ""
+    session_id = f"telegram_{user_id}"
+    
+    # Reset phiên chat trong bộ nhớ khi /start
+    memory_store[session_id] = []
+    memory_store[f"{session_id}_mode"] = "auto"
+    if f"{session_id}_data" in memory_store:
+        del memory_store[f"{session_id}_data"]
+    if f"{session_id}_draft" in memory_store:
+        del memory_store[f"{session_id}_draft"]
+
     welcome_text = (
         "Welcome to Easy Trip & Visa. I'm here to help you with your Visarun trip. \n"
         "Could you please tell me: \n"
