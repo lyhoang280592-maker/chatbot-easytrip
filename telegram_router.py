@@ -447,8 +447,8 @@ async def send_new_customer_welcome_menu(chat_id: str | int, target_msg, conn_id
 
 async def send_returning_customer_request(chat_id: str | int, target_msg, conn_id=None):
     returning_prompt = (
-        "🌟 **RETURNING CUSTOMER LOYALTY DISCOUNT**\n\n"
-        "To apply your **exclusive loyalty discount** and personal preferences, please send your **previous booking confirmation message, ticket screenshot, or your Full Passport Name / Phone number**.\n\n"
+        "🌟 **RETURNING CUSTOMER / FRIEND REFERRAL LOYALTY DISCOUNT**\n\n"
+        "If you are a returning customer, **or a friend/relative booked on your behalf in the past**, or you previously used **another account/channel**, please send your **previous booking confirmation message, ticket screenshot, or your Full Passport Name / Phone number** to verify and receive your exclusive discount.\n\n"
         "📌 **Example Booking Format:**\n"
         "```text\n"
         "10/09 - 90D - Laos\n"
@@ -457,8 +457,8 @@ async def send_returning_customer_request(chat_id: str | int, target_msg, conn_i
         "Pickup: 40 Hon Chong - 9:30 PM\n"
         "```\n\n"
         "────────────────────\n"
-        "🌟 **СПЕЦИАЛЬНАЯ ЦЕНА ДЛЯ ПОСТОЯННЫХ КЛИЕНТОВ**\n\n"
-        "Чтобы получить **специальную цену постоянного клиента** и сохранить любимые места, отправьте, пожалуйста, **текст вашего предыдущего бронирования, скриншот билета или ваши ФИО на латинице (по загранпаспорту) / номер телефона**.\n\n"
+        "🌟 **СПЕЦИАЛЬНАЯ ЦЕНА ДЛЯ ПОСТОЯННЫХ КЛИЕНТОВ И ИХ ДРУЗЕЙ**\n\n"
+        "Если вы уже путешествовали с нами, **или бронировали через друзей/знакомых**, либо ранее писали с **другого аккаунта/устройства**, пожалуйста, отправьте **текст предыдущего бронирования, скриншот билета или ваши ФИО на латинице (по загранпаспорту) / номер телефона** для подтверждения и получения специальной цены постоянного клиента.\n\n"
         "📌 **Пример формата бронирования:**\n"
         "```text\n"
         "10/09 - 90D - Laos\n"
@@ -490,13 +490,13 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     welcome_question = (
         "👋 **Welcome to Easy Trip & Visa!**\n"
-        "Have you booked any service with us before?\n\n"
+        "Have you (or a friend on your behalf) booked any service with us before?\n\n"
         "👋 **Здравствуйте! Добро пожаловать в Easy Trip & Visa.**\n"
-        "Вы уже пользовались нашими услугами ранее?"
+        "Вы (или ваши знакомые для вас) уже пользовались нашими услугами ранее?"
     )
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🌟 Returning Customer (Loyalty Discount) / Постоянный клиент", callback_data="cust_type|returning")],
+        [InlineKeyboardButton("🌟 Returning / Friend Booked (Discount) / Постоянный клиент", callback_data="cust_type|returning")],
         [InlineKeyboardButton("🆕 New Customer / Новый клиент", callback_data="cust_type|new")],
         [InlineKeyboardButton("💬 Direct Telegram Support", url="https://t.me/easytripvisa_co_ltd")],
         [InlineKeyboardButton("💬 Direct WhatsApp Support", url="https://wa.me/84868462071")]
