@@ -50,57 +50,73 @@ class ChatResponse(BaseModel):
         if isinstance(json_data, (bytes, bytearray)):
             json_str = json_data.decode("utf-8")
         else:
-            json_str = json_data
+            json_str = str(json_data)
 
+        clean_data = json_str.strip()
+
+        # 1. Làm sạch Markdown nếu có
+        if "```" in clean_data:
+            match = re.search(r"```(?:json)?\s*(.*?)\s*```", clean_data, re.DOTALL)
+            if match:
+                clean_data = match.group(1).strip()
+
+        # 2. Trích xuất phần JSON giữa cặp ngoặc nhọn đầu tiên và cuối cùng
+        match_json = re.search(r"(\{.*\})", clean_data, re.DOTALL)
+        if match_json:
+            clean_data = match_json.group(1).strip()
+
+        # 3. Sửa lỗi dấu phẩy thừa trước ] hoặc }
+        clean_data = re.sub(r",\s*([\]}])", r"\1", clean_data)
+
+        data = None
+        # Thử parse bằng standard json
         try:
-            # 1. Trích xuất phần JSON giữa cặp ngoặc nhọn đầu tiên và cuối cùng
-            match_json = re.search(r"(\{.*\})", json_str, re.DOTALL)
-            if match_json:
-                clean_data = match_json.group(1).strip()
-            else:
-                clean_data = json_str.strip()
-
-            # 2. Làm sạch Markdown nếu vẫn còn
-            if "```" in clean_data:
-                match = re.search(r"```(?:json)?\s*(.*?)\s*```", clean_data, re.DOTALL)
-                if match:
-                    clean_data = match.group(1)
-
-            # 3. Sửa lỗi dấu phẩy thừa
-            clean_data = re.sub(r",\s*([\]}])", r"\1", clean_data)
-
-            # 4. Parse JSON
             data = json.loads(clean_data)
+        except Exception:
+            # Thử parse với strict=False (cho phép newlines và ký tự điều khiển trong chuỗi)
+            try:
+                data = json.loads(clean_data, strict=False)
+            except Exception:
+                try:
+                    import json_repair
+                    data = json_repair.loads(clean_data)
+                except Exception as e:
+                    print(f"⚠️ JSON repair failed: {e}")
 
-            # 5. Đảm bảo extracted_data luôn là dict
-            if "extracted_data" not in data or not isinstance(
-                data["extracted_data"], dict
-            ):
+        if isinstance(data, dict):
+            if "extracted_data" not in data or not isinstance(data["extracted_data"], dict):
                 data["extracted_data"] = {}
+            if "reply_message" in data and data["reply_message"]:
+                return cls.model_validate(data, *args, **kwargs)
 
-            return cls.model_validate(data, *args, **kwargs)
-        except Exception as e:
-            print(f"⚠️ JSON Parse Fallback triggered: {e}")
-            # PHƯƠNG ÁN CỨU HỘ CUỐI CÙNG: Nếu JSON lỗi hoàn toàn, lấy text thô làm reply_message
-            msg_match = re.search(
-                r'"reply_message"\s*:\s*"(.*?)"', json_str, re.DOTALL
-            )
-            if msg_match:
-                msg = msg_match.group(1)
+        # PHƯƠNG ÁN CỨU HỘ: Trích xuất reply_message từ chuỗi
+        msg = ""
+        msg_match = re.search(r'"reply_message"\s*:\s*"(.*?)(?:"\s*,\s*"extracted_data"|"\s*,\s*"current_phase"|"\s*\}|$)', json_str, re.DOTALL)
+        if msg_match:
+            msg = msg_match.group(1).strip()
+            msg = msg.replace('\\n', '\n').replace('\\"', '"')
+        
+        if not msg:
+            stripped = json_str.strip()
+            stripped = re.sub(r"```(?:json)?|```", "", stripped).strip()
+            if len(stripped) > 10:
+                clean_text = re.sub(r'["\']?(?:reply_message|current_phase|extracted_data|is_complete)["\']?\s*:\s*', '', stripped)
+                clean_text = re.sub(r'[{}"]', '', clean_text).strip()
+                if len(clean_text) > 10:
+                    msg = clean_text
+
+        if not msg:
+            if any(ord(c) >= 0x0400 and ord(c) <= 0x04FF for c in json_str):
+                msg = get_msg("processing_info", "ru")
             else:
-                # Nếu không tìm thấy trường reply_message nhưng có chữ thô, lấy chữ thô đó
-                stripped = json_str.strip()
-                if len(stripped) > 10 and not stripped.startswith("{"):
-                    msg = stripped
-                else:
-                    msg = get_msg("processing_info", "en")
-            
-            return cls(
-                reply_message=msg,
-                extracted_data=CustomerData(),
-                current_phase="CONSULTING",
-                is_complete=False,
-            )
+                msg = get_msg("processing_info", "en")
+
+        return cls(
+            reply_message=msg,
+            extracted_data=CustomerData(),
+            current_phase="CONSULTING",
+            is_complete=False,
+        )
 
 
 # === KNOWLEDGE BASE ===
