@@ -998,6 +998,20 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await message.reply_text(get_msg("system_busy", lang))
 
 
+def extract_text_from_image(image_path: str) -> str:
+    """Trích xuất văn bản từ hình ảnh vé/tin nhắn bằng EasyOCR (hỗ trợ Tiếng Anh & Tiếng Nga)"""
+    try:
+        import easyocr
+        import ssl
+        ssl._create_default_https_context = ssl._create_unverified_context
+        reader = easyocr.Reader(['en', 'ru'], gpu=False, verbose=False)
+        results = reader.readtext(image_path, detail=0)
+        return " \n".join(results)
+    except Exception as e:
+        print(f"⚠️ OCR Error: {e}")
+        return ""
+
+
 # ============================================================
 # HANDLER: XỬ LÝ ẢNH
 # ============================================================
@@ -1127,6 +1141,7 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if token: 
                 await update_customer_image(record_id, img_type if img_type != "Exit Stamp" else "Exit stamp", token)
         
+        conn_id = update.business_message.business_connection_id if update.business_message else memory_store.get(f"{session_id}_business_connection_id")
         data = memory_store.get(f"{session_id}_data")
         customer_name = getattr(data, "ho_ten", "Khách hàng") if data else "Khách hàng"
         nationality = getattr(data, "quoc_tich", "") if data else ""
@@ -1142,9 +1157,24 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         await send_to_admin_group(context, admin_notif_msg)
 
-        # Nếu khách đang trong luồng gửi ảnh booking cũ
-        if memory_store.get(f"{session_id}_awaiting_old_booking"):
+        # 1. Trích xuất OCR từ ảnh để tự động kiểm tra vé cũ / thông tin booking
+        ocr_text = extract_text_from_image(file_path)
+        matched_cust = customer_memory.find_customer_by_booking_text(ocr_text) if ocr_text else None
+        
+        # Nếu khách đang trong luồng gửi ảnh booking cũ HOẶC OCR đọc được thông tin khớp hồ sơ vé CRM
+        is_awaiting_old = memory_store.get(f"{session_id}_awaiting_old_booking")
+        if is_awaiting_old or matched_cust:
             memory_store.pop(f"{session_id}_awaiting_old_booking", None)
+            user_id = str(update.effective_user.id) if update.effective_user else ""
+            
+            if matched_cust:
+                print(f"🎯 OCR đã nhận diện Khách Cũ từ ảnh vé: {matched_cust.get('full_name')}")
+                if matched_cust.get("customer_id") and user_id:
+                    customer_memory.link_telegram_to_customer(matched_cust["customer_id"], user_id)
+                # Cho AI phản hồi trực tiếp dựa trên nội dung ảnh đã đọc
+                await process_customer_text_message(update, context, user_id, ocr_text)
+                return
+
             confirm_photo_msg = (
                 "✅ **Previous booking image received!**\n"
                 "Easy Trip & Visa is verifying your loyalty profile on our CRM to apply your returning customer discount.\n\n"
@@ -1160,9 +1190,7 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await message.reply_text(confirm_photo_msg)
             return
 
-        
         lang = get_lang_code(nationality) if data else "en"
-        conn_id = update.business_message.business_connection_id if update.business_message else None
         if conn_id:
             await message.reply_text(get_msg("image_received", lang, img_type=img_type), business_connection_id=conn_id)  # type: ignore
         else:
