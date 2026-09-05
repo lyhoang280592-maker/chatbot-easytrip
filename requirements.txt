@@ -36,6 +36,3 @@ reportlab
 opencv-python-headless
 numpy
 json-repair
-torch
-torchvision
-easyocr

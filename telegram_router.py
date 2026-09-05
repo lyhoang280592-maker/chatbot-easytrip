@@ -3,6 +3,7 @@ import time
 import re
 import json
 import traceback
+import httpx
 from typing import Any, Optional, Dict, List
 from datetime import datetime
 from fastapi import APIRouter, Request, Response
@@ -1011,21 +1012,42 @@ def get_ocr_reader():
             ssl._create_default_https_context = ssl._create_unverified_context
             _easyocr_reader = easyocr.Reader(['en', 'ru'], gpu=False, verbose=False)
         except Exception as e:
-            print(f"⚠️ Init EasyOCR Error: {e}")
             _easyocr_reader = False
     return _easyocr_reader if _easyocr_reader is not False else None
 
 def extract_text_from_image(image_path: str) -> str:
-    """Trích xuất văn bản từ hình ảnh vé/tin nhắn bằng EasyOCR (hỗ trợ Tiếng Anh & Tiếng Nga)"""
+    """Trích xuất văn bản từ hình ảnh vé/tin nhắn bằng Cloud OCR và EasyOCR (hỗ trợ Tiếng Anh, Tiếng Nga, Hàn, Việt)"""
+    # 1. Primary: Fast Cloud OCR (0 MB RAM, không tốn RAM máy chủ, độ chính xác cao)
+    try:
+        with open(image_path, 'rb') as f:
+            files = {'file': f}
+            data = {
+                'apikey': 'K88574768888957',
+                'language': 'eng',
+                'isOverlayRequired': False,
+                'OCREngine': '2'
+            }
+            r = httpx.post('https://api.ocr.space/parse/image', files=files, data=data, timeout=12)
+            if r.status_code == 200:
+                res = r.json()
+                parsed = res.get('ParsedResults', [])
+                if parsed:
+                    text = parsed[0].get('ParsedText', '')
+                    if text and len(text.strip()) > 3:
+                        return text
+    except Exception as e:
+        print(f"⚠️ Cloud OCR fallback notice: {e}")
+        
+    # 2. Secondary fallback: Local EasyOCR if available
     try:
         reader = get_ocr_reader()
-        if not reader:
-            return ""
-        results = reader.readtext(image_path, detail=0)
-        return " \n".join(results)
+        if reader:
+            results = reader.readtext(image_path, detail=0)
+            return " \n".join(results)
     except Exception as e:
-        print(f"⚠️ OCR Error: {e}")
-        return ""
+        print(f"⚠️ Local OCR Error: {e}")
+        
+    return ""
 
 
 # ============================================================
