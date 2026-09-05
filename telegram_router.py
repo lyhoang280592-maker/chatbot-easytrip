@@ -1000,13 +1000,27 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await message.reply_text(get_msg("system_busy", lang))
 
 
+_easyocr_reader = None
+
+def get_ocr_reader():
+    global _easyocr_reader
+    if _easyocr_reader is None:
+        try:
+            import easyocr
+            import ssl
+            ssl._create_default_https_context = ssl._create_unverified_context
+            _easyocr_reader = easyocr.Reader(['en', 'ru'], gpu=False, verbose=False)
+        except Exception as e:
+            print(f"⚠️ Init EasyOCR Error: {e}")
+            _easyocr_reader = False
+    return _easyocr_reader if _easyocr_reader is not False else None
+
 def extract_text_from_image(image_path: str) -> str:
     """Trích xuất văn bản từ hình ảnh vé/tin nhắn bằng EasyOCR (hỗ trợ Tiếng Anh & Tiếng Nga)"""
     try:
-        import easyocr
-        import ssl
-        ssl._create_default_https_context = ssl._create_unverified_context
-        reader = easyocr.Reader(['en', 'ru'], gpu=False, verbose=False)
+        reader = get_ocr_reader()
+        if not reader:
+            return ""
         results = reader.readtext(image_path, detail=0)
         return " \n".join(results)
     except Exception as e:
