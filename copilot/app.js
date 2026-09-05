@@ -40,7 +40,7 @@ const defaultLessons = [
         id: 'def-1',
         keywords: ['nga', 'hàn', 'lao', 'lào', 'visarun', 'russia', 'korea'],
         promptText: "Tôi là người Nga/Hàn, muốn đi visarun Lào từ Nha Trang",
-        response: "🚌 Chào bạn! Với quốc tịch Nga/Hàn Quốc/ASEAN, bạn sẽ đi tuyến **Nha Trang <=> LÀO (Cửa khẩu Bờ Y)** vì được **MIỄN VISA LÀO** giúp tiết kiệm chi phí! \n\n* **Gói xe Trọn gói 45 ngày:** 1.400.000đ. Xe chạy hàng ngày lúc 21:00.\n* **Gói E-visa 90 ngày:** 3.400.000đ. Xe chạy thứ 3, 5, CN lúc 21:30.\n👉 Đón khách tại River Station hoặc Oceanus Nha Trang. Bạn muốn đi vào ngày nào?"
+        response: "🚌 Chào bạn! Với quốc tịch Nga/Hàn Quốc/ASEAN, bạn sẽ đi tuyến **Nha Trang <=> LÀO (Cửa khẩu Bờ Y)** vì được **MIỄN VISA LÀO** giúp tiết kiệm chi phí! \n\n* **Gói xe Trọn gói 45 ngày:** 1.400.000đ (Khách cũ: 1.300.000đ). Xe chạy hàng ngày lúc 21:00.\n* **Gói E-visa 90 ngày (Nga):** Khách mới 3.400.000đ (Single) / 4.400.000đ (Multi) | Khách cũ 3.000.000đ (Single) / 4.000.000đ (Multi). Xe chạy thứ 3, 5, CN lúc 21:30.\n👉 Đón khách tại River Station hoặc Oceanus Nha Trang. Bạn muốn đi vào ngày nào?"
     },
     {
         id: 'def-2',
@@ -1594,7 +1594,7 @@ Please tell us: your nationality, the city you are currently staying in Vietnam,
 
 👉 TUYẾN LÀO (Cửa khẩu Bờ Y): Dành cho các quốc tịch được miễn visa Lào (Nga, Hàn Quốc, Belarus, Malaysia, Czech, ASEAN...).
 - Free Visa 45 ngày Lào: Vé xe buýt khởi hành hàng ngày lúc 21:30 tại 40 Hòn Chồng (https://maps.app.goo.gl/XCinCHmvwBAT5x7Q7). Giá: 1.400.000 VND.
-- E-Visa 90 ngày Lào: Xe chạy tối Thứ 3, Thứ 5, Chủ Nhật hàng tuần lúc 21:30. Giá: 3.400.000 VND.
+- E-Visa 90 ngày Lào: Xe chạy tối Thứ 3, Thứ 5, Chủ Nhật hàng tuần lúc 21:30. Giá người Nga: Khách Mới 3.400.000 VND (Single) / 4.400.000 VND (Multi) | Khách Cũ 3.000.000 VND (Single) / 4.000.000 VND (Multi).
 
 👉 TUYẾN CAMPUCHIA (Cửa khẩu Mộc Bài): Dành cho các quốc tịch còn lại (Mỹ, Anh, Úc, Canada, Ukraine, Kyrgyz, Brazil...).
 - Vé xe buýt (45 ngày hoặc 90 ngày) khởi hành tối Thứ 3, Thứ 5, Chủ Nhật hàng tuần lúc 21:30 tại 40 Hòn Chồng (Bản đồ: https://maps.app.goo.gl/AUkyctD6mwBtkiBF7).

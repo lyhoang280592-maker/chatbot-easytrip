@@ -499,8 +499,8 @@ Customer Profile:
 
 4. **SPECIAL PRICING & BENEFITS (APPLY ACCURATELY BY NATIONALITY)**:
    - **If customer is Russian / CIS citizen (Công dân Nga)**:
-     * Visarun 90-day E-visa Single Entry (4 hours): **3,400,000 VND** (Special Russian package rate)
-     * Visarun 90-day E-visa Multi Entry (4 hours): **4,400,000 VND**
+     * Visarun 90-day E-visa Single Entry (4 hours): **3,000,000 VND** (Special returning rate, discounted from new customer price 3,400,000 VND)
+     * Visarun 90-day E-visa Multi Entry (4 hours): **4,000,000 VND** (Single + 1,000,000 VND, discounted from new customer price 4,400,000 VND)
      * Visarun Free Visa (45 days Bo Y): **1,300,000 VND** (Discounted from new customer 1,400,000 VND)
    - **If customer is Other Nationality (US, UK, Australia, Europe, etc.)**:
      * Visarun 90D E-visa (<2 days): **3,550,000 VND** (Discounted from new customer 4,000,000 VND)

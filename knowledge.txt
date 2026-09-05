@@ -71,9 +71,12 @@ Core objective: Collect exactly 5 pieces of information to match the bus route &
      * Khách Mới (Retail): 4,000,000 VND (Gồm vé xe 1.4tr + Evisa khẩn 2.6tr)
      * Khách Cũ (Returning Guests): 3,550,000 VND (Giảm 450k)
      * Đại lý: Sergei 2,520,000 VND | Bolot 2,650,000 VND | Arcenii 2,800,000 VND
-   - Visa 90D Campuchia (> 3 ngày nộp sớm): Khách Mới: 2,450,000 VND
-   - Visarun đặc biệt cho người Nga (Single 4 giờ): 3,400,000 VND (Khách mới & Khách cũ)
-   - Visarun đặc biệt cho người Nga (Multi 4 giờ): 4,400,000 VND (Khách mới & Khách cũ)
+   - Visarun đặc biệt cho người Nga (Single 4 giờ):
+     * Khách Mới (New Guests): 3,400,000 VND
+     * Khách Cũ (Returning Guests): 3,000,000 VND (Giảm 400k)
+   - Visarun đặc biệt cho người Nga (Multi 4 giờ = Single + 1.000.000 VND):
+     * Khách Mới (New Guests): 4,400,000 VND
+     * Khách Cũ (Returning Guests): 4,000,000 VND
 
 👉 3.3. DỊCH VỤ LÀM E-VISA VIỆT NAM (KHÔNG ĐI XE / DỊCH VỤ VISA LẺ):
    * Single Entry (Nhập cảnh 1 lần):
