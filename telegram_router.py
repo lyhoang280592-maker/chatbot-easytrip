@@ -1177,21 +1177,26 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ocr_text = extract_text_from_image(file_path)
         matched_cust = customer_memory.find_customer_by_booking_text(ocr_text) if ocr_text else None
         
-        # Nếu khách đang trong luồng gửi ảnh booking cũ HOẶC OCR đọc được thông tin khớp hồ sơ vé CRM
-        is_awaiting_old = memory_store.get(f"{session_id}_awaiting_old_booking")
-        if is_awaiting_old or matched_cust:
+        # Nhận diện nếu ảnh là vé / biên nhận / thông tin đặt xe cũ
+        is_ticket_or_receipt = any(kw in ocr_text.upper() for kw in [
+            "RECEIPT", "PAYMENT", "DATE OF", "SERVICE TYPES", "SEAT NUMBER", 
+            "PICK UP", "DEPARTURE DATE", "E-VISA", "VISARUN", "VISA RUN", "HON CHONG", "40 HON CHONG"
+        ]) if ocr_text else False
+
+        # 1. Nếu tìm thấy khách cũ trên CRM (dù gửi lần đầu hay gửi lại)
+        if matched_cust:
             memory_store.pop(f"{session_id}_awaiting_old_booking", None)
             user_id = str(update.effective_user.id) if update.effective_user else ""
-            
-            if matched_cust:
-                print(f"🎯 OCR đã nhận diện Khách Cũ từ ảnh vé: {matched_cust.get('full_name')}")
-                if matched_cust.get("customer_id") and user_id:
-                    customer_memory.link_telegram_to_customer(matched_cust["customer_id"], user_id)
-                # Cho AI phản hồi trực tiếp dựa trên nội dung ảnh đã đọc
-                await process_customer_text_message(update, context, user_id, ocr_text)
-                return
+            print(f"🎯 OCR đã nhận diện Khách Cũ từ ảnh vé: {matched_cust.get('full_name')}")
+            if matched_cust.get("customer_id") and user_id:
+                customer_memory.link_telegram_to_customer(matched_cust["customer_id"], user_id)
+            # Cho AI phản hồi trực tiếp dựa trên nội dung ảnh đã đọc
+            await process_customer_text_message(update, context, user_id, ocr_text)
+            return
 
-            # Nếu không tìm thấy thông tin trên CRM
+        # 2. Nếu khách đang trong luồng chọn Khách Cũ HOẶC gửi ảnh biên nhận/vé nhưng không tìm thấy trên CRM
+        if is_awaiting_old or is_ticket_or_receipt:
+            memory_store.pop(f"{session_id}_awaiting_old_booking", None)
             not_found_photo_msg = (
                 "ℹ️ **We could not find your booking information in our database.**\n"
                 "Therefore, our **standard website listed prices** will apply to your booking.\n\n"
