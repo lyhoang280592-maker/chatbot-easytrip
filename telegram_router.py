@@ -623,23 +623,23 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
         except Exception as e_direct:
             print(f"❌ Fallback send_message thất bại: {e_direct}")
 
-        # Tự động gửi ảnh sơ đồ ghế nếu khách hỏi hoặc AI đề cập sơ đồ ghế
-        seat_keywords = ["sơ đồ", "seat map", "seatmap", "схема", "chọn ghế", "xem ghế", "chỗ ngồi", "ghế trống"]
-        if any(kw in text.lower() for kw in seat_keywords) or any(kw in reply.lower() for kw in ["sơ đồ", "seat map", "схема"]):
-            try:
-                target_chat_id = update.effective_chat.id if update.effective_chat else int(user_id)
-                out_seat_img = f"seat_map_{user_id}.jpg"
-                booked_seats = ["B1", "A3", "B5"]
-                generate_seat_map(booked_seats, output_path=out_seat_img)
-                if os.path.exists(out_seat_img):
-                    with open(out_seat_img, "rb") as photo_file:
-                        caption_map = "🚌 Sơ đồ ghế xe EasyTrip (Ghế có dấu X màu vàng là đã có khách đặt)"
-                        if conn_id:
-                            await context.bot.send_photo(chat_id=target_chat_id, photo=photo_file, caption=caption_map, business_connection_id=conn_id)  # type: ignore
-                        else:
-                            await context.bot.send_photo(chat_id=target_chat_id, photo=photo_file, caption=caption_map)
-            except Exception as e_map:
-                print(f"⚠️ Lỗi gửi ảnh sơ đồ ghế: {e_map}")
+    # Tự động gửi ảnh sơ đồ ghế nếu khách hỏi hoặc AI đề cập sơ đồ ghế
+    seat_keywords = ["sơ đồ", "seat map", "seatmap", "схема", "chọn ghế", "xem ghế", "chỗ ngồi", "ghế trống"]
+    if any(kw in text.lower() for kw in seat_keywords) or any(kw in reply.lower() for kw in ["sơ đồ", "seat map", "схема"]):
+        try:
+            target_chat_id = update.effective_chat.id if update.effective_chat else int(user_id)
+            out_seat_img = f"seat_map_{user_id}.jpg"
+            booked_seats = ["B1", "A3", "B5"]
+            generate_seat_map(booked_seats, output_path=out_seat_img)
+            if os.path.exists(out_seat_img):
+                with open(out_seat_img, "rb") as photo_file:
+                    caption_map = "🚌 Sơ đồ ghế xe EasyTrip (Ghế có dấu X màu vàng là đã có khách đặt)"
+                    if conn_id:
+                        await context.bot.send_photo(chat_id=target_chat_id, photo=photo_file, caption=caption_map, business_connection_id=conn_id)  # type: ignore
+                    else:
+                        await context.bot.send_photo(chat_id=target_chat_id, photo=photo_file, caption=caption_map)
+        except Exception as e_map:
+            print(f"⚠️ Lỗi gửi ảnh sơ đồ ghế: {e_map}")
 
     data = ai_response.extracted_data
     memory_store[f"{session_id}_data"] = data
@@ -1029,29 +1029,36 @@ def get_ocr_reader():
     return _easyocr_reader if _easyocr_reader is not False else None
 
 async def extract_text_from_image(image_path: str) -> str:
-    """Trích xuất văn bản từ hình ảnh vé/tin nhắn bằng Cloud OCR và EasyOCR (hỗ trợ Tiếng Anh, Tiếng Nga, Hàn, Việt)"""
-    # 1. Primary: Fast Cloud OCR (0 MB RAM, không tốn RAM máy chủ, độ chính xác cao)
+    """Trích xuất văn bản từ hình ảnh vé/tin nhắn bằng Cloud OCR xoay vòng nhiều key và EasyOCR fallback"""
+    # 1. Primary: Fast Cloud OCR xoay vòng nhiều Key (0 MB RAM, phản hồi nhanh 1-2s, chính xác cao)
+    ocr_keys = ['K88574768888957', 'K82846985488957', 'K83995874488957', 'helloworld']
     try:
         with open(image_path, 'rb') as f:
             file_bytes = f.read()
-        files = {'file': ('image.jpg', file_bytes, 'image/jpeg')}
-        data = {
-            'apikey': 'K88574768888957',
-            'language': 'eng',
-            'isOverlayRequired': False,
-            'OCREngine': '2'
-        }
-        async with httpx.AsyncClient(timeout=15) as client:
-            r = await client.post('https://api.ocr.space/parse/image', files=files, data=data)
-            if r.status_code == 200:
-                res = r.json()
-                parsed = res.get('ParsedResults', [])
-                if parsed:
-                    text = parsed[0].get('ParsedText', '')
-                    if text and len(text.strip()) > 3:
-                        return text
+        
+        for key in ocr_keys:
+            try:
+                files = {'file': ('image.jpg', file_bytes, 'image/jpeg')}
+                data = {
+                    'apikey': key,
+                    'language': 'eng',
+                    'isOverlayRequired': False,
+                    'OCREngine': '2'
+                }
+                async with httpx.AsyncClient(timeout=8) as client:
+                    r = await client.post('https://api.ocr.space/parse/image', files=files, data=data)
+                    if r.status_code == 200:
+                        res = r.json()
+                        parsed = res.get('ParsedResults', [])
+                        if parsed:
+                            text = parsed[0].get('ParsedText', '')
+                            if text and len(text.strip()) > 3:
+                                return text
+            except Exception as e_k:
+                print(f"⚠️ OCR Key {key[:5]}... notice: {e_k}")
+                continue
     except Exception as e:
-        print(f"⚠️ Cloud OCR fallback notice: {e}")
+        print(f"⚠️ Cloud OCR general error: {e}")
         
     # 2. Secondary fallback: Local EasyOCR if available
     try:
@@ -1307,7 +1314,9 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         else:
             await message.reply_text(get_msg("image_received", lang, img_type=img_type))
     except Exception as e:
+        import traceback
         print(f"❌ PHOTO ERROR: {e}")
+        traceback.print_exc()
         try:
             await message.reply_text("Received your photo! We are processing your request. Please wait a moment.")
         except Exception:
