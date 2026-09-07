@@ -560,11 +560,10 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
         memory_store[f"{session_id}_name"] = update.effective_user.full_name
     memory_store[f"{session_id}_last_update"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    # Kiểm tra chế độ Bot (Ưu tiên: Phiên chat riêng > Kênh Telegram > Toàn hệ thống)
-    plat_mode = memory_store.get("BOT_MODE_TELEGRAM")
+    # Kiểm tra chế độ Bot (Ưu tiên chế độ riêng của phiên, nếu chưa đặt thì lấy chế độ toàn hệ thống)
     global_mode = memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "auto"))
     session_mode = memory_store.get(f"{session_id}_mode")
-    mode = session_mode if session_mode is not None else (plat_mode if plat_mode is not None else global_mode)
+    mode = session_mode if session_mode is not None else global_mode
     if mode in ["manual", "off"]:
         # Chế độ thủ công / tắt bot, chỉ ghi nhận tin nhắn, không trả lời tự động
         print(f"⏸️ [Telegram Bot Paused/Manual] Bỏ qua trả lời tự động cho {session_id} (Mode: {mode})")

@@ -886,17 +886,8 @@ async function updateActiveLiveSessionDetail(forceScroll = false) {
 }
 
 // ==========================================================
-// ĐIỀU KHIỂN CHẾ ĐỘ BOT TỪNG MẠNG XÃ HỘI (PER-PLATFORM SWITCHES)
+// ĐIỀU KHIỂN CHẾ ĐỘ BOT TOÀN HỆ THỐNG (GLOBAL BOT SWITCH)
 // ==========================================================
-
-// Cập nhật giao diện Select của từng nền tảng mạng xã hội
-function updatePlatformUI(platform, mode) {
-    const select = document.getElementById(`plat-mode-${platform}`);
-    if (select) {
-        select.value = mode;
-        select.className = `plat-select ${mode === 'auto' ? 'badge-auto' : (mode === 'copilot' ? 'badge-copilot' : 'badge-off')}`;
-    }
-}
 
 // Cập nhật giao diện Badge & Select chế độ Bot toàn hệ thống
 function updateGlobalBotUI(mode) {
@@ -920,64 +911,18 @@ function updateGlobalBotUI(mode) {
     }
 }
 
-// Lấy chế độ Bot của tất cả các kênh từ Backend
-async function fetchPlatformBotModes() {
+// Lấy chế độ Bot toàn hệ thống từ Backend
+async function fetchGlobalBotMode() {
     try {
-        const response = await fetch(`${BACKEND_URL}/api/system/bot-modes`);
+        const response = await fetch(`${BACKEND_URL}/api/system/bot-mode`);
         if (response.ok) {
             const data = await response.json();
-            if (data.success && data.platforms) {
-                for (const [plat, mode] of Object.entries(data.platforms)) {
-                    updatePlatformUI(plat, mode);
-                }
-            }
             if (data.success && data.global_mode) {
                 updateGlobalBotUI(data.global_mode);
             }
         }
     } catch (e) {
         // im lặng nếu offline
-    }
-}
-
-// Lấy chế độ Bot toàn hệ thống từ Backend
-async function fetchGlobalBotMode() {
-    await fetchPlatformBotModes();
-}
-
-// Thay đổi chế độ Bot cho riêng một mạng xã hội (Telegram, Zalo, Facebook, Website)
-async function changePlatformBotMode(platform) {
-    const select = document.getElementById(`plat-mode-${platform}`);
-    if (!select) return;
-    const newMode = select.value;
-    
-    // Cập nhật ngay class màu sắc
-    select.className = `plat-select ${newMode === 'auto' ? 'badge-auto' : (newMode === 'copilot' ? 'badge-copilot' : 'badge-off')}`;
-    
-    const platNames = {
-        telegram: "✈️ Telegram",
-        zalo: "💬 Zalo OA",
-        facebook: "🌐 Meta Facebook",
-        website: "💻 Website Chat"
-    };
-    const platDisplayName = platNames[platform] || platform;
-
-    try {
-        const response = await fetch(`${BACKEND_URL}/api/system/platform-mode`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ platform: platform, mode: newMode })
-        });
-        
-        const data = await response.json();
-        if (data.success) {
-            const modeText = newMode === 'auto' ? '🟢 BẬT Tự Động' : (newMode === 'copilot' ? '🟡 Co-Pilot (Nháp)' : '🔴 TẮT Bot');
-            showNotification(`Đã chuyển kênh [${platDisplayName}] sang: ${modeText}`);
-        } else {
-            showNotification(data.message || "Không thể đổi trạng thái kênh", "warning");
-        }
-    } catch (e) {
-        showNotification("Lỗi kết nối máy chủ", "warning");
     }
 }
 
@@ -999,7 +944,6 @@ async function changeGlobalBotMode() {
             updateGlobalBotUI(newMode);
             const modeText = newMode === 'auto' ? '🟢 BẬT Tự Động (Auto)' : (newMode === 'copilot' ? '🟡 Co-Pilot (Nháp & Duyệt)' : '🔴 TẮT Bot (Tạm Dừng / Test)');
             showNotification(`Đã chuyển trạng thái Bot toàn hệ thống sang: ${modeText}`);
-            await fetchPlatformBotModes();
         } else {
             showNotification(data.message || "Không thể đổi trạng thái", "warning");
         }
