@@ -1028,13 +1028,38 @@ def get_ocr_reader():
             _easyocr_reader = False
     return _easyocr_reader if _easyocr_reader is not False else None
 
+def prepare_image_bytes_for_ocr(image_path: str) -> bytes:
+    """Tự động nén và chuẩn hóa kích thước ảnh về < 800KB để Cloud OCR xử lý nhanh 1-2s và không bị quá dung lượng"""
+    try:
+        from PIL import Image
+        import io
+        with Image.open(image_path) as img:
+            if img.mode in ("RGBA", "P"):
+                img = img.convert("RGB")
+            max_dimension = 1600
+            if max(img.width, img.height) > max_dimension:
+                img.thumbnail((max_dimension, max_dimension), Image.Resampling.LANCZOS)
+            buf = io.BytesIO()
+            img.save(buf, format="JPEG", quality=85, optimize=True)
+            return buf.getvalue()
+    except Exception as e:
+        print(f"⚠️ Image compression notice: {e}")
+        try:
+            with open(image_path, "rb") as f:
+                return f.read()
+        except Exception:
+            return b""
+
+
 async def extract_text_from_image(image_path: str) -> str:
     """Trích xuất văn bản từ hình ảnh vé/tin nhắn bằng Cloud OCR xoay vòng nhiều key và EasyOCR fallback"""
     # 1. Primary: Fast Cloud OCR xoay vòng nhiều Key (0 MB RAM, phản hồi nhanh 1-2s, chính xác cao)
     ocr_keys = ['K88574768888957', 'K82846985488957', 'K83995874488957', 'helloworld']
     try:
-        with open(image_path, 'rb') as f:
-            file_bytes = f.read()
+        file_bytes = prepare_image_bytes_for_ocr(image_path)
+        if not file_bytes:
+            with open(image_path, 'rb') as f:
+                file_bytes = f.read()
         
         for key in ocr_keys:
             try:
@@ -1204,9 +1229,12 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         
         record_id = memory_store.get(f"telegram_{chat_id}_record_id")
         if record_id:
-            token = await upload_image_to_lark(file_path)
-            if token: 
-                await update_customer_image(record_id, img_type if img_type != "Exit Stamp" else "Exit stamp", token)
+            try:
+                token = await upload_image_to_lark(file_path)
+                if token: 
+                    await update_customer_image(record_id, img_type if img_type != "Exit Stamp" else "Exit stamp", token)
+            except Exception as e_lark:
+                print(f"⚠️ Lark upload error: {e_lark}")
         
         conn_id = update.business_message.business_connection_id if update.business_message else memory_store.get(f"{session_id}_business_connection_id")
         is_awaiting_old = memory_store.get(f"{session_id}_awaiting_old_booking", False)
@@ -1223,7 +1251,10 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
             f"📂 Thể loại nhận diện: {img_type}\n"
             f"👉 [Admin vui lòng kiểm tra và xử lý giao dịch!](https://t.me/easytripvisa_co_ltd)"
         )
-        await send_to_admin_group(context, admin_notif_msg)
+        try:
+            await send_to_admin_group(context, admin_notif_msg)
+        except Exception:
+            pass
 
         # 1. Trích xuất OCR từ ảnh để tự động kiểm tra vé cũ / thông tin booking
         ocr_text = await extract_text_from_image(file_path)
@@ -1235,10 +1266,11 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
             "PICK UP", "DEPARTURE DATE", "E-VISA", "VISARUN", "VISA RUN", "HON CHONG", "40 HON CHONG"
         ]) if ocr_text else False
 
+        user_id = str(update.effective_user.id) if update.effective_user else chat_id
+
         # 1. Nếu tìm thấy khách cũ trên CRM (dù gửi lần đầu hay gửi lại)
         if matched_cust:
             memory_store.pop(f"{session_id}_awaiting_old_booking", None)
-            user_id = str(update.effective_user.id) if update.effective_user else ""
             print(f"🎯 OCR đã nhận diện Khách Cũ từ ảnh vé: {matched_cust.get('full_name')}")
             if matched_cust.get("customer_id") and user_id:
                 customer_memory.link_telegram_to_customer(matched_cust["customer_id"], user_id)
@@ -1323,6 +1355,13 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
         traceback.print_exc()
         try:
             await message.reply_text("Received your photo! We are processing your request. Please wait a moment.")
+        except Exception:
+            pass
+    finally:
+        # Xóa file tạm
+        try:
+            if 'file_path' in locals() and os.path.exists(file_path):
+                os.remove(file_path)
         except Exception:
             pass
 
@@ -1435,10 +1474,36 @@ async def check_visa_reminders_command(update: Update, context: ContextTypes.DEF
     except Exception as e:
         await status_msg.edit_text(f"❌ Lỗi khi quét nhắc nhở: {e}")
 
+async def sync_contracts_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Lệnh Admin: Đồng bộ toàn bộ hợp đồng và hộ chiếu từ CRM lên Lark Cloud ngay lập tức"""
+    if not update.effective_message:
+        return
+    status_msg = await update.effective_message.reply_text("⏳ Đang quét CRM Lark Base, tạo file hợp đồng và upload Hợp đồng + Hộ chiếu lên Lark Cloud...")
+    try:
+        contract_proj_dir = os.path.abspath(os.path.join(ROOT_DIR, "..", "contracts-easytrip"))
+        contract_script = os.path.join(contract_proj_dir, "scripts", "daily_contract_sync.py")
+        if os.path.exists(contract_script):
+            import subprocess
+            proc = subprocess.run([sys.executable, contract_script, "--now"], capture_output=True, text=True, cwd=contract_proj_dir)
+            if proc.returncode == 0:
+                await status_msg.edit_text(
+                    f"✅ **HOÀN TẤT ĐỒNG BỘ HỢP ĐỒNG & HỘ CHIẾU!**\n\n"
+                    f"📄 Đã cập nhật 100% hợp đồng mới nhất đến hiện tại.\n"
+                    f"☁️ Đã upload toàn bộ PDF & Hộ chiếu lên 2 kho lưu trữ trên Lark Base.\n"
+                    f"🤖 Đã lưu trữ trong phân hệ contracts-easytrip."
+                )
+            else:
+                await status_msg.edit_text(f"⚠️ Quá trình đồng bộ kết thúc với cảnh báo:\n{proc.stderr or proc.stdout}")
+        else:
+            await status_msg.edit_text("❌ Không tìm thấy phân hệ contracts-easytrip!")
+    except Exception as e:
+        await status_msg.edit_text(f"❌ Lỗi khi đồng bộ hợp đồng: {e}")
+
 tg_app.add_handler(CommandHandler("start", start_command))
 tg_app.add_handler(CommandHandler("getid", get_id_command))
 tg_app.add_handler(CommandHandler("check_visa_reminders", check_visa_reminders_command))
 tg_app.add_handler(CommandHandler("remind_visa", check_visa_reminders_command))
+tg_app.add_handler(CommandHandler("sync_contracts", sync_contracts_command))
 tg_app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
 tg_app.add_handler(MessageHandler(filters.UpdateType.BUSINESS_MESSAGE & filters.TEXT, handle_text))
 tg_app.add_handler(MessageHandler(filters.UpdateType.EDITED_BUSINESS_MESSAGE & filters.TEXT, handle_text))
