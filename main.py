@@ -325,6 +325,46 @@ async def send_facebook_image(user_id: str, image_url: str):
             print(f"Facebook send image failed: {e}")
 
 
+def normalize_platform_key(platform: str) -> str:
+    plat = platform.lower().strip()
+    if plat in ["web", "website"]:
+        return "website"
+    if plat in ["facebook", "meta", "fb"]:
+        return "facebook"
+    if plat in ["telegram", "tg"]:
+        return "telegram"
+    if plat in ["zalo"]:
+        return "zalo"
+    return plat
+
+
+def get_platform_bot_mode(platform: str) -> str:
+    """Lấy chế độ hoạt động của Bot cho từng kênh mạng xã hội riêng biệt"""
+    plat_key = normalize_platform_key(platform)
+    mode = memory_store.get(f"BOT_MODE_{plat_key.upper()}")
+    if mode is not None:
+        return mode
+        
+    # Mặc định theo biến môi trường nếu là Facebook
+    if plat_key == "facebook":
+        enable_meta = os.getenv("ENABLE_META_BOT", "false").lower() in ["true", "1", "yes"]
+        return "auto" if enable_meta else "off"
+        
+    # Fallback về GLOBAL_BOT_MODE hoặc auto
+    return memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "auto"))
+
+
+def get_effective_bot_mode(session_id: str, platform: str) -> str:
+    """Xác định chế độ bot áp dụng: Ưu tiên phiên chat riêng > Kênh mạng xã hội > Toàn hệ thống"""
+    # 1. Nếu phiên chat được admin gán riêng
+    session_mode = memory_store.get(f"{session_id}_mode")
+    if session_mode is not None:
+        return session_mode
+        
+    # 2. Lấy theo chế độ của kênh mạng xã hội
+    return get_platform_bot_mode(platform)
+
+
 # === LUỒNG XỬ LÝ CHUNG CHO MỌI KÊNH ===
 async def process_omnichannel_logic(user_id, platform, user_text, session_id, agent="Direct"):
     # 1. Truy xuất hoặc tạo mới hồ sơ khách hàng từ SQLite
@@ -346,13 +386,11 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
         cust_name_db = cust_profile.get("full_name") if cust_profile else None
         memory_store[f"{session_id}_name"] = cust_name_db or f"Khách {platform} ({str(user_id)[:6]})"
 
-    # Kiểm tra chế độ Bot (Ưu tiên chế độ riêng của phiên, nếu chưa đặt thì lấy chế độ toàn hệ thống)
-    global_mode = memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "auto"))
-    session_mode = memory_store.get(f"{session_id}_mode")
-    mode = session_mode if session_mode is not None else global_mode
+    # Kiểm tra chế độ Bot theo từng kênh mạng xã hội và phiên chat
+    mode = get_effective_bot_mode(session_id, platform)
     if mode in ["manual", "off"]:
         # Chế độ thủ công hoàn toàn / tắt bot, không tự động trả lời
-        print(f"⏸️ [Bot Paused/Manual] Bỏ qua tự động trả lời cho {session_id} (Mode: {mode})")
+        print(f"⏸️ [Bot Paused - {platform}] Bỏ qua tự động trả lời cho {session_id} (Mode: {mode})")
         return None, None
         
     if mode == "copilot":
@@ -628,9 +666,9 @@ async def handle_zalo_flow(u_id, text):
 
 
 async def handle_fb_flow(u_id, text):
-    enable_meta = os.getenv("ENABLE_META_BOT", "false").lower() in ["true", "1", "yes"]
-    if not enable_meta:
-        print(f"⏸️ [Meta/Facebook] Chatbot AI đang tạm dừng hoạt động. Không gửi phản hồi tự động tới user {u_id}.")
+    fb_mode = get_platform_bot_mode("facebook")
+    if fb_mode in ["off", "manual"]:
+        print(f"⏸️ [Meta/Facebook] Chatbot AI đang tắt. Không gửi phản hồi tự động tới user {u_id}.")
         return
     reply, img = await process_omnichannel_logic(u_id, "Facebook", text, f"fb_{u_id}")
     if reply:
@@ -668,7 +706,7 @@ async def facebook_webhook(request: Request, background_tasks: BackgroundTasks):
     try:
         data = await request.json()
         if data.get("object") == "page":
-            enable_meta = os.getenv("ENABLE_META_BOT", "false").lower() in ["true", "1", "yes"]
+            fb_mode = get_platform_bot_mode("facebook")
             for entry in data.get("entry", []):
                 for event in entry.get("messaging", []):
                     if "message" in event and "text" in event["message"]:
@@ -676,8 +714,8 @@ async def facebook_webhook(request: Request, background_tasks: BackgroundTasks):
                             continue
                         u_id = event["sender"]["id"]
                         text = event["message"]["text"]
-                        if not enable_meta:
-                            print(f"⏸️ [Meta/Facebook Webhook] Bot đang tạm dừng. Tin nhắn từ {u_id}: '{text[:50]}' sẽ để nhân viên trực tiếp phản hồi.")
+                        if fb_mode in ["off", "manual"]:
+                            print(f"⏸️ [Meta/Facebook Webhook] Bot đang tắt. Tin nhắn từ {u_id}: '{text[:50]}' sẽ để nhân viên trực tiếp phản hồi.")
                             continue
                         background_tasks.add_task(handle_fb_flow, u_id, text)
     except Exception as e:
@@ -811,15 +849,21 @@ async def root_index_redirect():
     return RedirectResponse(url="/copilot/index.html")
 
 
+@app.get("/api/system/bot-modes")
 @app.get("/api/system/bot-mode")
-async def get_system_bot_mode():
-    """Lấy trạng thái hoạt động của Bot toàn hệ thống"""
+async def get_system_bot_modes():
+    """Lấy trạng thái hoạt động của Bot toàn hệ thống và từng kênh riêng biệt"""
     global_mode = memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "auto"))
-    enable_meta = os.getenv("ENABLE_META_BOT", "false").lower() in ["true", "1", "yes"]
+    platforms = {
+        "telegram": get_platform_bot_mode("telegram"),
+        "zalo": get_platform_bot_mode("zalo"),
+        "facebook": get_platform_bot_mode("facebook"),
+        "website": get_platform_bot_mode("website")
+    }
     return {
         "success": True,
         "global_mode": global_mode,
-        "enable_meta": enable_meta
+        "platforms": platforms
     }
 
 
@@ -835,6 +879,34 @@ async def set_system_bot_mode(request: Request):
     memory_store["GLOBAL_BOT_MODE"] = normalized_mode
     print(f"🔄 Đã cập nhật chế độ Bot toàn hệ thống sang: {normalized_mode.upper()}")
     return {"success": True, "global_mode": normalized_mode}
+
+
+@app.post("/api/system/platform-mode", dependencies=[Depends(verify_admin_access)])
+async def set_platform_bot_mode(request: Request):
+    """Thay đổi chế độ của từng nền tảng mạng xã hội riêng biệt: telegram | zalo | facebook | website"""
+    body = await request.json()
+    platform = body.get("platform", "").lower().strip()
+    mode = body.get("mode", "auto").lower().strip()
+    
+    if platform not in ["telegram", "zalo", "facebook", "website", "web", "meta", "tg"]:
+        return {"success": False, "message": "Nền tảng không hợp lệ."}
+    if mode not in ["auto", "copilot", "off", "manual"]:
+        return {"success": False, "message": "Chế độ không hợp lệ."}
+        
+    plat_key = normalize_platform_key(platform)
+    normalized_mode = "off" if mode == "manual" else mode
+    memory_store[f"BOT_MODE_{plat_key.upper()}"] = normalized_mode
+    
+    if plat_key == "facebook":
+        os.environ["ENABLE_META_BOT"] = "true" if normalized_mode != "off" else "false"
+        update_env_file("ENABLE_META_BOT", os.environ["ENABLE_META_BOT"])
+        
+    print(f"🔄 Đã cập nhật chế độ Bot cho kênh [{plat_key.upper()}] sang: {normalized_mode.upper()}")
+    return {
+        "success": True,
+        "platform": plat_key,
+        "mode": normalized_mode
+    }
 
 
 @app.post("/api/session/{session_id}/message", dependencies=[Depends(verify_admin_access)])
