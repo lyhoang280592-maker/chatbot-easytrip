@@ -35,6 +35,22 @@
                 <button class="tab-btn" id="tab-btn-ops" onclick="switchTab('ops')">📋 دليل التشغيل والآلة الحاسبة (SOP & Calc)</button>
             </div>
             
+            <!-- Công Tắc Bật / Tắt Chatbot Toàn Hệ Thống -->
+            <div class="global-bot-control" id="global-bot-control">
+                <div class="global-bot-header">
+                    <span class="bot-icon-pulse">🤖</span>
+                    <span class="global-bot-title">CHATBOT:</span>
+                    <span class="global-bot-badge badge-auto" id="global-bot-badge">🟢 AUTO</span>
+                </div>
+                <div class="global-bot-select-wrap">
+                    <select id="global-bot-mode-select" class="global-bot-select" onchange="changeGlobalBotMode()" title="Chuyển chế độ hoạt động toàn hệ thống">
+                        <option value="auto">🟢 BẬT Tự Động (Auto)</option>
+                        <option value="copilot">🟡 Co-Pilot (Nháp & Duyệt)</option>
+                        <option value="off">🔴 TẮT Bot (Tạm Dừng / Test)</option>
+                    </select>
+                </div>
+            </div>
+            
             <!-- Chỉ số thời gian thực -->
             <div class="analytics-bar">
                 <div class="stat-card">

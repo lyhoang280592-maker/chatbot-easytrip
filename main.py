@@ -4,7 +4,7 @@ from datetime import datetime
 import httpx
 from fastapi import FastAPI, Request, BackgroundTasks, Response, UploadFile, File, Depends, Header, HTTPException
 import shutil
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 import uvicorn
@@ -346,10 +346,13 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
         cust_name_db = cust_profile.get("full_name") if cust_profile else None
         memory_store[f"{session_id}_name"] = cust_name_db or f"Khách {platform} ({str(user_id)[:6]})"
 
-    # Kiểm tra chế độ Bot
-    mode = memory_store.get(f"{session_id}_mode", "auto")
-    if mode == "manual":
-        # Chế độ thủ công hoàn toàn, không tự động trả lời
+    # Kiểm tra chế độ Bot (Ưu tiên chế độ riêng của phiên, nếu chưa đặt thì lấy chế độ toàn hệ thống)
+    global_mode = memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "auto"))
+    session_mode = memory_store.get(f"{session_id}_mode")
+    mode = session_mode if session_mode is not None else global_mode
+    if mode in ["manual", "off"]:
+        # Chế độ thủ công hoàn toàn / tắt bot, không tự động trả lời
+        print(f"⏸️ [Bot Paused/Manual] Bỏ qua tự động trả lời cho {session_id} (Mode: {mode})")
         return None, None
         
     if mode == "copilot":
@@ -800,6 +803,38 @@ async def set_session_mode(session_id: str, request: Request):
     if mode != "copilot":
         memory_store[f"{session_id}_draft"] = ""
     return {"success": True, "mode": mode}
+
+
+@app.get("/")
+async def root_index_redirect():
+    """Chuyển hướng trang chủ sang giao diện Live Chat Studio"""
+    return RedirectResponse(url="/copilot/index.html")
+
+
+@app.get("/api/system/bot-mode")
+async def get_system_bot_mode():
+    """Lấy trạng thái hoạt động của Bot toàn hệ thống"""
+    global_mode = memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "auto"))
+    enable_meta = os.getenv("ENABLE_META_BOT", "false").lower() in ["true", "1", "yes"]
+    return {
+        "success": True,
+        "global_mode": global_mode,
+        "enable_meta": enable_meta
+    }
+
+
+@app.post("/api/system/bot-mode", dependencies=[Depends(verify_admin_access)])
+async def set_system_bot_mode(request: Request):
+    """Thay đổi chế độ của Bot toàn hệ thống: auto | copilot | off"""
+    body = await request.json()
+    mode = body.get("mode", "auto")
+    if mode not in ["auto", "copilot", "off", "manual"]:
+        return {"success": False, "message": "Chế độ không hợp lệ."}
+    
+    normalized_mode = "off" if mode == "manual" else mode
+    memory_store["GLOBAL_BOT_MODE"] = normalized_mode
+    print(f"🔄 Đã cập nhật chế độ Bot toàn hệ thống sang: {normalized_mode.upper()}")
+    return {"success": True, "global_mode": normalized_mode}
 
 
 @app.post("/api/session/{session_id}/message", dependencies=[Depends(verify_admin_access)])

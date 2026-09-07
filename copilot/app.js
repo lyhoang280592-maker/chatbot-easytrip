@@ -661,6 +661,7 @@ queryChips.forEach(chip => {
 window.addEventListener('DOMContentLoaded', () => {
     initBrain();
     checkAuthOnStartup();
+    fetchGlobalBotMode();
     switchTab('sandbox');
     setupStaffChatDragAndDrop();
     setupStaffChatPaste();
@@ -746,6 +747,7 @@ async function pollLiveSessions() {
         const data = await response.json();
         liveSessions = data;
         
+        await fetchGlobalBotMode();
         renderLiveChannelsList();
         
         if (activeSessionId) {
@@ -883,7 +885,74 @@ async function updateActiveLiveSessionDetail(forceScroll = false) {
     }
 }
 
-// Thay đổi chế độ của phiên chat
+// ==========================================================
+// ĐIỀU KHIỂN CHẾ ĐỘ BOT TOÀN HỆ THỐNG (GLOBAL BOT SWITCH)
+// ==========================================================
+
+// Cập nhật giao diện Badge & Select chế độ Bot toàn hệ thống
+function updateGlobalBotUI(mode) {
+    const badge = document.getElementById('global-bot-badge');
+    const select = document.getElementById('global-bot-mode-select');
+    if (select && select.value !== mode) {
+        select.value = mode;
+    }
+    if (badge) {
+        badge.className = 'global-bot-badge';
+        if (mode === 'auto') {
+            badge.classList.add('badge-auto');
+            badge.textContent = '🟢 AUTO';
+        } else if (mode === 'copilot') {
+            badge.classList.add('badge-copilot');
+            badge.textContent = '🟡 CO-PILOT';
+        } else {
+            badge.classList.add('badge-off');
+            badge.textContent = '🔴 OFF';
+        }
+    }
+}
+
+// Lấy chế độ Bot toàn hệ thống từ Backend
+async function fetchGlobalBotMode() {
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/system/bot-mode`);
+        if (response.ok) {
+            const data = await response.json();
+            if (data.success && data.global_mode) {
+                updateGlobalBotUI(data.global_mode);
+            }
+        }
+    } catch (e) {
+        // im lặng nếu offline
+    }
+}
+
+// Thay đổi chế độ Bot toàn hệ thống (BẬT Tự Động / Co-Pilot / TẮT Bot)
+async function changeGlobalBotMode() {
+    const select = document.getElementById('global-bot-mode-select');
+    if (!select) return;
+    const newMode = select.value;
+    
+    try {
+        const response = await fetch(`${BACKEND_URL}/api/system/bot-mode`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ mode: newMode })
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+            updateGlobalBotUI(newMode);
+            const modeText = newMode === 'auto' ? '🟢 BẬT Tự Động (Auto)' : (newMode === 'copilot' ? '🟡 Co-Pilot (Nháp & Duyệt)' : '🔴 TẮT Bot (Tạm Dừng / Test)');
+            showNotification(`Đã chuyển trạng thái Bot toàn hệ thống sang: ${modeText}`);
+        } else {
+            showNotification(data.message || "Không thể đổi trạng thái", "warning");
+        }
+    } catch (e) {
+        showNotification("Lỗi kết nối máy chủ", "warning");
+    }
+}
+
+// Thay đổi chế độ của phiên chat cá nhân
 async function changeSessionMode() {
     if (!activeSessionId) return;
     
