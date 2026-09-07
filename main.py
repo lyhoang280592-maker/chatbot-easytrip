@@ -625,6 +625,10 @@ async def handle_zalo_flow(u_id, text):
 
 
 async def handle_fb_flow(u_id, text):
+    enable_meta = os.getenv("ENABLE_META_BOT", "false").lower() in ["true", "1", "yes"]
+    if not enable_meta:
+        print(f"⏸️ [Meta/Facebook] Chatbot AI đang tạm dừng hoạt động. Không gửi phản hồi tự động tới user {u_id}.")
+        return
     reply, img = await process_omnichannel_logic(u_id, "Facebook", text, f"fb_{u_id}")
     if reply:
         await send_facebook_message(u_id, reply)
@@ -661,6 +665,7 @@ async def facebook_webhook(request: Request, background_tasks: BackgroundTasks):
     try:
         data = await request.json()
         if data.get("object") == "page":
+            enable_meta = os.getenv("ENABLE_META_BOT", "false").lower() in ["true", "1", "yes"]
             for entry in data.get("entry", []):
                 for event in entry.get("messaging", []):
                     if "message" in event and "text" in event["message"]:
@@ -668,6 +673,9 @@ async def facebook_webhook(request: Request, background_tasks: BackgroundTasks):
                             continue
                         u_id = event["sender"]["id"]
                         text = event["message"]["text"]
+                        if not enable_meta:
+                            print(f"⏸️ [Meta/Facebook Webhook] Bot đang tạm dừng. Tin nhắn từ {u_id}: '{text[:50]}' sẽ để nhân viên trực tiếp phản hồi.")
+                            continue
                         background_tasks.add_task(handle_fb_flow, u_id, text)
     except Exception as e:
         print(f"❌ Facebook Webhook Error: {e}")
