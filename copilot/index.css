@@ -93,43 +93,46 @@ body {
 .dashboard-wrapper {
     position: relative;
     z-index: 1;
-    max-width: 1500px;
+    max-width: 1650px;
     margin: 0 auto;
-    padding: 24px;
+    padding: 16px 24px;
     display: flex;
     flex-direction: column;
     height: 100vh;
-    min-height: 700px;
+    min-height: 720px;
 }
 
-/* Header */
+/* Header Command Center */
 .dashboard-header {
-    background: rgba(15, 23, 42, 0.6);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border-glass);
     border-bottom: 1px solid var(--border-glass-light);
-    border-radius: 20px;
-    padding: 16px 24px;
+    border-radius: 18px;
+    padding: 12px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    gap: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    flex-shrink: 0;
 }
 
 .header-logo {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
+    flex-shrink: 0;
 }
 
 .brand-badge {
     background: linear-gradient(135deg, var(--accent-purple), var(--accent-pink));
     color: white;
     font-weight: 800;
-    font-size: 0.85rem;
-    padding: 6px 12px;
+    font-size: 0.8rem;
+    padding: 5px 10px;
     border-radius: 8px;
     letter-spacing: 1px;
     box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
@@ -137,69 +140,102 @@ body {
 
 .brand-names h1 {
     font-family: 'Outfit', sans-serif;
-    font-size: 1.35rem;
+    font-size: 1.25rem;
     font-weight: 700;
-    background: linear-gradient(135deg, #FFF, #94A3B8);
+    line-height: 1.2;
+    background: linear-gradient(135deg, #FFF 40%, #94A3B8 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
 .brand-names span {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     color: var(--text-secondary);
     font-weight: 500;
+    display: block;
+}
+
+/* Nhóm Điều Khiển & Analytics Bên Phải */
+.header-controls-group {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
 }
 
 .analytics-bar {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 8px;
+    flex-shrink: 0;
 }
 
-.stat-card {
+/* Stat Pill Mini Badges */
+.stat-pill {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
+    align-items: center;
+    gap: 6px;
+    background: rgba(30, 41, 59, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 10px;
+    padding: 6px 12px;
+    white-space: nowrap;
+    transition: all 0.25s ease;
 }
 
-.stat-label {
-    font-size: 0.75rem;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
+.stat-pill:hover {
+    background: rgba(51, 65, 85, 0.7);
+    border-color: rgba(255, 255, 255, 0.16);
+    transform: translateY(-1px);
 }
 
-.stat-val {
-    font-size: 1.3rem;
+.stat-pill-icon {
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+.stat-pill-num {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1rem;
     font-weight: 700;
     color: #FFF;
-    font-family: 'Outfit', sans-serif;
+    line-height: 1;
+}
+
+.stat-pill-label {
+    font-size: 0.7rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    line-height: 1;
 }
 
 .text-cyan {
     color: var(--accent-teal) !important;
-    text-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+    text-shadow: 0 0 10px rgba(0, 242, 254, 0.35);
 }
 
 .system-status {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     background: rgba(16, 185, 129, 0.1);
-    padding: 8px 14px;
-    border-radius: 12px;
-    border: 1px solid rgba(16, 185, 129, 0.2);
-    font-size: 0.8rem;
+    padding: 6px 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(16, 185, 129, 0.25);
+    font-size: 0.75rem;
     font-weight: 600;
     color: var(--success);
+    white-space: nowrap;
 }
 
 .dot {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     background-color: var(--success);
     border-radius: 50%;
-    box-shadow: 0 0 10px var(--success);
+    box-shadow: 0 0 8px var(--success);
     animation: blink 2s infinite ease-in-out;
 }
 
@@ -211,18 +247,18 @@ body {
 
 .sync-status.online {
     background: rgba(0, 242, 254, 0.1);
-    border: 1px solid rgba(0, 242, 254, 0.25);
+    border: 1px solid rgba(0, 242, 254, 0.3);
     color: var(--accent-teal);
 }
 
 .sync-status.online .dot-sync {
     background-color: var(--accent-teal);
-    box-shadow: 0 0 10px var(--accent-teal);
+    box-shadow: 0 0 8px var(--accent-teal);
 }
 
 .sync-status.offline {
-    background: rgba(245, 158, 11, 0.05);
-    border: 1px solid rgba(245, 158, 11, 0.15);
+    background: rgba(245, 158, 11, 0.08);
+    border: 1px solid rgba(245, 158, 11, 0.2);
     color: var(--warning);
 }
 
@@ -232,8 +268,8 @@ body {
 }
 
 .dot-sync {
-    width: 8px;
-    height: 8px;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     display: inline-block;
     animation: blink 3s infinite ease-in-out;
@@ -244,14 +280,15 @@ body {
     50% { opacity: 0.3; }
 }
 
-/* Thân Dashboard chia đôi */
+/* Thân Dashboard chia đôi hoàn hảo */
 .dashboard-body {
     flex: 1;
     display: grid;
-    grid-template-columns: 460px 1fr;
+    grid-template-columns: 440px 1fr;
     gap: 24px;
     overflow: hidden;
-    padding-bottom: 10px;
+    height: 100%;
+    padding-bottom: 8px;
 }
 
 /* Khung các Panel */
@@ -290,11 +327,12 @@ body {
 
 .phone-frame {
     flex: 1;
-    max-height: 520px;
+    height: 100%;
+    min-height: 500px;
     background: #090e1a;
-    border: 12px solid #1e293b;
-    border-radius: 36px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(255,255,255,0.05);
+    border: 10px solid #1e293b;
+    border-radius: 34px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255,255,255,0.06);
     overflow: hidden;
     position: relative;
     display: flex;
@@ -575,12 +613,11 @@ body {
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border-glass);
     border-top: 1px solid var(--border-glass-light);
-    border-radius: 24px;
-    padding: 20px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    border-radius: 20px;
+    padding: 18px;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
     display: flex;
     flex-direction: column;
-    max-height: 480px;
 }
 
 /* Màn hình theo dõi cuộc chat */
@@ -994,12 +1031,12 @@ body {
 
 .dashboard-tabs {
     display: flex;
-    gap: 8px;
-    background: rgba(255, 255, 255, 0.03);
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.04);
     border: 1px solid var(--border-glass);
     padding: 4px;
     border-radius: 12px;
-    margin: 0 auto 0 24px;
+    margin: 0;
 }
 
 .tab-btn {
@@ -1363,6 +1400,16 @@ body {
 /* ========================================================== */
 /* RESPONSIVE LAYOUT */
 /* ========================================================== */
+@media (max-width: 1400px) {
+    .dashboard-header {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    .header-controls-group {
+        margin-left: auto;
+    }
+}
+
 @media (max-width: 1200px) {
     .live-grid {
         grid-template-columns: 280px 1fr !important;
@@ -1383,11 +1430,11 @@ body {
         overflow-y: auto;
     }
     .phone-frame {
-        max-height: 480px;
+        max-height: 520px;
     }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
     .dashboard-wrapper {
         padding: 12px;
     }
@@ -1396,13 +1443,19 @@ body {
         align-items: stretch;
         gap: 12px;
     }
+    .header-controls-group {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
     .analytics-bar {
+        flex-wrap: wrap;
         justify-content: space-between;
     }
     .dashboard-tabs {
-        margin: 8px 0;
         width: 100%;
         justify-content: center;
+        flex-wrap: wrap;
     }
 }
 
