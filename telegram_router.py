@@ -1312,7 +1312,7 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 f"6. If they want to change service / do not want the previous service, ask ONLY these 2 questions:\n"
                 f"   - Question 1: What type of service would they like (45-day visa-free, 90-day E-visa single/multi, or E-visa only)?\n"
                 f"   - Question 2: What date do they plan to travel (or when does their visa expire)?\n"
-                f"7. Offer the Standard Booking Form to confirm details.\n"
+                f"7. Confirm all details directly and conversationally in chat (DO NOT send external form links or make the customer fill forms).\n"
                 f"⚠️ NEVER confirm the old date from the previous ticket because it is a past completed trip."
             )
             

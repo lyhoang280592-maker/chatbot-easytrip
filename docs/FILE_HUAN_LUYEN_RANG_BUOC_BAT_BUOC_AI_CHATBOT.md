@@ -36,7 +36,7 @@ Khi khách gửi ảnh vé cũ hoặc thông tin cũ và **được hệ thống
 2. **Xử lý 2 Nhánh Phản Hồi của Khách**:
    * **Nhánh A (Khách ĐỒNG Ý đặt lại dịch vụ cũ)**:
      - Hỏi ngày dự kiến khởi hành mới (hoặc ngày hết hạn visa).
-     - Gửi **Form chuẩn đăng ký / xác nhận** để chốt thông tin.
+     - Xác nhận trực tiếp trong cuộc trò chuyện bằng **Form tóm tắt siêu ngắn gọn (4 dòng)** để chốt thông tin, **tuyệt đối KHÔNG gửi link form bên ngoài và KHÔNG yêu cầu khách tự điền form phức tạp**.
    * **Nhánh B (Khách KHÔNG MUỐN đặt dịch vụ cũ / Muốn đổi dịch vụ khác)**:
      - Chatbot **chỉ hỏi đúng 2 câu ngắn gọn**:
        1. **Chốt lại loại dịch vụ mong muốn**:
@@ -44,7 +44,7 @@ Khi khách gửi ảnh vé cũ hoặc thông tin cũ và **được hệ thống
           - *90 ngày (90D E-visa Lào/Campuchia - Single/Multi)*
           - *Hoặc chỉ thực hiện E-visa riêng lẻ (chỉ làm visa, không đi xe)?*
        2. **Thời gian khách muốn thực hiện (Ngày dự kiến khởi hành hoặc ngày hết hạn visa)?**
-     - Sau khi khách trả lời, gửi **Form chuẩn đồng nhất** để hoàn tất booking.
+     - Sau khi khách trả lời, xác nhận trực tiếp trong chat bằng **Form tóm tắt siêu ngắn gọn (4 dòng)** để hoàn tất booking, không bắt khách điền form.
 
 3. **BẢNG GIÁ ƯU ĐÃI KHÁCH CŨ (Đã giảm giá)**:
    * **Khách Hàn Quốc / Miễn Visa 45 ngày Lào**: **1.300.000 VNĐ** (Tiết kiệm 100.000đ so với giá mới 1.400.000đ).
@@ -66,55 +66,46 @@ Khi khách chọn luồng "Khách cũ" hoặc gửi ảnh vé/hóa đơn nhưng 
 
 ---
 
-### 2.4. MẪU FORM CHUẨN ĐỒNG NHẤT (STANDARD BOOKING FORM)
-Dưới đây là mẫu Form chuẩn đồng nhất cho các ngôn ngữ để Bot gửi cho khách hàng điền / xác nhận thông tin:
+### 2.4. MẪU FORM XÁC NHẬN CHUẨN SIÊU NGẮN GỌN (4 DÒNG ĐỒNG NHẤT - KHÔNG BẮT KHÁCH ĐIỀN FORM)
+> ⚠️ **QUY ĐỊNH BẮT BUỘC**:
+> - **KHÔNG gửi link form bên ngoài (Lark Form, Google Form...)**.
+> - **KHÔNG yêu cầu khách tự điền form**.
+> - Chatbot tự động thu thập thông tin tự nhiên trong đoạn chat và gửi lại **Thẻ tóm tắt xác nhận booking siêu ngắn gọn (đúng 4 dòng)** dưới đây để khách kiểm tra và chốt:
 
-#### 🇻🇳 [Tiếng Việt] Form Đăng Ký Booking Chuẩn:
+#### 🇻🇳 [Tiếng Việt] Xác Nhận Đặt Chỗ Ngắn Gọn:
 ```text
-📌 FORM ĐĂNG KÝ ĐẶT CHỖ VISARUN:
-1. Họ và tên (theo hộ chiếu):
-2. Quốc tịch:
-3. Loại dịch vụ (45D / 90D Single / 90D Multi / Chỉ E-visa):
-4. Thời gian / Ngày khởi hành mong muốn:
-5. Vị trí ghế mong muốn:
-6. Điểm đón (40 Hòn Chồng / Số 4 Trần Phú / Khác):
-7. Số điện thoại (Zalo/WhatsApp/Telegram):
+📌 ĐẶT CHỖ VISARUN:
+• Ngày đi: [DD/MM] (Tuyến: 45D / 90D)
+• Họ tên: [Theo hộ chiếu]
+• Ghế: [Số ghế]
+• Điểm đón: [40 Hòn Chồng / Số 4 Trần Phú] – 21:30
 ```
 
-#### 🇷🇺 [Tiếng Nga] Форма бронирования:
+#### 🇷🇺 [Tiếng Nga] Краткое подтверждение бронирования:
 ```text
-📌 ФОРМА БРОНИРОВАНИЯ ВИЗАРАНА:
-1. ФИО (по загранпаспорту):
-2. Гражданство:
-3. Тип услуги (45D Безвиз / 90D Single / 90D Multi / Только E-visa):
-4. Желаемая дата поездки:
-5. Предпочитаемое место в автобусе:
-6. Место посадки (40 Hon Chong / 4 Tran Phu / Другое):
-7. Контактный номер (WhatsApp/Telegram):
+📌 БРОНИРОВАНИЕ ВИЗАРАНА:
+• Дата поездки: [ДД/ММ] (90D / 45D Laos / Cambodia)
+• ФИО: [По загранпаспорту]
+• Место: [Номер места]
+• Посадка: [40 Hon Chong / 4 Tran Phu] – 21:30
 ```
 
-#### 🇬🇧 [Tiếng Anh] Standard Booking Form:
+#### 🇬🇧 [Tiếng Anh] Concise Booking Confirmation:
 ```text
-📌 VISARUN BOOKING FORM:
-1. Full Name (as in passport):
-2. Nationality:
-3. Service Type (45D Visa-Free / 90D Single / 90D Multi / E-visa only):
-4. Preferred Departure Date:
-5. Preferred Seat Number:
-6. Pick-up Location (40 Hon Chong / No. 4 Tran Phu / Other):
-7. Phone Number (WhatsApp/Zalo/Telegram):
+📌 VISARUN BOOKING:
+• Date: [DD/MM] (45D / 90D Laos / Cambodia)
+• Full Name: [As in passport]
+• Seat: [Seat number]
+• Pickup: [40 Hon Chong / No. 4 Tran Phu] – 21:30
 ```
 
-#### 🇰🇷 [Tiếng Hàn] 예약 양식:
+#### 🇰🇷 [Tiếng Hàn] 비자런 간편 예약 확인:
 ```text
-📌 비자런 예약 양식:
-1. 영문 성명 (여권 기준):
-2. 국적:
-3. 서비스 종류 (45일 무비자 / 90일 단수 / 90일 복수 / E-비자만 진행):
-4. 희망 출발 날짜:
-5. 희망 좌석 번호:
-6. 탑승 장소 (40 Hon Chong / 4 Tran Phu / 기타):
-7. 연락처 (카카오톡/WhatsApp/전화번호):
+📌 비자런 예약:
+• 출발일: [DD/MM] (45일 무비자 / 90일 E-비자)
+• 영문 성명: [여권 기준]
+• 좌석: [좌석 번호]
+• 탑승지: [40 Hon Chong / 4 Tran Phu] – 21:30
 ```
 
 ---
