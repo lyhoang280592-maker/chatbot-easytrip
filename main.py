@@ -347,7 +347,7 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
         memory_store[f"{session_id}_name"] = cust_name_db or f"Khách {platform} ({str(user_id)[:6]})"
 
     # Kiểm tra chế độ Bot (Ưu tiên chế độ riêng của phiên, nếu chưa đặt thì lấy chế độ toàn hệ thống)
-    global_mode = memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "auto"))
+    global_mode = memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "copilot"))
     session_mode = memory_store.get(f"{session_id}_mode")
     mode = session_mode if session_mode is not None else global_mode
     if mode in ["manual", "off"]:
@@ -814,7 +814,7 @@ async def root_index_redirect():
 @app.get("/api/system/bot-mode")
 async def get_system_bot_mode():
     """Lấy trạng thái hoạt động của Bot toàn hệ thống"""
-    global_mode = memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "auto"))
+    global_mode = memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "copilot"))
     enable_meta = os.getenv("ENABLE_META_BOT", "false").lower() in ["true", "1", "yes"]
     return {
         "success": True,

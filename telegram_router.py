@@ -561,7 +561,7 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
     memory_store[f"{session_id}_last_update"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # Kiểm tra chế độ Bot (Ưu tiên chế độ riêng của phiên, nếu chưa đặt thì lấy chế độ toàn hệ thống)
-    global_mode = memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "auto"))
+    global_mode = memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "copilot"))
     session_mode = memory_store.get(f"{session_id}_mode")
     mode = session_mode if session_mode is not None else global_mode
     if mode in ["manual", "off"]:
