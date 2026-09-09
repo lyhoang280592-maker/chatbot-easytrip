@@ -117,21 +117,25 @@ def import_contracts():
                         cust_id = cursor.lastrowid
                         count_cust += 1
                 
-                # Record trip in trip_history
+                # Record trip in trip_history if not already recorded
+                order_key = f"HD_{c.get('stt', cust_id)}"
+                cur_trip = conn.execute("SELECT trip_id FROM trip_history WHERE customer_id = ? AND order_id = ?", (cust_id, order_key)).fetchone()
+                if not cur_trip:
+                    with conn:
+                        conn.execute("""
+                            INSERT INTO trip_history (customer_id, departure_date, route, visa_type, price_paid, order_status, order_id)
+                            VALUES (?, ?, ?, ?, ?, 'COMPLETED', ?)
+                        """, (cust_id, date_str, service, visa_type, price, order_key))
+                        count_trips += 1
+                
                 with conn:
                     conn.execute("""
-                        INSERT INTO trip_history (customer_id, departure_date, route, visa_type, price_paid, order_status, order_id)
-                        VALUES (?, ?, ?, ?, ?, 'COMPLETED', ?)
-                    """, (cust_id, date_str, service, visa_type, price, f"HD_{c.get('stt', cust_id)}"))
-                    
-                    conn.execute("""
                         UPDATE customers 
-                        SET total_trips = total_trips + 1,
-                            customer_tier = CASE WHEN total_trips + 1 >= 3 THEN 'VIP' ELSE 'RETURNING' END,
+                        SET total_trips = (SELECT COUNT(*) FROM trip_history WHERE customer_id = ?),
+                            customer_tier = CASE WHEN (SELECT COUNT(*) FROM trip_history WHERE customer_id = ?) >= 3 THEN 'VIP' ELSE 'RETURNING' END,
                             preferred_route = COALESCE(?, preferred_route)
                         WHERE customer_id = ?
-                    """, (service, cust_id))
-                    count_trips += 1
+                    """, (cust_id, cust_id, service, cust_id))
 
     # 1.2 Load from Excel E-visa
     evisa_file = resolve_path("danh_sach_khach_hang_co_evisa_01_08_den_19_08.xlsx")
@@ -169,19 +173,23 @@ def import_contracts():
                             cust_id = cursor.lastrowid
                             count_cust += 1
                         
+                    order_ev_key = f"EV_{c_code}"
+                    cur_ev_trip = conn.execute("SELECT trip_id FROM trip_history WHERE customer_id = ? AND order_id = ?", (cust_id, order_ev_key)).fetchone()
+                    if not cur_ev_trip:
+                        with conn:
+                            conn.execute("""
+                                INSERT INTO trip_history (customer_id, departure_date, route, visa_type, price_paid, order_status, order_id)
+                                VALUES (?, ?, ?, ?, ?, 'COMPLETED', ?)
+                            """, (cust_id, c_date, c_srv, "E-Visa", c_price, order_ev_key))
+                            count_trips += 1
+                    
                     with conn:
                         conn.execute("""
-                            INSERT INTO trip_history (customer_id, departure_date, route, visa_type, price_paid, order_status, order_id)
-                            VALUES (?, ?, ?, ?, ?, 'COMPLETED', ?)
-                        """, (cust_id, c_date, c_srv, "E-Visa", c_price, f"EV_{c_code}"))
-                        
-                        conn.execute("""
                             UPDATE customers 
-                            SET total_trips = total_trips + 1,
-                                customer_tier = CASE WHEN total_trips + 1 >= 3 THEN 'VIP' ELSE 'RETURNING' END
+                            SET total_trips = (SELECT COUNT(*) FROM trip_history WHERE customer_id = ?),
+                                customer_tier = CASE WHEN (SELECT COUNT(*) FROM trip_history WHERE customer_id = ?) >= 3 THEN 'VIP' ELSE 'RETURNING' END
                             WHERE customer_id = ?
-                        """, (cust_id,))
-                        count_trips += 1
+                        """, (cust_id, cust_id, cust_id))
             print("Successfully processed E-visa Excel list")
         except Exception as e:
             print(f"⚠️ Error reading E-visa Excel: {e}")

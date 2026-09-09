@@ -20,17 +20,17 @@ from telegram.ext import (
 from memory_store import memory_store, load_session_history
 import customer_memory
 from ai_agent import process_chat, identify_image_type
-from lark_api import create_customer_record, upload_image_to_lark, update_customer_image, update_order_status, create_order
+from lark_api import create_customer_record, upload_image_to_lark, update_customer_image, update_order_status, create_order, get_daily_harvest_report
 from i18n import get_lang_code, get_msg
 from seat_map_generator import generate_seat_map, RELATIVE_COORDINATES
 
 router = APIRouter()
 
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
-ADMIN_TELEGRAM_ID = os.getenv("ADMIN_TELEGRAM_ID", "")
+ADMIN_TELEGRAM_ID = os.getenv("ADMIN_TELEGRAM_ID") or os.getenv("ID_TELEGRAM_QUAN_TRI", "")
 BUS_GROUP_CHAT_ID = os.getenv("BUS_GROUP_CHAT_ID", "")
 BUS_GROUP_TOPIC_ID = os.getenv("BUS_GROUP_TOPIC_ID", "")
-ADMIN_GROUP_CHAT_ID = os.getenv("ADMIN_GROUP_CHAT_ID", "")
+ADMIN_GROUP_CHAT_ID = os.getenv("ADMIN_GROUP_CHAT_ID") or os.getenv("ID_NHOM_CHAT_QUAN_TRI", "")
 ADMIN_GROUP_TOPIC_ID = os.getenv("ADMIN_GROUP_TOPIC_ID", "")
 
 # Biến toàn cục
@@ -403,20 +403,166 @@ async def get_or_create_seat_map(ngay: str, service: str) -> dict | None:
 
 
 async def send_to_admin_group(context, message: str):
-    if not ADMIN_GROUP_CHAT_ID: return
+    group_id = ADMIN_GROUP_CHAT_ID or os.getenv("ID_NHOM_CHAT_QUAN_TRI")
+    if not group_id: return
     try:
         topic_id = int(ADMIN_GROUP_TOPIC_ID) if ADMIN_GROUP_TOPIC_ID else None
         bot = context.bot if context else tg_app.bot
-        await bot.send_message(chat_id=ADMIN_GROUP_CHAT_ID, text=message, message_thread_id=topic_id)
+        await bot.send_message(chat_id=int(group_id), text=message, message_thread_id=topic_id)
     except Exception as e: print("Admin Group Error:", e)
 
 
 # ============================================================
 # KHỞI TẠO BOT
 # ============================================================
-# KHỞI TẠO BOT
-# ============================================================
 tg_app = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
+
+
+async def notify_admin_incoming_message(
+    platform: str,
+    user_id: str,
+    user_text: str,
+    session_id: Optional[str] = None,
+    user_name: Optional[str] = None,
+    agent: Optional[str] = None,
+    bot_reply: Optional[str] = None,
+    mode: Optional[str] = None,
+    extra_info: Optional[Dict[str, Any]] = None
+):
+    """
+    Gửi thông báo tức thì lên Telegram cho Admin khi có khách nhắn tin qua các kênh:
+    Facebook, Zalo, Website, Telegram.
+    """
+    import html
+    admin_tele_id = os.getenv("ADMIN_TELEGRAM_ID") or os.getenv("ID_TELEGRAM_QUAN_TRI", "")
+    admin_group_id = os.getenv("ADMIN_GROUP_CHAT_ID") or os.getenv("ID_NHOM_CHAT_QUAN_TRI", "")
+    topic_id = os.getenv("ADMIN_GROUP_TOPIC_ID", "")
+
+    # Tránh gửi thông báo nếu chính Admin gửi tin nhắn trên Telegram
+    if admin_tele_id and str(user_id) == str(admin_tele_id):
+        return
+
+    # Xác định nhãn kênh tiếp nhận (không dùng icon)
+    plat_lower = platform.lower()
+    if "facebook" in plat_lower or "fb" in plat_lower:
+        if "tích xanh" in plat_lower or "1244422022092408" in str(extra_info or {}):
+            chan_title = "Facebook (Fanpage Tích Xanh)"
+        elif "phụ" in plat_lower or "944798045391211" in str(extra_info or {}):
+            chan_title = "Facebook (Fanpage Phụ)"
+        else:
+            chan_title = "Facebook"
+    elif "zalo" in plat_lower:
+        chan_title = "Zalo (OA)"
+    elif "web" in plat_lower:
+        chan_title = f"Website (Nguồn: {agent})" if (agent and agent != "Direct") else "Website Chatbox"
+    elif "telegram" in plat_lower:
+        chan_title = "Telegram Business" if "business" in plat_lower else "Telegram"
+    else:
+        chan_title = platform
+
+    # Tra cứu thông tin khách hàng từ SQLite / Memory
+    full_name = user_name
+    phone = None
+    nationality = None
+    
+    if session_id:
+        if not full_name:
+            full_name = memory_store.get(f"{session_id}_name")
+        data_obj = memory_store.get(f"{session_id}_data")
+        if data_obj:
+            phone = getattr(data_obj, "so_dien_thoai", None)
+            nationality = getattr(data_obj, "quoc_tich", None)
+            if not full_name and getattr(data_obj, "ho_ten", None):
+                full_name = data_obj.ho_ten
+
+    # Tra cứu sâu hơn trong SQLite nếu chưa có
+    try:
+        base_plat = "facebook" if "facebook" in plat_lower else "zalo" if "zalo" in plat_lower else "telegram" if "telegram" in plat_lower else "web"
+        cust_profile = customer_memory.get_customer_by_platform(base_plat, str(user_id))
+        if cust_profile:
+            if not full_name: full_name = cust_profile.get("full_name")
+            if not phone: phone = cust_profile.get("phone_number")
+            if not nationality: nationality = cust_profile.get("nationality")
+    except Exception:
+        pass
+
+    display_name = full_name or f"Khách {platform.split()[0]} ({str(user_id)[:8]})"
+    display_phone = phone or "Chưa có"
+    display_nation = nationality or "Chưa xác định"
+
+    # Định dạng tin nhắn ngắn gọn nếu quá dài
+    clean_text = user_text.strip() if user_text else "[Không có nội dung]"
+    if len(clean_text) > 400:
+        clean_text = clean_text[:397] + "..."
+
+    # Nhãn trạng thái xử lý (không dùng icon)
+    mode_str = mode or (memory_store.get(f"{session_id}_mode") if session_id else None) or memory_store.get("GLOBAL_BOT_MODE", "copilot")
+    if mode_str == "copilot":
+        status_badge = "Co-Pilot (Đã tạo dự thảo, chờ quản trị viên duyệt)"
+    elif mode_str in ["manual", "off"]:
+        status_badge = "Thủ công (Chờ nhân viên xử lý phản hồi)"
+    else:
+        status_badge = "Tự động (Hệ thống bot đã phản hồi)"
+
+    now_str = datetime.now().strftime("%H:%M:%S - %d/%m/%Y")
+
+    lines = [
+        "<b>[THÔNG BÁO TIN NHẮN MỚI]</b>",
+        f"• <b>Kênh tiếp nhận:</b> {html.escape(chan_title)}",
+        f"• <b>Khách hàng:</b> {html.escape(str(display_name))} <code>(ID: {html.escape(str(user_id))})</code>",
+        f"• <b>Số điện thoại:</b> {html.escape(str(display_phone))} | <b>Quốc tịch:</b> {html.escape(str(display_nation))}",
+        f"• <b>Thời gian:</b> {now_str}",
+        "",
+        "<b>Nội dung tin nhắn:</b>",
+        f"<i>\"{html.escape(clean_text)}\"</i>",
+        "",
+        f"• <b>Trạng thái:</b> {html.escape(status_badge)}"
+    ]
+
+    # Nếu có bản nháp Co-Pilot, đính kèm vào thông báo
+    if bot_reply and mode_str == "copilot":
+        reply_preview = bot_reply.strip()
+        if len(reply_preview) > 300:
+            reply_preview = reply_preview[:297] + "..."
+        lines.append("")
+        lines.append("<b>Dự thảo phản hồi (AI):</b>")
+        lines.append(f"<i>\"{html.escape(reply_preview)}\"</i>")
+
+    msg_content = "\n".join(lines)
+
+    # Nút bấm mở Live Chat Studio
+    domain = os.getenv("RENDER_EXTERNAL_URL", "https://chatbot-easytrip.onrender.com").rstrip("/")
+    studio_url = f"{domain}/copilot/index.html"
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("Mở Live Chat Studio", url=studio_url)]
+    ])
+
+    bot = tg_app.bot
+    # 1. Gửi trực tiếp cho Admin Telegram cá nhân
+    if admin_tele_id:
+        try:
+            await bot.send_message(
+                chat_id=int(admin_tele_id),
+                text=msg_content,
+                parse_mode="HTML",
+                reply_markup=keyboard
+            )
+        except Exception as e_dm:
+            print(f"⚠️ Gửi thông báo tin nhắn mới tới Admin Telegram ({admin_tele_id}) lỗi:", e_dm)
+
+    # 2. Gửi vào Nhóm Quản Trị (nếu có cấu hình và khác ID cá nhân)
+    if admin_group_id and str(admin_group_id) != str(admin_tele_id):
+        try:
+            t_id = int(topic_id) if topic_id else None
+            await bot.send_message(
+                chat_id=int(admin_group_id),
+                text=msg_content,
+                parse_mode="HTML",
+                message_thread_id=t_id,
+                reply_markup=keyboard
+            )
+        except Exception:
+            pass
 
 async def send_new_customer_welcome_menu(chat_id: str | int, target_msg, conn_id=None):
     welcome_text = (
@@ -563,11 +709,21 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
     # Kiểm tra chế độ Bot (Ưu tiên chế độ riêng của phiên, nếu chưa đặt thì lấy chế độ toàn hệ thống)
     global_mode = memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "copilot"))
     session_mode = memory_store.get(f"{session_id}_mode")
-    mode = session_mode if session_mode is not None else global_mode
+    platform_label = "Telegram Business" if (getattr(update, "business_message", None) or getattr(update, "edited_business_message", None)) else "Telegram"
+    display_user_name = update.effective_user.full_name if update.effective_user else None
+
     if mode in ["manual", "off"]:
         # Chế độ thủ công / tắt bot, chỉ ghi nhận tin nhắn, không trả lời tự động
         print(f"⏸️ [Telegram Bot Paused/Manual] Bỏ qua trả lời tự động cho {session_id} (Mode: {mode})")
         memory_store[session_id].append({"role": "user", "content": text})
+        await notify_admin_incoming_message(
+            platform=platform_label,
+            user_id=user_id,
+            user_text=text,
+            session_id=session_id,
+            user_name=display_user_name,
+            mode=mode
+        )
         return
         
     if mode == "copilot":
@@ -580,14 +736,16 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
             memory_store[f"{session_id}_draft_data"] = ai_response.extracted_data
             memory_store[f"{session_id}_draft_phase"] = ai_response.current_phase
             
-            # Gửi tin nhắn thông báo cho admin duyệt
-            admin_id = os.getenv("ADMIN_TELEGRAM_ID")
-            if admin_id:
-                cust_name = memory_store.get(f"{session_id}_name", "Khách hàng")
-                await context.bot.send_message(
-                    chat_id=int(admin_id),
-                    text=f"🤖 **[Dự thảo Co-Pilot] (Telegram)**\n👤 Khách hàng: {cust_name}\n💬 Hỏi: \"{text}\"\n📝 Dự thảo: \"{reply}\"\n👉 Vui lòng duyệt trên Live Chat Studio!"
-                )
+            # Gửi tin nhắn thông báo tập trung cho Admin
+            await notify_admin_incoming_message(
+                platform=platform_label,
+                user_id=user_id,
+                user_text=text,
+                session_id=session_id,
+                user_name=display_user_name,
+                bot_reply=reply,
+                mode=mode
+            )
         except Exception as e:
             print("Lỗi tạo bản nháp Co-Pilot Telegram:", e)
         return
@@ -626,23 +784,19 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
         except Exception as e_direct:
             print(f"❌ Fallback send_message thất bại: {e_direct}")
 
-    # Tự động gửi ảnh sơ đồ ghế nếu khách hỏi hoặc AI đề cập sơ đồ ghế
-    seat_keywords = ["sơ đồ", "seat map", "seatmap", "схема", "chọn ghế", "xem ghế", "chỗ ngồi", "ghế trống"]
-    if any(kw in text.lower() for kw in seat_keywords) or any(kw in reply.lower() for kw in ["sơ đồ", "seat map", "схема"]):
-        try:
-            target_chat_id = update.effective_chat.id if update.effective_chat else int(user_id)
-            out_seat_img = f"seat_map_{user_id}.jpg"
-            booked_seats = ["B1", "A3", "B5"]
-            generate_seat_map(booked_seats, output_path=out_seat_img)
-            if os.path.exists(out_seat_img):
-                with open(out_seat_img, "rb") as photo_file:
-                    caption_map = "🚌 Sơ đồ ghế xe EasyTrip (Ghế có dấu X màu vàng là đã có khách đặt)"
-                    if conn_id:
-                        await context.bot.send_photo(chat_id=target_chat_id, photo=photo_file, caption=caption_map, business_connection_id=conn_id)  # type: ignore
-                    else:
-                        await context.bot.send_photo(chat_id=target_chat_id, photo=photo_file, caption=caption_map)
-        except Exception as e_map:
-            print(f"⚠️ Lỗi gửi ảnh sơ đồ ghế: {e_map}")
+    # Gửi thông báo cho Admin về tin nhắn mới và phản hồi tự động
+    await notify_admin_incoming_message(
+        platform=platform_label,
+        user_id=user_id,
+        user_text=text,
+        session_id=session_id,
+        user_name=display_user_name,
+        bot_reply=reply,
+        mode=mode
+    )
+
+    # ℹ️ Sơ đồ ghế được xử lý đúng ở bước get_or_create_seat_map bên dưới
+    # (dùng sơ đồ thực từ nhà xe nếu có, hoặc tự tạo trống nếu chưa có)
 
     data = ai_response.extracted_data
     memory_store[f"{session_id}_data"] = data
@@ -1202,17 +1356,30 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                 print(f"🚀 Tự động gửi sơ đồ chính thức mới cho khách {getattr(customer_data, 'ho_ten', 'Khách')} ({platform})")
                                 
                                 try:
+                                    domain = os.getenv("RENDER_EXTERNAL_URL", "https://chatbot-easytrip.onrender.com").rstrip("/")
+                                    image_url = f"{domain}/static/map_{ngay.replace('/', '_')}_{service}.jpg"
                                     if platform == "Telegram":
                                         conn_id = memory_store.get(f"{session_id}_business_connection_id")
-                                        await tg_app.bot.send_photo(chat_id=uid, photo=file_id, caption=caption, business_connection_id=conn_id)  # type: ignore
+                                        await tg_app.bot.send_photo(
+                                            chat_id=uid,
+                                            photo=file_id,
+                                            caption=caption,
+                                            business_connection_id=conn_id  # type: ignore
+                                        )
                                     elif platform == "Zalo":
                                         from main import send_zalo_image, send_zalo_message
-                                        domain = os.getenv("RENDER_EXTERNAL_URL", "https://chatbot-easytrip.onrender.com").rstrip("/")
-                                        image_url = f"{domain}/static/map_{ngay.replace('/', '_')}_{service}.jpg"
                                         await send_zalo_message(uid, caption)
                                         await send_zalo_image(uid, image_url)
+                                    elif platform == "Facebook":
+                                        from main import send_facebook_message, send_facebook_image
+                                        await send_facebook_message(uid, caption)
+                                        await send_facebook_image(uid, image_url)
+                                    elif platform == "Website":
+                                        # Ghi vào memory để /chat endpoint tự trả về URL ảnh
+                                        memory_store[f"{session_id}_pending_seat_map"] = image_url
+                                        print(f"🌐 Website: đã lưu seat map URL để client tự fetch: {image_url}")
                                 except Exception as e_forward:
-                                    print(f"Lỗi chuyển tiếp sơ đồ cho {uid}: {e_forward}")
+                                    print(f"Lỗi chuyển tiếp sơ đồ cho {uid} ({platform}): {e_forward}")
             return
 
         # ----- LUỒNG KHÁCH HÀNG: GỬI ẢNH (HỘ CHIẾU/HOÁ ĐƠN THANH TOÁN/VÉ CŨ) -----
@@ -1258,6 +1425,17 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await send_to_admin_group(context, admin_notif_msg)
         except Exception:
             pass
+
+        # Thông báo đa kênh tập trung cho Admin
+        platform_label = "Telegram Business" if update.business_message else "Telegram"
+        user_id_photo = str(update.effective_user.id) if update.effective_user else chat_id
+        await notify_admin_incoming_message(
+            platform=platform_label,
+            user_id=user_id_photo,
+            user_text=f"[Khách gửi ảnh: {img_type}]",
+            session_id=session_id,
+            user_name=customer_name
+        )
 
         # 1. Trích xuất OCR từ ảnh để tự động kiểm tra vé cũ / thông tin booking
         ocr_text = await extract_text_from_image(file_path)
@@ -1502,11 +1680,34 @@ async def sync_contracts_command(update: Update, context: ContextTypes.DEFAULT_T
     except Exception as e:
         await status_msg.edit_text(f"❌ Lỗi khi đồng bộ hợp đồng: {e}")
 
+
+async def daily_harvest_report_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Lệnh Admin: Lấy báo cáo thu hoạch đơn hàng trong ngày từ Lark Base.
+    Sử dụng: /bao_cao hoặc /bao_cao 07/09 để xem ngày cụ thể.
+    """
+    if not update.effective_message:
+        return
+    args = context.args if context.args else []
+    target_date = args[0] if args else None
+    date_label = target_date or datetime.now().strftime("%d/%m/%Y")
+    status_msg = await update.effective_message.reply_text(f"⏳ Đang tổng hợp báo cáo ngày {date_label}...")
+    try:
+        report = await get_daily_harvest_report(target_date)
+        text = report["report_text"]
+        if len(text) > 4000:
+            text = text[:4000] + "\n...\n(Báo cáo bị cắt ngắn do quá dài)"
+        await status_msg.edit_text(text, parse_mode="Markdown")
+    except Exception as e:
+        await status_msg.edit_text(f"❌ Lỗi khi lấy báo cáo: {e}")
+
+
 tg_app.add_handler(CommandHandler("start", start_command))
 tg_app.add_handler(CommandHandler("getid", get_id_command))
 tg_app.add_handler(CommandHandler("check_visa_reminders", check_visa_reminders_command))
 tg_app.add_handler(CommandHandler("remind_visa", check_visa_reminders_command))
 tg_app.add_handler(CommandHandler("sync_contracts", sync_contracts_command))
+tg_app.add_handler(CommandHandler("bao_cao", daily_harvest_report_command))
+tg_app.add_handler(CommandHandler("report", daily_harvest_report_command))
 tg_app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_text))
 tg_app.add_handler(MessageHandler(filters.UpdateType.BUSINESS_MESSAGE & filters.TEXT, handle_text))
 tg_app.add_handler(MessageHandler(filters.UpdateType.EDITED_BUSINESS_MESSAGE & filters.TEXT, handle_text))

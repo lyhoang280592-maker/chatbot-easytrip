@@ -266,3 +266,74 @@ async def get_all_orders(status_filter: str | None = None) -> list:
     except Exception as e:
         print("Lỗi get_all_orders:", e)
         return []
+
+
+async def get_daily_harvest_report(target_date: str | None = None) -> dict:
+    """
+    Tổng hợp báo cáo thu hoạch trong ngày từ bảng Orders của Lark Base.
+    target_date: DD/MM/YYYY hoặc DD/MM. Mặc định là ngày hôm nay.
+    Trả về dict có:
+      - total_orders: Tổng số đơn
+      - total_revenue: Tổng doanh thu
+      - paid_orders: Số đơn đã thu tiền
+      - pending_orders: Số đơn chưa xác nhận
+      - breakdown: Danh sách chi tiết từng đơn
+      - report_text: Chuỗi báo cáo đầy đủ
+    """
+    today = target_date or datetime.now().strftime("%d/%m/%Y")
+    # Chuẩn hóa ngày so sánh (chỉ lấy DD/MM)
+    today_short = "/".join(today.split("/")[:2])
+
+    orders = await get_all_orders()
+
+    day_orders = []
+    for o in orders:
+        created_at = o.get("Created At", "")
+        # Match ngày trong trường Created At (dạng: 2025-09-07 14:00)
+        if today_short in created_at or today in created_at:
+            day_orders.append(o)
+
+    total = len(day_orders)
+    paid = [o for o in day_orders if o.get("Status") == "PAID"]
+    pending = [o for o in day_orders if o.get("Status") == "PENDING"]
+    cancelled = [o for o in day_orders if o.get("Status") == "CANCELLED"]
+    total_revenue = sum(o.get("Price (VND)", 0) or 0 for o in paid)
+
+    lines = [
+        f"📊 **BÁO CÁO THU HOẠCH NGÀY {today_short}**",
+        f"─" * 30,
+        f"📝 Tổng đơn trong ngày: **{total}**",
+        f"✅ Đã thu tiền: **{len(paid)}** đơn",
+        f"⏳ Chưa xác nhận: **{len(pending)}** đơn",
+        f"❌ Đã huỷ: **{len(cancelled)}** đơn",
+        f"💰 Doanh thu đã thu: **{total_revenue:,} VND**",
+        f"─" * 30,
+    ]
+
+    if day_orders:
+        lines.append("📄 **CHI TIẾT TỪẾĐỢI:**")
+        for i, o in enumerate(day_orders, 1):
+            status_icon = "✅" if o.get("Status") == "PAID" else ("❌" if o.get("Status") == "CANCELLED" else "⏳")
+            name = o.get("Full Name", "?") or "?"
+            route = o.get("Route", "?") or "?"
+            seat = o.get("Seat", "?") or "?"
+            pickup = o.get("Pickup Point", "?") or "?"
+            channel = o.get("Source Channel", "?") or "?"
+            price = o.get("Price (VND)", 0) or 0
+            lines.append(
+                f"{i}. {status_icon} [{o.get('Order ID', '')}] {name}\n"
+                f"   🚌 {route} | 💺 Ghế: {seat} | 📍 {pickup}\n"
+                f"   📲 {channel} | 💰 {price:,} VND"
+            )
+    else:
+        lines.append("👋 Chưa có đơn nào trong ngày hôm nay.")
+
+    return {
+        "total_orders": total,
+        "paid_orders": len(paid),
+        "pending_orders": len(pending),
+        "cancelled_orders": len(cancelled),
+        "total_revenue": total_revenue,
+        "breakdown": day_orders,
+        "report_text": "\n".join(lines),
+    }

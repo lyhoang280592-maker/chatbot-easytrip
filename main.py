@@ -1,6 +1,6 @@
 import os
 import re
-from datetime import datetime
+from datetime import datetime, timedelta
 import httpx
 from fastapi import FastAPI, Request, BackgroundTasks, Response, UploadFile, File, Depends, Header, HTTPException
 import shutil
@@ -26,6 +26,7 @@ from telegram_router import (
     scheme_history,
     get_customer_service_type,
     get_or_create_seat_map,
+    notify_admin_incoming_message,
 )
 from memory_store import memory_store, log_message, get_recent_logs, load_session_history
 import customer_memory
@@ -288,24 +289,35 @@ async def send_zalo_image(user_id: str, image_url: str):
         except Exception as e:
             print(f"Zalo send image failed: {e}")
 
-async def send_facebook_message(user_id: str, text: str):
-    token = os.getenv("FB_PAGE_ACCESS_TOKEN")
+def get_fb_page_token(page_id: str = None) -> str | None:
+    """Lấy Page Access Token theo page_id.
+    Ưu tiên: FB_PAGE_TOKEN_{PAGE_ID} → FB_PAGE_ACCESS_TOKEN (fallback)
+    """
+    if page_id:
+        token = os.getenv(f"FB_PAGE_TOKEN_{page_id}")
+        if token:
+            return token
+    return os.getenv("FB_PAGE_ACCESS_TOKEN")
+
+
+async def send_facebook_message(user_id: str, text: str, page_id: str = None):
+    token = get_fb_page_token(page_id)
     if not token:
-        print("❌ send_facebook_message: Không cấu hình FB_PAGE_ACCESS_TOKEN")
+        print(f"❌ send_facebook_message: Không cấu hình token cho page {page_id or 'default'}")
         return
     url = f"https://graph.facebook.com/v19.0/me/messages?access_token={token}"
     payload = {"recipient": {"id": user_id}, "message": {"text": text}}
     async with httpx.AsyncClient() as client:
         try:
             resp = await client.post(url, json=payload)
-            print(f"Facebook send message response: {resp.status_code} - {resp.text}")
+            print(f"Facebook send message response (page={page_id}): {resp.status_code} - {resp.text}")
         except Exception as e:
             print(f"Facebook send message failed: {e}")
 
-async def send_facebook_image(user_id: str, image_url: str):
-    token = os.getenv("FB_PAGE_ACCESS_TOKEN")
+async def send_facebook_image(user_id: str, image_url: str, page_id: str = None):
+    token = get_fb_page_token(page_id)
     if not token:
-        print("❌ send_facebook_image: Không cấu hình FB_PAGE_ACCESS_TOKEN")
+        print(f"❌ send_facebook_image: Không cấu hình token cho page {page_id or 'default'}")
         return
     url = f"https://graph.facebook.com/v19.0/me/messages?access_token={token}"
     payload = {
@@ -320,18 +332,74 @@ async def send_facebook_image(user_id: str, image_url: str):
     async with httpx.AsyncClient() as client:
         try:
             resp = await client.post(url, json=payload)
-            print(f"Facebook send image response: {resp.status_code} - {resp.text}")
+            print(f"Facebook send image response (page={page_id}): {resp.status_code} - {resp.text}")
         except Exception as e:
             print(f"Facebook send image failed: {e}")
 
 
 # === LUỒNG XỬ LÝ CHUNG CHO MỌI KÊNH ===
+# ─── SESSION TTL ─────────────────────────────────────────────────
+# Nếu khách im lặng quá thời gian này thì reset context hội thoại
+# (giữ nguyên hồ sơ khách: tên, sơ điện thoại, tier trong SQLite)
+SESSION_TTL_HOURS = 8
+
+
+def reset_session_if_expired(session_id: str) -> bool:
+    """
+    Kiểm tra xẻ phiên đã hết hiệu lực chưa (im lặng > SESSION_TTL_HOURS).
+    Nếu hết TTL:
+      - Xóa messages + draft + data + phase + completed khỏi RAM
+      - Xóa messages trong SQLite (giữ nguyên bảng customers)
+    Trả về True nếu đã reset.
+    """
+    last_update_str = memory_store.get(f"{session_id}_last_update")
+    if not last_update_str:
+        return False  # Chưa có tương tác nào, không cần reset
+
+    try:
+        last_update = datetime.strptime(last_update_str, "%Y-%m-%d %H:%M:%S")
+    except ValueError:
+        return False
+
+    elapsed = datetime.now() - last_update
+    if elapsed < timedelta(hours=SESSION_TTL_HOURS):
+        return False  # Chưa hết TTL
+
+    # ─── Đã hết TTL → xóa context cũ ───
+    # 1. Xóa messages trong RAM
+    if session_id in memory_store:
+        del memory_store[session_id]
+
+    # 2. Xóa các keys phụ của session (data, phase, draft, completed, order...)
+    keys_to_clear = [k for k in list(memory_store.keys())
+                     if k.startswith(session_id + "_") and k not in (
+                         f"{session_id}_mode",      # giữ chế độ bot
+                         f"{session_id}_name",      # giữ tên hiển thị
+                     )]
+    for k in keys_to_clear:
+        del memory_store[k]
+
+    # 3. Xóa messages phên này trong SQLite (để không nạp lại context cũ)
+    try:
+        customer_memory.clear_session_messages(session_id)
+    except Exception as e:
+        print(f"⚠️ Không thể xóa session messages SQLite ({session_id}): {e}")
+
+    hours = round(elapsed.total_seconds() / 3600, 1)
+    print(f"🔄 [SESSION RESET] {session_id} — Đã im lặng {hours}h (> {SESSION_TTL_HOURS}h). Bắt đầu phiên mới.")
+    return True
+
+
 async def process_omnichannel_logic(user_id, platform, user_text, session_id, agent="Direct"):
     # 1. Truy xuất hoặc tạo mới hồ sơ khách hàng từ SQLite
     cust_profile = customer_memory.get_or_create_customer(platform.lower(), str(user_id))
     cust_id = cust_profile.get("customer_id") if cust_profile else None
 
     log_message(user_id, platform, "User", user_text, customer_id=cust_id)
+
+    # 2. Kiểm tra và reset phiên nếu khách im lặng quá SESSION_TTL_HOURS
+    was_reset = reset_session_if_expired(session_id)
+
     load_session_history(session_id)
         
     # Lấy trạng thái trước đó để so sánh thay đổi
@@ -353,6 +421,15 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
     if mode in ["manual", "off"]:
         # Chế độ thủ công hoàn toàn / tắt bot, không tự động trả lời
         print(f"⏸️ [Bot Paused/Manual] Bỏ qua tự động trả lời cho {session_id} (Mode: {mode})")
+        await notify_admin_incoming_message(
+            platform=platform,
+            user_id=str(user_id),
+            user_text=user_text,
+            session_id=session_id,
+            user_name=memory_store.get(f"{session_id}_name"),
+            agent=agent,
+            mode=mode
+        )
         return None, None
         
     if mode == "copilot":
@@ -364,17 +441,28 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
             memory_store[f"{session_id}_draft_data"] = ai_response.extracted_data
             memory_store[f"{session_id}_draft_phase"] = ai_response.current_phase
             
-            # Gửi thông báo cho Admin Group (nếu có cấu hình)
-            admin_msg = (
-                f"🤖 **[Dự thảo Co-Pilot] ({platform})**\n"
-                f"👤 Khách hàng: {memory_store.get(f'{session_id}_name')}\n"
-                f"💬 Hỏi: \"{user_text}\"\n"
-                f"📝 Dự thảo: \"{reply}\"\n"
-                f"👉 Duyệt qua Live Chat Studio!"
+            # Gửi thông báo tức thì cho Admin kèm dự thảo AI
+            await notify_admin_incoming_message(
+                platform=platform,
+                user_id=str(user_id),
+                user_text=user_text,
+                session_id=session_id,
+                user_name=memory_store.get(f"{session_id}_name"),
+                agent=agent,
+                bot_reply=reply,
+                mode=mode
             )
-            await send_to_admin_group(None, admin_msg)
         except Exception as e:
             print(f"Lỗi tạo tin nhắn nháp Co-Pilot ({platform}):", e)
+            await notify_admin_incoming_message(
+                platform=platform,
+                user_id=str(user_id),
+                user_text=user_text,
+                session_id=session_id,
+                user_name=memory_store.get(f"{session_id}_name"),
+                agent=agent,
+                mode=mode
+            )
         return None, None
 
     try:
@@ -383,6 +471,18 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
         reply = ai_response.reply_message
         memory_store[session_id].append({"role": "assistant", "content": reply})
         log_message(user_id, platform, "Bot", reply, customer_id=cust_id)
+
+        # Gửi thông báo cho Admin về tin nhắn mới của khách và phản hồi tự động
+        await notify_admin_incoming_message(
+            platform=platform,
+            user_id=str(user_id),
+            user_text=user_text,
+            session_id=session_id,
+            user_name=memory_store.get(f"{session_id}_name"),
+            agent=agent,
+            bot_reply=reply,
+            mode=mode
+        )
 
         data = ai_response.extracted_data
         # Inject agent from URL param if not set by AI
@@ -576,17 +676,23 @@ async def web_chat(request: Request):
     agent = data.get("agent", "Direct")
     messages = data.get("messages", [])
     user_text = messages[-1].get("content", "") if messages else ""
+    session_id = f"web_{user_id}"
+
     reply, img = await process_omnichannel_logic(
         user_id, "Website", user_text, f"web_{user_id}", agent=agent
     )
+
+    # Kiểm tra seat map đến từ nhà xe (được ghi vào memory khi Bus Topic nhận ảnh)
+    pending_map = memory_store.pop(f"{session_id}_pending_seat_map", None)
+    if pending_map and not img:
+        img = pending_map
+
     if reply is None:
         reply = "Cảm ơn bạn đã nhắn tin. Nhân viên tư vấn đang kiểm tra thông tin và sẽ phản hồi trực tiếp cho bạn ngay ạ! 🧑‍💻"
-        session_id = f"web_{user_id}"
         if session_id in memory_store:
             memory_store[session_id].append({"role": "assistant", "content": reply})
             log_message(user_id, "Website", "Bot", reply)
     elif img:
-        session_id = f"web_{user_id}"
         if session_id in memory_store and memory_store[session_id]:
             if memory_store[session_id][-1]["role"] == "assistant":
                 memory_store[session_id][-1]["content"] += f"\n\n![Sơ đồ ghế]({img})"
@@ -610,9 +716,20 @@ async def get_web_chat_history(user_id: str):
 async def zalo_webhook(request: Request, background_tasks: BackgroundTasks):
     try:
         data = await request.json()
-        if data.get("event_name") == "user_send_text":
+        event_name = data.get("event_name", "")
+        if event_name.startswith("user_send_"):
             u_id = data.get("sender", {}).get("id")
-            text = data.get("message", {}).get("text")
+            msg_obj = data.get("message", {})
+            text = msg_obj.get("text", "")
+            if not text:
+                if event_name == "user_send_image":
+                    text = "[Khách gửi hình ảnh]"
+                elif event_name == "user_send_sticker":
+                    text = "[Khách gửi sticker]"
+                elif event_name == "user_send_file":
+                    text = "[Khách gửi tệp đính kèm]"
+                else:
+                    text = f"[{event_name}]"
             background_tasks.add_task(handle_zalo_flow, u_id, text)
     except Exception as e:
         print(f"❌ Zalo Webhook Error: {e}")
@@ -627,16 +744,37 @@ async def handle_zalo_flow(u_id, text):
             await send_zalo_image(u_id, img)
 
 
-async def handle_fb_flow(u_id, text):
+async def handle_fb_flow(u_id, text, page_id: str = None):
+    # Xác định Fanpage chi tiết
+    if str(page_id) == "1244422022092408":
+        fb_platform = "Facebook (Page Tích Xanh)"
+    elif str(page_id) == "944798045391211":
+        fb_platform = "Facebook (Page Phụ)"
+    elif page_id:
+        fb_platform = f"Facebook (Page {page_id})"
+    else:
+        fb_platform = "Facebook"
+
     enable_meta = os.getenv("ENABLE_META_BOT", "false").lower() in ["true", "1", "yes"]
     if not enable_meta:
-        print(f"⏸️ [Meta/Facebook] Chatbot AI đang tạm dừng hoạt động. Không gửi phản hồi tự động tới user {u_id}.")
+        print(f"⏸️ [{fb_platform}] Chatbot AI đang tạm dừng hoạt động. Không gửi phản hồi tự động tới user {u_id}.")
+        # Vẫn thông báo tức thì lên Telegram cho Admin để nhân viên kịp thời hỗ trợ
+        await notify_admin_incoming_message(
+            platform=fb_platform,
+            user_id=str(u_id),
+            user_text=text,
+            session_id=f"fb_{u_id}",
+            mode="manual",
+            extra_info={"page_id": page_id}
+        )
         return
-    reply, img = await process_omnichannel_logic(u_id, "Facebook", text, f"fb_{u_id}")
+
+    print(f"📨 [{fb_platform}] Tin nhắn từ {u_id}: {text[:60]}")
+    reply, img = await process_omnichannel_logic(u_id, fb_platform, text, f"fb_{u_id}")
     if reply:
-        await send_facebook_message(u_id, reply)
+        await send_facebook_message(u_id, reply, page_id=page_id)
         if img:
-            await send_facebook_image(u_id, img)
+            await send_facebook_image(u_id, img, page_id=page_id)
 
 
 # === ADMIN PAYMENT CONFIRMATION (Telegram callback) ===
@@ -668,18 +806,22 @@ async def facebook_webhook(request: Request, background_tasks: BackgroundTasks):
     try:
         data = await request.json()
         if data.get("object") == "page":
-            enable_meta = os.getenv("ENABLE_META_BOT", "false").lower() in ["true", "1", "yes"]
             for entry in data.get("entry", []):
+                page_id = entry.get("id")  # ID của Page nhận tin nhắn
                 for event in entry.get("messaging", []):
-                    if "message" in event and "text" in event["message"]:
+                    if "message" in event:
                         if event["message"].get("is_echo"):
                             continue
                         u_id = event["sender"]["id"]
-                        text = event["message"]["text"]
-                        if not enable_meta:
-                            print(f"⏸️ [Meta/Facebook Webhook] Bot đang tạm dừng. Tin nhắn từ {u_id}: '{text[:50]}' sẽ để nhân viên trực tiếp phản hồi.")
-                            continue
-                        background_tasks.add_task(handle_fb_flow, u_id, text)
+                        text = event["message"].get("text")
+                        if not text:
+                            attachments = event["message"].get("attachments", [])
+                            if attachments:
+                                att_type = attachments[0].get("type", "tệp")
+                                text = f"[Khách gửi {att_type}]"
+                            else:
+                                text = "[Khách gửi tệp/hình ảnh]"
+                        background_tasks.add_task(handle_fb_flow, u_id, text, page_id)
     except Exception as e:
         print(f"❌ Facebook Webhook Error: {e}")
     return Response(status_code=200)

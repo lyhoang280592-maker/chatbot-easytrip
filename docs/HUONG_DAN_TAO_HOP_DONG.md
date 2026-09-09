@@ -16,6 +16,7 @@ Chúng tôi đã xây dựng công cụ tổng chỉ huy **`contract_generator_m
 ### Các Tùy Chọn Dòng Lệnh Nhanh:
 - **Tạo hợp đồng lẻ nhanh**: `./venv/bin/python scripts/contracts/contract_generator_master.py --single`
 - **Tạo hợp đồng hàng loạt từ Excel**: `./venv/bin/python scripts/contracts/contract_generator_master.py --batch`
+- **Cập nhật toàn bộ hợp đồng từ CRM Lark Base đến hiện tại**: `./venv/bin/python scripts/contracts/contract_generator_master.py --crm-batch`
 - **Xử lý ảnh hộ chiếu đen trắng**: `./venv/bin/python scripts/contracts/contract_generator_master.py --bw-passports`
 
 ---
@@ -39,17 +40,33 @@ Dành cho trường hợp khách chốt tour qua Chatbot (Zalo, Telegram, Facebo
 
 ---
 
-### 2.2. Tạo Hợp Đồng Hàng Loạt Từ Excel CRM (Batch Generation)
-Dành cho kế toán / điều hành tour khi cần xuất toàn bộ hợp đồng theo ngày khởi hành hoặc theo đợt cấp e-visa:
+### 2.2. Tạo Toàn Bộ Hợp Đồng Trực Tiếp Từ CRM Lark Base (Khuyên dùng)
+Dành cho kế toán & ban giám đốc khi cần đồng bộ toàn bộ hợp đồng mới nhất đến thời điểm hiện tại:
 
-- **Dữ liệu nguồn**: 
-  - `data/contracts_and_crm/danh_sach_hop_dong_01_08_den_24_08.xlsx`
-  - `data/contracts_and_crm/danh_sach_khach_hang_co_evisa_01_08_den_19_08.xlsx`
+- **Dữ liệu nguồn**: Hệ thống CRM Lark Base (`Data KH 2026 - tbluosVi3sQS9gIS`).
 - **Thực thi**:
   ```bash
-  ./venv/bin/python scripts/contracts/batch_process_contracts.py
+  ./venv/bin/python scripts/contracts/contract_generator_master.py --crm-batch
+  # hoặc chạy trực tiếp:
+  ./venv/bin/python scripts/contracts/batch_generate_by_accounting_date.py
   ```
-- **Kết quả**: Tự động duyệt qua từng dòng dữ liệu khách hàng trong Excel, tạo từng file hợp đồng riêng biệt và lưu vào thư mục `output_contracts/`.
+- **Kết quả**:
+  - Tự động quét và phân loại toàn bộ hợp đồng (Khách lẻ / Đại lý, Single / Multi / Visa Cam).
+  - Tự động tải ảnh hộ chiếu và trích xuất chữ ký điện tử.
+  - Xuất 100% file DOCX và PDF vào thư mục `output_contracts_01_08_den_06_09/` (đồng bộ sang `output_contracts/`).
+  - Xuất file Excel đối soát 17 cột: `data/contracts_and_crm/danh_sach_hop_dong_01_08_den_06_09.xlsx`.
+  - Tự động phát hiện thay đổi và ghi nhận lịch sử vào `LICH_SU_THAY_DOI_HOP_DONG.md`.
+
+---
+
+### 2.3. Tạo Hợp Đồng Hàng Loạt Từ Excel CRM (Batch Generation)
+Dành cho trường hợp sử dụng file Excel offline:
+
+- **Dữ liệu nguồn**: Các file Excel trong `data/contracts_and_crm/`.
+- **Thực thi**:
+  ```bash
+  ./venv/bin/python scripts/contracts/contract_generator_master.py --batch
+  ```
 
 ---
 
@@ -59,7 +76,7 @@ Dành cho kế toán / điều hành tour khi cần xuất toàn bộ hợp đ�
    - Script: `scripts/contracts/convert_passports_to_bw.py`
    - Công dụng: Tự động cân bằng sáng, tăng độ tương phản và chuyển ảnh hộ chiếu sang màu xám/trắng đen sắc nét để in ấn rõ ràng, không bị lem mực.
 2. **Con dấu & Chữ ký**:
-   - Chữ ký và con dấu của EasyTrip được tự động tách nền trong suốt (`transparent PNG`) và tự động chèn vào trang cuối của hợp đồng ở mục **Đại Diện Bên A (Công Ty EasyTrip)**.
+   - Chữ ký và con dấu của EasyTrip được tự động tách nền trong suốt (`transparent PNG`) và tự động chèn vào trang cuối của hợp đồng ở mục **Đại Diện Bên B (Công Ty EasyTrip)**. Chữ ký khách hàng chèn ở mục **Bên A**.
 
 ---
 
@@ -67,7 +84,8 @@ Dành cho kế toán / điều hành tour khi cần xuất toàn bộ hợp đ�
 
 ```text
 scripts/contracts/
-├── contract_generator_master.py         # Menu tổng quản lý tạo hợp đồng
+├── contract_generator_master.py         # Menu tổng quản lý tạo hợp đồng (Hỗ trợ 1-click CRM)
+├── batch_generate_by_accounting_date.py # Engine tạo hàng loạt từ CRM Lark Base đến hiện tại
 ├── generate_docx_contracts.py           # Engine sinh file Word DOCX song ngữ
 ├── generate_contracts.py                # Helper đọc số thành chữ (Việt - Anh) & xử lý dấu
 ├── batch_process_contracts.py           # Tạo hợp đồng hàng loạt từ Excel

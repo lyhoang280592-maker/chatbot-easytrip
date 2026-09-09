@@ -682,6 +682,26 @@ def get_recent_logs_from_db(limit: int = 200) -> List[Dict[str, Any]]:
     return [dict(r) for r in cursor.fetchall()]
 
 
+def clear_session_messages(session_id: str) -> int:
+    """
+    Xóa toàn bộ messages của session_id này trong SQLite.
+    Dùng khi phiên chat hết TTL (khách im lặng > 8 giờ).
+    Giữ nguyên bảng customers — KHÔNG xóa hồ sơ khách.
+    Trả về số dòng đã xóa.
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "DELETE FROM chat_messages WHERE session_id = ?",
+        (session_id,)
+    )
+    conn.commit()
+    deleted = cursor.rowcount
+    if deleted > 0:
+        print(f"🧹 [clear_session_messages] Đã xóa {deleted} messages của {session_id} khỏi SQLite.")
+    return deleted
+
+
 def format_customer_profile_for_prompt(profile: Optional[Dict[str, Any]]) -> str:
     """Tạo chỉ dẫn ngữ điệu & thông tin khách cũ cho System Prompt của AI Agent"""
     if not profile:
