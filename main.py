@@ -747,30 +747,24 @@ async def handle_zalo_flow(u_id, text):
 async def handle_fb_flow(u_id, text, page_id: str = None):
     # Xác định Fanpage chi tiết
     if str(page_id) == "1244422022092408":
-        fb_platform = "Facebook (Page Tích Xanh)"
+        fb_platform = "Facebook (Fanpage Tích Xanh)"
     elif str(page_id) == "944798045391211":
-        fb_platform = "Facebook (Page Phụ)"
+        fb_platform = "Facebook (Fanpage Phụ)"
     elif page_id:
         fb_platform = f"Facebook (Page {page_id})"
     else:
         fb_platform = "Facebook"
 
-    enable_meta = os.getenv("ENABLE_META_BOT", "false").lower() in ["true", "1", "yes"]
+    session_id = f"fb_{u_id}"
+    enable_meta = os.getenv("ENABLE_META_BOT", "true").lower() in ["true", "1", "yes"]
     if not enable_meta:
-        print(f"⏸️ [{fb_platform}] Chatbot AI đang tạm dừng hoạt động. Không gửi phản hồi tự động tới user {u_id}.")
-        # Vẫn thông báo tức thì lên Telegram cho Admin để nhân viên kịp thời hỗ trợ
-        await notify_admin_incoming_message(
-            platform=fb_platform,
-            user_id=str(u_id),
-            user_text=text,
-            session_id=f"fb_{u_id}",
-            mode="manual",
-            extra_info={"page_id": page_id}
-        )
-        return
+        # Nếu bot Meta bị tắt, đặt phiên sang chế độ thủ công để lưu tin nhắn vào Studio nhưng không tự động gửi trả lời
+        memory_store[f"{session_id}_mode"] = "manual"
+        print(f"⏸️ [{fb_platform}] Chatbot AI đang tạm dừng (Chế độ thủ công). Tin nhắn từ {u_id}: {text[:60]}")
+    else:
+        print(f"📨 [{fb_platform}] Tin nhắn từ {u_id}: {text[:60]}")
 
-    print(f"📨 [{fb_platform}] Tin nhắn từ {u_id}: {text[:60]}")
-    reply, img = await process_omnichannel_logic(u_id, fb_platform, text, f"fb_{u_id}")
+    reply, img = await process_omnichannel_logic(u_id, fb_platform, text, session_id)
     if reply:
         await send_facebook_message(u_id, reply, page_id=page_id)
         if img:
@@ -957,7 +951,7 @@ async def root_index_redirect():
 async def get_system_bot_mode():
     """Lấy trạng thái hoạt động của Bot toàn hệ thống"""
     global_mode = memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "copilot"))
-    enable_meta = os.getenv("ENABLE_META_BOT", "false").lower() in ["true", "1", "yes"]
+    enable_meta = os.getenv("ENABLE_META_BOT", "true").lower() in ["true", "1", "yes"]
     return {
         "success": True,
         "global_mode": global_mode,
