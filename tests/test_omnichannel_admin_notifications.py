@@ -60,7 +60,7 @@ async def run_tests():
         assert "Facebook (Fanpage Tích Xanh)" in sent_text
         assert "John Doe" in sent_text
         assert "Laos visarun" in sent_text
-        assert "Hệ thống bot đã phản hồi" in sent_text
+        assert "Tự động" in sent_text
         print("✅ Test 2.2 thành công!")
 
         # Test 2.3: Zalo (OA)

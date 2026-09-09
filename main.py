@@ -725,24 +725,52 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
                         ),
                     ]
                 ])
+                import random
+                ORDER_GREETINGS = [
+                    "🎉 <b>NỔ ĐƠN KÌA BẠN ƠI! TING TING!</b> 💸",
+                    "🚀 <b>BÙM! LẠI NỔ ĐƠN MỚI RỒI BẠN ÊI!</b> 🔥",
+                    "🔥 <b>LÚA VỀ LÚA VỀ! CÓ ĐƠN MỚI TOANH NÈ!</b> 💰"
+                ]
+                order_head = random.choice(ORDER_GREETINGS)
                 msg = (
-                    f"🔔 ĐƠN MỚI [{order_id}]\n"
-                    f"👤 {data.ho_ten or ''} / {data.nam_sinh or ''}\n"
-                    f"🌏 {data.quoc_tich or ''} | {platform}\n"
-                    f"🚌 {data.loai_visa or ''} — {ngay_di or ''}\n"
-                    f"💺 Ghế: {data.ghe_chon or ''} | Điểm đón: {data.diem_don or ''}\n"
-                    f"📞 {data.so_dien_thoai or 'Chưa có SĐT'}\n"
-                    f"💰 Giá: {price:,} VND\n"
-                    f"🏷️ Đại lý: {agent}"
+                    f"{order_head}\n\n"
+                    f"📦 <b>Mã đơn:</b> <code>[{order_id}]</code>\n"
+                    f"👤 <b>Khách iu:</b> {data.ho_ten or 'Khách hàng'} / {data.nam_sinh or ''}\n"
+                    f"🌏 <b>Quốc tịch:</b> {data.quoc_tich or 'Chưa rõ'} | <b>Kênh:</b> {platform}\n"
+                    f"🚌 <b>Chuyến đi:</b> {data.loai_visa or ''} — {ngay_di or ''}\n"
+                    f"💺 <b>Ghế & Đón:</b> Ghế {data.ghe_chon or ''} | Điểm đón: {data.diem_don or 'Oceanus'}\n"
+                    f"📞 <b>SĐT:</b> {data.so_dien_thoai or 'Chưa có SĐT'}\n"
+                    f"💰 <b>Tổng lúa:</b> <b>{price:,} VND</b>\n"
+                    f"🏷️ <b>Đại lý / Nguồn:</b> {agent or 'Trực tiếp'}\n\n"
+                    f"👉 <i>Mau check tài khoản xem lúa về chưa rồi bấm xác nhận bên dưới nhé bạn iu!</i>"
                 )
                 admin_id = os.getenv("ADMIN_TELEGRAM_ID")
+                admin_group = os.getenv("ADMIN_GROUP_CHAT_ID")
+                topic_id = os.getenv("ADMIN_GROUP_TOPIC_ID", "")
+                bot = tg_app.bot
                 if admin_id:
-                    bot = tg_app.bot
-                    await bot.send_message(
-                        chat_id=admin_id,
-                        text=msg,
-                        reply_markup=keyboard
-                    )
+                    try:
+                        await bot.send_message(
+                            chat_id=int(admin_id),
+                            text=msg,
+                            parse_mode="HTML",
+                            reply_markup=keyboard
+                        )
+                    except Exception as e_adm:
+                        print(f"⚠️ Gửi thông báo đơn mới tới Admin cá nhân lỗi:", e_adm)
+
+                if admin_group and str(admin_group) != str(admin_id):
+                    try:
+                        t_id = int(topic_id) if topic_id else None
+                        await bot.send_message(
+                            chat_id=int(admin_group),
+                            message_thread_id=t_id,
+                            text=msg,
+                            parse_mode="HTML",
+                            reply_markup=keyboard
+                        )
+                    except Exception as e_grp:
+                        print(f"⚠️ Gửi thông báo đơn mới vào nhóm Admin lỗi:", e_grp)
 
         return reply, image_to_send
     except Exception as e:

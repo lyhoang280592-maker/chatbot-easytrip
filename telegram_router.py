@@ -498,28 +498,40 @@ async def notify_admin_incoming_message(
     if len(clean_text) > 400:
         clean_text = clean_text[:397] + "..."
 
-    # Nhãn trạng thái xử lý (không dùng icon)
+    import random
+
+    FRIENDLY_GREETINGS = [
+        "🔥 <b>Hey bạn ơi, có khách nhắn nè!</b>",
+        "⚡ <b>Ê bạn êi, khách vào hỏi kìa! Vào việc thôi!</b>",
+        "🎉 <b>Ting ting! Có khách ghé thăm nè bạn ơi!</b>",
+        "🚀 <b>Khách mới nổ tin nhắn nè người anh em!</b>",
+        "👀 <b>Hú hú bạn ơi, có khách vừa nhắn nè!</b>"
+    ]
+
+    # Nhãn trạng thái xử lý thân thiện, hóm hỉnh
     mode_str = mode or (memory_store.get(f"{session_id}_mode") if session_id else None) or memory_store.get("GLOBAL_BOT_MODE", "copilot")
     if mode_str == "copilot":
-        status_badge = "Co-Pilot (Đã tạo dự thảo, chờ quản trị viên duyệt)"
+        status_badge = "Co-Pilot (Mình soạn nháp sẵn rồi nè, bạn duyệt cái là bay!)"
     elif mode_str in ["manual", "off"]:
-        status_badge = "Thủ công (Chờ nhân viên xử lý phản hồi)"
+        status_badge = "Thủ công (Mình đang ngồi hóng, bạn vào rep khách nha!)"
     else:
-        status_badge = "Tự động (Hệ thống bot đã phản hồi)"
+        status_badge = "Tự động (Mình vừa tiếp khách và trả lời giúp bạn rồi nha!)"
 
     now_str = datetime.now().strftime("%H:%M:%S - %d/%m/%Y")
+    greeting = random.choice(FRIENDLY_GREETINGS)
 
     lines = [
-        "<b>[THÔNG BÁO TIN NHẮN MỚI]</b>",
-        f"• <b>Kênh tiếp nhận:</b> {html.escape(chan_title)}",
-        f"• <b>Khách hàng:</b> {html.escape(str(display_name))} <code>(ID: {html.escape(str(user_id))})</code>",
-        f"• <b>Số điện thoại:</b> {html.escape(str(display_phone))} | <b>Quốc tịch:</b> {html.escape(str(display_nation))}",
-        f"• <b>Thời gian:</b> {now_str}",
+        greeting,
         "",
-        "<b>Nội dung tin nhắn:</b>",
+        f"👤 <b>Khách iu:</b> {html.escape(str(display_name))} <code>(ID: {html.escape(str(user_id))})</code>",
+        f"📍 <b>Kênh ghé thăm:</b> {html.escape(chan_title)}",
+        f"📞 <b>Liên hệ:</b> {html.escape(str(display_phone))} | <b>Quốc tịch:</b> {html.escape(str(display_nation))}",
+        f"⏰ <b>Thời gian:</b> {now_str}",
+        "",
+        "💬 <b>Khách bảo là:</b>",
         f"<i>\"{html.escape(clean_text)}\"</i>",
         "",
-        f"• <b>Trạng thái:</b> {html.escape(status_badge)}"
+        f"📌 <b>Trạng thái:</b> {html.escape(status_badge)}"
     ]
 
     # Nếu có bản nháp Co-Pilot, đính kèm vào thông báo
@@ -528,7 +540,7 @@ async def notify_admin_incoming_message(
         if len(reply_preview) > 300:
             reply_preview = reply_preview[:297] + "..."
         lines.append("")
-        lines.append("<b>Dự thảo phản hồi (AI):</b>")
+        lines.append("🤖 <b>Bản nháp mình gợi ý sẵn nè (duyệt là gửi luôn):</b>")
         lines.append(f"<i>\"{html.escape(reply_preview)}\"</i>")
 
     msg_content = "\n".join(lines)
@@ -537,7 +549,7 @@ async def notify_admin_incoming_message(
     domain = os.getenv("RENDER_EXTERNAL_URL", "https://chatbot-easytrip.onrender.com").rstrip("/")
     studio_url = f"{domain}/copilot/index.html"
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("Mở Live Chat Studio", url=studio_url)]
+        [InlineKeyboardButton("💬 Mở Live Chat Studio chiến luôn", url=studio_url)]
     ])
 
     bot = tg_app.bot
@@ -823,11 +835,11 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
     payment_keywords = ["paid", "thanh toan", "chuyen tien", "chuyển tiền", "đã ck", "da ck", "sent money", "оплатил", "оплата", "перевел", "bill", "chuyển khoản", "chuyen khoan"]
     if any(kw in text_lower for kw in payment_keywords):
         admin_pay_msg = (
-            f"💰 **KHÁCH BÁO ĐÃ CHUYỂN TIỀN**\n"
-            f"👤 Tên: {getattr(data, 'ho_ten', 'Khách hàng')} ({getattr(data, 'quoc_tich', '')})\n"
-            f"📞 SĐT: {getattr(data, 'so_dien_thoai', '')}\n"
-            f"💬 Tin nhắn: \"{text}\"\n"
-            f"👉 [Admin vui lòng đối soát tài khoản!](https://t.me/easytripvisa_co_ltd)"
+            f"💸 <b>KHÁCH BÁO ĐÃ CHUYỂN TIỀN KÌA BẠN ƠI!</b>\n\n"
+            f"👤 <b>Khách iu:</b> {getattr(data, 'ho_ten', 'Khách hàng')} ({getattr(data, 'quoc_tich', '')})\n"
+            f"📞 <b>SĐT:</b> {getattr(data, 'so_dien_thoai', 'Chưa rõ')}\n"
+            f"💬 <b>Khách vừa bảo:</b> <i>\"{text}\"</i>\n\n"
+            f"👉 <i>Mau check tài khoản xem ting ting chưa nha bạn ơi!</i>"
         )
         await send_to_admin_group(context, admin_pay_msg)
 
@@ -938,7 +950,23 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
             except Exception as e_trip:
                 print(f"⚠️ Lỗi lưu trip_history vào SQLite: {e_trip}")
 
-        await send_to_admin_group(context, f"Có khách mới đã hoàn thành thông tin: {data.ho_ten}")
+        import random
+        ORDER_GREETINGS = [
+            "🎉 <b>NỔ ĐƠN KÌA BẠN ƠI! TING TING!</b> 💸",
+            "🚀 <b>BÙM! LẠI NỔ ĐƠN MỚI RỒI BẠN ÊI!</b> 🔥",
+            "🔥 <b>LÚA VỀ LÚA VỀ! CÓ ĐƠN MỚI TOANH NÈ!</b> 💰"
+        ]
+        order_head = random.choice(ORDER_GREETINGS)
+        order_notif = (
+            f"{order_head}\n\n"
+            f"👤 <b>Khách iu:</b> {data.ho_ten or 'Khách hàng'}\n"
+            f"🚌 <b>Tuyến:</b> {service_type} ({data.loai_visa or ''})\n"
+            f"📅 <b>Ngày đi:</b> {ngay_di or ''}\n"
+            f"💺 <b>Ghế & Đón:</b> Ghế {data.ghe_chon or ''} | Điểm đón: {data.diem_don or 'Oceanus'}\n"
+            f"💰 <b>Lúa thu:</b> {4000000 if service_type == 'Cambodia' else 2000000:,} VND\n\n"
+            f"👉 <i>Đã chốt xong xuôi, bạn vào việc tiếp nhé người anh em!</i>"
+        )
+        await send_to_admin_group(context, order_notif)
         memory_store[f"{session_id}_completed"] = True
 
 # ============================================================
