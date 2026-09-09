@@ -1085,11 +1085,17 @@ async def verify_whatsapp_webhook(request: Request):
     mode = request.query_params.get("hub.mode")
     token = request.query_params.get("hub.verify_token")
     challenge = request.query_params.get("hub.challenge")
-    expected_token = os.getenv("WHATSAPP_VERIFY_TOKEN") or os.getenv("FB_VERIFY_TOKEN") or "EasytripWhatsAppWebhook2026"
-    if mode == "subscribe" and token == expected_token:
-        print(f"✅ WhatsApp Webhook verified successfully!")
+    expected_tokens = {
+        os.getenv("WHATSAPP_VERIFY_TOKEN"),
+        os.getenv("FB_VERIFY_TOKEN"),
+        "EasytripWhatsAppWebhook2026",
+        "EasytripMessengerWebhook2026"
+    }
+    expected_tokens = {t for t in expected_tokens if t}
+    if mode == "subscribe" and token in expected_tokens:
+        print(f"✅ WhatsApp Webhook verified successfully with token: {token}")
         return Response(content=challenge, status_code=200)
-    print(f"⚠️ WhatsApp Webhook verification failed. Token received: {token}, expected: {expected_token}")
+    print(f"⚠️ WhatsApp Webhook verification failed. Token received: {token}, expected one of: {expected_tokens}")
     return Response(status_code=403)
 
 
