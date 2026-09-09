@@ -121,6 +121,17 @@ def normalize_phone(phone: Optional[str]) -> Optional[str]:
     return cleaned if len(cleaned) >= 8 else None
 
 
+def _get_platform_column(platform: str) -> str:
+    p = (platform or "").lower()
+    if "facebook" in p or "fb" in p:
+        return "facebook_id"
+    if "zalo" in p:
+        return "zalo_id"
+    if "web" in p:
+        return "web_id"
+    return "telegram_id"
+
+
 def get_or_create_customer(
     platform: str,
     user_id: str,
@@ -130,8 +141,9 @@ def get_or_create_customer(
 ) -> Dict[str, Any]:
     """Tìm hoặc tạo mới hồ sơ khách hàng dựa trên ID nền tảng hoặc số điện thoại"""
     conn = get_db_connection()
-    platform_lower = platform.lower()
+    col_name = _get_platform_column(platform)
     norm_phone = normalize_phone(phone_number)
+    clean_name = full_name.strip() if full_name and not full_name.startswith("Khách ") else None
     
     # 1. Tìm theo số điện thoại (nếu có)
     if norm_phone:
@@ -140,28 +152,41 @@ def get_or_create_customer(
         row = cursor.fetchone()
         if row:
             cust_dict = dict(row)
-            # Cập nhật ID nền tảng nếu chưa có
-            col_name = f"{platform_lower}_id" if platform_lower in ["telegram", "zalo", "facebook", "web"] else None
-            if col_name and not cust_dict.get(col_name):
+            updates = []
+            params = []
+            if not cust_dict.get(col_name):
+                updates.append(f"{col_name} = ?")
+                params.append(str(user_id))
+                cust_dict[col_name] = str(user_id)
+            if clean_name and (not cust_dict.get("full_name") or cust_dict.get("full_name").startswith("Khách ")):
+                updates.append("full_name = ?")
+                params.append(clean_name)
+                cust_dict["full_name"] = clean_name
+            if updates:
+                updates.append("updated_at = CURRENT_TIMESTAMP")
+                params.append(cust_dict["customer_id"])
                 with conn:
-                    conn.execute(f"UPDATE customers SET {col_name} = ?, updated_at = CURRENT_TIMESTAMP WHERE customer_id = ?", (str(user_id), cust_dict["customer_id"]))
-                    cust_dict[col_name] = str(user_id)
+                    conn.execute(f"UPDATE customers SET {', '.join(updates)} WHERE customer_id = ?", params)
             return cust_dict
 
     # 2. Tìm theo ID nền tảng
-    col_name = f"{platform_lower}_id" if platform_lower in ["telegram", "zalo", "facebook", "web"] else "telegram_id"
     cursor = conn.cursor()
     cursor.execute(f"SELECT * FROM customers WHERE {col_name} = ?", (str(user_id),))
     row = cursor.fetchone()
     if row:
-        return dict(row)
+        cust_dict = dict(row)
+        if clean_name and (not cust_dict.get("full_name") or cust_dict.get("full_name").startswith("Khách ")):
+            with conn:
+                conn.execute("UPDATE customers SET full_name = ?, updated_at = CURRENT_TIMESTAMP WHERE customer_id = ?", (clean_name, cust_dict["customer_id"]))
+                cust_dict["full_name"] = clean_name
+        return cust_dict
 
     # 3. Tạo mới nếu chưa tồn tại
     with conn:
         cursor = conn.execute(f"""
             INSERT INTO customers ({col_name}, full_name, phone_number, nationality, customer_tier)
             VALUES (?, ?, ?, ?, 'NEW')
-        """, (str(user_id), full_name or "", norm_phone, nationality or ""))
+        """, (str(user_id), clean_name or full_name or "", norm_phone, nationality or ""))
         new_id = cursor.lastrowid
 
     cursor.execute("SELECT * FROM customers WHERE customer_id = ?", (new_id,))
@@ -171,8 +196,7 @@ def get_or_create_customer(
 def get_customer_profile(user_id: str, platform: str = "telegram") -> Optional[Dict[str, Any]]:
     """Lấy thông tin đầy đủ của khách hàng kèm lịch sử chuyến đi"""
     conn = get_db_connection()
-    platform_lower = platform.lower()
-    col_name = f"{platform_lower}_id" if platform_lower in ["telegram", "zalo", "facebook", "web"] else "telegram_id"
+    col_name = _get_platform_column(platform)
     
     cursor = conn.cursor()
     cursor.execute(f"SELECT * FROM customers WHERE {col_name} = ?", (str(user_id),))
@@ -190,6 +214,10 @@ def get_customer_profile(user_id: str, platform: str = "telegram") -> Optional[D
     trips = [dict(t) for t in cursor.fetchall()]
     cust["past_trips"] = trips
     return cust
+
+
+# Alias để tương thích với các module gọi get_customer_by_platform
+get_customer_by_platform = get_customer_profile
 
 
 def update_customer_profile(customer_id: int, **kwargs) -> bool:
@@ -342,7 +370,7 @@ def link_platform_by_phone(phone_number: str, platform: str, user_id: str) -> Op
         return None
         
     conn = get_db_connection()
-    platform_col = f"{platform.lower()}_id"
+    platform_col = _get_platform_column(platform)
     
     cursor = conn.cursor()
     # Tìm hồ sơ đã có số điện thoại này

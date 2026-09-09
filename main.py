@@ -1,5 +1,7 @@
 import os
 import re
+import json
+from typing import Optional, Dict, Any, List
 from datetime import datetime, timedelta
 import httpx
 from fastapi import FastAPI, Request, BackgroundTasks, Response, UploadFile, File, Depends, Header, HTTPException
@@ -337,6 +339,58 @@ async def send_facebook_image(user_id: str, image_url: str, page_id: str = None)
             print(f"Facebook send image failed: {e}")
 
 
+async def get_facebook_user_profile(user_id: str, page_id: str = None) -> Optional[str]:
+    """Lấy tên khách hàng từ Facebook Graph API qua PSID"""
+    token = get_fb_page_token(page_id)
+    if not token:
+        return None
+    url = f"https://graph.facebook.com/v19.0/{user_id}?fields=name,first_name,last_name&access_token={token}"
+    try:
+        async with httpx.AsyncClient(timeout=4.0) as client:
+            resp = await client.get(url)
+            if resp.status_code == 200:
+                data = resp.json()
+                name = data.get("name")
+                if not name:
+                    first = data.get("first_name", "").strip()
+                    last = data.get("last_name", "").strip()
+                    if first or last:
+                        name = f"{first} {last}".strip()
+                if name:
+                    print(f"👤 Facebook Graph API lấy được tên khách {user_id}: {name}")
+                    return name
+            else:
+                print(f"ℹ️ Facebook Graph API profile ({user_id}) trả về {resp.status_code}: {resp.text[:120]}")
+    except Exception as e:
+        print(f"⚠️ Lỗi Facebook Graph API get profile {user_id}: {e}")
+    return None
+
+
+async def get_zalo_user_profile(user_id: str) -> Optional[str]:
+    """Lấy tên hiển thị của khách hàng từ Zalo OA API"""
+    token = await get_zalo_access_token()
+    if not token:
+        return None
+    url = "https://openapi.zalo.me/v3.0/oa/user/detail"
+    headers = {"access_token": token}
+    params = {"data": json.dumps({"user_id": str(user_id)})}
+    try:
+        async with httpx.AsyncClient(timeout=4.0) as client:
+            resp = await client.get(url, headers=headers, params=params)
+            if resp.status_code == 200:
+                res_data = resp.json()
+                if res_data.get("error") == 0:
+                    display_name = res_data.get("data", {}).get("display_name")
+                    if display_name:
+                        print(f"👤 Zalo API lấy được tên khách {user_id}: {display_name}")
+                        return display_name
+            else:
+                print(f"ℹ️ Zalo API profile ({user_id}) trả về {resp.status_code}: {resp.text[:120]}")
+    except Exception as e:
+        print(f"⚠️ Lỗi Zalo API get profile {user_id}: {e}")
+    return None
+
+
 # === LUỒNG XỬ LÝ CHUNG CHO MỌI KÊNH ===
 # ─── SESSION TTL ─────────────────────────────────────────────────
 # Nếu khách im lặng quá thời gian này thì reset context hội thoại
@@ -390,9 +444,9 @@ def reset_session_if_expired(session_id: str) -> bool:
     return True
 
 
-async def process_omnichannel_logic(user_id, platform, user_text, session_id, agent="Direct"):
+async def process_omnichannel_logic(user_id, platform, user_text, session_id, agent="Direct", customer_name: Optional[str] = None):
     # 1. Truy xuất hoặc tạo mới hồ sơ khách hàng từ SQLite
-    cust_profile = customer_memory.get_or_create_customer(platform.lower(), str(user_id))
+    cust_profile = customer_memory.get_or_create_customer(platform.lower(), str(user_id), full_name=customer_name)
     cust_id = cust_profile.get("customer_id") if cust_profile else None
 
     log_message(user_id, platform, "User", user_text, customer_id=cust_id)
@@ -409,10 +463,16 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
     memory_store[session_id].append({"role": "user", "content": user_text})
     memory_store[f"{session_id}_last_update"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
-    # Ghi nhận tên hiển thị nếu chưa có
-    if not memory_store.get(f"{session_id}_name"):
-        cust_name_db = cust_profile.get("full_name") if cust_profile else None
-        memory_store[f"{session_id}_name"] = cust_name_db or f"Khách {platform} ({str(user_id)[:6]})"
+    # Ghi nhận tên hiển thị nếu chưa có hoặc cập nhật tên thật
+    existing_name = memory_store.get(f"{session_id}_name")
+    cust_name_db = cust_profile.get("full_name") if cust_profile else None
+    
+    if customer_name and customer_name.strip() and not customer_name.startswith("Khách "):
+        memory_store[f"{session_id}_name"] = customer_name.strip()
+    elif cust_name_db and cust_name_db.strip() and not cust_name_db.startswith("Khách "):
+        memory_store[f"{session_id}_name"] = cust_name_db.strip()
+    elif not existing_name:
+        memory_store[f"{session_id}_name"] = f"Khách {platform} ({str(user_id)[:6]})"
 
     # Kiểm tra chế độ Bot (Ưu tiên chế độ riêng của phiên, nếu chưa đặt thì lấy chế độ toàn hệ thống)
     global_mode = memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "copilot"))
@@ -441,6 +501,21 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
             memory_store[f"{session_id}_draft_data"] = ai_response.extracted_data
             memory_store[f"{session_id}_draft_phase"] = ai_response.current_phase
             
+            # Cập nhật hồ sơ khách hàng nếu AI trích xuất được thông tin
+            extracted_data = ai_response.extracted_data
+            if extracted_data and cust_id:
+                profile_updates = {}
+                if getattr(extracted_data, "ho_ten", None):
+                    profile_updates["full_name"] = extracted_data.ho_ten
+                    memory_store[f"{session_id}_name"] = extracted_data.ho_ten
+                if getattr(extracted_data, "quoc_tich", None):
+                    profile_updates["nationality"] = extracted_data.quoc_tich
+                if getattr(extracted_data, "so_dien_thoai", None):
+                    profile_updates["phone_number"] = str(extracted_data.so_dien_thoai)
+                    customer_memory.link_platform_by_phone(str(extracted_data.so_dien_thoai), platform.lower(), str(user_id))
+                if profile_updates:
+                    customer_memory.update_customer_profile(cust_id, **profile_updates)
+
             # Gửi thông báo tức thì cho Admin kèm dự thảo AI
             await notify_admin_incoming_message(
                 platform=platform,
@@ -493,7 +568,9 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
         # Tự động cập nhật hồ sơ khách hàng vào Database SQLite
         if cust_id:
             profile_updates = {}
-            if getattr(data, "ho_ten", None): profile_updates["full_name"] = data.ho_ten
+            if getattr(data, "ho_ten", None):
+                profile_updates["full_name"] = data.ho_ten
+                memory_store[f"{session_id}_name"] = data.ho_ten
             if getattr(data, "quoc_tich", None): profile_updates["nationality"] = data.quoc_tich
             if getattr(data, "so_dien_thoai", None):
                 profile_updates["phone_number"] = str(data.so_dien_thoai)
@@ -737,7 +814,15 @@ async def zalo_webhook(request: Request, background_tasks: BackgroundTasks):
 
 
 async def handle_zalo_flow(u_id, text):
-    reply, img = await process_omnichannel_logic(u_id, "Zalo", text, f"zalo_{u_id}")
+    session_id = f"zalo_{u_id}"
+    cust_name = memory_store.get(f"{session_id}_name")
+    if not cust_name or cust_name.startswith("Khách "):
+        real_zalo_name = await get_zalo_user_profile(u_id)
+        if real_zalo_name:
+            cust_name = real_zalo_name
+            memory_store[f"{session_id}_name"] = cust_name
+
+    reply, img = await process_omnichannel_logic(u_id, "Zalo", text, session_id, customer_name=cust_name)
     if reply:
         await send_zalo_message(u_id, reply)
         if img:
@@ -756,15 +841,24 @@ async def handle_fb_flow(u_id, text, page_id: str = None):
         fb_platform = "Facebook"
 
     session_id = f"fb_{u_id}"
+
+    # Lấy tên khách từ Graph API nếu chưa có
+    cust_name = memory_store.get(f"{session_id}_name")
+    if not cust_name or cust_name.startswith("Khách "):
+        real_fb_name = await get_facebook_user_profile(u_id, page_id=page_id)
+        if real_fb_name:
+            cust_name = real_fb_name
+            memory_store[f"{session_id}_name"] = cust_name
+
     enable_meta = os.getenv("ENABLE_META_BOT", "true").lower() in ["true", "1", "yes"]
     if not enable_meta:
         # Nếu bot Meta bị tắt, đặt phiên sang chế độ thủ công để lưu tin nhắn vào Studio nhưng không tự động gửi trả lời
         memory_store[f"{session_id}_mode"] = "manual"
-        print(f"⏸️ [{fb_platform}] Chatbot AI đang tạm dừng (Chế độ thủ công). Tin nhắn từ {u_id}: {text[:60]}")
+        print(f"⏸️ [{fb_platform}] Chatbot AI đang tạm dừng (Chế độ thủ công). Tin nhắn từ {cust_name or u_id}: {text[:60]}")
     else:
-        print(f"📨 [{fb_platform}] Tin nhắn từ {u_id}: {text[:60]}")
+        print(f"📨 [{fb_platform}] Tin nhắn từ {cust_name or u_id}: {text[:60]}")
 
-    reply, img = await process_omnichannel_logic(u_id, fb_platform, text, session_id)
+    reply, img = await process_omnichannel_logic(u_id, fb_platform, text, session_id, customer_name=cust_name)
     if reply:
         await send_facebook_message(u_id, reply, page_id=page_id)
         if img:
