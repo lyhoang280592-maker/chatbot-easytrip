@@ -42,6 +42,7 @@ def init_db():
                 telegram_id TEXT UNIQUE,
                 zalo_id TEXT UNIQUE,
                 facebook_id TEXT UNIQUE,
+                whatsapp_id TEXT UNIQUE,
                 web_id TEXT UNIQUE,
                 total_trips INTEGER DEFAULT 0,
                 customer_tier TEXT DEFAULT 'NEW',
@@ -63,6 +64,8 @@ def init_db():
             conn.execute("ALTER TABLE customers ADD COLUMN reminder_status TEXT DEFAULT 'NONE';")
         if "birth_year" not in cols:
             conn.execute("ALTER TABLE customers ADD COLUMN birth_year TEXT;")
+        if "whatsapp_id" not in cols:
+            conn.execute("ALTER TABLE customers ADD COLUMN whatsapp_id TEXT;")
         
         # 2. Bảng Lịch sử Tin nhắn (Chat Messages)
         conn.execute("""
@@ -101,6 +104,7 @@ def init_db():
         conn.execute("CREATE INDEX IF NOT EXISTS idx_cust_tg ON customers(telegram_id);")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_cust_zalo ON customers(zalo_id);")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_cust_fb ON customers(facebook_id);")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_cust_wa ON customers(whatsapp_id);")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_cust_visa_exp ON customers(visa_expiry_date);")
         conn.execute("CREATE INDEX IF NOT EXISTS idx_msg_session ON chat_messages(session_id);")
 
@@ -123,6 +127,8 @@ def normalize_phone(phone: Optional[str]) -> Optional[str]:
 
 def _get_platform_column(platform: str) -> str:
     p = (platform or "").lower()
+    if "whatsapp" in p or "wa" in p:
+        return "whatsapp_id"
     if "facebook" in p or "fb" in p:
         return "facebook_id"
     if "zalo" in p:
@@ -229,7 +235,7 @@ def update_customer_profile(customer_id: int, **kwargs) -> bool:
         "phone_number", "full_name", "nationality", "preferred_lang",
         "preferred_seat", "preferred_pickup", "preferred_route",
         "visa_expiry_date", "last_reminder_sent_at", "reminder_status",
-        "telegram_id", "zalo_id", "facebook_id", "web_id",
+        "telegram_id", "zalo_id", "facebook_id", "whatsapp_id", "web_id",
         "total_trips", "customer_tier", "customer_notes", "birth_year"
     }
     

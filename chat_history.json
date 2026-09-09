@@ -45,3 +45,4 @@
 {"timestamp": "2026-09-09 09:37:41", "user_id": "real_user_fb_123", "platform": "Facebook (Page Tích Xanh)", "role": "User", "content": "Xin chào, mình đang test thử tin nhắn Fanpage tích xanh"}
 {"timestamp": "2026-09-09 09:37:49", "user_id": "test_fb_live_user", "platform": "Facebook (Page Tích Xanh)", "role": "User", "content": "Test trực tiếp qua localhost Facebook webhook"}
 {"timestamp": "2026-09-09 09:38:19", "user_id": "test_fb_user_999", "platform": "Facebook (Page Tích Xanh)", "role": "User", "content": "Xin chào, tư vấn giúp mình"}
+{"timestamp": "2026-09-09 15:57:29", "user_id": "84999888777", "platform": "WhatsApp", "role": "User", "content": "Hello, do you have visa run to Laos?"}

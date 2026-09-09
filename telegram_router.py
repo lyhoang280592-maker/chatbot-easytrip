@@ -457,6 +457,8 @@ async def notify_admin_incoming_message(
         chan_title = f"Website (Nguồn: {agent})" if (agent and agent != "Direct") else "Website Chatbox"
     elif "telegram" in plat_lower:
         chan_title = "Telegram Business" if "business" in plat_lower else "Telegram"
+    elif "whatsapp" in plat_lower or "wa" in plat_lower:
+        chan_title = "WhatsApp Business"
     else:
         chan_title = platform
 
@@ -478,7 +480,7 @@ async def notify_admin_incoming_message(
 
     # Tra cứu sâu hơn trong SQLite nếu chưa có
     try:
-        base_plat = "facebook" if "facebook" in plat_lower else "zalo" if "zalo" in plat_lower else "telegram" if "telegram" in plat_lower else "web"
+        base_plat = "whatsapp" if ("whatsapp" in plat_lower or "wa" in plat_lower) else "facebook" if "facebook" in plat_lower else "zalo" if "zalo" in plat_lower else "telegram" if "telegram" in plat_lower else "web"
         cust_profile = customer_memory.get_customer_by_platform(base_plat, str(user_id))
         if cust_profile:
             cust_name = cust_profile.get("full_name")
@@ -1405,6 +1407,10 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                         from main import send_facebook_message, send_facebook_image
                                         await send_facebook_message(uid, caption)
                                         await send_facebook_image(uid, image_url)
+                                    elif platform == "WhatsApp":
+                                        from main import send_whatsapp_message, send_whatsapp_image
+                                        await send_whatsapp_message(uid, caption)
+                                        await send_whatsapp_image(uid, image_url)
                                     elif platform == "Website":
                                         # Ghi vào memory để /chat endpoint tự trả về URL ảnh
                                         memory_store[f"{session_id}_pending_seat_map"] = image_url

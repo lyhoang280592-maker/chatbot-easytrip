@@ -339,6 +339,67 @@ async def send_facebook_image(user_id: str, image_url: str, page_id: str = None)
             print(f"Facebook send image failed: {e}")
 
 
+def get_whatsapp_credentials(phone_number_id: str = None) -> tuple[Optional[str], Optional[str]]:
+    """Lấy Access Token và Phone Number ID của WhatsApp Cloud API"""
+    token = os.getenv("WHATSAPP_ACCESS_TOKEN") or os.getenv("WHATSAPP_TOKEN")
+    p_id = phone_number_id or os.getenv("WHATSAPP_PHONE_NUMBER_ID")
+    return token, p_id
+
+
+async def send_whatsapp_message(to_number: str, text: str, phone_number_id: str = None):
+    """Gửi tin nhắn văn bản qua WhatsApp Business Cloud API"""
+    token, p_id = get_whatsapp_credentials(phone_number_id)
+    if not token or not p_id:
+        print(f"❌ send_whatsapp_message: Chưa cấu hình WHATSAPP_ACCESS_TOKEN hoặc WHATSAPP_PHONE_NUMBER_ID")
+        return
+    clean_to = re.sub(r"[^\d]", "", str(to_number))
+    url = f"https://graph.facebook.com/v19.0/{p_id}/messages"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "messaging_product": "whatsapp",
+        "recipient_type": "individual",
+        "to": clean_to,
+        "type": "text",
+        "text": {"preview_url": False, "body": text}
+    }
+    async with httpx.AsyncClient() as client:
+        try:
+            resp = await client.post(url, json=payload, headers=headers)
+            print(f"WhatsApp send message response ({clean_to}): {resp.status_code} - {resp.text}")
+        except Exception as e:
+            print(f"WhatsApp send message failed: {e}")
+
+
+async def send_whatsapp_image(to_number: str, image_url: str, phone_number_id: str = None):
+    """Gửi hình ảnh qua WhatsApp Business Cloud API"""
+    token, p_id = get_whatsapp_credentials(phone_number_id)
+    if not token or not p_id:
+        print(f"❌ send_whatsapp_image: Chưa cấu hình WHATSAPP_ACCESS_TOKEN hoặc WHATSAPP_PHONE_NUMBER_ID")
+        return
+    clean_to = re.sub(r"[^\d]", "", str(to_number))
+    url = f"https://graph.facebook.com/v19.0/{p_id}/messages"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "messaging_product": "whatsapp",
+        "recipient_type": "individual",
+        "to": clean_to,
+        "type": "image",
+        "image": {"link": image_url}
+    }
+    async with httpx.AsyncClient() as client:
+        try:
+            resp = await client.post(url, json=payload, headers=headers)
+            print(f"WhatsApp send image response ({clean_to}): {resp.status_code} - {resp.text}")
+        except Exception as e:
+            print(f"WhatsApp send image failed: {e}")
+
+
 async def get_facebook_user_profile(user_id: str, page_id: str = None) -> Optional[str]:
     """Lấy tên khách hàng từ Facebook: Thử endpoint Conversations của Page trước, sau đó fallback sang PSID direct"""
     candidate_pages = [page_id] if page_id else ["1244422022092408", "944798045391211"]
@@ -975,6 +1036,117 @@ async def facebook_webhook(request: Request, background_tasks: BackgroundTasks):
     return Response(status_code=200)
 
 
+async def handle_whatsapp_flow(wa_id: str, text: str, contact_name: Optional[str] = None, phone_number_id: Optional[str] = None):
+    session_id = f"whatsapp_{wa_id}"
+
+    # Lấy tên khách từ profile WhatsApp
+    cust_name = memory_store.get(f"{session_id}_name")
+    if not cust_name or cust_name.startswith("Khách "):
+        if contact_name:
+            cust_name = contact_name
+            memory_store[f"{session_id}_name"] = cust_name
+
+    # Lưu phone_number_id vào session để khi trả lời thủ công hoặc duyệt nháp sẽ gọi đúng phone_number_id
+    if phone_number_id:
+        memory_store[f"{session_id}_phone_number_id"] = phone_number_id
+
+    # WhatsApp ID chính là số điện thoại quốc tế (ví dụ: 84868462071)
+    clean_digits = re.sub(r"[^\d]", "", str(wa_id))
+    phone_formatted = f"+{clean_digits}" if clean_digits else None
+
+    # Tự động cập nhật / tạo hồ sơ khách hàng vào SQLite
+    try:
+        customer_memory.get_or_create_customer(
+            platform="whatsapp",
+            user_id=str(wa_id),
+            full_name=cust_name,
+            phone_number=phone_formatted
+        )
+    except Exception as e_cust:
+        print(f"⚠️ Lưu customer memory cho WhatsApp thất bại: {e_cust}")
+
+    enable_meta = os.getenv("ENABLE_META_BOT", "true").lower() in ["true", "1", "yes"]
+    if not enable_meta:
+        memory_store[f"{session_id}_mode"] = "manual"
+        print(f"⏸️ [WhatsApp] Chatbot AI đang tạm dừng (Chế độ thủ công). Tin nhắn từ {cust_name or wa_id}: {text[:60]}")
+    else:
+        print(f"📨 [WhatsApp] Tin nhắn từ {cust_name or wa_id} ({phone_formatted}): {text[:60]}")
+
+    reply, img = await process_omnichannel_logic(wa_id, "WhatsApp", text, session_id, customer_name=cust_name)
+    if reply:
+        await send_whatsapp_message(wa_id, reply, phone_number_id=phone_number_id)
+        if img:
+            await send_whatsapp_image(wa_id, img, phone_number_id=phone_number_id)
+
+
+@app.get("/whatsapp/webhook")
+async def verify_whatsapp_webhook(request: Request):
+    """Xác thực Webhook với Meta Developer Portal"""
+    mode = request.query_params.get("hub.mode")
+    token = request.query_params.get("hub.verify_token")
+    challenge = request.query_params.get("hub.challenge")
+    expected_token = os.getenv("WHATSAPP_VERIFY_TOKEN") or os.getenv("FB_VERIFY_TOKEN") or "EasytripWhatsAppWebhook2026"
+    if mode == "subscribe" and token == expected_token:
+        print(f"✅ WhatsApp Webhook verified successfully!")
+        return Response(content=challenge, status_code=200)
+    print(f"⚠️ WhatsApp Webhook verification failed. Token received: {token}, expected: {expected_token}")
+    return Response(status_code=403)
+
+
+@app.post("/whatsapp/webhook")
+async def whatsapp_webhook(request: Request, background_tasks: BackgroundTasks):
+    """Tiếp nhận tin nhắn mới từ khách hàng qua WhatsApp Cloud API"""
+    try:
+        data = await request.json()
+        if data.get("object") == "whatsapp_business_account":
+            for entry in data.get("entry", []):
+                for change in entry.get("changes", []):
+                    value = change.get("value", {})
+                    metadata = value.get("metadata", {})
+                    phone_number_id = metadata.get("phone_number_id")
+
+                    # Lấy danh bạ (contacts) có sẵn tên hiển thị profile WhatsApp
+                    contacts = value.get("contacts", [])
+                    contact_map = {}
+                    for c in contacts:
+                        c_wa_id = c.get("wa_id")
+                        c_name = c.get("profile", {}).get("name")
+                        if c_wa_id and c_name:
+                            contact_map[c_wa_id] = c_name
+
+                    for msg in value.get("messages", []):
+                        sender_wa_id = msg.get("from")
+                        msg_type = msg.get("type")
+                        text = ""
+                        if msg_type == "text":
+                            text = msg.get("text", {}).get("body", "")
+                        elif msg_type == "image":
+                            caption = msg.get("image", {}).get("caption", "")
+                            text = f"[Khách gửi hình ảnh WhatsApp]{(': ' + caption) if caption else ''}"
+                        elif msg_type == "document":
+                            caption = msg.get("document", {}).get("caption", "")
+                            text = f"[Khách gửi tài liệu WhatsApp]{(': ' + caption) if caption else ''}"
+                        elif msg_type in ["audio", "voice"]:
+                            text = "[Khách gửi tin nhắn thoại WhatsApp]"
+                        elif msg_type == "location":
+                            loc = msg.get("location", {})
+                            text = f"[Khách chia sẻ vị trí: Lat {loc.get('latitude')}, Long {loc.get('longitude')}]"
+                        else:
+                            text = f"[Khách gửi tin nhắn {msg_type}]"
+
+                        contact_name = contact_map.get(sender_wa_id)
+                        background_tasks.add_task(
+                            handle_whatsapp_flow,
+                            sender_wa_id,
+                            text,
+                            contact_name,
+                            phone_number_id
+                        )
+    except Exception as e:
+        print(f"❌ WhatsApp Webhook Error: {e}")
+    return Response(status_code=200)
+
+
 # === API CHO CO-PILOT CHAT STUDIO ===
 
 def get_active_sessions():
@@ -1152,6 +1324,10 @@ async def send_manual_message(session_id: str, request: Request):
         elif platform == "facebook":
             await send_facebook_message(user_id, content)
             success = True
+        elif platform == "whatsapp":
+            p_id = memory_store.get(f"{session_id}_phone_number_id")
+            await send_whatsapp_message(user_id, content, phone_number_id=p_id)
+            success = True
         elif platform == "web":
             # Webchat kéo tin nhắn từ history nên chỉ cần append vào là thành công
             success = True
@@ -1240,6 +1416,16 @@ async def send_manual_media(session_id: str, file: UploadFile = File(...)):
                 await send_facebook_message(user_id, fb_text)
                 success = True
                 
+        elif platform == "whatsapp":
+            p_id = memory_store.get(f"{session_id}_phone_number_id")
+            if is_image:
+                await send_whatsapp_image(user_id, file_url, phone_number_id=p_id)
+                success = True
+            else:
+                wa_text = f"Gửi bạn tài liệu đính kèm: {filename}\nTải tại đây: {file_url}"
+                await send_whatsapp_message(user_id, wa_text, phone_number_id=p_id)
+                success = True
+
         elif platform == "web":
             success = True
         else:
@@ -1286,6 +1472,10 @@ async def approve_session_draft(session_id: str):
             success = True
         elif platform == "facebook":
             await send_facebook_message(user_id, draft)
+            success = True
+        elif platform == "whatsapp":
+            p_id = memory_store.get(f"{session_id}_phone_number_id")
+            await send_whatsapp_message(user_id, draft, phone_number_id=p_id)
             success = True
         elif platform == "web":
             success = True
@@ -1334,6 +1524,10 @@ async def edit_send_session_draft(session_id: str, request: Request):
             success = True
         elif platform == "facebook":
             await send_facebook_message(user_id, edited_reply)
+            success = True
+        elif platform == "whatsapp":
+            p_id = memory_store.get(f"{session_id}_phone_number_id")
+            await send_whatsapp_message(user_id, edited_reply, phone_number_id=p_id)
             success = True
         elif platform == "web":
             success = True
