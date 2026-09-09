@@ -340,29 +340,61 @@ async def send_facebook_image(user_id: str, image_url: str, page_id: str = None)
 
 
 async def get_facebook_user_profile(user_id: str, page_id: str = None) -> Optional[str]:
-    """Lấy tên khách hàng từ Facebook Graph API qua PSID"""
+    """Lấy tên khách hàng từ Facebook: Thử endpoint Conversations của Page trước, sau đó fallback sang PSID direct"""
+    candidate_pages = [page_id] if page_id else ["1244422022092408", "944798045391211"]
+    
+    for pid in candidate_pages:
+        token = get_fb_page_token(pid)
+        if not token:
+            continue
+            
+        # Cách 1: Truy vấn qua endpoint Conversations của Page (chính xác 100% và không bị chặn bởi User Profile API)
+        url_conv = f"https://graph.facebook.com/v19.0/{pid}/conversations"
+        params = {
+            "user_id": str(user_id),
+            "fields": "participants,senders",
+            "access_token": token
+        }
+        try:
+            async with httpx.AsyncClient(timeout=4.0) as client:
+                resp = await client.get(url_conv, params=params)
+                if resp.status_code == 200:
+                    data = resp.json().get("data", [])
+                    for conv in data:
+                        for p in conv.get("participants", {}).get("data", []):
+                            if str(p.get("id")) == str(user_id) and p.get("name"):
+                                name = p["name"].strip()
+                                print(f"👤 Facebook Conversations API lấy được tên khách {user_id}: {name}")
+                                return name
+                        for s in conv.get("senders", {}).get("data", []):
+                            if str(s.get("id")) == str(user_id) and s.get("name"):
+                                name = s["name"].strip()
+                                print(f"👤 Facebook Conversations API lấy được tên khách {user_id}: {name}")
+                                return name
+        except Exception as e:
+            print(f"⚠️ Lỗi Facebook Conversations API {user_id}: {e}")
+
+    # Cách 2: Fallback trực tiếp qua PSID nếu Cách 1 không có kết quả
     token = get_fb_page_token(page_id)
-    if not token:
-        return None
-    url = f"https://graph.facebook.com/v19.0/{user_id}?fields=name,first_name,last_name&access_token={token}"
-    try:
-        async with httpx.AsyncClient(timeout=4.0) as client:
-            resp = await client.get(url)
-            if resp.status_code == 200:
-                data = resp.json()
-                name = data.get("name")
-                if not name:
-                    first = data.get("first_name", "").strip()
-                    last = data.get("last_name", "").strip()
-                    if first or last:
-                        name = f"{first} {last}".strip()
-                if name:
-                    print(f"👤 Facebook Graph API lấy được tên khách {user_id}: {name}")
-                    return name
-            else:
-                print(f"ℹ️ Facebook Graph API profile ({user_id}) trả về {resp.status_code}: {resp.text[:120]}")
-    except Exception as e:
-        print(f"⚠️ Lỗi Facebook Graph API get profile {user_id}: {e}")
+    if token:
+        url_direct = f"https://graph.facebook.com/v19.0/{user_id}?fields=first_name,last_name,name&access_token={token}"
+        try:
+            async with httpx.AsyncClient(timeout=4.0) as client:
+                resp = await client.get(url_direct)
+                if resp.status_code == 200:
+                    data = resp.json()
+                    name = data.get("name")
+                    if not name:
+                        first = data.get("first_name", "").strip()
+                        last = data.get("last_name", "").strip()
+                        if first or last:
+                            name = f"{first} {last}".strip()
+                    if name:
+                        print(f"👤 Facebook PSID API lấy được tên khách {user_id}: {name}")
+                        return name
+        except Exception as e:
+            print(f"⚠️ Lỗi Facebook PSID API {user_id}: {e}")
+
     return None
 
 

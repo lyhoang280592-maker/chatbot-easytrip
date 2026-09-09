@@ -461,13 +461,14 @@ async def notify_admin_incoming_message(
         chan_title = platform
 
     # Tra cứu thông tin khách hàng từ SQLite / Memory
-    full_name = user_name
+    full_name = user_name if (user_name and not user_name.startswith("Khách ")) else None
     phone = None
     nationality = None
     
     if session_id:
-        if not full_name:
-            full_name = memory_store.get(f"{session_id}_name")
+        sess_name = memory_store.get(f"{session_id}_name")
+        if sess_name and not sess_name.startswith("Khách "):
+            full_name = sess_name
         data_obj = memory_store.get(f"{session_id}_data")
         if data_obj:
             phone = getattr(data_obj, "so_dien_thoai", None)
@@ -480,7 +481,9 @@ async def notify_admin_incoming_message(
         base_plat = "facebook" if "facebook" in plat_lower else "zalo" if "zalo" in plat_lower else "telegram" if "telegram" in plat_lower else "web"
         cust_profile = customer_memory.get_customer_by_platform(base_plat, str(user_id))
         if cust_profile:
-            if not full_name: full_name = cust_profile.get("full_name")
+            cust_name = cust_profile.get("full_name")
+            if not full_name and cust_name and not cust_name.startswith("Khách "):
+                full_name = cust_name
             if not phone: phone = cust_profile.get("phone_number")
             if not nationality: nationality = cust_profile.get("nationality")
     except Exception:
