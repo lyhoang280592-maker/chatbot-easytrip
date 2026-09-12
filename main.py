@@ -311,6 +311,56 @@ async def send_facebook_image(user_id: str, image_url: str):
         except Exception as e:
             print(f"Facebook send image failed: {e}")
 
+async def send_whatsapp_message(to_phone: str, text: str):
+    token = os.getenv("WHATSAPP_ACCESS_TOKEN")
+    phone_number_id = os.getenv("WHATSAPP_PHONE_NUMBER_ID")
+    if not token or not phone_number_id:
+        print("❌ send_whatsapp_message: Chưa cấu hình WHATSAPP_ACCESS_TOKEN hoặc WHATSAPP_PHONE_NUMBER_ID")
+        return
+    url = f"https://graph.facebook.com/v19.0/{phone_number_id}/messages"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "messaging_product": "whatsapp",
+        "recipient_type": "individual",
+        "to": to_phone,
+        "type": "text",
+        "text": {"preview_url": False, "body": text}
+    }
+    async with httpx.AsyncClient() as client:
+        try:
+            resp = await client.post(url, headers=headers, json=payload)
+            print(f"WhatsApp send message response: {resp.status_code} - {resp.text}")
+        except Exception as e:
+            print(f"WhatsApp send message failed: {e}")
+
+async def send_whatsapp_image(to_phone: str, image_url: str):
+    token = os.getenv("WHATSAPP_ACCESS_TOKEN")
+    phone_number_id = os.getenv("WHATSAPP_PHONE_NUMBER_ID")
+    if not token or not phone_number_id:
+        print("❌ send_whatsapp_image: Chưa cấu hình WHATSAPP_ACCESS_TOKEN hoặc WHATSAPP_PHONE_NUMBER_ID")
+        return
+    url = f"https://graph.facebook.com/v19.0/{phone_number_id}/messages"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "messaging_product": "whatsapp",
+        "recipient_type": "individual",
+        "to": to_phone,
+        "type": "image",
+        "image": {"link": image_url}
+    }
+    async with httpx.AsyncClient() as client:
+        try:
+            resp = await client.post(url, headers=headers, json=payload)
+            print(f"WhatsApp send image response: {resp.status_code} - {resp.text}")
+        except Exception as e:
+            print(f"WhatsApp send image failed: {e}")
+
 
 # === LUỒNG XỬ LÝ CHUNG CHO MỌI KÊNH ===
 async def process_omnichannel_logic(user_id, platform, user_text, session_id, agent="Direct"):
@@ -623,6 +673,53 @@ async def facebook_webhook(request: Request, background_tasks: BackgroundTasks):
                         background_tasks.add_task(handle_fb_flow, u_id, text)
     except Exception as e:
         print(f"❌ Facebook Webhook Error: {e}")
+    return Response(status_code=200)
+
+
+# === WHATSAPP BUSINESS CLOUD API WEBHOOK ===
+async def handle_whatsapp_flow(u_id: str, text: str, user_name: str = ""):
+    session_id = f"wa_{u_id}"
+    if user_name and not memory_store.get(f"{session_id}_name"):
+        memory_store[f"{session_id}_name"] = f"{user_name} (WA {u_id})"
+    reply, img = await process_omnichannel_logic(u_id, "WhatsApp", text, session_id)
+    if reply:
+        await send_whatsapp_message(u_id, reply)
+        if img:
+            await send_whatsapp_image(u_id, img)
+
+
+@app.get("/whatsapp/webhook")
+async def verify_whatsapp_webhook(request: Request):
+    mode = request.query_params.get("hub.mode")
+    token = request.query_params.get("hub.verify_token")
+    challenge = request.query_params.get("hub.challenge")
+    expected_token = os.getenv("WHATSAPP_VERIFY_TOKEN", "EasytripWhatsAppWebhook2026")
+    if mode == "subscribe" and token == expected_token:
+        print("✅ WhatsApp Webhook verified successfully!")
+        return Response(content=challenge, status_code=200)
+    print(f"❌ WhatsApp Webhook verification failed: token={token}")
+    return Response(status_code=403)
+
+
+@app.post("/whatsapp/webhook")
+async def whatsapp_webhook(request: Request, background_tasks: BackgroundTasks):
+    try:
+        data = await request.json()
+        if data.get("object") == "whatsapp_business_account":
+            for entry in data.get("entry", []):
+                for change in entry.get("changes", []):
+                    value = change.get("value", {})
+                    messages = value.get("messages", [])
+                    contacts = value.get("contacts", [])
+                    user_name = contacts[0].get("profile", {}).get("name", "") if contacts else ""
+                    for msg in messages:
+                        if msg.get("type") == "text":
+                            from_phone = msg.get("from")
+                            text_body = msg.get("text", {}).get("body", "")
+                            if from_phone and text_body:
+                                background_tasks.add_task(handle_whatsapp_flow, from_phone, text_body, user_name)
+    except Exception as e:
+        print(f"❌ WhatsApp Webhook Error: {e}")
     return Response(status_code=200)
 
 
