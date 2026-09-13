@@ -29,6 +29,7 @@ from telegram_router import (
     get_customer_service_type,
     get_or_create_seat_map,
     notify_admin_incoming_message,
+    format_bus_booking_notification,
 )
 from memory_store import memory_store, log_message, get_recent_logs, load_session_history
 import customer_memory
@@ -834,15 +835,7 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
                 if not getattr(data, "diem_don", None):
                     data.diem_don = "Oceanus"
                 
-                bus_msg = (
-                    f"🚌 **ĐẶT CHỖ MỚI ({platform})**\n"
-                    f"👤 Khách hàng: {data.ho_ten or 'Khách'} / {data.nam_sinh or ''}\n"
-                    f"🌏 Quốc tịch: {data.quoc_tich or ''}\n"
-                    f"📞 SĐT: {data.so_dien_thoai or ''}\n"
-                    f"💺 Ghế chọn: {curr_seat}\n"
-                    f"📍 Điểm đón: {data.diem_don}\n"
-                    f"⚠️ *Vui lòng đối tác đặt chỗ trên hệ thống của mình!*"
-                )
+                bus_msg = format_bus_booking_notification(data, ngay_di=ngay_di or "", service_type=service_type or "")
                 await send_to_bus_group(None, bus_msg, date=ngay_di or "", service=service_type)
                 memory_store[notif_key] = True
                 print(f"📢 ({platform}) Đã gửi tin nhắn đặt chỗ {curr_seat} vào topic đối tác!")

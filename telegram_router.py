@@ -3,9 +3,8 @@ import time
 import re
 import json
 import traceback
-import httpx
 from typing import Any, Optional, Dict, List
-from datetime import datetime
+from datetime import datetime, timedelta
 from fastapi import APIRouter, Request, Response
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import (
@@ -295,6 +294,161 @@ def validate_and_adjust_departure(ngay_khoi_hanh: str, ngay_het_han: str, loai_v
         print(f"Lỗi validate_and_adjust_departure: {e}")
 
     return calculated_date
+
+
+def format_bus_booking_notification(data, ngay_di: str = "", service_type: str = "") -> str:
+    """
+    Format operational bus seat booking notification message for partner / bus group.
+    
+    Example output:
+    13/09-90D- Laos
+    TSARENKO EKATERINA
+    A2
+    RODICHEV DMITRY
+    B1
+    40 Hon Chong - 9:30PM
+    📍https://maps.app.goo.gl/LmwZhraVzHBuxoTm9
+
+    Single
+    E-visa 4 hour x 2 person
+    14/09 - 8:00: Exit Bo Y
+    14/09 - 11:30: Entry Bo Y
+    """
+    def _get(field, default=""):
+        if data is None:
+            return default
+        if isinstance(data, dict):
+            return data.get(field, default) or default
+        return getattr(data, field, default) or default
+
+    # 1. Date normalization (DD/MM)
+    raw_date = ngay_di or _get("ngay_khoi_hanh", "") or _get("ngay_di", "")
+    date_match = re.search(r"(\d{1,2})[/-](\d{1,2})", str(raw_date))
+    if date_match:
+        d, m = int(date_match.group(1)), int(date_match.group(2))
+        ngay_di_str = f"{d:02d}/{m:02d}"
+    else:
+        ngay_di_str = datetime.now().strftime("%d/%m")
+
+    # 2. Destination & Service Code
+    combined_service = f"{service_type} {_get('tuyen_duong')} {_get('loai_visa')} {_get('goi_dich_vu')}".lower()
+    
+    if "cam" in combined_service:
+        dest_name = "Cambodia"
+        border_name = "Moc Bai"
+    else:
+        dest_name = "Laos"
+        border_name = "Bo Y"
+
+    if "45" in combined_service or "miễn" in combined_service or "free" in combined_service:
+        service_code = "45D"
+    elif "trc" in combined_service or "tam tru" in combined_service or "tạm trú" in combined_service:
+        service_code = "TRC"
+    else:
+        service_code = "90D"
+
+    header = f"{ngay_di_str}-{service_code}- {dest_name}"
+
+    # 3. Passenger Names
+    raw_names = _get("ho_ten") or _get("ten_khach") or _get("customer_name") or ""
+    split_names = [n.strip() for n in re.split(r"[,/\n;&]|\band\b|\bi\b", str(raw_names), flags=re.IGNORECASE) if n.strip()]
+    cleaned_names = []
+    for n in split_names:
+        clean_n = re.sub(r"\b\d{2,4}\b", "", n).strip().strip("-").strip()
+        if clean_n and len(clean_n) > 1:
+            cleaned_names.append(clean_n.upper())
+    
+    # 4. Seats
+    raw_seats = _get("ghe_chon") or _get("seat_number") or ""
+    if isinstance(raw_seats, (list, tuple)):
+        raw_seats = " ".join(str(s) for s in raw_seats)
+    seats = [s.upper() for s in re.findall(r"\b[A-Za-z]\d{1,2}\b|\b\d{1,2}\b", str(raw_seats))]
+
+    # Interleave names and seats
+    passenger_lines = []
+    if not cleaned_names and not seats:
+        passenger_lines.append("Khách")
+    elif not cleaned_names and seats:
+        passenger_lines.append("Khách")
+        for s in seats:
+            passenger_lines.append(s)
+    elif cleaned_names and not seats:
+        for n in cleaned_names:
+            passenger_lines.append(n)
+    else:
+        min_len = min(len(cleaned_names), len(seats))
+        for i in range(min_len):
+            passenger_lines.append(cleaned_names[i])
+            passenger_lines.append(seats[i])
+        for i in range(min_len, len(cleaned_names)):
+            passenger_lines.append(cleaned_names[i])
+        for i in range(min_len, len(seats)):
+            passenger_lines.append(seats[i])
+
+    # 5. Pickup Location & Map
+    diem_don = _get("diem_don") or "40 Hon Chong"
+    diem_don_lower = str(diem_don).lower()
+    
+    if any(k in diem_don_lower for k in ["40 hon chong", "hon chong", "oceanus", "muong thanh vien trieu", "vien trieu"]):
+        pickup_line = "40 Hon Chong - 9:30PM"
+        map_link = "📍https://maps.app.goo.gl/LmwZhraVzHBuxoTm9"
+    elif any(k in diem_don_lower for k in ["tran phu", "04 tran phu", "4 tran phu"]):
+        pickup_line = "04 Tran Phu - Muong Thanh - 9:15PM"
+        map_link = "📍https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9"
+    elif any(k in diem_don_lower for k in ["bo ke", "bo cat"]):
+        pickup_line = "New Bo Ke Bo Cat - 9:30PM"
+        map_link = "📍https://maps.app.goo.gl/Kc6dm92VVAF1j13j9"
+    else:
+        if any(t in str(diem_don) for t in ["PM", "AM", "pm", "am", "21:", "9:"]):
+            pickup_line = str(diem_don)
+        else:
+            pickup_line = f"{diem_don} - 9:30PM"
+        map_link = "📍https://maps.app.goo.gl/LmwZhraVzHBuxoTm9"
+
+    # 6. Visa & Border Crossing Schedule
+    pax_count = max(len(cleaned_names), len(seats), 1)
+    
+    visa_raw = f"{_get('loai_visa')} {_get('goi_dich_vu')}".lower()
+    if "multi" in visa_raw:
+        entry_type = "Multi"
+    else:
+        entry_type = "Single"
+
+    if service_code == "90D" or "e-visa" in visa_raw or "evisa" in visa_raw:
+        visa_line = f"E-visa 4 hour x {pax_count} person"
+    elif service_code == "45D":
+        visa_line = f"45D Visa Free x {pax_count} person"
+    elif service_code == "TRC":
+        visa_line = f"TRC x {pax_count} person"
+    else:
+        visa_line = f"E-visa 4 hour x {pax_count} person"
+
+    # Calculate Border Crossing Date (Departure + 1 day)
+    try:
+        d_val, m_val = map(int, ngay_di_str.split("/"))
+        year = datetime.now().year
+        dep_dt = datetime(year, m_val, d_val)
+        border_dt = dep_dt + timedelta(days=1)
+        border_date_str = border_dt.strftime("%d/%m")
+    except Exception:
+        border_date_str = ngay_di_str
+
+    exit_line = f"{border_date_str} - 8:00: Exit {border_name}"
+    entry_line = f"{border_date_str} - 11:30: Entry {border_name}"
+
+    lines = [
+        header,
+        *passenger_lines,
+        pickup_line,
+        map_link,
+        "",
+        entry_type,
+        visa_line,
+        exit_line,
+        entry_line
+    ]
+
+    return "\n".join(lines)
 
 
 
@@ -919,15 +1073,7 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
                     else:
                         await target_msg.reply_photo(photo=qr_f, caption=get_msg("please_pay", lang))
             
-            bus_msg = (
-                f"🚌 **ĐẶT CHỖ MỚI**\n"
-                f"👤 Khách hàng: {data.ho_ten or 'Khách'} / {data.nam_sinh or ''}\n"
-                f"🌏 Quốc tịch: {data.quoc_tich or ''}\n"
-                f"📞 SĐT: {data.so_dien_thoai or ''}\n"
-                f"💺 Ghế chọn: {curr_seat}\n"
-                f"📍 Điểm đón: {data.diem_don}\n"
-                f"⚠️ *Vui lòng đối tác đặt chỗ trên hệ thống của mình!*"
-            )
+            bus_msg = format_bus_booking_notification(data, ngay_di=ngay_di or "", service_type=service_type or "")
             await send_to_bus_group(context, bus_msg, date=ngay_di, service=service_type)
             memory_store[notif_key] = True
             print(f"📢 Đã gửi tin nhắn đặt chỗ {curr_seat} vào topic đối tác!")
