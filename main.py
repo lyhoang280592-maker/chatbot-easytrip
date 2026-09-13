@@ -781,15 +781,37 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
             else:
                 print(f"⏳ Omnichannel: Bỏ qua Scheme cho {ngay_di}_{service_type} (vừa gửi).")
 
-        # 2. Kiểm tra/Tạo Sơ đồ tự động
+        # 2. Kiểm tra/Tạo Sơ đồ tự động hoặc Gửi Mã QR Thanh Toán
         image_to_send = None
-        if ngay_di:
+        domain = os.getenv("RENDER_EXTERNAL_URL", "https://chatbot-easytrip.onrender.com").rstrip("/")
+        user_text_lower = user_text.lower()
+        reply_lower = reply.lower()
+        
+        # A. Kiểm tra gửi Mã QR Thanh toán Vietcombank OneQR
+        pay_keywords = [
+            "qr", "qr code", "qr-код", "куар", "кьюар", "thanh toán", "chuyển khoản", "stk", "tài khoản",
+            "payment", "how to pay", "pay", "как оплатить", "оплата", "реквизиты", "перевод", "счет",
+            "vietcombank", "vcb", "momo", "zalopay", "bank", "send qr", "oneqr", "vietqr"
+        ]
+        is_pay_query = any(kw in user_text_lower or kw in reply_lower for kw in pay_keywords)
+        is_seat_map_query = any(kw in user_text_lower for kw in ["sơ đồ", "seat map", "chọn ghế", "карта мест", "выбор места", "схема мест"])
+        
+        should_send_qr = (
+            ai_response.current_phase in ["PAYMENT", "PAYMENT_PENDING", "CONFIRMATION"]
+            or (getattr(data, "ghe_chon", None) and not is_seat_map_query)
+            or (is_pay_query and not is_seat_map_query)
+        )
+        
+        if should_send_qr:
+            if os.path.exists("static/qr_code.jpg") or os.path.exists("qr_code.jpg"):
+                image_to_send = f"{domain}/static/qr_code.jpg?v=2"
+                print(f"💳 ({platform}) Tự động đính kèm Mã QR thanh toán Vietcombank OneQR cho khách!")
+        elif ngay_di:
+            # B. Kiểm tra gửi Sơ đồ ghế
             should_send_map = False
             if ai_response.current_phase == "SEAT_SELECTION" and not getattr(data, "ghe_chon", None):
                 should_send_map = True
             
-            user_text_lower = user_text.lower()
-            reply_lower = reply.lower()
             map_keywords = [
                 "sơ đồ", "seat map", "chờ", "ghế trống", "vị trí", "chỗ", "sơ đồ ghế", "chọn ghế",
                 "map", "seat selection", "select seat", "available seats",
@@ -802,7 +824,6 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
             if should_send_map:
                 map_data = await get_or_create_seat_map(ngay_di, service_type)
                 if map_data:
-                    domain = os.getenv("RENDER_EXTERNAL_URL", "https://chatbot-easytrip.onrender.com").rstrip("/")
                     image_to_send = f"{domain}{map_data['url']}"
 
         # 3. Gửi lệnh đặt ghế cho đối tác nếu khách vừa chọn ghế
@@ -1202,7 +1223,15 @@ async def handle_fb_flow(u_id, text, page_id: str = None):
         if reply:
             ok, err_msg = await send_facebook_message(u_id, reply, page_id=page_id)
             if img and ok:
-                await send_facebook_image(u_id, img, page_id=page_id)
+                local_f = None
+                if "qr_code" in img:
+                    local_f = "static/qr_code.jpg" if os.path.exists("static/qr_code.jpg") else "qr_code.jpg"
+                elif "/static/" in img:
+                    extracted_path = img.split("/static/")[-1].split("?")[0]
+                    cand = f"static/{extracted_path}"
+                    if os.path.exists(cand):
+                        local_f = cand
+                await send_facebook_image(u_id, img, page_id=page_id, local_file_path=local_f)
             
             # Gửi thông báo cho Admin kèm trạng thái gửi thực tế
             await notify_admin_incoming_message(
