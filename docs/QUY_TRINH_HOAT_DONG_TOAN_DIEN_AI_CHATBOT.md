@@ -1,6 +1,6 @@
 # 📘 QUY TRÌNH HOẠT ĐỘNG TOÀN DIỆN VẬN HÀNH AI CHATBOT EASY TRIP & VISA
 
-> **Phiên bản**: 4.0 (Nâng cấp Hệ Thống Đa Kênh Toàn Diện, Thông Báo Admin Thời Gian Thực & Tự Động Hóa Vận Hành)  
+> **Phiên bản**: 4.1 (Cập nhật Bảng Giá Chuẩn Telegram, Điểm Đón Google Maps & Quy Trình Lấy Sơ Đồ Xe Qua Kênh Admin)  
 > **Áp dụng cho**: Toàn bộ hệ thống AI Chatbot, Nhân viên Điều hành, CSKH & Quản trị viên Easy Trip & Visa.
 
 ---
@@ -11,9 +11,9 @@
 3. [Hai Chế Độ Vận Hành: Tự Động (Auto Mode) & Bán Tự Động (Co-Pilot Mode)](#3-hai-chế-độ-vận-hành-tự-động-auto-mode--bán-tự-động-co-pilot-mode)
 4. [Quy Trình 5 Giai Đoạn Phục Vụ Khách Hàng Khép Kín](#4-quy-trình-5-giai-đoạn-phục-vụ-khách-hàng-khép-kín)
 5. [Phân Định Khách Hàng: Mới (New), Cũ (Returning), VIP & Đại Lý](#5-phân-định-khách-hàng-mới-new-cũ-returning-vip--đại-lý)
-6. [Bảng Giá Bán Lẻ & Bảng Giá Ưu Đãi Khách Cũ / Đại Lý](#6-bảng-giá-bán-lẻ--bảng-giá-ưu-đãi-khách-cũ--đại-lý)
-7. [Thuật Toán Lịch Xe Tránh Quá Hạn Visa (Anti-Overstay Scheduling)](#7-thuật-toán-lịch-xe-tránh-quá-hạn-visa-anti-overstay-scheduling)
-8. [Quy Trình Sơ Đồ Xe Tự Động & Lệnh Điều Hành Nhóm Telegram](#8-quy-trình-sơ-đồ-xe-tự-động--lệnh-điều-hành-nhóm-telegram)
+6. [Bảng Giá Bán Lẻ & Bảng Giá Ưu Đãi Khách Cũ (Chuẩn Telegram & Các Kênh)](#6-bảng-giá-bán-lẻ--bảng-giá-ưu-đãi-khách-cũ-chuẩn-telegram--các-kênh)
+7. [Thuật Toán Lịch Xe Tránh Quá Hạn Visa & Điểm Đón Chuẩn (Anti-Overstay Scheduling)](#7-thuật-toán-lịch-xe-tránh-quá-hạn-visa--điểm-đón-chuẩn-anti-overstay-scheduling)
+8. [Quy Trình Lấy Sơ Đồ Xe (Scheme) & Lệnh Điều Hành Nhóm Telegram](#8-quy-trình-lấy-sơ-đồ-xe-scheme--lệnh-điều-hành-nhóm-telegram)
 9. [Hệ Thống Tự Động Quét & Nhắc Hết Hạn Visa Trước 10 Ngày](#9-hệ-thống-tự-động-quét--nhắc-hết-hạn-visa-trước-10-ngày)
 10. [Tự Động Hóa Tạo Hợp Đồng Song Ngữ (7 Trang) & Kế Toán CRM](#10-tự-động-hóa-tạo-hợp-đồng-song-ngữ-7-trang--kế-toán-crm)
 11. [Hướng Dẫn Triển Khai, Khởi Chạy & Bảo Mật Webhook](#11-hướng-dẫn-triển-khai-khởi-chạy--bảo-mật-webhook)
@@ -37,30 +37,23 @@ flowchart TD
 
     subgraph BACKEND [FastAPI Core Gateway - main.py]
         INCOMING --> GW[Router Tiếp Nhận & Phân Luồng Webhook]
-        GW --> RES[Tự Động Giải Mã PSID / Tên Thật Khách Hàng]
+        GW --> RES[Tự Động Tra Cứu: Tên Khách + Năm Sinh + Nguồn + Loại Dịch Vụ]
         GW --> MEM[(SQLite WAL Database: 936+ Hồ Sơ Khách & Chuyến Đi)]
         GW --> RAG[Bộ Não Tri Thức RAG TF-IDF: 706+ Cặp Q&A Chuẩn]
-        GW --> CAL[Bộ Tính Lịch Chạy Xe Thông Minh: T3, T5, CN]
+        GW --> CAL[Bộ Tính Lịch Chạy Xe Thông Minh: T3, T5, CN Tránh Overstay]
         GW --> LLM[AI Core: DeepSeek-Chat / Groq Mixtral / Llama 3]
     end
 
     subgraph OPERATION [Hệ Thống Vận Hành & Điều Phối]
         LLM --> OUT_CUST[Phản Hồi Trực Tiếp Cho Khách Đa Ngôn Ngữ]
         LLM --> NOTIF[Bắn Alert Telegram Báo Đơn Tức Thì Tới Admin]
-        LLM --> SEAT[Seat Map Generator: Tự Vẽ Sơ Đồ Xe 21 Chỗ]
-        LLM --> BUS_GRP[Gửi Lệnh Scheme / Lock Ghế Vào Đúng Topic Telegram Bus]
+        LLM --> SCHEME_ADMIN[Gửi Lệnh Scheme Đến Admin https://t.me/easytripvisa_co_ltd Lấy Sơ Đồ]
+        SCHEME_ADMIN --> SEAT_FORWARD[Admin Gửi Sơ Đồ -> Bot Gửi Khách Kèm Nhãn Ngày/Tuyến]
+        LLM --> BUS_GRP[Gửi Lệnh Lock Ghế / Chốt Đơn Vào Đúng Topic Telegram Bus]
         LLM --> CRM_SYNC[Đồng Bộ Lark Base / Google Sheets / Bảng Kê Kế Toán]
         LLM --> CONTR[Tự Động Sinh Hợp Đồng 7 Trang Song Ngữ + Ký Tên]
     end
 ```
-
-### Các Kênh Tích Hợp Chi Tiết:
-1. **Telegram (@Easy_Trip_Visa_bot)**: Xử lý chat cá nhân, tiếp nhận lệnh `/start`, khảo sát khách cũ, chọn ghế, nhận ảnh hồ sơ hộ chiếu.
-2. **Meta Facebook Messenger**: Tiếp nhận qua Webhook Graph API, tích hợp tự động phân giải PSID ra tên thật qua Page Conversations API.
-3. **Instagram Direct Messaging**: Tiếp nhận webhook nhắn tin từ khách quốc tế trên Instagram.
-4. **WhatsApp Business Cloud API**: Tiếp nhận tin nhắn qua số điện thoại quốc tế (+84, +7, +1, +44...).
-5. **Website Live Chat / Co-Pilot Studio**: Web client tương tác thời gian thực, hỗ trợ chế độ Co-Pilot duyệt tin nhắn nháp.
-6. **Zalo OA**: Đồng bộ khách hàng qua kênh Zalo chính thức.
 
 ---
 
@@ -74,16 +67,14 @@ Mỗi khi có khách hàng gửi tin nhắn từ bất kỳ kênh nào, hàm `no
   - `💃 Khách iu ghé thăm!`
   - `🔥 Có khách cần chốt visa kìa sếp!`
   - `✨ Khách quen quay lại!`
-* **Thông tin định danh khách**:
-  - Tên hiển thị / Tên thật (Nếu tra cứu được từ CRM).
-  - Kênh tiếp nhận: `Facebook (Fanpage Tích Xanh)`, `WhatsApp Business`, `Telegram`, `Website`, `Instagram`.
-  - Quốc tịch & Số điện thoại (nếu có trong hồ sơ).
+* **Thông tin định danh khách (Tra cứu từ SQLite 936+ hồ sơ)**:
+  - Tên hiển thị / Họ tên thật.
+  - Năm sinh.
+  - Kênh tiếp nhận / Nguồn (Telegram / Facebook / WhatsApp / Zalo / Web).
+  - Loại dịch vụ khách đã/đang quan tâm (Visarun Lào 90D/45D, Mộc Bài...).
 * **Nội dung cuộc hội thoại**:
   - 💬 **Khách nhắn**: Trích xuất chính xác câu hỏi/yêu cầu của khách.
-  - 🤖 **Bot đã phản hồi**: Hiển thị câu trả lời mà Bot đã gửi cho khách (ở chế độ Auto) hoặc câu trả lời nháp (ở chế độ Co-Pilot).
-* **Nút hành động nhanh (Inline Buttons)**:
-  - 🖥️ `Mở Co-Pilot Studio` (Truy cập nhanh bàn làm việc điều hành).
-  - ✍️ `Can thiệp trả lời / Tiếp quản chat`.
+  - 🤖 **Bot đã phản hồi**: Hiển thị câu trả lời mà Bot đã gửi cho khách (Auto Mode) hoặc câu trả lời nháp (Co-Pilot Mode).
 
 ---
 
@@ -103,38 +94,37 @@ Mỗi khi có khách hàng gửi tin nhắn từ bất kỳ kênh nào, hàm `no
 ```mermaid
 sequenceDiagram
     autonumber
-    actor C as Khách Hàng (Đa Kênh)
+    actor C as Khách Hàng (Telegram / Đa Kênh)
     participant B as AI Chatbot Core
-    participant DB as SQLite CRM (936 Khách)
-    participant AD as Telegram Admin Alert
+    participant DB as SQLite CRM (936+ Khách)
+    participant AD as Admin (https://t.me/easytripvisa_co_ltd)
     participant BUS as Nhóm Telegram Điều Hành Xe
 
-    C->>B: Gửi tin nhắn đầu tiên
-    B->>DB: Tra cứu SĐT / ID mạng xã hội
-    alt Tìm thấy trong CRM
-        DB-->>B: Trả về Profile: Khách Cũ (Tên, Quốc tịch, Ghế quen)
-        B->>C: Chào đúng tên + Áp dụng Bảng Giá Ưu Đãi
-    else Chưa có trong CRM
+    C->>B: Nhắn tin: Hết hạn 15/09, muốn đi Lào 90D
+    B->>DB: Tra cứu: Tên Khách + Năm Sinh + Nguồn + Dịch Vụ
+    alt Tìm thấy trong CRM (Khách Cũ)
+        DB-->>B: Trả về Profile: Khách Cũ (Tên, Năm sinh, Ghế quen)
+        B->>C: Chào đúng tên + Báo giá Khách Cũ Telegram (3.000.000đ - Chỉ nhận tiền mặt)
+    else Chưa có trong CRM (Khách Mới)
         DB-->>B: Trả về: Khách Mới
-        B->>C: Chào lịch sự + Áp dụng Bảng Giá Niêm Yết
+        B->>C: Chào lịch sự + Báo giá Khách Mới Telegram (3.400.000đ)
     end
 
-    B->>AD: Bắn Alert Telegram: "🚀 Nổ đơn kìa sếp ơi!" + Preview Bot Reply
-    C->>B: Cung cấp ngày hết hạn visa cũ + Quốc tịch
-    B->>B: Tính ngày xe chạy (Tránh Overstay) + Lọc tuyến (Lào/Cam)
-    B->>C: Báo lịch khởi hành chuẩn + Báo giá chuẩn gói dịch vụ
+    B->>B: Tính ngày xe: 15/09 -> Lùi về Tối Chủ Nhật 13/09 (Đón 21:30 tại map)
+    B->>C: Thông báo ngày đi 13/09, giờ đón 21:30 tại link Google Maps
 
-    opt Khách hỏi sơ đồ xe
-        B->>B: Sinh ảnh sơ đồ xe 21 chỗ (Gạch chéo ghế đã có khách)
-        B->>C: Gửi ảnh sơ đồ xe trực tiếp qua chat
+    opt Khách yêu cầu xem sơ đồ xe
+        B->>AD: Phát lệnh Scheme: "Scheme 13/09 - 90D Laos"
+        AD-->>B: Admin gửi ảnh sơ đồ xe thực tế
+        B->>C: Gửi ảnh sơ đồ cho khách kèm nhãn: "[13/09 - 90D Laos]"
     end
 
-    C->>B: Xác nhận chọn ghế + Điểm đón
-    B->>BUS: Gửi Lệnh: Lock [Ghế] [Kênh] vào đúng Topic ngày chạy
-    B->>C: Gửi hướng dẫn chụp ảnh Hộ chiếu & STK Vietcombank chính thức
-    C->>B: Gửi ảnh Hộ chiếu + Ủy nhiệm chi / Bill chuyển khoản
-    B->>BUS: Báo chốt khách: [HỌ TÊN]/[NĂM SINH] [SỐ GHẾ] [NGUỒN] [ĐIỂM ĐÓN] Đã tt
-    B->>DB: Cập nhật chuyến đi mới, lưu hồ sơ và đồng bộ Lark CRM
+    C->>B: Chọn số ghế (ví dụ: A1)
+    B->>BUS: Gửi lệnh khóa ghế tạm: "Lock A1 Telegram" (vào Topic 13/09 - 90D)
+    B->>C: Hướng dẫn nộp ảnh Hộ chiếu + Thanh toán
+    C->>B: Gửi ảnh Hộ chiếu + Xác nhận thanh toán (hoặc chọn nộp tiền mặt)
+    B->>BUS: Báo chốt khách: [HỌ TÊN]/[NĂM SINH] A1 TELEGRAM [ĐIỂM ĐÓN] Đã tt
+    B->>DB: Lưu hồ sơ, cập nhật chuyến đi vào SQLite và đồng bộ CRM
 ```
 
 ---
@@ -143,42 +133,43 @@ sequenceDiagram
 
 ```mermaid
 graph TD
-    A[Tiếp Nhận Khách Hàng] --> B{Tra Cứu CSDL CRM 936 Khách}
-    B -->|Không Có Thông Tin| C[👤 Khách Hàng Mới - NEW]
-    B -->|Đã Từng Đi >= 1 Chuyến| D[🌟 Khách Hàng Cũ - RETURNING]
-    B -->|Đã Từng Đi >= 5 Chuyến| E[💎 Khách VIP]
-    B -->|Thuộc Danh Sách Đối Tác| F[🤝 Đại Lý: Sergei / Bolot / Arcenii]
+    A[Tiếp Nhận Khách Hàng] --> B{Tra Cứu SQLite CRM 936+ Khách}
+    B -->|Tên + Năm Sinh + Nguồn + Dịch Vụ Chưa Có| C[👤 Khách Hàng Mới - NEW]
+    B -->|Đã Từng Sử Dụng Dịch Vụ| D[🌟 Khách Hàng Cũ - RETURNING]
+    B -->|Đã Đi >= 5 Chuyến| E[💎 Khách VIP]
+    B -->|Thuộc Đối Tác| F[🤝 Đại Lý: Sergei / Bolot / Arcenii]
 
-    C --> C1[Báo Giá Bán Lẻ Niêm Yết]
-    C --> C2[Hỏi đầy đủ 5 thông tin từ đầu]
-
-    D --> D1[Báo Giá Tri Ân Khách Cũ - Giảm 100k đến 1.300k]
-    D --> D2[Không hỏi lại quốc tịch / Điểm đón; Nhắc giữ chỗ quen cũ]
-
-    E --> E1[Ưu tiên giữ ghế đẹp nhất A1/A2 + Hỗ trợ VIP 24/7]
-    F --> F1[Áp dụng Bảng Giá Chiết Khấu Đại Lý Riêng Biệt]
+    C --> C1[Báo Giá Khách Mới: 45D = 1.400k | 90D = 3.400k]
+    D --> D1[Báo Giá Khách Cũ: 45D = 1.150k | 90D = 3.000k - CHỈ NHẬN TIỀN MẶT]
+    E --> E1[Ưu tiên giữ ghế đẹp nhất A1/A2 + Chăm sóc VIP]
+    F --> F1[Áp dụng Bảng Giá Chiết Khấu Đại Lý]
 ```
 
 ---
 
-## 💰 6. BẢNG GIÁ BÁN LẺ & BẢNG GIÁ ƯU ĐÃI KHÁCH CŨ / ĐẠI LÝ
+## 💰 6. BẢNG GIÁ BÁN LẺ & BẢNG GIÁ ƯU ĐÃI KHÁCH CŨ (CHUẨN TELEGRAM & CÁC KÊNH)
 
-### 6.1. Dịch Vụ Xe Visarun Trọn Gói
+### 6.1. Tuyến Visarun Nha Trang - Lào (Chuẩn Kênh Telegram)
 
-| DỊCH VỤ | GIÁ BÁN LẺ (Khách Mới) | GIÁ ƯU ĐÃI (Khách Cũ) | ĐẠI LÝ SERGEI | ĐẠI LÝ BOLOT | ĐẠI LÝ ARCENII |
-| :--- | :---: | :---: | :---: | :---: | :---: |
-| **Free Visa Bờ Y (Lào 45D)** | **1.400.000đ** | **1.300.000đ** | 1.000.000đ | 1.050.000đ | 1.100.000đ |
-| **Free Visa Mộc Bài (Cam 45D)** | **1.400.000đ** | **1.300.000đ** | 1.100.000đ | 1.150.000đ | 1.200.000đ |
-| **Visarun 90D Lào (< 2 ngày)** | **4.000.000đ** | **3.550.000đ** | 2.520.000đ | 2.650.000đ | 2.800.000đ |
-| **Visarun 90D Lào (> 3 ngày)** | **2.450.000đ** | - | - | - | - |
-| **Visarun 90D Cam (< 2 ngày)** | **4.000.000đ** | **3.550.000đ** | 2.520.000đ | 2.650.000đ | 2.800.000đ |
-| **Visarun 90D Cam (> 3 ngày)** | **2.450.000đ** | - | - | - | - |
-| **Visarun Nga 4h (Single)** | **3.400.000đ** | **3.000.000đ** | - | - | - |
-| **Visarun Nga 4h (Multi)** | **4.400.000đ** | **4.000.000đ** | - | - | - |
+| DỊCH VỤ VISARUN LÀO | 👤 KHÁCH MỚI (NEW) | 🌟 KHÁCH CŨ (RETURNING) | HÌNH THỨC THANH TOÁN |
+| :--- | :---: | :---: | :---: |
+| **Nha Trang - Lào 45 Ngày (Free Visa)** | **1.400.000 VNĐ** | **1.150.000 VNĐ** | **Khách cũ: Chỉ nhận tiền mặt** |
+| **Nha Trang - Lào 90 Ngày (E-visa Single)** | **3.400.000 VNĐ** | **3.000.000 VNĐ** | **Khách cũ: Chỉ nhận tiền mặt** |
+| **Nha Trang - Lào 90 Ngày (E-visa Multi)** | **4.400.000 VNĐ** | **4.000.000 VNĐ** | **Khách cũ: Chỉ nhận tiền mặt** |
 
 ---
 
-### 6.2. Dịch Vụ Làm E-Visa Lẻ (Single Entry)
+### 6.2. Tuyến Campuchia (Cửa Khẩu Mộc Bài) & Đại Lý
+
+| DỊCH VỤ | KHÁCH MỚI | KHÁCH CŨ | ĐẠI LÝ SERGEI | ĐẠI LÝ BOLOT | ĐẠI LÝ ARCENII |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Free Visa Mộc Bài (Cam 45D)** | **1.400.000đ** | **1.300.000đ** | 1.100.000đ | 1.150.000đ | 1.200.000đ |
+| **Visarun 90D Cam (< 2 ngày)** | **4.000.000đ** | **3.550.000đ** | 2.520.000đ | 2.650.000đ | 2.800.000đ |
+| **Visarun 90D Lào (Đại lý)** | - | - | **2.520.000đ** | **2.650.000đ** | **2.800.000đ** |
+
+---
+
+### 6.3. Dịch Vụ Làm E-Visa Lẻ (Single Entry)
 
 | GÓI THỜI GIAN | GIÁ BÁN LẺ (Khách Mới) | GIÁ ƯU ĐÃI (Khách Cũ) | ĐẠI LÝ SERGEI | ĐẠI LÝ BOLOT | ĐẠI LÝ ARCENII |
 | :--- | :---: | :---: | :---: | :---: | :---: |
@@ -194,67 +185,57 @@ graph TD
 
 ---
 
-### 6.3. Tuyến Đà Nẵng & Fast Track Sân Bay
+## 📅 7. THUẬT TOÁN LỊCH XE TRÁNH QUÁ HẠN VISA & ĐIỂM ĐÓN CHUẨN (ANTI-OVERSTAY SCHEDULING)
 
-| DỊCH VỤ | GIÁ BÁN LẺ (Khách Mới) | KHÁCH CŨ / ĐẠI LÝ | ĐẠI LÝ SERGEI |
-| :--- | :---: | :---: | :---: |
-| **Xe buýt Đà Nẵng - Lao Bảo** | **950.000đ** | - | - |
-| **Visarun ĐN - Lao Bảo (trước 3 ngày)** | **3.550.000đ** | - | **2.800.000đ** |
-| **Visarun ĐN - Lao Bảo (khẩn)** | **3.800.000đ** | - | **3.050.000đ** |
-| **Fast track Đón Cam Ranh / Đà Nẵng** | **1.200.000đ** | **540.000đ** | **450.000đ** |
-| **Fast track Đón Tân Sơn Nhất / Nội Bài** | **1.200.000đ** | **675.000đ** | **675.000đ** |
-| **Fast track Tiễn Tân Sơn Nhất** | **1.890.000đ** | **891.000đ** | **891.000đ** |
-| **Fast track Tiễn Sân bay khác** | **1.890.000đ** | **756.000đ** | **756.000đ** |
-| **Fast track Tiễn Cam Ranh VIP** | **1.890.000đ** | **1.890.000đ** | **1.890.000đ** |
+### 7.1. Thuật Toán Lùi Lịch Tránh Overstay:
+1. **Nguyên tắc an toàn**: Xe xuất bến chậm nhất trước ngày hết hạn 1 ngày: $T_{depart} \le T_{expiry} - 1 \text{ ngày}$.
+2. **Lịch chạy thực tế**:
+   - **Tuyến Lào 45 Ngày**: Chạy **MỖI NGÀY**.
+   - **Tuyến Lào 90 Ngày & Campuchia**: Chạy cố định các tối **Thứ 3, Thứ 5, Chủ Nhật**.
+3. **Ví dụ Khách hết hạn 15/09**:
+   - Ngày muộn nhất được phép đi: 14/09 (Thứ 2 - không có xe 90D chạy).
+   - Bot tự động lùi về ngày xe chạy gần nhất trước đó: **Tối Chủ Nhật ngày 13/09**.
 
----
-
-## 📅 7. THUẬT TOÁN LỊCH XE TRÁNH QUÁ HẠN VISA (ANTI-OVERSTAY SCHEDULING)
-
-Bộ tính toán lịch (`calculate_smart_departure` & `validate_and_adjust_departure`) hoạt động theo nguyên lý nghiêm ngặt:
-
-1. **Tuyến Lào 45 Ngày (Từ Nha Trang)**:
-   - Xe chạy **MỖI NGÀY** vào ban đêm (19h00 - 20h00).
-   - Ngày khởi hành chuẩn: $T_{depart} = T_{expiry} - 1 \text{ ngày}$.
-2. **Tuyến Lào 90 Ngày & Tuyến Campuchia (Mộc Bài)**:
-   - Xe chỉ chạy cố định vào các tối: **Thứ 3, Thứ 5, Chủ Nhật**.
-   - Thuật toán tự động tìm ngày chạy xe gần nhất nằm **trước hoặc bằng** $T_{expiry} - 1 \text{ ngày}$.
-   - *Ví dụ*: Visa hết hạn vào Thứ 5 ngày 15/09 $\rightarrow$ Ngày muộn nhất được đi là Thứ 4 ngày 14/09. Do Thứ 4 không có xe chạy, hệ thống **tự động lùi về Thứ 3 ngày 13/09** và giải thích rõ ràng cho khách để tránh rủi ro phạt overstay tại cửa khẩu.
+### 7.2. Thời Gian Khởi Hành & Điểm Đón Chính Thức Tại Nha Trang:
+* ⏰ **Thời gian đón khách**: **21:30**
+* 📍 **Điểm đón Google Maps chính thức**: [https://maps.app.goo.gl/PAxvxTsxxjvqqBpG9](https://maps.app.goo.gl/PAxvxTsxxjvqqBpG9)
 
 ---
 
-## 🚌 8. QUY TRÌNH SƠ ĐỒ XE TỰ ĐỘNG & LỆNH ĐIỀU HÀNH NHÓM TELEGRAM
+## 🚌 8. QUY TRÌNH LẤY SƠ ĐỒ XE (SCHEME) & LỆNH ĐIỀU HÀNH NHÓM TELEGRAM
 
-### 8.1. Sơ Đồ Ghế Xe Tự Động (Seat Map Generator)
-- Xe giường nằm cao cấp 21 chỗ gồm 2 dãy A và B (A1-A12, B1-B10).
-- Module `seat_map_generator.py` tự động lấy danh sách ghế đã đặt từ CSDL, gạch chéo vàng/xanh vào các vị trí đã khóa và gửi ảnh nét cao trực tiếp vào cuộc chat của khách.
+### 8.1. Quy Trình Lấy Sơ Đồ Xe Chuẩn:
+1. Khi khách hỏi sơ đồ xe hoặc muốn chọn vị trí ghế:
+   * Bot tự động tạo câu lệnh `Scheme` gửi đến kênh Admin: [https://t.me/easytripvisa_co_ltd](https://t.me/easytripvisa_co_ltd)
+   * *Ví dụ câu lệnh Bot gửi Admin*:
+     ```text
+     Scheme 13/09 - 90D Laos
+     ```
+2. **Admin gửi lại sơ đồ xe**: Sau khi Admin gửi ảnh sơ đồ xe giường nằm 21 chỗ vào hệ thống:
+   * Bot lập tức chuyển tiếp ảnh sơ đồ xe đến cho đúng khách hàng tương ứng.
+   * Tin nhắn đi kèm ảnh sơ đồ theo đúng định dạng:
+     ```text
+     [13/09 - 90D Laos]
+     ```
 
 ### 8.2. Cấu Trúc Topic Trong Nhóm Điều Hành `EasyTrip booking BUS`:
-* `# General`: Kênh điều phối chung, dùng để phát lệnh xin sơ đồ xe (`Scheme`).
+* `# General`: Kênh điều phối chung.
 * Topic `[Ngày/Tháng] - 45D`: Chuyến xe 45 ngày Lào *(Ví dụ: `11/10 - 45D`)*.
-* Topic `[Ngày/Tháng] - 90D`: Chuyến xe 90 ngày Lào *(Ví dụ: `10/09 - 90D`)*.
-* Topic `[Ngày/Tháng] - mộc bài` *(hoặc `mbi`)*: Chuyến Campuchia *(Ví dụ: `13/09 - mbi`)*.
+* Topic `[Ngày/Tháng] - 90D`: Chuyến xe 90 ngày Lào *(Ví dụ: `13/09 - 90D`, `10/09 - 90D`)*.
+* Topic `[Ngày/Tháng] - mộc bài` *(hoặc `mbi`)*: Chuyến Campuchia.
 
-### 8.3. Cú Pháp Câu Lệnh Điều Hành:
-* **Xin sơ đồ xe (Gửi vào `# General`)**:
+### 8.3. Cú Pháp Khóa Ghế & Báo Khách Vào Topic:
+* **Khóa ghế tạm thời (chờ thanh toán)**:
   ```text
-  Scheme 13/09- mộc bài
-  Scheme 10/09 - 90D Laos
-  Scheme 11/10 - 45D
+  Lock A1 Telegram
   ```
-* **Khóa ghế tạm thời (Gửi vào đúng Topic ngày xe)**:
-  ```text
-  Lock A9 A10 Telegram
-  Lock B1 Facebook
-  ```
-* **Báo khách chính thức & Đã thanh toán (Gửi vào đúng Topic ngày xe)**:
+* **Báo khách chính thức & Đã thanh toán (hoặc xác nhận thu tiền mặt)**:
   ```text
   [HỌ TÊN KHÁCH]/[NĂM SINH] [SỐ GHẾ] [NGUỒN] [ĐIỂM ĐÓN] [TÌNH TRẠNG TT]
   ```
-  *Ví dụ chuẩn:*
+  *Ví dụ:*
   ```text
-  DRAPPIER ALEXANDRE GERARD GILBERT/2002 A12 ZALO Hòn Chồng Đã tt
-  IVANOV SERGEI/1990 A1 TELEGRAM 4 Trần Phú Đã tt
+  IVANOV SERGEI/1990 A1 TELEGRAM Điểm đón Maps Đã tt tiền mặt
   ```
 
 ---
@@ -266,11 +247,11 @@ Bộ tính toán lịch (`calculate_smart_departure` & `validate_and_adjust_depa
    - Khách hàng có `visa_expiry_date` cách ngày hiện tại từ **9 đến 11 ngày**.
    - Trạng thái `reminder_status` chưa gửi hoặc đã qua hơn 7 ngày (Cơ chế chống spam nghiêm ngặt).
 3. **Mẫu tin nhắn cá nhân hóa theo ngôn ngữ mẹ đẻ**:
-   - 🇷🇺 **Tiếng Nga (`ru`)**: Chào thân mật theo tên, nhắc visa sắp hết hạn, chủ động đề xuất giữ lại ghế quen `A1` và điểm đón quen `Oceanus Nha Trang`.
+   - 🇷🇺 **Tiếng Nga (`ru`)**: Chào thân mật theo tên, nhắc visa sắp hết hạn, chủ động đề xuất giữ lại ghế quen `A1` và áp dụng giá tri ân khách cũ **3.000.000 VNĐ (tiền mặt)**.
    - 🇰🇷 **Tiếng Hàn (`ko`)**: Sử dụng kính ngữ trang trọng, đề xuất giữ chỗ quen `B2`.
    - 🇬🇧 **Tiếng Anh (`en`)**: Lịch sự, chuyên nghiệp, thông báo lịch xe chạy gần nhất.
    - 🇻🇳 **Tiếng Việt (`vi`)** & 🇫🇷 **Tiếng Pháp (`fr`)**.
-4. **Xử lý phản hồi**: Khi khách trả lời tin nhắn nhắc nhở, Bot tự động nối tiếp ngữ cảnh, áp dụng ngay **Bảng Giá Ưu Đãi Khách Cũ** để chốt chuyến tiếp theo.
+4. **Xử lý phản hồi**: Khi khách trả lời, Bot tự động nối tiếp ngữ cảnh để chốt chuyến nhanh chóng.
 
 ---
 
@@ -296,20 +277,14 @@ source venv/bin/activate  # Trên Linux/macOS
 
 # 2. Khởi chạy Server FastAPI Gateway (Cổng 8000)
 python main.py
-# hoặc uvicorn main:app --host 0.0.0.0 --port 8000 --reload
 
-# 3. Khởi chạy Telegram Bot Poller dự phòng (Nếu không dùng Webhook trực tiếp)
+# 3. Khởi chạy Telegram Bot Poller dự phòng
 python telegram_poller.py
 ```
 
 ### 11.2. Cơ Chế Webhook Guardian Tự Động Phục Hồi
-Backend tích hợp tiến trình nền `webhook_guardian()` chạy ngầm mỗi 60 giây. Nếu Webhook URL của Telegram bị sai lệch hoặc mất kết nối với Render Server (`RENDER_EXTERNAL_URL`), hệ thống sẽ tự động khôi phục Webhook ngay lập tức mà không cần can thiệp thủ công.
-
-### 11.3. Bảng Điều Khiển & Giám Sát
-* **Trang Co-Pilot Studio (Live Chat)**: `http://localhost:8000/copilot/index.html`
-* **Trang Nhật Ký Tin Nhắn Admin**: `http://localhost:8000/admin/logs`
-* **File Cơ Sở Dữ Liệu SQLite**: `easytrip_chat.db`
+Backend tích hợp tiến trình nền `webhook_guardian()` chạy ngầm mỗi 60 giây. Nếu Webhook URL của Telegram bị sai lệch hoặc mất kết nối với Render Server (`RENDER_EXTERNAL_URL`), hệ thống sẽ tự động khôi phục Webhook ngay lập tức.
 
 ---
 
-*Tài liệu quy trình vận hành chính thức thuộc bản quyền Easy Trip & Visa Co. Ltd. Mọi cập nhật cần được đồng bộ trực tiếp lên hệ thống GitHub và CSDL trung tâm.*
+*Tài liệu quy trình vận hành chính thức thuộc bản quyền Easy Trip & Visa Co. Ltd. Mọi cập nhật được đồng bộ trực tiếp lên hệ thống GitHub và CSDL trung tâm.*
