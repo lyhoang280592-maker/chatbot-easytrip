@@ -1371,7 +1371,7 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
                                 
                                 try:
                                     domain = os.getenv("RENDER_EXTERNAL_URL", "https://chatbot-easytrip.onrender.com").rstrip("/")
-                                    image_url = f"{domain}/static/map_{ngay.replace('/', '_')}_{service}.jpg"
+                                    image_url = f"{domain}/static/map_{ngay.replace('/', '_')}_{service}.jpg?t={int(datetime.now().timestamp())}"
                                     if platform == "Telegram":
                                         conn_id = memory_store.get(f"{session_id}_business_connection_id")
                                         await tg_app.bot.send_photo(
