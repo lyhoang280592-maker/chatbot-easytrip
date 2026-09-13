@@ -288,13 +288,15 @@ async def call_deepseek(messages):
         "model": DEEPSEEK_MODEL,
         "messages": messages,
         "response_format": {"type": "json_object"},
-        "temperature": 0.3,
+        "temperature": 0.5,
     }
     async with httpx.AsyncClient(timeout=30) as client:
         try:
             r = await client.post(url, json=payload, headers=headers)
             if r.status_code == 200:
-                return r.json()["choices"][0]["message"]["content"]
+                raw = r.json()["choices"][0]["message"]["content"]
+                if raw and raw.strip():
+                    return raw
             return None
         except Exception:
             return None
@@ -321,7 +323,9 @@ async def call_groq_fallback(messages):
             try:
                 r = await client.post(url, json=payload, headers=headers)
                 if r.status_code == 200:
-                    return r.json()["choices"][0]["message"]["content"]
+                    raw = r.json()["choices"][0]["message"]["content"]
+                    if raw and raw.strip():
+                        return raw
                 else:
                     print(f"⚠️ Groq key {idx+1} failed with status {r.status_code}: {r.text}")
             except Exception as e:
@@ -351,7 +355,7 @@ async def call_gemini_fallback(messages):
         
         full_prompt = f"{system_content}CONVERSATION HISTORY:\n" + "\n".join(conversation_history) + "\n\nRespond with ONLY a valid JSON object matching the schema:"
         response = await model.generate_content_async(full_prompt)
-        if response and response.text:
+        if response and response.text and response.text.strip():
             return response.text.strip()
         return None
     except Exception as e:
@@ -583,12 +587,12 @@ async def process_chat(history_messages: list[dict], customer_profile: dict | No
         messages.append({"role": role, "content": msg["content"]})
 
     content = await call_deepseek(messages)
-    if not content:
+    if not content or not content.strip():
         content = await call_groq_fallback(messages)
-    if not content:
+    if not content or not content.strip():
         content = await call_gemini_fallback(messages)
 
-    if not content:
+    if not content or not content.strip():
         # Fallback in case of complete API failure
         lang = lang_code
         return ChatResponse(
@@ -622,7 +626,9 @@ async def call_deepseek_text(messages):
         try:
             r = await client.post(url, json=payload, headers=headers)
             if r.status_code == 200:
-                return r.json()["choices"][0]["message"]["content"]
+                raw = r.json()["choices"][0]["message"]["content"]
+                if raw and raw.strip():
+                    return raw
             return None
         except Exception:
             return None
@@ -647,7 +653,9 @@ async def call_groq_fallback_text(messages):
             try:
                 r = await client.post(url, json=payload, headers=headers)
                 if r.status_code == 200:
-                    return r.json()["choices"][0]["message"]["content"]
+                    raw = r.json()["choices"][0]["message"]["content"]
+                    if raw and raw.strip():
+                        return raw
                 else:
                     print(f"⚠️ Groq text key {idx+1} failed with status {r.status_code}: {r.text}")
             except Exception as e:
@@ -671,7 +679,7 @@ async def call_gemini_fallback_text(messages):
                 user_content += m["content"] + "\n"
         full_prompt = f"{system_content}YÊU CẦU / CÂU HỎI:\n{user_content}"
         response = await model.generate_content_async(full_prompt)
-        if response and response.text:
+        if response and response.text and response.text.strip():
             return response.text.strip()
         return None
     except Exception as e:
@@ -722,12 +730,12 @@ async def process_staff_chat(question: str) -> str:
 
     # 3. Gọi LLM chính hoặc fallback dạng text
     content = await call_deepseek_text(messages)
-    if not content:
+    if not content or not content.strip():
         content = await call_groq_fallback_text(messages)
-    if not content:
+    if not content or not content.strip():
         content = await call_gemini_fallback_text(messages)
 
-    if not content:
+    if not content or not content.strip():
         return "🤖 Không thể kết nối với AI (API Error). Vui lòng thử lại sau hoặc tra cứu từ khóa!"
 
     return content.strip()
