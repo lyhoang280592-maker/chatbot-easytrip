@@ -109,11 +109,11 @@ class TestSeatMapGeneration(unittest.IsolatedAsyncioTestCase):
             if os.path.exists(f):
                 os.remove(f)
 
-        # 1. Gọi khi chưa có sơ đồ chính thức trên đĩa -> tự động tạo sơ đồ trống
+        # 1. Gọi khi chưa có sơ đồ chính thức trên đĩa -> trả về None để chờ Admin tải lên
         res_45d = await get_or_create_seat_map("20/05", "45D")
-        self.assertIsNotNone(res_45d)
+        self.assertIsNone(res_45d)
 
-        # 2. Giả lập đối tác đã tải lên sơ đồ bằng cách tạo file trống trên đĩa
+        # 2. Giả lập đối tác đã tải lên sơ đồ bằng cách tạo file trên đĩa
         os.makedirs(os.path.dirname(file_45d), exist_ok=True)
         with open(file_45d, "w") as f:
             f.write("mock content")

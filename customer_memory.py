@@ -386,6 +386,7 @@ def link_platform_by_phone(phone_number: str, platform: str, user_id: str) -> Op
     if existing_profile:
         cust_id = existing_profile["customer_id"]
         with conn:
+            conn.execute(f"UPDATE customers SET {platform_col} = NULL WHERE {platform_col} = ? AND customer_id != ?", (str(user_id), cust_id))
             conn.execute(f"UPDATE customers SET {platform_col} = ?, updated_at = CURRENT_TIMESTAMP WHERE customer_id = ?", (str(user_id), cust_id))
         cursor.execute("SELECT * FROM customers WHERE customer_id = ?", (cust_id,))
         return dict(cursor.fetchone())
@@ -693,11 +694,12 @@ def get_session_messages(session_id: str, limit: int = 20) -> List[Dict[str, str
     """Lấy danh sách tin nhắn gần nhất của một phiên từ SQLite"""
     conn = get_db_connection()
     cursor = conn.cursor()
+    raw_uid = session_id.split("_")[-1] if "_" in session_id else session_id
     cursor.execute("""
         SELECT role, content FROM chat_messages 
-        WHERE session_id = ? 
+        WHERE session_id = ? OR session_id LIKE ?
         ORDER BY message_id ASC
-    """, (session_id,))
+    """, (session_id, f"%_{raw_uid}"))
     rows = cursor.fetchall()
     if not rows:
         return []

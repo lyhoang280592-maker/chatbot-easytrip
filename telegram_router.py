@@ -162,7 +162,7 @@ async def get_or_register_topic_key(bot, thread_id: int) -> str | None:
 
 def get_customer_service_type(data, history_text: str = "", user_only_text: str = "") -> str | None:
     loai_lower = (getattr(data, "loai_visa", "") or "").lower()
-    user_lower = (user_only_text or "").lower()
+    user_lower = (user_only_text or history_text or "").lower()
     
     # 1. Kiểm tra các dịch vụ KHÔNG CẦN XE BUÝT (Fast Track, Visa Online khẩn, Gia hạn)
     non_bus_keywords = [

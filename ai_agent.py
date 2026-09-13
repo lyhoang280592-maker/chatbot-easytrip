@@ -104,7 +104,7 @@ class ChatResponse(BaseModel):
             if len(stripped) > 10:
                 clean_text = re.sub(r'["\']?(?:reply_message|current_phase|extracted_data|is_complete)["\']?\s*:\s*', '', stripped)
                 clean_text = re.sub(r'[{}"]', '', clean_text).strip()
-                if len(clean_text) > 10:
+                if len(clean_text) > 10 and "json_object" not in clean_text.lower():
                     msg = clean_text
 
         if not msg:
@@ -206,8 +206,8 @@ CORE COMMUNICATION PHILOSOPHY:
 - **OFFICIAL PERSONAL SUPPORT CONTACTS (AUTO-SEND WHEN REQUESTED)**: If the customer asks to speak with a human agent/manager, requests direct support, wants manual payment confirmation, or asks for Zalo/WhatsApp/Telegram contact info, you MUST automatically provide these two links and encourage them to click to contact our official support team directly:
   - Telegram Support: https://t.me/easytripvisa_co_ltd
   - WhatsApp Support: https://wa.me/84868462071
-- **INTERACTIVE ONBOARDING TEMPLATE (WHEN GREETING OR GATHERING DETAILS)**:
-  When a customer sends a greeting (like 'hi', 'hello', 'chào', 'здравствуйте') or asks generally how to book without providing their details, warmly introduce our services and provide this easy-to-fill **5-point template** in their native language:
+- **INTERACTIVE ONBOARDING TEMPLATE (ONLY FOR BLANK GREETINGS WITHOUT DETAILS)**:
+  When a customer sends ONLY a blank greeting (like 'hi', 'hello', 'chào', 'здравствуйте') or asks generally how to book without providing ANY details, warmly introduce our services and provide this easy-to-fill **5-point template** in their native language:
   
   📋 **Quick Booking Template (Mẫu thông tin tư vấn nhanh)**:
   1️⃣ **Nationality (Quốc tịch)**: (e.g. Russia, Vietnam, Korea, USA, Germany...)
@@ -223,6 +223,8 @@ CORE COMMUNICATION PHILOSOPHY:
   💡 *Example one-line format (Ví dụ gửi 1 dòng):*
   👉 `[Nationality] - [Expiry Date] - [City] - [Service] - [Phone]`
 
+  ⚠️ **CRITICAL RULE**: DO NOT send this 5-point template if the customer has ALREADY stated their needs, answered booking questions, provided their name/year/pickup point, or sent passport/photos!
+
 - **VALUE-FIRST (ADVISE FIRST, PROCEDURES LATER)**: If the customer asks a question (such as prices, schedules, routes, border fees, visa requirements), **immediately and directly answer their question first** clearly, politely, and professionally. Do NOT withhold prices or information until they answer a checklist. Provide value first to build trust!
 - **CONTACT NUMBER REQUEST FORMAT (MANDATORY - CONCISE & FRIENDLY)**:
   When asking the customer for their phone number / contact info, you MUST use this concise, friendly phrasing:
@@ -237,19 +239,24 @@ CONVERSATION PHASES (TECHNICAL STATE MANAGEMENT):
 
 PHASE 1 - CONSULTING:
 - Answer all inquiries, explain packages, and collect key booking details naturally.
-- Switch to PHASE 2 once the customer agrees to proceed with booking/selecting a seat (or after you've proposed a departure date and they are ready to proceed).
+- Switch to PHASE 2 once the customer provides booking details (name, birth year, pickup location, or sends passport photos) or agrees to proceed.
 - Do NOT send external form links. Collect and confirm booking details directly, naturally, and concisely in the chat.
 
 PHASE 2 - SEAT_SELECTION:
-- Move to this phase when the customer is ready to select a seat.
-- Present the final selected package details:
+- Move to this phase as soon as the customer provides their name, year of birth, pickup location, or sends passport/photos after pricing/itinerary was discussed.
+- Acknowledge their details/photos warmly.
+- Present the final selected package details clearly:
+  - 👤 Full Name & Year of Birth (e.g. Dimitry / 1995)
+  - 📍 Pickup Location & Departure Time (e.g. 40 Hon Chong - 21:30)
   - 🚌 Route & Departure Date (calculated dynamically as 1 day before visa expiry, format DD/MM).
   - 💰 Total Price (in VND).
-  - 📍 Pickup Location (default Oceanus Nha Trang or River Station in Nha Trang, or Da Nang office).
-  - ⏰ Departure Time.
-- End your reply with: "Please wait a moment while we check seat availability and send you the seat map..." (translated to the customer's language).
+- End your reply with:
+  • In Russian: "Пожалуйста, подождите немного — я уточню у администратора схему автобуса на этот день и пришлю вам для выбора места! 🚌"
+  • In Vietnamese: "Anh/chị đợi em một chút, em kiểm tra sơ đồ xe và gửi ngay cho mình chọn chỗ nhé! 🚌"
+  • In English: "Please wait a moment while we check seat availability and send you the bus seat map to select your seat... 🚌"
+  • In Korean: "잠시만 기다려 주시면 당일 버스 좌석 배치도를 확인하여 좌석 선택을 도와드리겠습니다! 🚌"
 - Set `current_phase = "SEAT_SELECTION"`.
-- Crucial: Populate `extracted_data.ngay_khoi_hanh` with the calculated departure date (format DD/MM, e.g., "05/06") so the system can retrieve the correct seat map.
+- Crucial: Populate `extracted_data.ngay_khoi_hanh` with the calculated departure date (format DD/MM, e.g., "14/09") so the system can automatically request the seat map (`Scheme`).
 
 PHASE 3 - PAYMENT:
 - After a seat is chosen, provide the payment instructions (translated to the customer's language):
@@ -415,12 +422,13 @@ def calculate_smart_departure_local(ngay_het_han: str, loai_visa: str = "", dest
 
 def extract_date_and_nationality_from_history(history_messages: list[dict]):
     user_text = " ".join([m["content"] for m in history_messages if m.get("role") == "user"])
+    clean_user_text = re.sub(r'\[.*?\]', '', user_text)
+    clean_user_text_lower = clean_user_text.lower()
     full_text = " ".join([m["content"] for m in history_messages])
-    user_text_lower = user_text.lower()
     full_text_lower = full_text.lower()
     
     # 1. Extract expiry date
-    date_match = re.search(r"\b(\d{1,2})[/.-](\d{1,2})(?:[/.-](\d{2,4}))?\b", user_text)
+    date_match = re.search(r"\b(\d{1,2})[/.-](\d{1,2})(?:[/.-](\d{2,4}))?\b", clean_user_text)
     expiry_date = None
     if date_match:
         day = date_match.group(1)
@@ -431,27 +439,37 @@ def extract_date_and_nationality_from_history(history_messages: list[dict]):
         if len(year) == 2: year = "20" + year
         expiry_date = f"{day}/{month}/{year}"
         
-    # 2. Extract destination based on whole-word or keyword matches
+    # 2. Extract destination based on nationality and whole-word matches
     destination = "laos"
-    cambodia_keywords = [
-        "us", "usa", "american", "uk", "british", "germany", "german", "france", "french", 
-        "canada", "canadian", "australia", "australian", "india", "indian", "mỹ", "anh", "pháp", "đức"
-    ]
     
-    has_cambodia_keyword = False
-    for kw in cambodia_keywords:
-        if kw in ["us", "uk", "mỹ", "anh", "đức"]:
-            # Strict whole-word matching to avoid matching substrings like "bus" or "status"
-            if re.search(r"\b" + re.escape(kw) + r"\b", user_text_lower):
-                has_cambodia_keyword = True
-                break
-        else:
-            if kw in user_text_lower:
-                has_cambodia_keyword = True
-                break
-                
-    if has_cambodia_keyword or "cambodia" in user_text_lower or "campuchia" in user_text_lower or "mộc bài" in user_text_lower or "moc bai" in user_text_lower:
-        destination = "cambodia"
+    # Russian, CIS, Belarusian, Korean, ASEAN citizens always take Laos route
+    is_laos_exempt = (
+        bool(re.search(r'\b(ru|russia|russian|nga|belarus|kazakh|kazakhstan|cis|kr|korea|korean|hàn quốc)\b', clean_user_text_lower))
+        or any(re.search(r'\b' + re.escape(rn) + r'\b', clean_user_text_lower) for rn in [
+            "dmitry", "dimitry", "dmitrii", "ivan", "alexey", "sergei", "vladimir", "ekaterina", 
+            "elena", "olga", "tatiana", "roman", "andrei", "nikita", "timofei", "tsarenko", "rodichev"
+        ])
+    )
+    
+    if not is_laos_exempt:
+        cambodia_keywords = [
+            "us", "usa", "american", "uk", "british", "germany", "german", "france", "french", 
+            "canada", "canadian", "australia", "australian", "india", "indian", "mỹ", "nước anh", "quốc tịch anh", "nước pháp", "nước đức"
+        ]
+        
+        has_cambodia_keyword = False
+        for kw in cambodia_keywords:
+            if kw in ["us", "uk", "mỹ"]:
+                if re.search(r"\b" + re.escape(kw) + r"\b", clean_user_text_lower):
+                    has_cambodia_keyword = True
+                    break
+            else:
+                if kw in clean_user_text_lower:
+                    has_cambodia_keyword = True
+                    break
+                    
+        if has_cambodia_keyword or "cambodia" in clean_user_text_lower or "campuchia" in clean_user_text_lower or "mộc bài" in clean_user_text_lower or "moc bai" in clean_user_text_lower:
+            destination = "cambodia"
         
     # 3. Extract visa type (45D vs 90D)
     visa_type = "90D"  # Default is 90D
@@ -522,21 +540,41 @@ async def process_chat(history_messages: list[dict], customer_profile: dict | No
                 f"- YOU MUST propose exactly the date '{smart_dep}' ({day_name_en}) as their departure date in your response! Do NOT suggest any other date. Clearly state this date to the customer and explain that the bus departs on this day."
             )
 
-    # 2. Đoán ngôn ngữ đích bằng Python dựa trên quốc tịch / tin nhắn / hồ sơ khách cũ
+    # 2. Đoán ngôn ngữ đích bằng Python dựa trên quốc tịch / tin nhắn / tên / hồ sơ khách cũ
     user_text = " ".join([m["content"] for m in history_messages if m.get("role") == "user"])
-    user_text_lower = user_text.lower()
+    # Loại bỏ các tag hệ thống trong ngoặc vuông trước khi nhận diện ngôn ngữ
+    clean_user_text = re.sub(r'\[.*?\]', '', user_text)
+    clean_user_text_lower = clean_user_text.lower()
     
-    # Kiểm tra ngôn ngữ từ ký tự thực tế
-    if re.search(r'[а-яё]', user_text_lower):
+    # Check Russian indicators:
+    # 1. Cyrillic characters
+    # 2. Russian nationality keywords
+    # 3. Common Russian/Slavic names
+    russian_name_keywords = [
+        "dmitry", "dimitry", "dmitrii", "dmitri", "ivan", "alexey", "aleksei", "alexander", 
+        "sergei", "sergey", "vladimir", "ekaterina", "elena", "olga", "tatiana", "tatyana", 
+        "roman", "andrei", "andrey", "nikita", "timofei", "timofey", "tsarenko", "rodichev", 
+        "krasheninnikov", "krasheninnikova", "burlin", "makeev", "kurguzov", "kordonskii", "azizov"
+    ]
+    is_russian_nat = bool(re.search(r'\b(ru|russia|russian|nga|belarus|kazakh|kazakhstan|cis)\b', clean_user_text_lower))
+    has_russian_name = any(re.search(r'\b' + re.escape(rn) + r'\b', clean_user_text_lower) for rn in russian_name_keywords)
+    
+    # Kiểm tra nếu trợ lý đã từng chat tiếng Nga trong các lượt trước
+    prev_assistant_texts = " ".join([m.get("content", "") for m in history_messages if m.get("role") in ["assistant", "model", "agent"]])
+    has_prev_russian = bool(re.search(r'[а-яё]', prev_assistant_texts.lower()))
+    
+    # Kiểm tra ký tự tiếng Việt thực tế từ người dùng (không tính tag hệ thống)
+    has_real_vietnamese = bool(re.search(r'[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]', clean_user_text_lower)) or any(re.search(r'\b' + re.escape(w) + r'\b', clean_user_text_lower) for w in ["chào", "xin chào", "giá", "vé", "lào", "bao nhiêu", "đi", "xe", "tôi", "cho tôi", "sơ đồ", "ghế", "hết hạn", "ngày", "đón", "ở đâu"])
+    
+    if re.search(r'[а-яё]', clean_user_text_lower) or is_russian_nat or has_russian_name or (has_prev_russian and not has_real_vietnamese):
         lang_code = "ru"
-    elif re.search(r'[\uac00-\ud7a3]', user_text_lower):
+    elif re.search(r'[\uac00-\ud7a3]', clean_user_text_lower) or bool(re.search(r'\b(kr|korea|korean|hàn quốc)\b', clean_user_text_lower)):
         lang_code = "ko"
-    elif re.search(r'[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]', user_text_lower) or any(w in user_text_lower for w in ["chào", "xin chào", "giá", "vé", "lào", "bao nhiêu", "đi", "xe", "tôi", "cho tôi", "sơ đồ", "ghế", "hết hạn", "ngày", "đón", "ở đâu"]):
-        lang_code = "vi"
-    elif re.search(r'[\u4e00-\u9fff]', user_text_lower):
+    elif re.search(r'[\u4e00-\u9fff]', clean_user_text_lower) or bool(re.search(r'\b(cn|china|chinese|trung quốc)\b', clean_user_text_lower)):
         lang_code = "zh"
+    elif has_real_vietnamese:
+        lang_code = "vi"
     elif customer_profile:
-        # Nếu là khách cũ đã lưu quốc tịch / ngôn ngữ
         prof_nat = (customer_profile.get("nationality") or "").lower()
         if any(r in prof_nat for r in ["nga", "russia", "belarus", "kazakh", "ukrain"]):
             lang_code = "ru"
@@ -568,8 +606,13 @@ async def process_chat(history_messages: list[dict], customer_profile: dict | No
     last_user_msg = ""
     for msg in reversed(history_messages):
         if msg.get("role") == "user":
-            last_user_msg = msg.get("content", "")
-            break
+            content = msg.get("content", "")
+            clean_content = re.sub(r'\[.*?\]', '', content).strip()
+            if clean_content:
+                last_user_msg = clean_content
+                break
+            elif not last_user_msg:
+                last_user_msg = content
 
     rag_context = ""
     if last_user_msg:

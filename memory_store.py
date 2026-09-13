@@ -7,6 +7,24 @@ import customer_memory
 memory_store: Dict[str, Any] = {}
 
 
+def normalize_session_id(platform: str, user_id: str) -> str:
+    """Chuẩn hóa session_id thống nhất giữa RAM memory_store và SQLite"""
+    p = str(platform).lower()
+    if "fb" in p or "facebook" in p:
+        return f"fb_{user_id}"
+    elif "wa" in p or "whatsapp" in p:
+        return f"whatsapp_{user_id}"
+    elif "tg" in p or "telegram" in p:
+        return f"telegram_{user_id}"
+    elif "zalo" in p:
+        return f"zalo_{user_id}"
+    elif "web" in p:
+        return f"web_{user_id}"
+    elif "ig" in p or "instagram" in p:
+        return f"ig_{user_id}"
+    return f"{p}_{user_id}"
+
+
 def load_session_history(session_id: str, limit: int = 20) -> List[Dict[str, str]]:
     """Tải lịch sử phiên trò chuyện từ SQLite vào memory_store nếu chưa có trong RAM"""
     if session_id in memory_store and isinstance(memory_store[session_id], list) and memory_store[session_id]:
@@ -22,9 +40,10 @@ def load_session_history(session_id: str, limit: int = 20) -> List[Dict[str, str
     return memory_store[session_id]
 
 
-def log_message(user_id, platform, role, content, customer_id=None):
+def log_message(user_id, platform, role, content, customer_id=None, session_id=None):
     """Ghi log hội thoại đồng thời vào SQLite và file chat_history.json"""
-    session_id = f"{platform.lower()}_{user_id}"
+    if not session_id:
+        session_id = normalize_session_id(platform, user_id)
     
     # 1. Lưu vào SQLite Database bền vững
     try:

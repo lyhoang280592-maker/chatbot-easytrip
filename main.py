@@ -35,6 +35,15 @@ import customer_memory
 from i18n import get_lang_code, get_msg
 
 import time
+import asyncio
+
+_session_locks: dict[str, asyncio.Lock] = {}
+
+def get_session_lock(session_id: str) -> asyncio.Lock:
+    """Lấy hoặc khởi tạo async lock cho session_id để tránh race condition khi khách gửi nhiều tin/ảnh cùng lúc"""
+    if session_id not in _session_locks:
+        _session_locks[session_id] = asyncio.Lock()
+    return _session_locks[session_id]
 
 def update_env_file(key: str, value: str):
     import re
@@ -571,7 +580,7 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
     cust_profile = customer_memory.get_or_create_customer(platform.lower(), str(user_id), full_name=customer_name)
     cust_id = cust_profile.get("customer_id") if cust_profile else None
 
-    log_message(user_id, platform, "User", user_text, customer_id=cust_id)
+    log_message(user_id, platform, "User", user_text, customer_id=cust_id, session_id=session_id)
 
     # 2. Kiểm tra và reset phiên nếu khách im lặng quá SESSION_TTL_HOURS
     was_reset = reset_session_if_expired(session_id)
@@ -667,7 +676,7 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
         ai_response = await process_chat(memory_store[session_id], customer_profile=cust_profile)
         reply = ai_response.reply_message
         memory_store[session_id].append({"role": "assistant", "content": reply})
-        log_message(user_id, platform, "Bot", reply, customer_id=cust_id)
+        log_message(user_id, platform, "Bot", reply, customer_id=cust_id, session_id=session_id)
 
         # Gửi thông báo cho Admin về tin nhắn mới của khách và phản hồi tự động
         await notify_admin_incoming_message(
@@ -1077,18 +1086,20 @@ async def zalo_webhook(request: Request, background_tasks: BackgroundTasks):
 
 async def handle_zalo_flow(u_id, text):
     session_id = f"zalo_{u_id}"
-    cust_name = memory_store.get(f"{session_id}_name")
-    if not cust_name or cust_name.startswith("Khách "):
-        real_zalo_name = await get_zalo_user_profile(u_id)
-        if real_zalo_name:
-            cust_name = real_zalo_name
-            memory_store[f"{session_id}_name"] = cust_name
+    lock = get_session_lock(session_id)
+    async with lock:
+        cust_name = memory_store.get(f"{session_id}_name")
+        if not cust_name or cust_name.startswith("Khách "):
+            real_zalo_name = await get_zalo_user_profile(u_id)
+            if real_zalo_name:
+                cust_name = real_zalo_name
+                memory_store[f"{session_id}_name"] = cust_name
 
-    reply, img = await process_omnichannel_logic(u_id, "Zalo", text, session_id, customer_name=cust_name)
-    if reply:
-        await send_zalo_message(u_id, reply)
-        if img:
-            await send_zalo_image(u_id, img)
+        reply, img = await process_omnichannel_logic(u_id, "Zalo", text, session_id, customer_name=cust_name)
+        if reply:
+            await send_zalo_message(u_id, reply)
+            if img:
+                await send_zalo_image(u_id, img)
 
 
 async def handle_fb_flow(u_id, text, page_id: str = None):
@@ -1103,36 +1114,40 @@ async def handle_fb_flow(u_id, text, page_id: str = None):
         fb_platform = "Facebook"
 
     session_id = f"fb_{u_id}"
+    lock = get_session_lock(session_id)
+    async with lock:
+        # Lấy tên khách từ Graph API nếu chưa có
+        cust_name = memory_store.get(f"{session_id}_name")
+        if not cust_name or cust_name.startswith("Khách "):
+            real_fb_name = await get_facebook_user_profile(u_id, page_id=page_id)
+            if real_fb_name:
+                cust_name = real_fb_name
+                memory_store[f"{session_id}_name"] = cust_name
 
-    # Lấy tên khách từ Graph API nếu chưa có
-    cust_name = memory_store.get(f"{session_id}_name")
-    if not cust_name or cust_name.startswith("Khách "):
-        real_fb_name = await get_facebook_user_profile(u_id, page_id=page_id)
-        if real_fb_name:
-            cust_name = real_fb_name
-            memory_store[f"{session_id}_name"] = cust_name
+        enable_meta = os.getenv("ENABLE_META_BOT", "true").lower() in ["true", "1", "yes"]
+        if not enable_meta:
+            # Nếu bot Meta bị tắt, đặt phiên sang chế độ thủ công để lưu tin nhắn vào Studio nhưng không tự động gửi trả lời
+            memory_store[f"{session_id}_mode"] = "manual"
+            print(f"⏸️ [{fb_platform}] Chatbot AI đang tạm dừng (Chế độ thủ công). Tin nhắn từ {cust_name or u_id}: {text[:60]}")
+        else:
+            print(f"📨 [{fb_platform}] Tin nhắn từ {cust_name or u_id}: {text[:60]}")
 
-    enable_meta = os.getenv("ENABLE_META_BOT", "true").lower() in ["true", "1", "yes"]
-    if not enable_meta:
-        # Nếu bot Meta bị tắt, đặt phiên sang chế độ thủ công để lưu tin nhắn vào Studio nhưng không tự động gửi trả lời
-        memory_store[f"{session_id}_mode"] = "manual"
-        print(f"⏸️ [{fb_platform}] Chatbot AI đang tạm dừng (Chế độ thủ công). Tin nhắn từ {cust_name or u_id}: {text[:60]}")
-    else:
-        print(f"📨 [{fb_platform}] Tin nhắn từ {cust_name or u_id}: {text[:60]}")
-
-    reply, img = await process_omnichannel_logic(u_id, fb_platform, text, session_id, customer_name=cust_name)
-    if reply:
-        await send_facebook_message(u_id, reply, page_id=page_id)
-        if img:
-            await send_facebook_image(u_id, img, page_id=page_id)
+        reply, img = await process_omnichannel_logic(u_id, fb_platform, text, session_id, customer_name=cust_name)
+        if reply:
+            await send_facebook_message(u_id, reply, page_id=page_id)
+            if img:
+                await send_facebook_image(u_id, img, page_id=page_id)
 
 
 async def handle_ig_flow(u_id, text):
-    reply, img = await process_omnichannel_logic(u_id, "Instagram", text, f"ig_{u_id}")
-    if reply:
-        await send_facebook_message(u_id, reply)
-        if img:
-            await send_facebook_image(u_id, img)
+    session_id = f"ig_{u_id}"
+    lock = get_session_lock(session_id)
+    async with lock:
+        reply, img = await process_omnichannel_logic(u_id, "Instagram", text, session_id)
+        if reply:
+            await send_facebook_message(u_id, reply)
+            if img:
+                await send_facebook_image(u_id, img)
 
 
 # === ADMIN PAYMENT CONFIRMATION (Telegram callback) ===
@@ -1203,45 +1218,46 @@ async def instagram_webhook(request: Request, background_tasks: BackgroundTasks)
 
 async def handle_whatsapp_flow(wa_id: str, text: str, contact_name: Optional[str] = None, phone_number_id: Optional[str] = None):
     session_id = f"whatsapp_{wa_id}"
+    lock = get_session_lock(session_id)
+    async with lock:
+        # Lấy tên khách từ profile WhatsApp
+        cust_name = memory_store.get(f"{session_id}_name")
+        if not cust_name or cust_name.startswith("Khách "):
+            if contact_name:
+                cust_name = contact_name
+                memory_store[f"{session_id}_name"] = cust_name
 
-    # Lấy tên khách từ profile WhatsApp
-    cust_name = memory_store.get(f"{session_id}_name")
-    if not cust_name or cust_name.startswith("Khách "):
-        if contact_name:
-            cust_name = contact_name
-            memory_store[f"{session_id}_name"] = cust_name
+        # Lưu phone_number_id vào session để khi trả lời thủ công hoặc duyệt nháp sẽ gọi đúng phone_number_id
+        if phone_number_id:
+            memory_store[f"{session_id}_phone_number_id"] = phone_number_id
 
-    # Lưu phone_number_id vào session để khi trả lời thủ công hoặc duyệt nháp sẽ gọi đúng phone_number_id
-    if phone_number_id:
-        memory_store[f"{session_id}_phone_number_id"] = phone_number_id
+        # WhatsApp ID chính là số điện thoại quốc tế (ví dụ: 84868462071)
+        clean_digits = re.sub(r"[^\d]", "", str(wa_id))
+        phone_formatted = f"+{clean_digits}" if clean_digits else None
 
-    # WhatsApp ID chính là số điện thoại quốc tế (ví dụ: 84868462071)
-    clean_digits = re.sub(r"[^\d]", "", str(wa_id))
-    phone_formatted = f"+{clean_digits}" if clean_digits else None
+        # Tự động cập nhật / tạo hồ sơ khách hàng vào SQLite
+        try:
+            customer_memory.get_or_create_customer(
+                platform="whatsapp",
+                user_id=str(wa_id),
+                full_name=cust_name,
+                phone_number=phone_formatted
+            )
+        except Exception as e_cust:
+            print(f"⚠️ Lưu customer memory cho WhatsApp thất bại: {e_cust}")
 
-    # Tự động cập nhật / tạo hồ sơ khách hàng vào SQLite
-    try:
-        customer_memory.get_or_create_customer(
-            platform="whatsapp",
-            user_id=str(wa_id),
-            full_name=cust_name,
-            phone_number=phone_formatted
-        )
-    except Exception as e_cust:
-        print(f"⚠️ Lưu customer memory cho WhatsApp thất bại: {e_cust}")
+        enable_meta = os.getenv("ENABLE_META_BOT", "true").lower() in ["true", "1", "yes"]
+        if not enable_meta:
+            memory_store[f"{session_id}_mode"] = "manual"
+            print(f"⏸️ [WhatsApp] Chatbot AI đang tạm dừng (Chế độ thủ công). Tin nhắn từ {cust_name or wa_id}: {text[:60]}")
+        else:
+            print(f"📨 [WhatsApp] Tin nhắn từ {cust_name or wa_id} ({phone_formatted}): {text[:60]}")
 
-    enable_meta = os.getenv("ENABLE_META_BOT", "true").lower() in ["true", "1", "yes"]
-    if not enable_meta:
-        memory_store[f"{session_id}_mode"] = "manual"
-        print(f"⏸️ [WhatsApp] Chatbot AI đang tạm dừng (Chế độ thủ công). Tin nhắn từ {cust_name or wa_id}: {text[:60]}")
-    else:
-        print(f"📨 [WhatsApp] Tin nhắn từ {cust_name or wa_id} ({phone_formatted}): {text[:60]}")
-
-    reply, img = await process_omnichannel_logic(wa_id, "WhatsApp", text, session_id, customer_name=cust_name)
-    if reply:
-        await send_whatsapp_message(wa_id, reply, phone_number_id=phone_number_id)
-        if img:
-            await send_whatsapp_image(wa_id, img, phone_number_id=phone_number_id)
+        reply, img = await process_omnichannel_logic(wa_id, "WhatsApp", text, session_id, customer_name=cust_name)
+        if reply:
+            await send_whatsapp_message(wa_id, reply, phone_number_id=phone_number_id)
+            if img:
+                await send_whatsapp_image(wa_id, img, phone_number_id=phone_number_id)
 
 
 @app.get("/whatsapp/webhook")
