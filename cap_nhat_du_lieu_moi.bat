@@ -13,9 +13,10 @@ echo   [2] Cập nhật toàn bộ tin nhắn mới từ FACEBOOK (META)
 echo   [3] Cập nhật nội dung mới từ file ZALO (zalo_chat.docx)
 echo   [4] Tải tri thức mới nhất từ CRM Lark Base về máy
 echo   [5] Quét TẤT CẢ các nguồn và đồng bộ lên CRM Lark Base
+echo   [6] Xuất Hợp đồng (DOCX/PDF) & Excel đối soát (01/08 - 24/08/2026)
 echo   [0] Thoát
 echo --------------------------------------------------------
-set /p opt="👉 Nhập lựa chọn (1/2/3/4/5): "
+set /p opt="👉 Nhập lựa chọn (1/2/3/4/5/6): "
 
 set "PY=.\venv\Scripts\python.exe"
 if not exist "%PY%" set "PY=python"
@@ -65,8 +66,14 @@ if "%opt%"=="5" (
     "%PY%" sync_knowledge_crm.py push
 )
 
+if "%opt%"=="6" (
+    echo.
+    echo 📑 Đang tiến hành tạo toàn bộ Hợp đồng (DOCX/PDF) và file Excel đối soát...
+    "%PY%" batch_generate_by_accounting_date.py
+)
+
 echo.
 echo ========================================================
-echo   🎉 HOÀN TẤT CẬP NHẬT & HUẤN LUYỆN DỮ LIỆU!
+echo   🎉 HOÀN TẤT!
 echo ========================================================
 pause

@@ -338,6 +338,56 @@ async def send_facebook_image(user_id: str, image_url: str, page_id: str = None)
         except Exception as e:
             print(f"Facebook send image failed: {e}")
 
+async def send_whatsapp_message(to_phone: str, text: str):
+    token = os.getenv("WHATSAPP_ACCESS_TOKEN")
+    phone_number_id = os.getenv("WHATSAPP_PHONE_NUMBER_ID")
+    if not token or not phone_number_id:
+        print("❌ send_whatsapp_message: Chưa cấu hình WHATSAPP_ACCESS_TOKEN hoặc WHATSAPP_PHONE_NUMBER_ID")
+        return
+    url = f"https://graph.facebook.com/v19.0/{phone_number_id}/messages"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "messaging_product": "whatsapp",
+        "recipient_type": "individual",
+        "to": to_phone,
+        "type": "text",
+        "text": {"preview_url": False, "body": text}
+    }
+    async with httpx.AsyncClient() as client:
+        try:
+            resp = await client.post(url, headers=headers, json=payload)
+            print(f"WhatsApp send message response: {resp.status_code} - {resp.text}")
+        except Exception as e:
+            print(f"WhatsApp send message failed: {e}")
+
+async def send_whatsapp_image(to_phone: str, image_url: str):
+    token = os.getenv("WHATSAPP_ACCESS_TOKEN")
+    phone_number_id = os.getenv("WHATSAPP_PHONE_NUMBER_ID")
+    if not token or not phone_number_id:
+        print("❌ send_whatsapp_image: Chưa cấu hình WHATSAPP_ACCESS_TOKEN hoặc WHATSAPP_PHONE_NUMBER_ID")
+        return
+    url = f"https://graph.facebook.com/v19.0/{phone_number_id}/messages"
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "messaging_product": "whatsapp",
+        "recipient_type": "individual",
+        "to": to_phone,
+        "type": "image",
+        "image": {"link": image_url}
+    }
+    async with httpx.AsyncClient() as client:
+        try:
+            resp = await client.post(url, headers=headers, json=payload)
+            print(f"WhatsApp send image response: {resp.status_code} - {resp.text}")
+        except Exception as e:
+            print(f"WhatsApp send image failed: {e}")
+
 
 def get_whatsapp_credentials(phone_number_id: str = None) -> tuple[Optional[str], Optional[str]]:
     """Lấy Access Token và Phone Number ID của WhatsApp Cloud API"""
@@ -986,6 +1036,14 @@ async def handle_fb_flow(u_id, text, page_id: str = None):
             await send_facebook_image(u_id, img, page_id=page_id)
 
 
+async def handle_ig_flow(u_id, text):
+    reply, img = await process_omnichannel_logic(u_id, "Instagram", text, f"ig_{u_id}")
+    if reply:
+        await send_facebook_message(u_id, reply)
+        if img:
+            await send_facebook_image(u_id, img)
+
+
 # === ADMIN PAYMENT CONFIRMATION (Telegram callback) ===
 @app.post("/admin/order/{record_id}/paid")
 async def admin_confirm_paid(record_id: str, request: Request):
@@ -1005,7 +1063,7 @@ async def list_orders(status: str | None = None):
 
 @app.get("/facebook/webhook")
 async def verify_facebook_webhook(request: Request):
-    if request.query_params.get("hub.mode") == "subscribe" and request.query_params.get("hub.verify_token") == os.getenv("FB_VERIFY_TOKEN"):
+    if request.query_params.get("hub.mode") == "subscribe" and request.query_params.get("hub.verify_token") == os.getenv("FB_VERIFY_TOKEN", "EasytripMessengerWebhook2026"):
         return Response(content=request.query_params.get("hub.challenge"), status_code=200)
     return Response(status_code=403)
 
