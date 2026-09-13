@@ -347,15 +347,39 @@ async def send_facebook_message(user_id: str, text: str, page_id: str = None) ->
             print(f"Facebook send message failed: {e}")
             return False, str(e)
 
-async def send_facebook_image(user_id: str, image_url: str, page_id: str = None) -> tuple[bool, str]:
+async def send_facebook_image(user_id: str, image_url: str, page_id: str = None, local_file_path: str = None) -> tuple[bool, str]:
     token = get_fb_page_token(page_id)
     if not token:
         msg = f"Không cấu hình token cho page {page_id or 'default'}"
         print(f"❌ send_facebook_image: {msg}")
         return False, msg
     url = f"https://graph.facebook.com/v19.0/me/messages?access_token={token}"
+    
+    # 1. Thử gửi trực tiếp qua filedata nếu có file local trên đĩa
+    if local_file_path and os.path.exists(local_file_path):
+        try:
+            async with httpx.AsyncClient(timeout=15.0) as client:
+                data = {
+                    "recipient": json.dumps({"id": str(user_id)}),
+                    "message": json.dumps({
+                        "attachment": {
+                            "type": "image",
+                            "payload": {"is_reusable": True}
+                        }
+                    })
+                }
+                with open(local_file_path, "rb") as f:
+                    files = {"filedata": (os.path.basename(local_file_path), f, "image/jpeg")}
+                    resp = await client.post(url, data=data, files=files)
+                print(f"Facebook send local image response (page={page_id}): {resp.status_code} - {resp.text}")
+                if resp.status_code in [200, 201]:
+                    return True, resp.text
+        except Exception as e_file:
+            print(f"Facebook send local image failed, fallback to URL: {e_file}")
+
+    # 2. Gửi qua URL công khai
     payload = {
-        "recipient": {"id": user_id},
+        "recipient": {"id": str(user_id)},
         "message": {
             "attachment": {
                 "type": "image",
@@ -363,7 +387,7 @@ async def send_facebook_image(user_id: str, image_url: str, page_id: str = None)
             }
         }
     }
-    async with httpx.AsyncClient(timeout=10.0) as client:
+    async with httpx.AsyncClient(timeout=15.0) as client:
         try:
             resp = await client.post(url, json=payload)
             print(f"Facebook send image response (page={page_id}): {resp.status_code} - {resp.text}")
@@ -1156,6 +1180,8 @@ async def handle_fb_flow(u_id, text, page_id: str = None):
     session_id = f"fb_{u_id}"
     lock = get_session_lock(session_id)
     async with lock:
+        if page_id:
+            memory_store[f"{session_id}_fb_page_id"] = str(page_id)
         # Lấy tên khách từ Graph API nếu chưa có
         cust_name = memory_store.get(f"{session_id}_name")
         if not cust_name or cust_name.startswith("Khách "):
