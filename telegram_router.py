@@ -160,21 +160,33 @@ async def get_or_register_topic_key(bot, thread_id: int) -> str | None:
     return None
 
 
-def get_customer_service_type(data, history_text: str) -> str:
-    history_lower = (history_text or "").lower()
+def get_customer_service_type(data, history_text: str = "", user_only_text: str = "") -> str | None:
     loai_lower = (getattr(data, "loai_visa", "") or "").lower()
-    quoc_tich_lower = (getattr(data, "quoc_tich", "") or "").lower()
+    user_lower = (user_only_text or "").lower()
     
-    # 1. Kiểm tra đích đến rõ ràng trong hội thoại hoặc thông tin data
-    if any(kw in history_lower for kw in ["laos", "lào", "bo y", "bờ y", "лаос"]):
-        if any(kw in loai_lower or kw in history_lower for kw in ["90", "e-visa", "evisa", "90d"]):
-            return "90D"
-        return "45D"
+    # 1. Kiểm tra các dịch vụ KHÔNG CẦN XE BUÝT (Fast Track, Visa Online khẩn, Gia hạn)
+    non_bus_keywords = [
+        "fast track", "fasttrack", "sân bay", "airport", "đón sân bay",
+        "visa khẩn", "khẩn 4 giờ", "khẩn 4h", "khẩn 1 ngày", "khẩn 2 ngày", "khẩn 3 ngày", "khẩn 5 ngày",
+        "gia hạn", "extension", "work permit", "trc", "thẻ tạm trú"
+    ]
+    check_text = f"{loai_lower} {user_lower}".strip()
+    if any(kw in check_text for kw in non_bus_keywords) and not any(b in check_text for b in ["xe", "bus", "visarun", "chuyến đi"]):
+        return "NON_BUS"
 
-    if any(kw in history_lower for kw in ["cambodia", "campuchia", "mộc bài", "moc bai", "камбоджа"]):
+    # 2. Kiểm tra nếu khách hoặc loai_visa đã chọn rõ tuyến Cambodia / Mộc Bài
+    if any(kw in check_text for kw in ["cambodia", "campuchia", "mộc bài", "moc bai", "камбоджа"]):
         return "Cambodia"
 
-    # 2. Kiểm tra quốc tịch (Chỉ xét trong trường quoc_tich_lower hoặc cụm từ định danh quốc tịch rõ ràng)
+    # 3. Kiểm tra nếu khách đã chọn rõ 90D hoặc 45D
+    if any(kw in check_text for kw in ["90d", "90 d", "90 ngày", "90 days", "90-day", "90 day", "90д", "90 д", "90 дней", "e-visa 90", "90"]):
+        return "90D"
+
+    if any(kw in check_text for kw in ["45d", "45 d", "45 ngày", "45 days", "45-day", "45 day", "45д", "45 д", "45 дней", "visa free", "miễn thị thực", "miễn visa"]):
+        return "45D"
+
+    # 4. Kiểm tra quốc tịch Tây Phương bắt buộc đi Cambodia (khi đã đến bước chọn chuyến)
+    quoc_tich_lower = (getattr(data, "quoc_tich", "") or "").lower()
     western_cambodia_nationalities = [
         "usa", "united states", "american", "united kingdom", "british", "great britain", 
         "germany", "german", "france", "french", "canada", "canadian", "australia", "australian", 
@@ -184,22 +196,24 @@ def get_customer_service_type(data, history_text: str) -> str:
         if nat in quoc_tich_lower:
             return "Cambodia"
 
-    # 3. Quốc tịch Nga, Belarus, Ukraine, CIS, Hàn Quốc, Việt Nam, ASEAN -> Tuyến Lào
-    if any(kw in loai_lower or kw in history_lower for kw in ["90", "e-visa", "evisa", "90d"]):
-        return "90D"
-    return "45D"
+    # Nếu chưa có thông tin chốt dịch vụ
+    return None
 
 
-def get_scheme_command(ngay: str, loai_visa: str, text_history: str) -> str | None:
+def get_scheme_command(ngay: str, service: str | None = None, text_history: str = "") -> str | None:
     if not ngay: return None
     ngay_clean = normalize_date(ngay)
-    service = get_customer_service_type(None, f"{loai_visa} {text_history}")
-    if service == "Cambodia":
+    resolved_service = service
+    if not resolved_service or resolved_service not in ["45D", "90D", "Cambodia"]:
+        resolved_service = get_customer_service_type(None, user_only_text=text_history)
+        
+    if resolved_service == "Cambodia":
         return f"Scheme {ngay_clean} - mộc bài"
-    elif service == "90D":
+    elif resolved_service == "90D":
         return f"Scheme {ngay_clean} - 90D laos"
-    else:
+    elif resolved_service == "45D":
         return f"Scheme {ngay_clean} - 45D laos"
+    return None
 
 
 def calculate_smart_departure(ngay_het_han: str, loai_visa: str = "", destination: str = "laos") -> str | None:
@@ -811,22 +825,23 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
         await send_to_admin_group(context, admin_pay_msg)
 
     # Xác định ngày đi và loại dịch vụ của khách
-    history_text = " ".join([m["content"] for m in memory_store[session_id]])
-    service_type = get_customer_service_type(data, history_text)
+    user_only_text = " ".join([m.get("content", "") for m in memory_store.get(session_id, []) if isinstance(m, dict) and m.get("role") == "user"])
+    service_type = get_customer_service_type(data, user_only_text=user_only_text)
     
     dest = "cambodia" if service_type == "Cambodia" else "laos"
     ngay_di = validate_and_adjust_departure(data.ngay_khoi_hanh or "", data.ngay_het_han_visa or "", data.loai_visa or "", dest)
     if ngay_di:
         data.ngay_khoi_hanh = ngay_di
 
-    # --- 2. GỬI SCHEME KHI KHÁCH ĐÃ ĐẾN PHASE SEAT_SELECTION ---
-    if ai_response.current_phase == "SEAT_SELECTION" and ngay_di:
+    # --- 2. GỬI SCHEME KHI KHÁCH ĐÃ ĐẾN PHASE SEAT_SELECTION VÀ ĐÃ CHỐT TUYẾN XE ---
+    if ai_response.current_phase == "SEAT_SELECTION" and ngay_di and service_type in ["45D", "90D", "Cambodia"]:
         now = time.time()
-        if (now - scheme_history.get(ngay_di, 0)) > 900:
-            scheme_cmd = get_scheme_command(ngay_di, data.loai_visa or "", history_text)
+        last_sent = scheme_history.get(f"{ngay_di}_{service_type}", 0)
+        if (now - last_sent) > 900:
+            scheme_cmd = get_scheme_command(ngay_di, service_type)
             if scheme_cmd:
                 await send_to_bus_group(context, scheme_cmd, date=ngay_di, service=service_type)
-                scheme_history[ngay_di] = now
+                scheme_history[f"{ngay_di}_{service_type}"] = now
                 print(f"🚀 Scheme sent: {scheme_cmd} (phase=SEAT_SELECTION, service={service_type})")
 
     # --- 5. GỬI SƠ ĐỒ GHẾ ĐA NGÔN NGỮ ---

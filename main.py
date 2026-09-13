@@ -705,25 +705,26 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
                 customer_memory.update_customer_profile(cust_id, **profile_updates)
 
         # Xác định ngày đi và loại dịch vụ của khách
-        history_text = " ".join([m["content"] for m in memory_store[session_id]])
-        service_type = get_customer_service_type(data, history_text)
+        user_only_text = " ".join([m.get("content", "") for m in memory_store.get(session_id, []) if isinstance(m, dict) and m.get("role") == "user"])
+        service_type = get_customer_service_type(data, user_only_text=user_only_text)
         
         dest = "cambodia" if service_type == "Cambodia" else "laos"
         ngay_di = validate_and_adjust_departure(data.ngay_khoi_hanh or "", data.ngay_het_han_visa or "", data.loai_visa or "", dest)
         if ngay_di:
             data.ngay_khoi_hanh = ngay_di
 
-        # 1. Gửi Scheme vào nhóm Bus (Cooldown 15p)
-        if ngay_di:
+        # 1. GỬI SCHEME VÀO NHÓM BUS (CHỈ GỬI KHI KHÁCH ĐÃ CHỐT TUYẾN XE VÀ ĐẾN BƯỚC CHỌN GHẾ)
+        if ai_response.current_phase == "SEAT_SELECTION" and ngay_di and service_type in ["45D", "90D", "Cambodia"]:
             now = time.time()
-            last_sent = scheme_history.get(ngay_di, 0)
+            last_sent = scheme_history.get(f"{ngay_di}_{service_type}", 0)
             if (now - last_sent) > (15 * 60):
-                cmd = get_scheme_command(ngay_di, data.loai_visa or "", history_text)
+                cmd = get_scheme_command(ngay_di, service_type)
                 if cmd:
                     await send_to_bus_group(None, cmd, date=ngay_di, service=service_type)
-                    scheme_history[ngay_di] = now
+                    scheme_history[f"{ngay_di}_{service_type}"] = now
+                    print(f"🚀 Omnichannel Scheme sent: {cmd} (phase=SEAT_SELECTION, service={service_type})")
             else:
-                print(f"⏳ Omnichannel: Bỏ qua Scheme cho {ngay_di} (vừa gửi).")
+                print(f"⏳ Omnichannel: Bỏ qua Scheme cho {ngay_di}_{service_type} (vừa gửi).")
 
         # 2. Kiểm tra/Tạo Sơ đồ tự động
         image_to_send = None
