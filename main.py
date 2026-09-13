@@ -952,6 +952,116 @@ async def get_web_chat_history(user_id: str):
     }
 
 
+@app.get("/zalo/login")
+async def zalo_login_redirect():
+    """Tự động chuyển hướng đến link cấp quyền Zalo OA"""
+    app_id = os.getenv("ZALO_APP_ID", "4566290251866781404")
+    render_url = os.getenv("RENDER_EXTERNAL_URL", "https://chatbot-easytrip.onrender.com").rstrip("/")
+    redirect_uri = f"{render_url}/zalo/callback"
+    import urllib.parse
+    encoded_redirect = urllib.parse.quote(redirect_uri, safe="")
+    auth_url = f"https://oauth.zaloapp.com/v4/oa/permission?app_id={app_id}&redirect_uri={encoded_redirect}"
+    return RedirectResponse(auth_url)
+
+
+@app.get("/zalo/callback")
+async def zalo_oauth_callback(request: Request):
+    """Tiếp nhận OAuth callback từ Zalo khi cấp quyền OA"""
+    code = request.query_params.get("code") or request.query_params.get("oa_code")
+    oa_id = request.query_params.get("oa_id")
+    error = request.query_params.get("error")
+    error_desc = request.query_params.get("error_description")
+    
+    if error:
+        return HTMLResponse(content=f"""
+        <html><body style="font-family: Arial; text-align: center; padding: 50px; background: #0f172a; color: white;">
+            <h1 style="color: #ef4444;">❌ Xác thực Zalo OA Thất Bại</h1>
+            <p>Lỗi: {error} - {error_desc}</p>
+        </body></html>
+        """, status_code=400)
+        
+    if not code:
+        return HTMLResponse(content="""
+        <html><body style="font-family: Arial; text-align: center; padding: 50px; background: #0f172a; color: white;">
+            <h1 style="color: #f59e0b;">⚠️ Thiếu mã Authorization Code</h1>
+            <p>Không tìm thấy tham số code trong URL callback.</p>
+        </body></html>
+        """, status_code=400)
+        
+    app_id = os.getenv("ZALO_APP_ID")
+    secret_key = os.getenv("ZALO_APP_SECRET")
+    
+    url = "https://oauth.zaloapp.com/v4/oa/access_token"
+    headers = {
+        "secret_key": secret_key,
+        "Content-Type": "application/x-www-form-urlencoded"
+    }
+    data = {
+        "app_id": app_id,
+        "grant_type": "authorization_code",
+        "code": code
+    }
+    
+    async with httpx.AsyncClient(timeout=15.0) as client:
+        try:
+            resp = await client.post(url, headers=headers, data=data)
+            res_data = resp.json()
+            if "access_token" in res_data and "refresh_token" in res_data:
+                global _zalo_access_token, _zalo_token_expiry
+                _zalo_access_token = res_data["access_token"]
+                expires_in = int(res_data.get("expires_in", 90000))
+                _zalo_token_expiry = time.time() + expires_in - 300
+                new_refresh = res_data["refresh_token"]
+                
+                os.environ["ZALO_REFRESH_TOKEN"] = new_refresh
+                update_env_file("ZALO_REFRESH_TOKEN", new_refresh)
+                
+                # Báo Telegram Admin
+                try:
+                    await send_to_admin_group(None, f"🎉 **XÁC THỰC ZALO OA THÀNH CÔNG!**\nĐã nạp và kích hoạt Access Token & Refresh Token mới cho OA (ID: {oa_id or 'Easy Trip'}).")
+                except:
+                    pass
+                    
+                return HTMLResponse(content="""
+                <html>
+                <head>
+                    <title>Zalo OA Connected</title>
+                    <meta charset="utf-8">
+                    <style>
+                        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #060913; color: white; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; }
+                        .card { background: rgba(30, 41, 59, 0.7); border: 1px solid rgba(255,255,255,0.1); padding: 40px 50px; border-radius: 20px; text-align: center; box-shadow: 0 20px 40px rgba(0,0,0,0.5); backdrop-filter: blur(10px); max-width: 500px; }
+                        .icon { font-size: 60px; margin-bottom: 20px; }
+                        h1 { color: #10b981; margin: 0 0 10px 0; font-size: 24px; }
+                        p { color: #94a3b8; font-size: 16px; line-height: 1.6; margin-bottom: 25px; }
+                        .btn { display: inline-block; background: #2563eb; color: white; text-decoration: none; padding: 12px 28px; border-radius: 12px; font-weight: 600; transition: 0.2s; }
+                        .btn:hover { background: #1d4ed8; }
+                    </style>
+                </head>
+                <body>
+                    <div class="card">
+                        <div class="icon">🎉</div>
+                        <h1>XÁC THỰC ZALO OA THÀNH CÔNG!</h1>
+                        <p>Hệ thống AI Chatbot đã tự động nạp Token mới và kết nối hoàn tất với Zalo OA của <b>Easy Trip & Visa</b>. Bạn có thể đóng tab này và bắt đầu nhận tin nhắn từ khách hàng.</p>
+                        <a href="/copilot/index.html" class="btn">Mở Co-Pilot Studio</a>
+                    </div>
+                </body>
+                </html>
+                """)
+            else:
+                return HTMLResponse(content=f"""
+                <html><body style="font-family: Arial; text-align: center; padding: 50px; background: #0f172a; color: white;">
+                    <h1 style="color: #ef4444;">❌ Lỗi Đổi Token Zalo</h1>
+                    <p>{res_data}</p>
+                </body></html>
+                """, status_code=400)
+        except Exception as e:
+            return HTMLResponse(content=f"""
+            <html><body style="font-family: Arial; text-align: center; padding: 50px; background: #0f172a; color: white;">
+                <h1 style="color: #ef4444;">❌ Lỗi Kết Nối Máy Chủ Zalo</h1>
+                <p>{str(e)}</p>
+            </body></html>
+            """, status_code=500)
+
 
 @app.post("/zalo/webhook")
 async def zalo_webhook(request: Request, background_tasks: BackgroundTasks):
