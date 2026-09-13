@@ -165,29 +165,29 @@ def get_customer_service_type(data, history_text: str) -> str:
     loai_lower = (getattr(data, "loai_visa", "") or "").lower()
     quoc_tich_lower = (getattr(data, "quoc_tich", "") or "").lower()
     
-    cambodia_keywords = [
-        "us", "usa", "american", "uk", "british", "germany", "german", "france", "french", 
-        "canada", "canadian", "australia", "australian", "india", "indian", "mỹ", "anh", "pháp", "đức"
-    ]
-    
-    is_cambodia = False
-    for kw in cambodia_keywords:
-        if kw in ["us", "uk", "mỹ", "anh", "đức"]:
-            # Strict whole-word matching to avoid matching substrings like "bus"
-            if re.search(r"\b" + re.escape(kw) + r"\b", history_lower) or re.search(r"\b" + re.escape(kw) + r"\b", quoc_tich_lower):
-                is_cambodia = True
-                break
-        else:
-            if kw in history_lower or kw in quoc_tich_lower:
-                is_cambodia = True
-                break
-                
-    if is_cambodia or "cambodia" in history_lower or "campuchia" in history_lower or "mộc bài" in history_lower or "moc bai" in history_lower:
+    # 1. Kiểm tra đích đến rõ ràng trong hội thoại hoặc thông tin data
+    if any(kw in history_lower for kw in ["laos", "lào", "bo y", "bờ y", "лаос"]):
+        if any(kw in loai_lower or kw in history_lower for kw in ["90", "e-visa", "evisa", "90d"]):
+            return "90D"
+        return "45D"
+
+    if any(kw in history_lower for kw in ["cambodia", "campuchia", "mộc bài", "moc bai", "камбоджа"]):
         return "Cambodia"
-    elif "90" in loai_lower:
+
+    # 2. Kiểm tra quốc tịch (Chỉ xét trong trường quoc_tich_lower hoặc cụm từ định danh quốc tịch rõ ràng)
+    western_cambodia_nationalities = [
+        "usa", "united states", "american", "united kingdom", "british", "great britain", 
+        "germany", "german", "france", "french", "canada", "canadian", "australia", "australian", 
+        "india", "indian", "mỹ", "nước anh", "nước pháp", "nước đức"
+    ]
+    for nat in western_cambodia_nationalities:
+        if nat in quoc_tich_lower:
+            return "Cambodia"
+
+    # 3. Quốc tịch Nga, Belarus, Ukraine, CIS, Hàn Quốc, Việt Nam, ASEAN -> Tuyến Lào
+    if any(kw in loai_lower or kw in history_lower for kw in ["90", "e-visa", "evisa", "90d"]):
         return "90D"
-    else:
-        return "45D"  # Mặc định
+    return "45D"
 
 
 def get_scheme_command(ngay: str, loai_visa: str, text_history: str) -> str | None:
@@ -195,7 +195,7 @@ def get_scheme_command(ngay: str, loai_visa: str, text_history: str) -> str | No
     ngay_clean = normalize_date(ngay)
     service = get_customer_service_type(None, f"{loai_visa} {text_history}")
     if service == "Cambodia":
-        return f"Scheme {ngay_clean} Cambodia"
+        return f"Scheme {ngay_clean} - mộc bài"
     elif service == "90D":
         return f"Scheme {ngay_clean} - 90D laos"
     else:
@@ -315,8 +315,8 @@ async def send_to_bus_group(context, message: str, date: str | None = None, serv
 
 async def get_or_create_seat_map(ngay: str, service: str) -> dict | None:
     """
-    Lấy thông tin sơ đồ ghế (file_id, url) cho ngày và dịch vụ cụ thể.
-    Nếu chưa có sơ đồ chính thức trên đĩa, tự động tạo sơ đồ trống từ ảnh mẫu.
+    Lấy thông tin sơ đồ ghế chính thức (file_id, url) cho ngày và dịch vụ cụ thể.
+    Chỉ trả về khi đã có sơ đồ chính thức do Admin / Nhà xe tải lên, tuyệt đối KHÔNG tự tạo sơ đồ trống.
     """
     ngay_clean = normalize_date(ngay)
     if not ngay_clean:
@@ -326,80 +326,22 @@ async def get_or_create_seat_map(ngay: str, service: str) -> dict | None:
     key = f"{ngay_clean}_{service}"
     file_path = f"static/map_{ngay_clean.replace('/', '_')}_{service}.jpg"
 
-    # 1. Kiểm tra bộ nhớ và đĩa cứng
+    # 1. Kiểm tra bộ nhớ cache
     if key in latest_seat_maps:
         if os.path.exists(file_path):
             return latest_seat_maps[key]
 
-    # 2. Nếu file tồn tại trên đĩa (đã được tải về từ đối tác) nhưng chưa có trong latest_seat_maps
+    # 2. Nếu file tồn tại trên đĩa (đã được Admin/Nhà xe gửi vào hệ thống)
     if os.path.exists(file_path):
-        file_id = None
-        try:
-            bot = tg_app.bot
-            target_chat_id = BUS_GROUP_CHAT_ID or ADMIN_TELEGRAM_ID
-            topic_id = date_to_topic_id_map.get(key)
-            if topic_id is None and BUS_GROUP_TOPIC_ID:
-                topic_id = int(BUS_GROUP_TOPIC_ID)
-                
-            if target_chat_id:
-                with open(file_path, "rb") as f:
-                    msg = await bot.send_photo(
-                        chat_id=target_chat_id,
-                        photo=f,
-                        caption=f"📋 Đồng bộ sơ đồ chính thức ngày {ngay_clean} - Dịch vụ: {service}",
-                        message_thread_id=topic_id if BUS_GROUP_CHAT_ID else None
-                    )
-                    file_id = msg.photo[-1].file_id
-        except Exception as e:
-            print(f"Không thể upload sơ đồ {key} lên Telegram: {e}")
-
         map_data = {
-            "file_id": file_id,
+            "file_id": None,
             "url": f"/static/map_{ngay_clean.replace('/', '_')}_{service}.jpg"
         }
         latest_seat_maps[key] = map_data
         return map_data
 
-    # 3. Tự động vẽ sơ đồ trống từ ảnh mẫu nếu chưa có ảnh từ đối tác
-    print(f"🧠 Sơ đồ cho {key} chưa tồn tại. Tự động vẽ sơ đồ trống từ ảnh mẫu...")
-    try:
-        # Tự động tạo thư mục static nếu thiếu
-        if not os.path.exists("static"):
-            os.makedirs("static")
-            
-        # Tạo sơ đồ trống ban đầu (không có ghế nào bận)
-        generate_seat_map([], output_path=file_path)
-        
-        # Thử upload lên Telegram để lấy file_id phục vụ gửi siêu tốc lần sau
-        file_id = None
-        try:
-            bot = tg_app.bot
-            target_chat_id = BUS_GROUP_CHAT_ID or ADMIN_TELEGRAM_ID
-            topic_id = date_to_topic_id_map.get(key)
-            if topic_id is None and BUS_GROUP_TOPIC_ID:
-                topic_id = int(BUS_GROUP_TOPIC_ID)
-                
-            if target_chat_id:
-                with open(file_path, "rb") as f:
-                    msg = await bot.send_photo(
-                        chat_id=target_chat_id,
-                        photo=f,
-                        caption=f"📋 Khởi tạo sơ đồ trống ngày {ngay_clean} - Dịch vụ: {service}",
-                        message_thread_id=topic_id if BUS_GROUP_CHAT_ID else None
-                    )
-                    file_id = msg.photo[-1].file_id
-        except Exception as e:
-            print(f"Không thể upload sơ đồ tự tạo {key} lên Telegram: {e}")
-
-        map_data = {
-            "file_id": file_id,
-            "url": f"/static/map_{ngay_clean.replace('/', '_')}_{service}.jpg"
-        }
-        latest_seat_maps[key] = map_data
-        return map_data
-    except Exception as e:
-        print(f"Lỗi khi tự động tạo sơ đồ ghế trống: {e}")
-        return None
+    # Chưa có sơ đồ chính thức từ Admin / Nhà xe -> Trả về None để Bot chờ Admin gửi
+    return None
 
 
 async def send_to_admin_group(context, message: str):
@@ -1403,13 +1345,29 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
                             
                             # Nếu khách trùng tuyến và chưa chọn ghế
                             if cust_service == service and not getattr(customer_data, "ghe_chon", None):
-                                platform = "Telegram" if "telegram_" in session_id else "Zalo" if "zalo_" in session_id else "Website"
-                                uid = session_id.split("_")[1]
+                                if "fb_" in session_id:
+                                    platform = "Facebook"
+                                    uid = session_id.replace("fb_", "")
+                                elif "whatsapp_" in session_id:
+                                    platform = "WhatsApp"
+                                    uid = session_id.replace("whatsapp_", "")
+                                elif "telegram_" in session_id:
+                                    platform = "Telegram"
+                                    uid = session_id.replace("telegram_", "")
+                                elif "zalo_" in session_id:
+                                    platform = "Zalo"
+                                    uid = session_id.replace("zalo_", "")
+                                else:
+                                    platform = "Website"
+                                    uid = session_id.replace("web_", "")
                                 
                                 lang = get_lang_code(getattr(customer_data, "quoc_tich", ""))
-                                caption = get_msg("seat_map_caption", lang, date=ngay)
+                                route_tag = "Laos" if service != "Cambodia" else "Cambodia"
+                                tag_header = f"[{ngay} - {service} {route_tag}]"
+                                base_caption = get_msg("seat_map_caption", lang, date=ngay)
+                                caption = f"{tag_header}\n{base_caption}"
                                 
-                                print(f"🚀 Tự động gửi sơ đồ chính thức mới cho khách {getattr(customer_data, 'ho_ten', 'Khách')} ({platform})")
+                                print(f"🚀 Tự động gửi sơ đồ chính thức mới từ Admin cho khách {getattr(customer_data, 'ho_ten', 'Khách')} ({platform})")
                                 
                                 try:
                                     domain = os.getenv("RENDER_EXTERNAL_URL", "https://chatbot-easytrip.onrender.com").rstrip("/")
