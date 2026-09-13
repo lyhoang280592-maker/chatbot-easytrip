@@ -325,25 +325,34 @@ def get_fb_page_token(page_id: str = None) -> str | None:
     return os.getenv("FB_PAGE_ACCESS_TOKEN")
 
 
-async def send_facebook_message(user_id: str, text: str, page_id: str = None):
+async def send_facebook_message(user_id: str, text: str, page_id: str = None) -> tuple[bool, str]:
     token = get_fb_page_token(page_id)
     if not token:
-        print(f"❌ send_facebook_message: Không cấu hình token cho page {page_id or 'default'}")
-        return
+        msg = f"Không cấu hình token cho page {page_id or 'default'}"
+        print(f"❌ send_facebook_message: {msg}")
+        return False, msg
     url = f"https://graph.facebook.com/v19.0/me/messages?access_token={token}"
     payload = {"recipient": {"id": user_id}, "message": {"text": text}}
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=10.0) as client:
         try:
             resp = await client.post(url, json=payload)
             print(f"Facebook send message response (page={page_id}): {resp.status_code} - {resp.text}")
+            if resp.status_code in [200, 201]:
+                return True, resp.text
+            else:
+                err_data = resp.json() if resp.headers.get("content-type", "").startswith("application/json") else {}
+                err_msg = err_data.get("error", {}).get("message", resp.text)
+                return False, f"FB Error {resp.status_code}: {err_msg}"
         except Exception as e:
             print(f"Facebook send message failed: {e}")
+            return False, str(e)
 
-async def send_facebook_image(user_id: str, image_url: str, page_id: str = None):
+async def send_facebook_image(user_id: str, image_url: str, page_id: str = None) -> tuple[bool, str]:
     token = get_fb_page_token(page_id)
     if not token:
-        print(f"❌ send_facebook_image: Không cấu hình token cho page {page_id or 'default'}")
-        return
+        msg = f"Không cấu hình token cho page {page_id or 'default'}"
+        print(f"❌ send_facebook_image: {msg}")
+        return False, msg
     url = f"https://graph.facebook.com/v19.0/me/messages?access_token={token}"
     payload = {
         "recipient": {"id": user_id},
@@ -354,12 +363,19 @@ async def send_facebook_image(user_id: str, image_url: str, page_id: str = None)
             }
         }
     }
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=10.0) as client:
         try:
             resp = await client.post(url, json=payload)
             print(f"Facebook send image response (page={page_id}): {resp.status_code} - {resp.text}")
+            if resp.status_code in [200, 201]:
+                return True, resp.text
+            else:
+                err_data = resp.json() if resp.headers.get("content-type", "").startswith("application/json") else {}
+                err_msg = err_data.get("error", {}).get("message", resp.text)
+                return False, f"FB Error {resp.status_code}: {err_msg}"
         except Exception as e:
             print(f"Facebook send image failed: {e}")
+            return False, str(e)
 
 def get_whatsapp_credentials(phone_number_id: str = None) -> tuple[Optional[str], Optional[str]]:
     """Lấy Access Token và Phone Number ID của WhatsApp Cloud API"""
@@ -678,18 +694,18 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
         memory_store[session_id].append({"role": "assistant", "content": reply})
         log_message(user_id, platform, "Bot", reply, customer_id=cust_id, session_id=session_id)
 
-        # Gửi thông báo cho Admin về tin nhắn mới của khách và phản hồi tự động
-        await notify_admin_incoming_message(
-            platform=platform,
-            user_id=str(user_id),
-            user_text=user_text,
-            session_id=session_id,
-            user_name=memory_store.get(f"{session_id}_name"),
-            agent=agent,
-            bot_reply=reply,
-            mode=mode
-        )
-
+        # Gửi thông báo cho Admin nếu là Website hoặc Telegram
+        if platform.lower() in ["website", "telegram"]:
+            await notify_admin_incoming_message(
+                platform=platform,
+                user_id=str(user_id),
+                user_text=user_text,
+                session_id=session_id,
+                user_name=memory_store.get(f"{session_id}_name"),
+                agent=agent,
+                bot_reply=reply,
+                mode=mode
+            )
 
         data = ai_response.extracted_data
         # Inject agent from URL param if not set by AI
@@ -1103,9 +1119,21 @@ async def handle_zalo_flow(u_id, text):
 
         reply, img = await process_omnichannel_logic(u_id, "Zalo", text, session_id, customer_name=cust_name)
         if reply:
-            await send_zalo_message(u_id, reply)
-            if img:
+            ok, err_msg = await send_zalo_message(u_id, reply)
+            if img and ok:
                 await send_zalo_image(u_id, img)
+            
+            # Gửi thông báo cho Admin kèm trạng thái gửi thực tế
+            await notify_admin_incoming_message(
+                platform="Zalo",
+                user_id=str(u_id),
+                user_text=text,
+                session_id=session_id,
+                user_name=memory_store.get(f"{session_id}_name"),
+                bot_reply=reply,
+                mode=memory_store.get(f"{session_id}_mode"),
+                extra_info={"send_error": err_msg} if not ok else None
+            )
 
 
 async def handle_fb_flow(u_id, text, page_id: str = None):
@@ -1140,9 +1168,21 @@ async def handle_fb_flow(u_id, text, page_id: str = None):
 
         reply, img = await process_omnichannel_logic(u_id, fb_platform, text, session_id, customer_name=cust_name)
         if reply:
-            await send_facebook_message(u_id, reply, page_id=page_id)
-            if img:
+            ok, err_msg = await send_facebook_message(u_id, reply, page_id=page_id)
+            if img and ok:
                 await send_facebook_image(u_id, img, page_id=page_id)
+            
+            # Gửi thông báo cho Admin kèm trạng thái gửi thực tế
+            await notify_admin_incoming_message(
+                platform=fb_platform,
+                user_id=str(u_id),
+                user_text=text,
+                session_id=session_id,
+                user_name=memory_store.get(f"{session_id}_name"),
+                bot_reply=reply,
+                mode=memory_store.get(f"{session_id}_mode"),
+                extra_info={"send_error": err_msg, "page_id": page_id} if not ok else {"page_id": page_id}
+            )
 
 
 async def handle_ig_flow(u_id, text):
@@ -1151,9 +1191,21 @@ async def handle_ig_flow(u_id, text):
     async with lock:
         reply, img = await process_omnichannel_logic(u_id, "Instagram", text, session_id)
         if reply:
-            await send_facebook_message(u_id, reply)
-            if img:
+            ok, err_msg = await send_facebook_message(u_id, reply)
+            if img and ok:
                 await send_facebook_image(u_id, img)
+            
+            # Gửi thông báo cho Admin kèm trạng thái gửi thực tế
+            await notify_admin_incoming_message(
+                platform="Instagram",
+                user_id=str(u_id),
+                user_text=text,
+                session_id=session_id,
+                user_name=memory_store.get(f"{session_id}_name"),
+                bot_reply=reply,
+                mode=memory_store.get(f"{session_id}_mode"),
+                extra_info={"send_error": err_msg} if not ok else None
+            )
 
 
 # === ADMIN PAYMENT CONFIRMATION (Telegram callback) ===
@@ -1261,9 +1313,21 @@ async def handle_whatsapp_flow(wa_id: str, text: str, contact_name: Optional[str
 
         reply, img = await process_omnichannel_logic(wa_id, "WhatsApp", text, session_id, customer_name=cust_name)
         if reply:
-            await send_whatsapp_message(wa_id, reply, phone_number_id=phone_number_id)
-            if img:
+            ok, err_msg = await send_whatsapp_message(wa_id, reply, phone_number_id=phone_number_id)
+            if img and ok:
                 await send_whatsapp_image(wa_id, img, phone_number_id=phone_number_id)
+
+            # Gửi thông báo cho Admin kèm trạng thái gửi thực tế
+            await notify_admin_incoming_message(
+                platform="WhatsApp",
+                user_id=str(wa_id),
+                user_text=text,
+                session_id=session_id,
+                user_name=memory_store.get(f"{session_id}_name"),
+                bot_reply=reply,
+                mode=memory_store.get(f"{session_id}_mode"),
+                extra_info={"send_error": err_msg} if not ok else None
+            )
 
 
 @app.get("/whatsapp/webhook")
