@@ -520,14 +520,18 @@ async def notify_admin_incoming_message(
         "👀 <b>Hú hú bạn ơi, có khách vừa nhắn nè!</b>"
     ]
 
-    # Nhãn trạng thái xử lý thân thiện, hóm hỉnh
+    # Nhãn trạng thái xử lý thân thiện, minh bạch
+    send_err = (extra_info or {}).get("send_error")
     mode_str = mode or (memory_store.get(f"{session_id}_mode") if session_id else None) or memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "auto"))
-    if mode_str == "copilot":
+    
+    if send_err:
+        status_badge = f"⚠️ Gửi qua API thất bại: {send_err}"
+    elif mode_str == "copilot":
         status_badge = "Co-Pilot (Mình soạn nháp sẵn rồi nè, bạn duyệt cái là bay!)"
     elif mode_str in ["manual", "off"]:
         status_badge = "Thủ công (Mình đang ngồi hóng, bạn vào rep khách nha!)"
     else:
-        status_badge = "Tự động (Mình vừa tiếp khách và trả lời giúp bạn rồi nha!)"
+        status_badge = "Tự động (Đã gửi phản hồi thành công qua API)"
 
     now_str = datetime.now().strftime("%H:%M:%S - %d/%m/%Y")
     greeting = random.choice(FRIENDLY_GREETINGS)
@@ -552,11 +556,16 @@ async def notify_admin_incoming_message(
         if len(reply_preview) > 300:
             reply_preview = reply_preview[:297] + "..."
         lines.append("")
-        if mode_str == "copilot":
+        if send_err:
+            lines.append("🤖 <b>Dự thảo câu trả lời của Bot (chưa gửi được qua API):</b>")
+            lines.append(f"<i>\"{html.escape(reply_preview)}\"</i>")
+            lines.append("👉 <i>Gợi ý: Vui lòng kiểm tra lại Token API hoặc trực tiếp trả lời khách trên ứng dụng/Meta Suite nhé!</i>")
+        elif mode_str == "copilot":
             lines.append("🤖 <b>Bản nháp mình gợi ý sẵn nè (duyệt là gửi luôn):</b>")
+            lines.append(f"<i>\"{html.escape(reply_preview)}\"</i>")
         else:
             lines.append("🤖 <b>Bot đã phản hồi khách:</b>")
-        lines.append(f"<i>\"{html.escape(reply_preview)}\"</i>")
+            lines.append(f"<i>\"{html.escape(reply_preview)}\"</i>")
 
     msg_content = "\n".join(lines)
 

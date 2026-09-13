@@ -338,57 +338,6 @@ async def send_facebook_image(user_id: str, image_url: str, page_id: str = None)
         except Exception as e:
             print(f"Facebook send image failed: {e}")
 
-async def send_whatsapp_message(to_phone: str, text: str):
-    token = os.getenv("WHATSAPP_ACCESS_TOKEN")
-    phone_number_id = os.getenv("WHATSAPP_PHONE_NUMBER_ID")
-    if not token or not phone_number_id:
-        print("❌ send_whatsapp_message: Chưa cấu hình WHATSAPP_ACCESS_TOKEN hoặc WHATSAPP_PHONE_NUMBER_ID")
-        return
-    url = f"https://graph.facebook.com/v19.0/{phone_number_id}/messages"
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json"
-    }
-    payload = {
-        "messaging_product": "whatsapp",
-        "recipient_type": "individual",
-        "to": to_phone,
-        "type": "text",
-        "text": {"preview_url": False, "body": text}
-    }
-    async with httpx.AsyncClient() as client:
-        try:
-            resp = await client.post(url, headers=headers, json=payload)
-            print(f"WhatsApp send message response: {resp.status_code} - {resp.text}")
-        except Exception as e:
-            print(f"WhatsApp send message failed: {e}")
-
-async def send_whatsapp_image(to_phone: str, image_url: str):
-    token = os.getenv("WHATSAPP_ACCESS_TOKEN")
-    phone_number_id = os.getenv("WHATSAPP_PHONE_NUMBER_ID")
-    if not token or not phone_number_id:
-        print("❌ send_whatsapp_image: Chưa cấu hình WHATSAPP_ACCESS_TOKEN hoặc WHATSAPP_PHONE_NUMBER_ID")
-        return
-    url = f"https://graph.facebook.com/v19.0/{phone_number_id}/messages"
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json"
-    }
-    payload = {
-        "messaging_product": "whatsapp",
-        "recipient_type": "individual",
-        "to": to_phone,
-        "type": "image",
-        "image": {"link": image_url}
-    }
-    async with httpx.AsyncClient() as client:
-        try:
-            resp = await client.post(url, headers=headers, json=payload)
-            print(f"WhatsApp send image response: {resp.status_code} - {resp.text}")
-        except Exception as e:
-            print(f"WhatsApp send image failed: {e}")
-
-
 def get_whatsapp_credentials(phone_number_id: str = None) -> tuple[Optional[str], Optional[str]]:
     """Lấy Access Token và Phone Number ID của WhatsApp Cloud API"""
     token = os.getenv("WHATSAPP_ACCESS_TOKEN") or os.getenv("WHATSAPP_TOKEN")
@@ -396,12 +345,13 @@ def get_whatsapp_credentials(phone_number_id: str = None) -> tuple[Optional[str]
     return token, p_id
 
 
-async def send_whatsapp_message(to_number: str, text: str, phone_number_id: str = None):
-    """Gửi tin nhắn văn bản qua WhatsApp Business Cloud API"""
+async def send_whatsapp_message(to_number: str, text: str, phone_number_id: str = None) -> tuple[bool, str]:
+    """Gửi tin nhắn văn bản qua WhatsApp Business Cloud API và trả về (is_success, error_or_id)"""
     token, p_id = get_whatsapp_credentials(phone_number_id)
     if not token or not p_id:
-        print(f"❌ send_whatsapp_message: Chưa cấu hình WHATSAPP_ACCESS_TOKEN hoặc WHATSAPP_PHONE_NUMBER_ID")
-        return
+        msg = "Chưa cấu hình WHATSAPP_ACCESS_TOKEN hoặc WHATSAPP_PHONE_NUMBER_ID"
+        print(f"❌ send_whatsapp_message: {msg}")
+        return False, msg
     clean_to = re.sub(r"[^\d]", "", str(to_number))
     url = f"https://graph.facebook.com/v19.0/{p_id}/messages"
     headers = {
@@ -415,20 +365,28 @@ async def send_whatsapp_message(to_number: str, text: str, phone_number_id: str 
         "type": "text",
         "text": {"preview_url": False, "body": text}
     }
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=10.0) as client:
         try:
             resp = await client.post(url, json=payload, headers=headers)
             print(f"WhatsApp send message response ({clean_to}): {resp.status_code} - {resp.text}")
+            if resp.status_code in [200, 201]:
+                return True, resp.text
+            else:
+                err_data = resp.json() if resp.headers.get("content-type", "").startswith("application/json") else {}
+                err_msg = err_data.get("error", {}).get("message", resp.text)
+                return False, f"HTTP {resp.status_code}: {err_msg}"
         except Exception as e:
             print(f"WhatsApp send message failed: {e}")
+            return False, str(e)
 
 
-async def send_whatsapp_image(to_number: str, image_url: str, phone_number_id: str = None):
-    """Gửi hình ảnh qua WhatsApp Business Cloud API"""
+async def send_whatsapp_image(to_number: str, image_url: str, phone_number_id: str = None) -> tuple[bool, str]:
+    """Gửi hình ảnh qua WhatsApp Business Cloud API và trả về (is_success, error_or_id)"""
     token, p_id = get_whatsapp_credentials(phone_number_id)
     if not token or not p_id:
-        print(f"❌ send_whatsapp_image: Chưa cấu hình WHATSAPP_ACCESS_TOKEN hoặc WHATSAPP_PHONE_NUMBER_ID")
-        return
+        msg = "Chưa cấu hình WHATSAPP_ACCESS_TOKEN hoặc WHATSAPP_PHONE_NUMBER_ID"
+        print(f"❌ send_whatsapp_image: {msg}")
+        return False, msg
     clean_to = re.sub(r"[^\d]", "", str(to_number))
     url = f"https://graph.facebook.com/v19.0/{p_id}/messages"
     headers = {
@@ -442,12 +400,19 @@ async def send_whatsapp_image(to_number: str, image_url: str, phone_number_id: s
         "type": "image",
         "image": {"link": image_url}
     }
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=10.0) as client:
         try:
             resp = await client.post(url, json=payload, headers=headers)
             print(f"WhatsApp send image response ({clean_to}): {resp.status_code} - {resp.text}")
+            if resp.status_code in [200, 201]:
+                return True, resp.text
+            else:
+                err_data = resp.json() if resp.headers.get("content-type", "").startswith("application/json") else {}
+                err_msg = err_data.get("error", {}).get("message", resp.text)
+                return False, f"HTTP {resp.status_code}: {err_msg}"
         except Exception as e:
             print(f"WhatsApp send image failed: {e}")
+            return False, str(e)
 
 
 async def get_facebook_user_profile(user_id: str, page_id: str = None) -> Optional[str]:
