@@ -15,8 +15,10 @@ DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
 GROQ_API_KEYS = [
     k.strip() for k in os.getenv("GROQ_API_KEYS", "").split(",") if k.strip()
 ]
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 DEEPSEEK_MODEL = "deepseek-chat"
 GROQ_MODEL = "groq/compound"
+
 
 
 # === DATA MODELS (Linh hoạt tối đa) ===
@@ -106,8 +108,14 @@ class ChatResponse(BaseModel):
                     msg = clean_text
 
         if not msg:
-            if any(ord(c) >= 0x0400 and ord(c) <= 0x04FF for c in json_str):
+            if any(ord(c) >= 0x0400 and ord(c) <= 0x04FF for c in json_str) or any(r in json_str.lower() for r in ["russian", "russia", "nga", "ru"]):
                 msg = get_msg("processing_info", "ru")
+            elif any(v in json_str.lower() for v in ["chào", "giá", "vé", "việt nam"]):
+                msg = get_msg("processing_info", "vi")
+            elif any(k in json_str.lower() for k in ["korea", "hàn quốc", "ko"]):
+                msg = get_msg("processing_info", "ko")
+            elif any(z in json_str.lower() for z in ["china", "trung quốc", "zh"]):
+                msg = get_msg("processing_info", "zh")
             else:
                 msg = get_msg("processing_info", "en")
 
@@ -282,7 +290,7 @@ async def call_deepseek(messages):
         "response_format": {"type": "json_object"},
         "temperature": 0.3,
     }
-    async with httpx.AsyncClient(timeout=15) as client:
+    async with httpx.AsyncClient(timeout=30) as client:
         try:
             r = await client.post(url, json=payload, headers=headers)
             if r.status_code == 200:
@@ -300,6 +308,7 @@ async def call_groq_fallback(messages):
         "model": GROQ_MODEL,
         "messages": messages,
         "response_format": {"type": "json_object"},
+        "max_tokens": 800,
     }
     
     # Try each available API key to handle rate limits or transient errors
@@ -308,7 +317,7 @@ async def call_groq_fallback(messages):
             "Authorization": f"Bearer {key}",
             "Content-Type": "application/json",
         }
-        async with httpx.AsyncClient(timeout=15) as client:
+        async with httpx.AsyncClient(timeout=20) as client:
             try:
                 r = await client.post(url, json=payload, headers=headers)
                 if r.status_code == 200:
@@ -318,6 +327,36 @@ async def call_groq_fallback(messages):
             except Exception as e:
                 print(f"⚠️ Groq key {idx+1} exception: {e}")
     return None
+
+
+async def call_gemini_fallback(messages):
+    if not GEMINI_API_KEY:
+        return None
+    try:
+        import google.generativeai as genai
+        genai.configure(api_key=GEMINI_API_KEY.strip())
+        model = genai.GenerativeModel(
+            "gemini-3.6-flash",
+            generation_config={"response_mime_type": "application/json"}
+        )
+        system_content = ""
+        conversation_history = []
+        for m in messages:
+            if m["role"] == "system":
+                system_content += m["content"] + "\n\n"
+            elif m["role"] == "assistant":
+                conversation_history.append(f"Assistant: {m['content']}")
+            elif m["role"] == "user":
+                conversation_history.append(f"Customer: {m['content']}")
+        
+        full_prompt = f"{system_content}CONVERSATION HISTORY:\n" + "\n".join(conversation_history) + "\n\nRespond with ONLY a valid JSON object matching the schema:"
+        response = await model.generate_content_async(full_prompt)
+        if response and response.text:
+            return response.text.strip()
+        return None
+    except Exception as e:
+        print(f"⚠️ Gemini fallback exception: {e}")
+        return None
 
 
 def calculate_smart_departure_local(ngay_het_han: str, loai_visa: str = "", destination: str = "laos") -> str | None:
@@ -546,6 +585,8 @@ async def process_chat(history_messages: list[dict], customer_profile: dict | No
     content = await call_deepseek(messages)
     if not content:
         content = await call_groq_fallback(messages)
+    if not content:
+        content = await call_gemini_fallback(messages)
 
     if not content:
         # Fallback in case of complete API failure
@@ -614,6 +655,30 @@ async def call_groq_fallback_text(messages):
     return None
 
 
+async def call_gemini_fallback_text(messages):
+    if not GEMINI_API_KEY:
+        return None
+    try:
+        import google.generativeai as genai
+        genai.configure(api_key=GEMINI_API_KEY.strip())
+        model = genai.GenerativeModel("gemini-3.6-flash")
+        system_content = ""
+        user_content = ""
+        for m in messages:
+            if m["role"] == "system":
+                system_content += m["content"] + "\n\n"
+            else:
+                user_content += m["content"] + "\n"
+        full_prompt = f"{system_content}YÊU CẦU / CÂU HỎI:\n{user_content}"
+        response = await model.generate_content_async(full_prompt)
+        if response and response.text:
+            return response.text.strip()
+        return None
+    except Exception as e:
+        print(f"⚠️ Gemini text fallback exception: {e}")
+        return None
+
+
 async def process_staff_chat(question: str) -> str:
     # 1. Lấy ngữ cảnh RAG từ cơ sở kiến thức
     rag_context = ""
@@ -659,6 +724,8 @@ async def process_staff_chat(question: str) -> str:
     content = await call_deepseek_text(messages)
     if not content:
         content = await call_groq_fallback_text(messages)
+    if not content:
+        content = await call_gemini_fallback_text(messages)
 
     if not content:
         return "🤖 Không thể kết nối với AI (API Error). Vui lòng thử lại sau hoặc tra cứu từ khóa!"

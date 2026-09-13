@@ -681,19 +681,6 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
             mode=mode
         )
 
-        # Thông báo trực tiếp cho Admin Telegram về tin nhắn khách hàng & câu trả lời của Bot
-        try:
-            cust_name = memory_store.get(f"{session_id}_name", f"Khách {platform} ({user_id})")
-            short_reply = reply[:250] + ("..." if len(reply) > 250 else "")
-            tg_alert = (
-                f"💬 **[{platform.upper()} - CÓ TIN NHẮN MỚI]**\n"
-                f"👤 Khách: {cust_name}\n"
-                f"❓ Hỏi: \"{user_text}\"\n"
-                f"🤖 Bot đáp: \"{short_reply}\""
-            )
-            await send_to_admin_group(None, tg_alert)
-        except Exception as e:
-            print(f"Lỗi gửi thông báo Telegram Admin: {e}")
 
         data = ai_response.extracted_data
         # Inject agent from URL param if not set by AI
