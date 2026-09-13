@@ -250,26 +250,34 @@ async def get_zalo_access_token():
             print("Exception khi refresh Zalo token:", e)
     return None
 
-async def send_zalo_message(user_id: str, text: str):
+async def send_zalo_message(user_id: str, text: str) -> tuple[bool, str]:
     token = await get_zalo_access_token()
     if not token:
-        print("❌ send_zalo_message: Không lấy được access token Zalo")
-        return
+        msg = "Không lấy được access token Zalo (Refresh Token đã hết hạn / không hợp lệ - Error -14014)"
+        print(f"❌ send_zalo_message: {msg}")
+        return False, msg
     url = "https://openapi.zalo.me/v3.0/oa/message/cs"
     headers = {"access_token": token, "Content-Type": "application/json"}
     payload = {"recipient": {"user_id": user_id}, "message": {"text": text}}
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=10.0) as client:
         try:
             resp = await client.post(url, headers=headers, json=payload)
             print(f"Zalo send message response: {resp.status_code} - {resp.text}")
+            res_data = resp.json() if resp.headers.get("content-type", "").startswith("application/json") else {}
+            if res_data.get("error") == 0:
+                return True, resp.text
+            else:
+                return False, f"Zalo Error {res_data.get('error')}: {res_data.get('message', resp.text)}"
         except Exception as e:
             print(f"Zalo send message failed: {e}")
+            return False, str(e)
 
-async def send_zalo_image(user_id: str, image_url: str):
+async def send_zalo_image(user_id: str, image_url: str) -> tuple[bool, str]:
     token = await get_zalo_access_token()
     if not token:
-        print("❌ send_zalo_image: Không lấy được access token Zalo")
-        return
+        msg = "Không lấy được access token Zalo (Refresh Token đã hết hạn / không hợp lệ - Error -14014)"
+        print(f"❌ send_zalo_image: {msg}")
+        return False, msg
     url = "https://openapi.zalo.me/v3.0/oa/message/cs"
     headers = {"access_token": token, "Content-Type": "application/json"}
     payload = {
@@ -284,12 +292,18 @@ async def send_zalo_image(user_id: str, image_url: str):
             }
         }
     }
-    async with httpx.AsyncClient() as client:
+    async with httpx.AsyncClient(timeout=10.0) as client:
         try:
             resp = await client.post(url, headers=headers, json=payload)
             print(f"Zalo send image response: {resp.status_code} - {resp.text}")
+            res_data = resp.json() if resp.headers.get("content-type", "").startswith("application/json") else {}
+            if res_data.get("error") == 0:
+                return True, resp.text
+            else:
+                return False, f"Zalo Error {res_data.get('error')}: {res_data.get('message', resp.text)}"
         except Exception as e:
             print(f"Zalo send image failed: {e}")
+            return False, str(e)
 
 def get_fb_page_token(page_id: str = None) -> str | None:
     """Lấy Page Access Token theo page_id.
