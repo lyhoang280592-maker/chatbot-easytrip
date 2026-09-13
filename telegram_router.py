@@ -521,7 +521,7 @@ async def notify_admin_incoming_message(
     ]
 
     # Nhãn trạng thái xử lý thân thiện, hóm hỉnh
-    mode_str = mode or (memory_store.get(f"{session_id}_mode") if session_id else None) or memory_store.get("GLOBAL_BOT_MODE", "copilot")
+    mode_str = mode or (memory_store.get(f"{session_id}_mode") if session_id else None) or memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "auto"))
     if mode_str == "copilot":
         status_badge = "Co-Pilot (Mình soạn nháp sẵn rồi nè, bạn duyệt cái là bay!)"
     elif mode_str in ["manual", "off"]:
@@ -546,13 +546,16 @@ async def notify_admin_incoming_message(
         f"📌 <b>Trạng thái:</b> {html.escape(status_badge)}"
     ]
 
-    # Nếu có bản nháp Co-Pilot, đính kèm vào thông báo
-    if bot_reply and mode_str == "copilot":
+    # Nếu có bản nháp Co-Pilot hoặc Bot đã trả lời tự động, đính kèm vào thông báo
+    if bot_reply:
         reply_preview = bot_reply.strip()
         if len(reply_preview) > 300:
             reply_preview = reply_preview[:297] + "..."
         lines.append("")
-        lines.append("🤖 <b>Bản nháp mình gợi ý sẵn nè (duyệt là gửi luôn):</b>")
+        if mode_str == "copilot":
+            lines.append("🤖 <b>Bản nháp mình gợi ý sẵn nè (duyệt là gửi luôn):</b>")
+        else:
+            lines.append("🤖 <b>Bot đã phản hồi khách:</b>")
         lines.append(f"<i>\"{html.escape(reply_preview)}\"</i>")
 
     msg_content = "\n".join(lines)
@@ -734,8 +737,9 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
     memory_store[f"{session_id}_last_update"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     # Kiểm tra chế độ Bot (Ưu tiên chế độ riêng của phiên, nếu chưa đặt thì lấy chế độ toàn hệ thống)
-    global_mode = memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "copilot"))
+    global_mode = memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "auto"))
     session_mode = memory_store.get(f"{session_id}_mode")
+    mode = session_mode if session_mode is not None else global_mode
     platform_label = "Telegram Business" if (getattr(update, "business_message", None) or getattr(update, "edited_business_message", None)) else "Telegram"
     display_user_name = update.effective_user.full_name if update.effective_user else None
 
