@@ -898,9 +898,15 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
         return reply, image_to_send
     except Exception as e:
         print(f"Lỗi Omnichannel ({platform}):", e)
-        # Try to get lang from existing data if possible
+        # Try to get lang from user text or existing data
         data = memory_store.get(f"{session_id}_data")
-        lang = get_lang_code(getattr(data, "quoc_tich", "")) if data else "en"
+        u_text = str(user_text or "").lower()
+        if re.search(r'[а-яё]', u_text):
+            lang = "ru"
+        elif any(v in u_text for v in ["chào", "giá", "vé", "lào", "visa", "bạn ơi"]):
+            lang = "vi"
+        else:
+            lang = get_lang_code(getattr(data, "quoc_tich", "")) if data else "en"
         return (
             get_msg("system_busy", lang),
             None,

@@ -549,6 +549,7 @@ async def process_chat(history_messages: list[dict], customer_profile: dict | No
 
     # 1. Tìm ngày hết hạn visa và tính ngày đi bằng Python
     expiry_date, destination, visa_type = extract_date_and_nationality_from_history(history_messages)
+    smart_dep = None
     
     # Kế thừa thông tin từ hồ sơ khách cũ nếu tin nhắn hiện tại chưa đề cập
     if customer_profile:
