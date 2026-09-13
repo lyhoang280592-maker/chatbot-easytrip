@@ -699,19 +699,22 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
 
         # Tự động cập nhật hồ sơ khách hàng vào Database SQLite
         if cust_id:
-            profile_updates = {}
-            if getattr(data, "ho_ten", None):
-                profile_updates["full_name"] = data.ho_ten
-                memory_store[f"{session_id}_name"] = data.ho_ten
-            if getattr(data, "quoc_tich", None): profile_updates["nationality"] = data.quoc_tich
-            if getattr(data, "so_dien_thoai", None):
-                profile_updates["phone_number"] = str(data.so_dien_thoai)
-                customer_memory.link_platform_by_phone(str(data.so_dien_thoai), platform.lower(), str(user_id))
-            if getattr(data, "ghe_chon", None): profile_updates["preferred_seat"] = data.ghe_chon
-            if getattr(data, "diem_don", None): profile_updates["preferred_pickup"] = data.diem_don
-            if getattr(data, "ngay_het_han_visa", None): profile_updates["visa_expiry_date"] = data.ngay_het_han_visa
-            if profile_updates:
-                customer_memory.update_customer_profile(cust_id, **profile_updates)
+            try:
+                profile_updates = {}
+                if getattr(data, "ho_ten", None):
+                    profile_updates["full_name"] = data.ho_ten
+                    memory_store[f"{session_id}_name"] = data.ho_ten
+                if getattr(data, "quoc_tich", None): profile_updates["nationality"] = data.quoc_tich
+                if getattr(data, "so_dien_thoai", None):
+                    profile_updates["phone_number"] = str(data.so_dien_thoai)
+                    customer_memory.link_platform_by_phone(str(data.so_dien_thoai), platform.lower(), str(user_id))
+                if getattr(data, "ghe_chon", None): profile_updates["preferred_seat"] = data.ghe_chon
+                if getattr(data, "diem_don", None): profile_updates["preferred_pickup"] = data.diem_don
+                if getattr(data, "ngay_het_han_visa", None): profile_updates["visa_expiry_date"] = data.ngay_het_han_visa
+                if profile_updates:
+                    customer_memory.update_customer_profile(cust_id, **profile_updates)
+            except Exception as e_prof:
+                print(f"⚠️ Cập nhật customer profile thất bại ({platform}): {e_prof}")
 
         # Xác định ngày đi và loại dịch vụ của khách
         user_only_text = " ".join([m.get("content", "") for m in memory_store.get(session_id, []) if isinstance(m, dict) and m.get("role") == "user"])
@@ -729,9 +732,12 @@ async def process_omnichannel_logic(user_id, platform, user_text, session_id, ag
             if (now - last_sent) > (15 * 60):
                 cmd = get_scheme_command(ngay_di, service_type)
                 if cmd:
-                    await send_to_bus_group(None, cmd, date=ngay_di, service=service_type)
-                    scheme_history[f"{ngay_di}_{service_type}"] = now
-                    print(f"🚀 Omnichannel Scheme sent: {cmd} (phase=SEAT_SELECTION, service={service_type})")
+                    try:
+                        await send_to_bus_group(None, cmd, date=ngay_di, service=service_type)
+                        scheme_history[f"{ngay_di}_{service_type}"] = now
+                        print(f"🚀 Omnichannel Scheme sent: {cmd} (phase=SEAT_SELECTION, service={service_type})")
+                    except Exception as e_bus:
+                        print(f"⚠️ Gửi Scheme vào nhóm bus thất bại: {e_bus}")
             else:
                 print(f"⏳ Omnichannel: Bỏ qua Scheme cho {ngay_di}_{service_type} (vừa gửi).")
 

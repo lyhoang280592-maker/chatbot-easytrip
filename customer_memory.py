@@ -259,6 +259,12 @@ def update_customer_profile(customer_id: int, **kwargs) -> bool:
     sql = f"UPDATE customers SET {', '.join(updates)} WHERE customer_id = ?"
     conn = get_db_connection()
     try:
+        for k, v in kwargs.items():
+            if k == "phone_number" and v:
+                norm_p = normalize_phone(v)
+                if norm_p:
+                    with conn:
+                        conn.execute("UPDATE customers SET phone_number = NULL WHERE phone_number = ? AND customer_id != ?", (norm_p, customer_id))
         with conn:
             conn.execute(sql, params)
         return True

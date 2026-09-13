@@ -12,12 +12,13 @@ load_dotenv()
 
 # === CONFIGURATION ===
 DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY")
+groq_raw_keys = f"{os.getenv('GROQ_API_KEYS', '')},{os.getenv('GROQ_API_KEY', '')}"
 GROQ_API_KEYS = [
-    k.strip() for k in os.getenv("GROQ_API_KEYS", "").split(",") if k.strip()
+    k.strip() for k in groq_raw_keys.split(",") if k.strip()
 ]
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 DEEPSEEK_MODEL = "deepseek-chat"
-GROQ_MODEL = "openai/gpt-oss-120b"
+GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-120b")
 
 
 
@@ -88,7 +89,26 @@ class ChatResponse(BaseModel):
         if isinstance(data, dict):
             if "extracted_data" not in data or not isinstance(data["extracted_data"], dict):
                 data["extracted_data"] = {}
-            if "reply_message" in data and data["reply_message"]:
+                
+            # Tự động ánh xạ các field nếu LLM đặt tên khác
+            ext = data["extracted_data"]
+            if not ext.get("ho_ten") and (data.get("customer_name") or data.get("name")):
+                ext["ho_ten"] = str(data.get("customer_name") or data.get("name"))
+            if not ext.get("nam_sinh") and (data.get("birth_year") or data.get("year_of_birth")):
+                ext["nam_sinh"] = str(data.get("birth_year") or data.get("year_of_birth"))
+            if not ext.get("diem_don") and (data.get("pickup_location") or data.get("pickup_address")):
+                ext["diem_don"] = str(data.get("pickup_location") or data.get("pickup_address"))
+            if not ext.get("loai_visa") and (data.get("visa_package") or data.get("visa_type")):
+                ext["loai_visa"] = str(data.get("visa_package") or data.get("visa_type"))
+            if not ext.get("ngay_khoi_hanh") and data.get("departure_date"):
+                ext["ngay_khoi_hanh"] = str(data.get("departure_date"))
+            if not ext.get("so_dien_thoai") and (data.get("phone") or data.get("phone_number")):
+                ext["so_dien_thoai"] = str(data.get("phone") or data.get("phone_number"))
+
+            if not data.get("reply_message"):
+                data["reply_message"] = data.get("message") or data.get("text") or data.get("notes") or ""
+
+            if data.get("reply_message"):
                 return cls.model_validate(data, *args, **kwargs)
 
         # PHƯƠNG ÁN CỨU HỘ: Trích xuất reply_message từ chuỗi
@@ -331,9 +351,41 @@ async def call_groq_fallback(messages):
     if not GROQ_API_KEYS:
         return None
     url = "https://api.groq.com/openai/v1/chat/completions"
+    
+    SCHEMA_DIRECTIVE = """
+OUTPUT SCHEMA: You MUST return strictly a JSON object with these EXACT keys:
+{
+  "reply_message": "your warm, helpful response in the customer's language",
+  "extracted_data": {
+    "ho_ten": "...",
+    "nam_sinh": "...",
+    "quoc_tich": "...",
+    "thanh_pho": "...",
+    "ngay_het_han_visa": "...",
+    "loai_visa": "...",
+    "ngay_khoi_hanh": "...",
+    "ghe_chon": "...",
+    "diem_don": "...",
+    "so_dien_thoai": "..."
+  },
+  "current_phase": "CONSULTING|SEAT_SELECTION|PAYMENT|COMPLETED",
+  "is_complete": false
+}
+"""
+    groq_messages = []
+    for m in messages:
+        if m.get("role") == "system":
+            sys_txt = m.get("content", "")
+            if len(sys_txt) > 3500:
+                sys_txt = sys_txt[:3500]
+            sys_txt += "\n\n" + SCHEMA_DIRECTIVE
+            groq_messages.append({"role": "system", "content": sys_txt})
+        else:
+            groq_messages.append(m)
+
     payload = {
         "model": GROQ_MODEL,
-        "messages": messages,
+        "messages": groq_messages,
         "response_format": {"type": "json_object"},
         "max_tokens": 800,
     }
