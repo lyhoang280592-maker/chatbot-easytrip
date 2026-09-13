@@ -403,13 +403,23 @@ async def get_or_create_seat_map(ngay: str, service: str) -> dict | None:
 
 
 async def send_to_admin_group(context, message: str):
+    bot = context.bot if context else tg_app.bot
+    sent = False
     group_id = ADMIN_GROUP_CHAT_ID or os.getenv("ID_NHOM_CHAT_QUAN_TRI")
-    if not group_id: return
-    try:
-        topic_id = int(ADMIN_GROUP_TOPIC_ID) if ADMIN_GROUP_TOPIC_ID else None
-        bot = context.bot if context else tg_app.bot
-        await bot.send_message(chat_id=int(group_id), text=message, message_thread_id=topic_id)
-    except Exception as e: print("Admin Group Error:", e)
+    if group_id:
+        try:
+            topic_id = int(ADMIN_GROUP_TOPIC_ID) if ADMIN_GROUP_TOPIC_ID else None
+            await bot.send_message(chat_id=int(group_id), text=message, message_thread_id=topic_id)
+            sent = True
+        except Exception as e:
+            print(f"Admin Group Error ({group_id}):", e)
+            
+    admin_uid = os.getenv("ADMIN_TELEGRAM_ID")
+    if admin_uid and (not sent or not group_id):
+        try:
+            await bot.send_message(chat_id=int(admin_uid), text=message)
+        except Exception as e:
+            print(f"Admin Direct Error ({admin_uid}):", e)
 
 
 # ============================================================
