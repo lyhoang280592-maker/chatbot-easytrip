@@ -1014,7 +1014,8 @@ async def verify_facebook_webhook(request: Request):
 async def facebook_webhook(request: Request, background_tasks: BackgroundTasks):
     try:
         data = await request.json()
-        if data.get("object") == "page":
+        obj = data.get("object")
+        if obj in ("page", "instagram"):
             for entry in data.get("entry", []):
                 page_id = entry.get("id")  # ID của Page nhận tin nhắn
                 for event in entry.get("messaging", []):
@@ -1032,8 +1033,23 @@ async def facebook_webhook(request: Request, background_tasks: BackgroundTasks):
                                 text = "[Khách gửi tệp/hình ảnh]"
                         background_tasks.add_task(handle_fb_flow, u_id, text, page_id)
     except Exception as e:
-        print(f"❌ Facebook Webhook Error: {e}")
+        print(f"❌ Facebook/Instagram Webhook Error: {e}")
     return Response(status_code=200)
+
+
+@app.get("/instagram/webhook")
+async def verify_instagram_webhook(request: Request):
+    if request.query_params.get("hub.mode") == "subscribe" and request.query_params.get("hub.verify_token") in [
+        os.getenv("FB_VERIFY_TOKEN"),
+        "EasytripMessengerWebhook2026"
+    ]:
+        return Response(content=request.query_params.get("hub.challenge"), status_code=200)
+    return Response(status_code=403)
+
+
+@app.post("/instagram/webhook")
+async def instagram_webhook(request: Request, background_tasks: BackgroundTasks):
+    return await facebook_webhook(request, background_tasks)
 
 
 async def handle_whatsapp_flow(wa_id: str, text: str, contact_name: Optional[str] = None, phone_number_id: Optional[str] = None):

@@ -434,12 +434,12 @@ async def notify_admin_incoming_message(
     Facebook, Zalo, Website, Telegram.
     """
     import html
-    admin_tele_id = os.getenv("ADMIN_TELEGRAM_ID") or os.getenv("ID_TELEGRAM_QUAN_TRI", "")
+    admin_tele_id = os.getenv("ADMIN_TELEGRAM_ID") or os.getenv("ID_TELEGRAM_QUAN_TRI", "7323038761")
     admin_group_id = os.getenv("ADMIN_GROUP_CHAT_ID") or os.getenv("ID_NHOM_CHAT_QUAN_TRI", "")
     topic_id = os.getenv("ADMIN_GROUP_TOPIC_ID", "")
 
     # Tránh gửi thông báo nếu chính Admin gửi tin nhắn trên Telegram
-    if admin_tele_id and str(user_id) == str(admin_tele_id):
+    if admin_tele_id and str(user_id) == str(admin_tele_id) and "telegram" in platform.lower():
         return
 
     # Xác định nhãn kênh tiếp nhận (không dùng icon)
