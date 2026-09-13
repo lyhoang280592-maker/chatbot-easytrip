@@ -9,15 +9,19 @@ echo   Repo: https://github.com/lyhoang280592-maker/chatbot-easytrip
 echo ========================================================
 echo.
 
+setlocal enabledelayedexpansion
 set "GIT_CMD=C:\Users\AD\AppData\Local\Programs\MinGit\cmd\git.exe"
 if not exist "%GIT_CMD%" set "GIT_CMD=git"
 
 "%GIT_CMD%" remote set-url origin https://github.com/lyhoang280592-maker/chatbot-easytrip.git 2>nul || "%GIT_CMD%" remote add origin https://github.com/lyhoang280592-maker/chatbot-easytrip.git
 
-echo Đang thử đẩy code lên GitHub...
-"%GIT_CMD%" push -u origin main --force
+echo Đang tự động lưu các thay đổi mới...
+"%GIT_CMD%" add .
+"%GIT_CMD%" commit -m "update code and training materials" 2>nul
 
-if %ERRORLEVEL% EQU 0 (
+echo Đang thử đẩy code lên GitHub...
+"%GIT_CMD%" push -u origin main
+if !ERRORLEVEL! EQU 0 (
     echo.
     echo ========================================================
     echo   🎉 ĐẨY CODE LÊN GITHUB THÀNH CÔNG RỰC RỠ!
@@ -33,12 +37,12 @@ echo 2. Đặt tên Token (ví dụ: my-token), tích chọn ô 'repo'
 echo 3. Bấm 'Generate token' ở cuối trang và copy mã (dạng ghp_xxxx...)
 echo --------------------------------------------------------
 echo.
-set /p GH_TOKEN="👉 Dán mã Token của bạn vào đây rồi nhấn Enter: "
+set /p GH_TOKEN="👉 Dán mã Token GitHub của bạn vào đây rồi nhấn Enter: "
 
-if not "%GH_TOKEN%"=="" (
+if not "!GH_TOKEN!"=="" (
     echo Đang đẩy lại với Token...
-    "%GIT_CMD%" push https://%GH_TOKEN%@github.com/lyhoang280592-maker/chatbot-easytrip.git main --force
-    if %ERRORLEVEL% EQU 0 (
+    "%GIT_CMD%" push https://!GH_TOKEN!@github.com/lyhoang280592-maker/chatbot-easytrip.git main
+    if !ERRORLEVEL! EQU 0 (
         echo.
         echo ========================================================
         echo   🎉 ĐẨY CODE LÊN GITHUB THÀNH CÔNG RỰC RỠ!

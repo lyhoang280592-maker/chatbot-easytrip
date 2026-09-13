@@ -634,6 +634,14 @@ async def handle_fb_flow(u_id, text):
             await send_facebook_image(u_id, img)
 
 
+async def handle_ig_flow(u_id, text):
+    reply, img = await process_omnichannel_logic(u_id, "Instagram", text, f"ig_{u_id}")
+    if reply:
+        await send_facebook_message(u_id, reply)
+        if img:
+            await send_facebook_image(u_id, img)
+
+
 # === ADMIN PAYMENT CONFIRMATION (Telegram callback) ===
 @app.post("/admin/order/{record_id}/paid")
 async def admin_confirm_paid(record_id: str, request: Request):
@@ -653,7 +661,7 @@ async def list_orders(status: str | None = None):
 
 @app.get("/facebook/webhook")
 async def verify_facebook_webhook(request: Request):
-    if request.query_params.get("hub.mode") == "subscribe" and request.query_params.get("hub.verify_token") == os.getenv("FB_VERIFY_TOKEN"):
+    if request.query_params.get("hub.mode") == "subscribe" and request.query_params.get("hub.verify_token") == os.getenv("FB_VERIFY_TOKEN", "EasytripMessengerWebhook2026"):
         return Response(content=request.query_params.get("hub.challenge"), status_code=200)
     return Response(status_code=403)
 
@@ -662,7 +670,8 @@ async def verify_facebook_webhook(request: Request):
 async def facebook_webhook(request: Request, background_tasks: BackgroundTasks):
     try:
         data = await request.json()
-        if data.get("object") == "page":
+        obj = data.get("object")
+        if obj in ("page", "instagram"):
             for entry in data.get("entry", []):
                 for event in entry.get("messaging", []):
                     if "message" in event and "text" in event["message"]:
@@ -670,9 +679,36 @@ async def facebook_webhook(request: Request, background_tasks: BackgroundTasks):
                             continue
                         u_id = event["sender"]["id"]
                         text = event["message"]["text"]
-                        background_tasks.add_task(handle_fb_flow, u_id, text)
+                        if obj == "instagram":
+                            background_tasks.add_task(handle_ig_flow, u_id, text)
+                        else:
+                            background_tasks.add_task(handle_fb_flow, u_id, text)
     except Exception as e:
-        print(f"❌ Facebook Webhook Error: {e}")
+        print(f"❌ Facebook/Instagram Webhook Error: {e}")
+    return Response(status_code=200)
+
+
+@app.get("/instagram/webhook")
+async def verify_instagram_webhook(request: Request):
+    if request.query_params.get("hub.mode") == "subscribe" and request.query_params.get("hub.verify_token") == os.getenv("FB_VERIFY_TOKEN", "EasytripMessengerWebhook2026"):
+        return Response(content=request.query_params.get("hub.challenge"), status_code=200)
+    return Response(status_code=403)
+
+
+@app.post("/instagram/webhook")
+async def instagram_webhook(request: Request, background_tasks: BackgroundTasks):
+    try:
+        data = await request.json()
+        for entry in data.get("entry", []):
+            for event in entry.get("messaging", []):
+                if "message" in event and "text" in event["message"]:
+                    if event["message"].get("is_echo"):
+                        continue
+                    u_id = event["sender"]["id"]
+                    text = event["message"]["text"]
+                    background_tasks.add_task(handle_ig_flow, u_id, text)
+    except Exception as e:
+        print(f"❌ Instagram Webhook Error: {e}")
     return Response(status_code=200)
 
 
