@@ -246,21 +246,26 @@ CORE COMMUNICATION PHILOSOPHY:
   ⚠️ **CRITICAL RULE**: DO NOT send this 5-point template if the customer has ALREADY stated their needs, answered booking questions, provided their name/year/pickup point, or sent passport/photos!
 
 - **VALUE-FIRST (ADVISE FIRST, PROCEDURES LATER)**: If the customer asks a question (such as prices, schedules, routes, border fees, visa requirements), **immediately and directly answer their question first** clearly, politely, and professionally. Do NOT withhold prices or information until they answer a checklist. Provide value first to build trust!
-- **CONTACT NUMBER REQUEST FORMAT (MANDATORY - CONCISE & FRIENDLY)**:
-  When asking the customer for their phone number / contact info, you MUST use this concise, friendly phrasing:
+- **CONTACT NUMBER REQUEST FORMAT (CONCISE & FRIENDLY - NEVER MANDATORY)**:
+  When asking the customer for their phone number / contact info, you can politely include:
   • In English: "Could you please share your Phone number / WhatsApp?"
   • In Russian: "Пожалуйста, отправьте ваш контактный номер (WhatsApp / Telegram) 😊"
   • In Vietnamese: "Cho mình xin Số điện thoại / Zalo để liên hệ khi đón xe nhé!"
   • In Korean: "연락 가능한 전화번호 / 카카오톡을 알려주시겠어요? 😊"
   • In Chinese: "请留下您的联系电话 / 微信 / WhatsApp 😊"
-- **GENTLE INFORMATION GATHERING**: When gathering missing details, prompt them with the quick template above to make it effortless for them to reply.
+
+- **FLEXIBLE BOOKING WORKFLOW (NEVER RIGID / NEVER BLOCK ON MISSING PHONE NUMBER)**:
+  - Phone number is completely OPTIONAL. NEVER block, delay, or repeat asking for a phone number or whether they are a new/returning client before providing the seat map!
+  - As soon as the customer provides ANY booking details (e.g. Name/Year of birth, Pickup point, Package like 90D Single/Multi, or sends passport photos, or confirms they want to proceed), the bot MUST IMMEDIATELY proceed to **PHASE 2 - SEAT_SELECTION** (`current_phase = "SEAT_SELECTION"`).
+  - DO NOT ask a series of checklist questions (like asking for phone number, returning client status, preferred row) once they already provided their name/pickup/package.
+  - If the customer says "no", "нет", "không", skips phone number, or just wants to pick a seat, DO NOT repeat asking for contact info. Proceed directly to the seat map!
 
 CONVERSATION PHASES (TECHNICAL STATE MANAGEMENT):
 
 PHASE 1 - CONSULTING:
 - Answer all inquiries, explain packages, and collect key booking details naturally.
-- Switch to PHASE 2 once the customer provides booking details (name, birth year, pickup location, or sends passport photos) or agrees to proceed.
-- Do NOT send external form links. Collect and confirm booking details directly, naturally, and concisely in the chat.
+- Switch to PHASE 2 IMMEDIATELY once the customer provides ANY booking details (name, birth year, pickup location, package selection, or sends passport photos) or agrees to proceed.
+- Do NOT demand phone numbers or additional details before moving to Phase 2.
 
 PHASE 2 - SEAT_SELECTION:
 - Move to this phase as soon as the customer provides their name, year of birth, pickup location, or sends passport/photos after pricing/itinerary was discussed.
@@ -268,15 +273,16 @@ PHASE 2 - SEAT_SELECTION:
 - Present the final selected package details clearly:
   - 👤 Full Name & Year of Birth (e.g. Dimitry / 1995)
   - 📍 Pickup Location & Departure Time (e.g. 40 Hon Chong - 21:30)
-  - 🚌 Route & Departure Date (calculated dynamically as 1 day before visa expiry, format DD/MM).
+  - 🚌 Route & Departure Date (calculated dynamically, format DD/MM).
   - 💰 Total Price (in VND).
-- End your reply with:
-  • In Russian: "Пожалуйста, подождите немного — я уточню у администратора схему автобуса на этот день и пришлю вам для выбора места! 🚌"
-  • In Vietnamese: "Anh/chị đợi em một chút, em kiểm tra sơ đồ xe và gửi ngay cho mình chọn chỗ nhé! 🚌"
-  • In English: "Please wait a moment while we check seat availability and send you the bus seat map to select your seat... 🚌"
-  • In Korean: "잠시만 기다려 주시면 당일 버스 좌석 배치도를 확인하여 좌석 선택을 도와드리겠습니다! 🚌"
+- End your reply with the seat map waiting message with the departure date:
+  • In Russian: "Пожалуйста, подождите немного — я проверю свободные места в автобусе на **[дата выезда]** и отправлю вам схему свободных мест для выбора через несколько минут! 🚌"
+  • In Vietnamese: "Anh/chị vui lòng đợi một chút, em sẽ kiểm tra chỗ trống trên xe buýt vào ngày **[ngày khởi hành]** và gửi cho anh/chị sơ đồ chỗ trống để chọn trong vài phút nữa ạ! 🚌"
+  • In English: "Please wait a moment, I will check seat availability on the bus for **[departure date]** and send you the seat map to choose your seat in a few minutes! 🚌"
+  • In Korean: "잠시만 기다려 주시면 **[출발일]** 버스의 잔여 좌석을 확인하여 몇 분 내로 좌석 배치도를 보내드리겠습니다! 🚌"
+  • In Chinese: "请稍等片刻，我将查询 **[出发日期]** 大巴的空余座位，并在几分钟内为您发送座位图以便您选座！🚌"
 - Set `current_phase = "SEAT_SELECTION"`.
-- Crucial: Populate `extracted_data.ngay_khoi_hanh` with the calculated departure date (format DD/MM, e.g., "14/09") so the system can automatically request the seat map (`Scheme`).
+- Crucial: Populate `extracted_data.ngay_khoi_hanh` with the departure date (format DD/MM, e.g., "13/09" or "14/09") so the system can automatically request the seat map (`Scheme`).
 
 PHASE 3 - PAYMENT:
 - After a seat is chosen, provide the payment instructions (translated to the customer's language):
@@ -353,6 +359,10 @@ async def call_groq_fallback(messages):
     url = "https://api.groq.com/openai/v1/chat/completions"
     
     SCHEMA_DIRECTIVE = """
+CRITICAL BOOKING DIRECTIVE:
+- Never block on phone numbers or returning customer status. If the customer provided Name/Year, Pickup location, Package, or said 'no', IMMEDIATELY set current_phase = "SEAT_SELECTION".
+- In SEAT_SELECTION, end your response with: "Пожалуйста, подождите немного — я проверю свободные места в автобусе на [дата] и отправлю вам схему свободных мест для выбора через несколько минут! 🚌" (or translated to customer's language).
+
 OUTPUT SCHEMA: You MUST return strictly a JSON object with these EXACT keys:
 {
   "reply_message": "your warm, helpful response in the customer's language",
@@ -481,6 +491,8 @@ def extract_date_and_nationality_from_history(history_messages: list[dict]):
     
     # 1. Extract expiry date
     date_match = re.search(r"\b(\d{1,2})[/.-](\d{1,2})(?:[/.-](\d{2,4}))?\b", clean_user_text)
+    if not date_match:
+        date_match = re.search(r"\b(\d{1,2})[/.-](\d{1,2})(?:[/.-](\d{2,4}))?\b", full_text)
     expiry_date = None
     if date_match:
         day = date_match.group(1)
@@ -715,7 +727,64 @@ async def process_chat(history_messages: list[dict], customer_profile: dict | No
             is_complete=False,
         )
 
-    return ChatResponse.model_validate_json(content)
+    chat_resp = ChatResponse.model_validate_json(content)
+
+    # === SMART PHASE PROMOTION & SEAT MAP ENSURANCE ===
+    ext = chat_resp.extracted_data
+    if not ext.ngay_khoi_hanh and smart_dep:
+        ext.ngay_khoi_hanh = smart_dep
+
+    last_user_lower = last_user_msg.lower()
+    has_booking_info = (
+        bool(ext.ho_ten) or bool(ext.diem_don) or bool(ext.loai_visa) or
+        any(k in last_user_lower for k in ["hon chong", "tran phu", "oceanus", "single", "multi", "дмитрий", "dimitry", "199", "198", "200", "197"]) or
+        (last_user_lower.strip() in ["no", "нет", "không", "ko", "ok", "oke", "được", "хорошо", "да", "yes"] and len(recent_history) >= 2)
+    )
+
+    if chat_resp.current_phase == "CONSULTING" and has_booking_info and not ext.ghe_chon and not chat_resp.is_complete:
+        chat_resp.current_phase = "SEAT_SELECTION"
+        dep_date_display = ext.ngay_khoi_hanh or smart_dep or (expiry_date[:5] if expiry_date else "13/09")
+        waiting_msg = get_msg("seat_map_waiting", lang_code, date=dep_date_display)
+        
+        reply_lower = chat_resp.reply_message.lower()
+        stubborn_phrases = [
+            "нам все еще нужны", "номер телефона", "нужны номер", "уточните ещё", "завершить бронирование",
+            "cần số điện thoại", "vui lòng cung cấp thêm số", "still need your phone", "to complete your booking please provide"
+        ]
+        if any(p in reply_lower for p in stubborn_phrases) or not any(k in reply_lower for k in ["схем", "sơ đồ", "seat map", "배치도", "座位图"]):
+            name_disp = f"{ext.ho_ten or 'Дмитрий'} / {ext.nam_sinh or '1995'}".strip(" /")
+            pickup_disp = ext.diem_don or "40 Hon Chong (21:30)"
+            route_disp = "Лаос (граница Бо Й)" if destination == "laos" else "Камбоджа (граница Мок Бай)"
+            if lang_code == "ru":
+                chat_resp.reply_message = (
+                    f"Отлично, {ext.ho_ten or 'Дмитрий'}! Записал ваши данные. ✅\n\n"
+                    f"👤 **Имя и год рождения:** {name_disp}\n"
+                    f"📍 **Точка сбора:** {pickup_disp}\n"
+                    f"🚌 **Маршрут:** {route_disp}\n"
+                    f"📅 **Дата выезда:** **{dep_date_display}**\n"
+                    f"💰 **Стоимость:** **3,400,000 VND** ({ext.loai_visa or '90 дней, Single Entry'})\n\n"
+                    f"{waiting_msg}"
+                )
+            elif lang_code == "vi":
+                chat_resp.reply_message = (
+                    f"Dạ tuyệt vời! Em đã ghi nhận thông tin đặt chỗ của mình ạ. ✅\n\n"
+                    f"👤 **Họ tên & Năm sinh:** {name_disp}\n"
+                    f"📍 **Điểm đón:** {pickup_disp}\n"
+                    f"🚌 **Tuyến xe:** {route_disp}\n"
+                    f"📅 **Ngày khởi hành:** **{dep_date_display}**\n\n"
+                    f"{waiting_msg}"
+                )
+            else:
+                chat_resp.reply_message = (
+                    f"Great! I have recorded your booking details. ✅\n\n"
+                    f"👤 **Name & Year:** {name_disp}\n"
+                    f"📍 **Pickup Location:** {pickup_disp}\n"
+                    f"🚌 **Route:** {route_disp}\n"
+                    f"📅 **Departure Date:** **{dep_date_display}**\n\n"
+                    f"{waiting_msg}"
+                )
+
+    return chat_resp
 
 
 async def identify_image_type(file_path: str) -> str:

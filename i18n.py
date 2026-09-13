@@ -18,7 +18,7 @@ MESSAGES = {
         "image_received": "Received {img_type}! Thank you.",
         "please_pay": "Please pay here ✅",
         "seat_map_caption": "🚌 Seat map for {date}.",
-        "seat_map_waiting": "Please wait while we check seat availability and send you the seat map..."
+        "seat_map_waiting": "Please wait a moment, I will check seat availability on the bus for {date} and send you the seat map to choose your seat in a few minutes! 🚌"
     },
     "vi": {
         "welcome": "Chào mừng bạn đến với Trợ lý Easy Trip & Visa! 🚌🌏",
@@ -28,7 +28,7 @@ MESSAGES = {
         "image_received": "Đã nhận được {img_type}! Cảm ơn bạn.",
         "please_pay": "Vui lòng thanh toán tại đây ✅",
         "seat_map_caption": "🚌 Sơ đồ ghế cho ngày {date}.",
-        "seat_map_waiting": "Vui lòng chờ giây lát để chúng tôi kiểm tra chỗ và gửi sơ đồ ghế cho bạn..."
+        "seat_map_waiting": "Anh/chị vui lòng đợi một chút, em sẽ kiểm tra chỗ trống trên xe buýt vào ngày {date} và gửi cho anh/chị sơ đồ chỗ trống để chọn trong vài phút nữa ạ! 🚌"
     },
     "ru": {
         "welcome": "Добро пожаловать в Easy Trip & Visa Assistant! 🚌🌏",
@@ -38,7 +38,7 @@ MESSAGES = {
         "image_received": "Получено {img_type}! Спасибо.",
         "please_pay": "Пожалуйста, оплатите здесь ✅",
         "seat_map_caption": "🚌 Схема мест на {date}.",
-        "seat_map_waiting": "Пожалуйста, подождите, пока мы проверим наличие мест и вышлем вам схему..."
+        "seat_map_waiting": "Пожалуйста, подождите немного — я проверю свободные места в автобусе на {date} и отправлю вам схему свободных мест для выбора через несколько минут! 🚌"
     },
     "ko": {
         "welcome": "이지트립 & 비자 어시스턴트에 오신 것을 환영합니다! 🚌🌏",
@@ -48,7 +48,7 @@ MESSAGES = {
         "image_received": "{img_type}을(를) 받았습니다! 감사합니다.",
         "please_pay": "여기에서 결제해 주세요 ✅",
         "seat_map_caption": "{date} 좌석 배치도입니다. 🚌",
-        "seat_map_waiting": "좌석 가용성을 확인하고 좌석 배치도를 보내드릴 때까지 잠시만 기다려 주세요..."
+        "seat_map_waiting": "잠시만 기다려 주시면 {date} 버스의 잔여 좌석을 확인하여 몇 분 내로 좌석 배치도를 보내드리겠습니다! 🚌"
     },
     "zh": {
         "welcome": "欢迎使用 Easy Trip & Visa 助手！ 🚌🌏",
@@ -58,7 +58,7 @@ MESSAGES = {
         "image_received": "已收到 {img_type}！谢谢。",
         "please_pay": "请在这里支付 ✅",
         "seat_map_caption": "🚌 {date} 的座位图。",
-        "seat_map_waiting": "请稍候，我们正在检查座位情况并为您发送座位图..."
+        "seat_map_waiting": "请稍等片刻，我将查询 {date} 大巴的空余座位，并在几分钟内为您发送座位图以便您选座！🚌"
     }
 }
 
