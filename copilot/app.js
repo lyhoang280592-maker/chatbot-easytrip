@@ -662,7 +662,8 @@ window.addEventListener('DOMContentLoaded', () => {
     initBrain();
     checkAuthOnStartup();
     fetchGlobalBotMode();
-    switchTab('sandbox');
+    const savedTab = localStorage.getItem('copilot_active_tab') || 'live';
+    switchTab(savedTab);
     setupStaffChatDragAndDrop();
     setupStaffChatPaste();
 });
@@ -679,6 +680,7 @@ let liveLessons = [];
 
 // Chuyển đổi giữa 3 tab Sandbox, Live Channels và Quy Trình Vận Hành
 function switchTab(tabName) {
+    localStorage.setItem('copilot_active_tab', tabName);
     const tabSandbox = document.getElementById('tab-sandbox');
     const tabLive = document.getElementById('tab-live');
     const tabOps = document.getElementById('tab-ops');
@@ -734,6 +736,38 @@ function stopLivePolling() {
     if (livePollingInterval) {
         clearInterval(livePollingInterval);
         livePollingInterval = null;
+    }
+}
+
+// Ép làm mới danh sách phiên từ Backend SQLite
+async function reloadLiveSessions() {
+    const btn = document.getElementById('btn-reload-channels');
+    if (btn) btn.innerHTML = '<span>⏳</span> <span>Đang tải...</span>';
+    try {
+        await fetch(`${BACKEND_URL}/api/sessions/reload`, { method: 'POST' });
+        await pollLiveSessions();
+        if (activeSessionId) {
+            await updateActiveLiveSessionDetail(true, true);
+        }
+    } catch (e) {
+        console.error("Lỗi reload sessions:", e);
+    } finally {
+        if (btn) btn.innerHTML = '<span>🔄</span> <span>Tải lại</span>';
+    }
+}
+
+// Ép làm mới tin nhắn phiên hiện tại từ Database
+async function reloadCurrentActiveSession() {
+    const btn = document.getElementById('btn-reload-chat');
+    if (btn) btn.innerHTML = '<span>⏳</span> <span>Đang tải...</span>';
+    try {
+        if (activeSessionId) {
+            await updateActiveLiveSessionDetail(true, true);
+        }
+    } catch (e) {
+        console.error("Lỗi reload active session:", e);
+    } finally {
+        if (btn) btn.innerHTML = '<span>🔄</span> <span>Làm mới</span>';
     }
 }
 
@@ -818,11 +852,14 @@ async function selectLiveSession(sessionId) {
 }
 
 // Cập nhật nội dung cuộc chat đang chọn
-async function updateActiveLiveSessionDetail(forceScroll = false) {
+async function updateActiveLiveSessionDetail(forceScroll = false, forceRefresh = false) {
     if (!activeSessionId) return;
     
     try {
-        const response = await fetch(`${BACKEND_URL}/api/session/${activeSessionId}`);
+        const url = forceRefresh 
+            ? `${BACKEND_URL}/api/session/${activeSessionId}?refresh=true` 
+            : `${BACKEND_URL}/api/session/${activeSessionId}`;
+        const response = await fetch(url);
         const data = await response.json();
         
         if (!data.success) return;

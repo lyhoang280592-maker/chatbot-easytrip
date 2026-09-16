@@ -240,9 +240,14 @@
                     
                     <!-- CỘT 1: DANH SÁCH PHIÊN CHAT (Live Channels List) -->
                     <section class="panel-section channels-list-panel">
-                        <div class="panel-header">
-                            <div class="panel-icon">💬</div>
-                            <h3>Khách Hàng Đang Chat</h3>
+                        <div class="panel-header" style="display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div class="panel-icon">💬</div>
+                                <h3>Khách Hàng Đang Chat</h3>
+                            </div>
+                            <button id="btn-reload-channels" class="btn btn-sm btn-outline" onclick="reloadLiveSessions()" title="Tải lại danh sách tin nhắn từ Database" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #e2e8f0; display: flex; align-items: center; gap: 4px;">
+                                <span>🔄</span> <span>Tải lại</span>
+                            </button>
                         </div>
                         <div class="channels-search-bar">
                             <input type="text" id="channels-search-input" placeholder="Tìm kiếm khách hàng..." onkeyup="filterLiveSessions()">
@@ -259,13 +264,18 @@
                                 <div class="platform-icon" id="live-chat-platform-icon">🧑‍💻</div>
                                 <h3 id="live-chat-client-name">Vui lòng chọn khách hàng</h3>
                             </div>
-                            <div class="session-mode-indicator-wrap" id="session-mode-indicator-wrap" style="display: none;">
-                                <span>Chế độ Bot:</span>
-                                <select id="session-mode-select" onchange="changeSessionMode()">
-                                    <option value="auto">🟢 Tự Động (Auto)</option>
-                                    <option value="copilot">🟡 Co-Pilot (Nháp)</option>
-                                    <option value="manual">🔴 Tiếp Quản (Manual)</option>
-                                </select>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <button id="btn-reload-chat" class="btn btn-sm btn-outline" onclick="reloadCurrentActiveSession()" title="Tải lại tin nhắn cuộc hội thoại này từ Database" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #e2e8f0; display: flex; align-items: center; gap: 4px;">
+                                    <span>🔄</span> <span>Làm mới</span>
+                                </button>
+                                <div class="session-mode-indicator-wrap" id="session-mode-indicator-wrap" style="display: none;">
+                                    <span>Chế độ Bot:</span>
+                                    <select id="session-mode-select" onchange="changeSessionMode()">
+                                        <option value="auto">🟢 Tự Động (Auto)</option>
+                                        <option value="copilot">🟡 Co-Pilot (Nháp)</option>
+                                        <option value="manual">🔴 Tiếp Quản (Manual)</option>
+                                    </select>
+                                </div>
                             </div>
                         </div>
 

@@ -724,6 +724,47 @@ def get_recent_logs_from_db(limit: int = 200) -> List[Dict[str, Any]]:
     return [dict(r) for r in cursor.fetchall()]
 
 
+def get_recent_sessions_from_db(limit: int = 50) -> List[Dict[str, Any]]:
+    """Lấy danh sách các phiên chat gần nhất từ bảng chat_messages trong SQLite"""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute("""
+        SELECT m.session_id, m.platform, m.content, m.created_at, c.full_name
+        FROM chat_messages m
+        LEFT JOIN customers c ON m.customer_id = c.customer_id
+        WHERE m.message_id IN (
+            SELECT MAX(message_id) FROM chat_messages GROUP BY session_id
+        )
+        ORDER BY m.created_at DESC
+        LIMIT ?
+    """, (limit,))
+    rows = cursor.fetchall()
+    sessions = []
+    for r in rows:
+        session_id = r["session_id"]
+        platform = (r["platform"] or "").capitalize()
+        last_msg = r["content"] or ""
+        created_at = str(r["created_at"] or "")
+        full_name = r["full_name"] or ""
+        
+        parts = session_id.split("_", 1)
+        user_id = parts[1] if len(parts) > 1 else session_id
+        if not platform and len(parts) > 1:
+            platform = parts[0].capitalize()
+            
+        display_name = full_name if full_name else f"Khách {platform} ({user_id[:6]})"
+        
+        sessions.append({
+            "session_id": session_id,
+            "platform": platform,
+            "user_id": user_id,
+            "last_message": last_msg,
+            "last_update": created_at,
+            "customer_name": display_name
+        })
+    return sessions
+
+
 def clear_session_messages(session_id: str) -> int:
     """
     Xóa toàn bộ messages của session_id này trong SQLite.

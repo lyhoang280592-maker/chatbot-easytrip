@@ -25,16 +25,16 @@ def normalize_session_id(platform: str, user_id: str) -> str:
     return f"{p}_{user_id}"
 
 
-def load_session_history(session_id: str, limit: int = 20) -> List[Dict[str, str]]:
-    """Tải lịch sử phiên trò chuyện từ SQLite vào memory_store nếu chưa có trong RAM"""
-    if session_id in memory_store and isinstance(memory_store[session_id], list) and memory_store[session_id]:
+def load_session_history(session_id: str, limit: int = 50, force_reload: bool = False) -> List[Dict[str, str]]:
+    """Tải lịch sử phiên trò chuyện từ SQLite vào memory_store nếu chưa có trong RAM hoặc khi force_reload"""
+    if not force_reload and session_id in memory_store and isinstance(memory_store[session_id], list) and memory_store[session_id]:
         return memory_store[session_id]
         
     db_messages = customer_memory.get_session_messages(session_id, limit=limit)
     if db_messages:
         memory_store[session_id] = db_messages
     else:
-        if session_id not in memory_store:
+        if session_id not in memory_store or force_reload:
             memory_store[session_id] = []
             
     return memory_store[session_id]

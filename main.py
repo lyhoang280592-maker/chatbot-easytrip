@@ -1462,14 +1462,18 @@ async def whatsapp_webhook(request: Request, background_tasks: BackgroundTasks):
 
 def get_active_sessions():
     sessions = []
+    seen_ids = set()
+
+    # 1. Quét các session hiện có trong RAM memory_store
     for key in list(memory_store.keys()):
-        # Loại trừ các hậu tố quản lý trạng thái
         if "_" in key and not any(key.endswith(suffix) for suffix in [
             "_data", "_completed", "_mode", "_draft", "_name", "_last_update", 
-            "_draft_data", "_draft_phase", "_bus_notified", "_record_id", "_order"
+            "_draft_data", "_draft_phase", "_bus_notified", "_record_id", "_order",
+            "_awaiting_old_booking", "_business_connection_id"
         ]):
             if isinstance(memory_store[key], list):
                 session_id = key
+                seen_ids.add(session_id)
                 parts = session_id.split("_", 1)
                 platform = parts[0].capitalize()
                 user_id = parts[1]
@@ -1494,7 +1498,36 @@ def get_active_sessions():
                     "customer_name": name,
                     "pending_draft": memory_store.get(f"{session_id}_draft", "")
                 })
-    sessions.sort(key=lambda s: s["last_update"], reverse=True)
+
+    # 2. Quét thêm các session gần nhất từ SQLite database để không bỏ sót sau khi restart server
+    try:
+        db_sessions = customer_memory.get_recent_sessions_from_db(limit=50)
+        for ds in db_sessions:
+            sid = ds["session_id"]
+            if sid not in seen_ids:
+                seen_ids.add(sid)
+                # Prime memory_store nếu chưa có
+                if sid not in memory_store:
+                    load_session_history(sid)
+                if f"{sid}_name" not in memory_store and ds.get("customer_name"):
+                    memory_store[f"{sid}_name"] = ds["customer_name"]
+                if f"{sid}_last_update" not in memory_store and ds.get("last_update"):
+                    memory_store[f"{sid}_last_update"] = ds["last_update"]
+
+                sessions.append({
+                    "session_id": sid,
+                    "platform": ds["platform"],
+                    "user_id": ds["user_id"],
+                    "mode": memory_store.get(f"{sid}_mode", "auto"),
+                    "last_message": ds["last_message"],
+                    "last_update": ds["last_update"],
+                    "customer_name": ds["customer_name"],
+                    "pending_draft": memory_store.get(f"{sid}_draft", "")
+                })
+    except Exception as e:
+        print("⚠️ Lỗi truy vấn db_sessions:", e)
+
+    sessions.sort(key=lambda s: str(s.get("last_update") or ""), reverse=True)
     return sessions
 
 
@@ -1537,13 +1570,28 @@ async def list_active_sessions():
     return get_active_sessions()
 
 
+@app.post("/api/sessions/reload", dependencies=[Depends(verify_admin_access)])
+async def reload_sessions_endpoint():
+    """Ép làm mới toàn bộ danh sách phiên và nạp lại lịch sử mới nhất từ Database"""
+    try:
+        db_sessions = customer_memory.get_recent_sessions_from_db(limit=50)
+        for ds in db_sessions:
+            sid = ds["session_id"]
+            load_session_history(sid, limit=50, force_reload=True)
+            if ds.get("customer_name"):
+                memory_store[f"{sid}_name"] = ds["customer_name"]
+            if ds.get("last_update"):
+                memory_store[f"{sid}_last_update"] = ds["last_update"]
+    except Exception as e:
+        print("⚠️ Lỗi reload_sessions_endpoint:", e)
+    return {"success": True, "sessions": get_active_sessions()}
+
+
 @app.get("/api/session/{session_id}", dependencies=[Depends(verify_admin_access)])
-async def get_session_detail(session_id: str):
-    """Lấy chi tiết lịch sử và thông tin trích xuất của phiên chat"""
-    if session_id not in memory_store:
-        return {"success": False, "message": "Không tìm thấy session."}
+async def get_session_detail(session_id: str, refresh: bool = False):
+    """Lấy chi tiết lịch sử và thông tin trích xuất của phiên chat, tự động nạp từ SQLite nếu thiếu hoặc khi refresh"""
+    history = load_session_history(session_id, limit=50, force_reload=refresh)
     
-    history = memory_store[session_id]
     data = memory_store.get(f"{session_id}_data")
     data_dict = {}
     if data:
@@ -1552,6 +1600,20 @@ async def get_session_detail(session_id: str):
         else:
             data_dict = vars(data)
             
+    name = memory_store.get(f"{session_id}_name")
+    if not name or name.startswith("Khách "):
+        parts = session_id.split("_", 1)
+        if len(parts) > 1:
+            try:
+                prof = customer_memory.get_customer_profile(parts[1], platform=parts[0].lower())
+                if prof and prof.get("full_name"):
+                    name = prof["full_name"]
+                    memory_store[f"{session_id}_name"] = name
+            except Exception:
+                pass
+    if not name:
+        name = "Khách hàng"
+            
     return {
         "success": True,
         "session_id": session_id,
@@ -1559,7 +1621,7 @@ async def get_session_detail(session_id: str):
         "extracted_data": data_dict,
         "mode": memory_store.get(f"{session_id}_mode", "auto"),
         "pending_draft": memory_store.get(f"{session_id}_draft", ""),
-        "customer_name": memory_store.get(f"{session_id}_name", "Khách hàng")
+        "customer_name": name
     }
 
 
