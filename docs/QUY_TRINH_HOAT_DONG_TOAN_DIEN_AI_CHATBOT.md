@@ -221,13 +221,22 @@ graph TD
 ## 📅 8. THUẬT TOÁN LỊCH XE TRÁNH QUÁ HẠN VISA & ĐIỂM ĐÓN CHUẨN (ANTI-OVERSTAY SCHEDULING)
 
 ### 8.1. Thuật Toán Lùi Lịch Tránh Overstay:
-1. **Nguyên tắc an toàn**: Xe xuất bến chậm nhất trước ngày hết hạn 1 ngày: $T_{depart} \le T_{expiry} - 1 \text{ ngày}$.
-2. **Lịch chạy thực tế**:
-   - **Tuyến Lào 45 Ngày**: Chạy **MỖI NGÀY**.
-   - **Tuyến Lào 90 Ngày & Campuchia**: Chạy cố định các tối **Thứ 3, Thứ 5, Chủ Nhật**.
-3. **Ví dụ Khách hết hạn 15/09**:
-   - Ngày muộn nhất được phép đi: 14/09 (Thứ 2 - không có xe 90D chạy).
-   - Bot tự động lùi về ngày xe chạy gần nhất trước đó: **Tối Chủ Nhật ngày 13/09**.
+1. **Nguyên tắc an toàn tuyệt đối**: Xe xuất bến chậm nhất trước ngày hết hạn visa 1 ngày: $T_{depart} \le T_{expiry} - 1 \text{ ngày}$.
+2. **Lịch chạy xe thực tế phân định theo tuyến**:
+   - **Tuyến 45D Lào**: Chạy **HÀNG NGÀY** (mỗi tối).
+   - **Tuyến 90D Lào**: Chạy cố định các tối **Thứ 3, Thứ 5, Chủ Nhật**.
+   - **Tuyến Mộc Bài (45D Mộc Bài & 90D Mộc Bài)**: Chạy cố định các tối **Thứ 3, Thứ 5, Chủ Nhật**.
+3. **Cơ chế tự động lùi ngày của Chatbot**:
+   - Bot nhận diện ngày hết hạn visa ($T_{expiry}$) và tuyến khách đi (Lào hay Mộc Bài, 45D hay 90D).
+   - Xác định ngày muộn nhất có thể đi là $T_{expiry} - 1$.
+   - Nếu ngày đó trùng ngày có xe chạy của tuyến tương ứng, bot chọn ngay ngày đó.
+   - Nếu ngày đó không có chuyến xe (ví dụ Thứ 2, Thứ 4, Thứ 6, Thứ 7 đối với tuyến 90D/Mộc Bài/Lào), bot sẽ tự động lùi dần về chuyến xe chạy gần nhất trước đó (tối Thứ 3, Thứ 5 hoặc Chủ Nhật).
+4. **Ví dụ Khách hết hạn visa 15/09**:
+   - **Đối với tuyến 90D Lào, 45D Mộc Bài hoặc 90D Mộc Bài**:
+     + Ngày muộn nhất được phép đi: 14/09 (Thứ 2 - không có xe chạy).
+     + Bot tự động lùi về chuyến xe gần nhất: **Tối Chủ Nhật ngày 13/09**.
+   - **Đối với tuyến 45D Lào**:
+     + Do xe chạy hàng ngày nên ngày đi an toàn muộn nhất là **Tối Thứ 2 ngày 14/09**.
 
 ### 8.2. Thời Gian Khởi Hành & Điểm Đón Chính Thức Tại Nha Trang:
 * ⏰ **Thời gian đón khách**: **21:30**

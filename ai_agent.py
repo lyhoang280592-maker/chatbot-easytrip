@@ -511,8 +511,11 @@ def calculate_smart_departure_local(ngay_het_han: str, loai_visa: str = "", dest
         loai_lower = (loai_visa or "").lower()
         dest_lower = (destination or "").lower()
 
-        # Only Laos 45D runs daily. Cambodia (all) and Laos 90D run on Tue/Thu/Sun
-        is_daily = "45" in loai_lower and "cambodia" not in dest_lower and "campuchia" not in dest_lower
+        # Quy tắc lịch xe:
+        # - Chỉ duy nhất tuyến Lào 45 Ngày (Laos 45D) chạy HÀNG NGÀY.
+        # - Tuyến 90D/Mộc Bài, 45D/Mộc Bài (Campuchia) và 90D/Lào chỉ chạy tối Thứ 3, Thứ 5, Chủ Nhật.
+        is_cambodia = any(k in dest_lower or k in loai_lower for k in ["cambodia", "campuchia", "mộc bài", "moc bai", "mbi", "cam"])
+        is_daily = ("45" in loai_lower or "free" in loai_lower) and not is_cambodia and ("90" not in loai_lower)
         if is_daily:
             return latest.strftime("%d/%m")
 
@@ -644,7 +647,10 @@ async def process_chat(history_messages: list[dict], customer_profile: dict | No
                 f"\nCRITICAL CALENDAR DIRECTIVE:\n"
                 f"- Customer's visa expiry date is: {expiry_date[:5]}\n"
                 f"- Calculated correct bus departure date: {smart_dep} ({day_name_en} / {day_name_vi})\n"
-                f"- Since our bus to Cambodia/90D Laos only runs on Tuesday, Thursday, and Sunday nights, the departure date must be {smart_dep} ({day_name_en}) to avoid overstaying.\n"
+                f"- Operating Schedule Rules:\n"
+                f"  + Laos 45D: runs DAILY every night.\n"
+                f"  + Laos 90D, Cambodia/Moc Bai 90D, and Cambodia/Moc Bai 45D: run ONLY on Tuesday, Thursday, and Sunday nights.\n"
+                f"- To avoid overstaying, the bus departure date must be exactly {smart_dep} ({day_name_en}).\n"
                 f"- YOU MUST propose exactly the date '{smart_dep}' ({day_name_en}) as their departure date in your response! Do NOT suggest any other date. Clearly state this date to the customer and explain that the bus departs on this day."
             )
 
