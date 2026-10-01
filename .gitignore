@@ -26,6 +26,7 @@ extracted_signatures/
 HD_Khach_le/
 zalo_images/
 temp_*.jpg
+temp_build_mau01/
 *.xlsx
 
 # OS & IDE

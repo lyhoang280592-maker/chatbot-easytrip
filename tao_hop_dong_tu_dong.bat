@@ -12,7 +12,11 @@ echo.
 set "PY=.\venv\Scripts\python.exe"
 if not exist "%PY%" set "PY=python"
 
-"%PY%" batch_generate_by_accounting_date.py
+if exist "scripts\contracts\batch_generate_by_accounting_date.py" (
+    "%PY%" scripts\contracts\batch_generate_by_accounting_date.py
+) else (
+    "%PY%" batch_generate_by_accounting_date.py
+)
 
 echo.
 echo ========================================================

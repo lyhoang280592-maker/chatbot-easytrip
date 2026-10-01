@@ -1,7 +1,7 @@
 @echo off
 chcp 65001 > nul
 title Push Code to GitHub - Easy Trip
-cd /d "c:\Projects\chatbot-easytrip"
+cd /d "%~dp0"
 
 echo ========================================================
 echo   ĐẨY TOÀN BỘ CODE VÀ TRI THỨC LÊN GITHUB
@@ -10,7 +10,8 @@ echo ========================================================
 echo.
 
 setlocal enabledelayedexpansion
-set "GIT_CMD=C:\Users\AD\AppData\Local\Programs\MinGit\cmd\git.exe"
+set "GIT_CMD=C:\Users\PC\AppData\Local\Programs\MinGit\cmd\git.exe"
+if not exist "%GIT_CMD%" set "GIT_CMD=C:\Users\AD\AppData\Local\Programs\MinGit\cmd\git.exe"
 if not exist "%GIT_CMD%" set "GIT_CMD=git"
 
 "%GIT_CMD%" remote set-url origin https://github.com/lyhoang280592-maker/chatbot-easytrip.git 2>nul || "%GIT_CMD%" remote add origin https://github.com/lyhoang280592-maker/chatbot-easytrip.git

@@ -1,7 +1,7 @@
 @echo off
 chcp 65001 > nul
 title Dong bo Code tu GitHub - Easy Trip
-cd /d "c:\Projects\chatbot-easytrip"
+cd /d "%~dp0"
 
 echo ========================================================
 echo   ĐỒNG BỘ (PULL) CODE MỚI NHẤT TỪ GITHUB VỀ MÁY
@@ -10,7 +10,8 @@ echo ========================================================
 echo.
 
 setlocal enabledelayedexpansion
-set "GIT_CMD=C:\Users\AD\AppData\Local\Programs\MinGit\cmd\git.exe"
+set "GIT_CMD=C:\Users\PC\AppData\Local\Programs\MinGit\cmd\git.exe"
+if not exist "%GIT_CMD%" set "GIT_CMD=C:\Users\AD\AppData\Local\Programs\MinGit\cmd\git.exe"
 if not exist "%GIT_CMD%" set "GIT_CMD=git"
 
 echo ⏳ Đang kiểm tra và kéo code mới nhất từ GitHub...

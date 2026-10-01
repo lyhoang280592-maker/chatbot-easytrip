@@ -182,5 +182,6 @@ AI Chatbot phải phản hồi **100% bằng ngôn ngữ bản xứ của khách
   * Số tài khoản: **1068582577** (Chỉ nhận VND)
 * **Kênh hỗ trợ trực tiếp từ nhân viên (Human Agent)**:
   * 💬 **Telegram Support**: [https://t.me/easytripvisa_co_ltd](https://t.me/easytripvisa_co_ltd)
-  * 💬 **WhatsApp Support**: [https://wa.me/84868462071](https://wa.me/84868462071)
-  * 📞 **Hotline**: `+84 868 462 071`
+  * 💬 **WhatsApp Support**: [https://wa.me/84853201277](https://wa.me/84853201277)
+  * 💬 **Zalo Support**: [https://zalo.me/84853201277](https://zalo.me/84853201277)
+  * 📞 **Hotline**: `+84 853 201 277` / `+84 89 69 16 361`
