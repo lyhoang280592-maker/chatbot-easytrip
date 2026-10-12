@@ -164,6 +164,18 @@ AI Chatbot phải phản hồi **100% bằng ngôn ngữ bản xứ của khách
 * **Điểm đón 2**: 40 Hòn Chồng — Xuất phát lúc **21:30**.
 * *(Xe chạy đêm, khách ngủ trên xe giường nằm cao cấp, sáng 06:00 đến cửa khẩu).*
 
+### 5.3. Quy Chuẩn Sơ Đồ Ghế Xe Buýt (Seat Map Layout)
+* 🟢 **TẦNG DƯỚI (нижний ярус - Cột Trái): TOÀN BỘ SỐ LẺ**
+  * Dãy A (bên trái / dãy tài): `A1`, `A3`, `A5`, `A7`, `A9`, `A11`.
+  * Dãy B (bên phải / dãy cửa): `B1`, `B3`, `B5`, `B7`, `B9`.
+  * Vị trí cuối tầng dưới cạnh A11 là **Nhà vệ sinh WC**.
+* 🔵 **TẦNG TRÊN (верхний ярус - Cột Phải): TOÀN BỘ SỐ CHẴN**
+  * Dãy A (bên trái / dãy tài): `A2`, `A4`, `A6`, `A8`, `A10`, `A12` *(Giường A12 màu vàng dài 160 cm)*.
+  * Dãy B (bên phải / dãy cửa): `B2`, `B4`, `B6`, `B8`, `B10`.
+* 📏 **Kích thước giường**:
+  * Giường tiêu chuẩn dài **180 cm**: Các cabin `A1 - A11`, `B1 - B10`.
+  * Giường ngắn dài **160 cm**: Duy nhất cabin `A12` (tầng trên, đuôi xe).
+
 ---
 
 ## 🛂 PHẦN 6: QUY TRÌNH TẠI CỬA KHẨU & TRẢ E-VISA

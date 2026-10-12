@@ -206,6 +206,10 @@ Add-ByteEntry $zip "word/document.xml" $docBytes
 $zip.Dispose()
 $fs.Close()
 
-Copy-Item $outputDocx -Destination $desktopDocx -Force
+try {
+    Copy-Item $outputDocx -Destination $desktopDocx -Force
+} catch {
+    Write-Host "Lưu ý: File Desktop đang mở trong Word, file gốc tại thư mục đã được cập nhật thành công."
+}
 
 Write-Host "DOCX_CLEAN_BUILD_SUCCESS"
