@@ -791,6 +791,75 @@ async def send_returning_customer_request(chat_id: str | int, target_msg, conn_i
             await target_msg.reply_text(returning_prompt, parse_mode="Markdown")
 
 
+async def send_official_channel_card(
+    chat_id: int,
+    target_msg: Any = None,
+    context: Optional[ContextTypes.DEFAULT_TYPE] = None,
+    business_connection_id: Optional[str] = None
+):
+    """
+    Tự động gửi ảnh mã QR và danh thiếp Kênh Telegram chính thức (@easytripvisa_co_ltd) kèm các nút bấm tiện ích.
+    """
+    caption = (
+        "🌟 **EASY TRIP & VISA — OFFICIAL TELEGRAM SUPPORT**\n\n"
+        "🇻🇳 **Kênh hỗ trợ & điều phối chính thức của Easy Trip:**\n"
+        "• 👤 **Telegram**: [@easytripvisa_co_ltd](https://t.me/easytripvisa_co_ltd)\n"
+        "• 📢 **Kênh tin tức & lịch xe**: [Easy Trip Channel](https://t.me/visaEASYTRIP)\n"
+        "• 📞 **Hotline/Zalo/WhatsApp**: `+84 853 201 277` (Open 24/7)\n"
+        "• 🌐 **Website**: [easytripvisa.com](https://www.easytripvisa.com)\n"
+        "• 📍 **Văn phòng**: 21 Phan Vinh, Nha Trang, Khánh Hòa\n\n"
+        "🇷🇺 **Официальный контакт и поддержка Easy Trip:**\n"
+        "• Поддержка 24/7, оформление виз и виза-ран.\n"
+        "• Нажмите на кнопки ниже для связи с менеджером!"
+    )
+    keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("💬 Nhắn Telegram Chính Thức / Написать", url="https://t.me/easytripvisa_co_ltd")],
+        [InlineKeyboardButton("📢 Kênh Tin Tức / Канал", url="https://t.me/visaEASYTRIP")],
+        [InlineKeyboardButton("🌐 Website EasyTrip", url="https://www.easytripvisa.com")]
+    ])
+    
+    official_qr_file = "static/official_telegram_qr.png"
+    if not os.path.exists(official_qr_file):
+        official_qr_file = "static/official_telegram_channel.png"
+
+    bot = context.bot if context else tg_app.bot
+
+    if os.path.exists(official_qr_file):
+        try:
+            if target_msg and hasattr(target_msg, "reply_photo"):
+                with open(official_qr_file, "rb") as f:
+                    if business_connection_id:
+                        await target_msg.reply_photo(photo=f, caption=caption, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=business_connection_id)
+                    else:
+                        await target_msg.reply_photo(photo=f, caption=caption, reply_markup=keyboard, parse_mode="Markdown")
+                    return True
+            else:
+                with open(official_qr_file, "rb") as f:
+                    if business_connection_id:
+                        await bot.send_photo(chat_id=chat_id, photo=f, caption=caption, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=business_connection_id)
+                    else:
+                        await bot.send_photo(chat_id=chat_id, photo=f, caption=caption, reply_markup=keyboard, parse_mode="Markdown")
+                    return True
+        except Exception as e:
+            print("⚠️ Lỗi gửi ảnh kênh chính thức:", e)
+
+    # Fallback gửi text nếu không gửi được ảnh
+    try:
+        if target_msg and hasattr(target_msg, "reply_text"):
+            if business_connection_id:
+                await target_msg.reply_text(caption, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=business_connection_id)
+            else:
+                await target_msg.reply_text(caption, reply_markup=keyboard, parse_mode="Markdown")
+        else:
+            if business_connection_id:
+                await bot.send_message(chat_id=chat_id, text=caption, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=business_connection_id)
+            else:
+                await bot.send_message(chat_id=chat_id, text=caption, reply_markup=keyboard, parse_mode="Markdown")
+    except Exception as e_fallback:
+        print("⚠️ Lỗi gửi text kênh chính thức:", e_fallback)
+    return False
+
+
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_id = str(update.effective_user.id) if update.effective_user else ""
     session_id = f"telegram_{user_id}"
@@ -798,6 +867,7 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     # Reset phiên chat trong bộ nhớ khi /start
     memory_store[session_id] = []
     memory_store[f"{session_id}_mode"] = "auto"
+    memory_store[f"{session_id}_sent_official_channel"] = True
     if f"{session_id}_data" in memory_store:
         del memory_store[f"{session_id}_data"]
     if f"{session_id}_draft" in memory_store:
@@ -807,21 +877,44 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     welcome_question = (
         "👋 **Welcome to Easy Trip & Visa!**\n"
+        "Official Support: @easytripvisa_co_ltd | Hotline: +84 853 201 277\n\n"
         "Have you (or a friend on your behalf) booked any service with us before?\n\n"
         "👋 **Здравствуйте! Добро пожаловать в Easy Trip & Visa.**\n"
         "Вы (или ваши знакомые для вас) уже пользовались нашими услугами ранее?"
     )
     
     keyboard = InlineKeyboardMarkup([
+        [InlineKeyboardButton("💬 Direct Telegram Support (@easytripvisa_co_ltd)", url="https://t.me/easytripvisa_co_ltd")],
+        [InlineKeyboardButton("📢 Official Channel / Канал", url="https://t.me/visaEASYTRIP")],
         [InlineKeyboardButton("🌟 Returning / Friend Booked (Discount) / Постоянный клиент", callback_data="cust_type|returning")],
         [InlineKeyboardButton("🆕 New Customer / Новый клиент", callback_data="cust_type|new")],
-        [InlineKeyboardButton("💬 Direct Telegram Support", url="https://t.me/easytripvisa_co_ltd")],
         [InlineKeyboardButton("💬 Direct WhatsApp Support", url="https://wa.me/84868462071")]
     ])
     
     target_msg: Any = update.message or (update.callback_query.message if update.callback_query else None)
-    if target_msg:
-        await target_msg.reply_text(welcome_question, reply_markup=keyboard, parse_mode="Markdown")
+    conn_id = update.business_message.business_connection_id if update.business_message else memory_store.get(f"{session_id}_business_connection_id")
+    
+    official_qr_file = "static/official_telegram_qr.png"
+    if not os.path.exists(official_qr_file):
+        official_qr_file = "static/official_telegram_channel.png"
+
+    sent_with_photo = False
+    if os.path.exists(official_qr_file) and target_msg and hasattr(target_msg, "reply_photo"):
+        try:
+            with open(official_qr_file, "rb") as f:
+                if conn_id:
+                    await target_msg.reply_photo(photo=f, caption=welcome_question, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=conn_id)
+                else:
+                    await target_msg.reply_photo(photo=f, caption=welcome_question, reply_markup=keyboard, parse_mode="Markdown")
+            sent_with_photo = True
+        except Exception as e_p:
+            print("Lỗi reply_photo trong start_command:", e_p)
+
+    if not sent_with_photo and target_msg:
+        if conn_id:
+            await target_msg.reply_text(welcome_question, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=conn_id)
+        else:
+            await target_msg.reply_text(welcome_question, reply_markup=keyboard, parse_mode="Markdown")
 
 
 async def get_id_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -834,13 +927,44 @@ async def get_id_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # ============================================================
 async def process_customer_text_message(update: Update, context: ContextTypes.DEFAULT_TYPE, user_id: str, text: str):
     session_id = f"telegram_{user_id}"
+    target_msg: Any = update.message or update.business_message or (update.callback_query.message if update.callback_query else None)
+    conn_id = update.business_message.business_connection_id if update.business_message else memory_store.get(f"{session_id}_business_connection_id")
+    target_chat_id = update.effective_chat.id if update.effective_chat else int(user_id)
     
     # 0. Bắn tín hiệu "Đang soạn tin nhắn..." (Typing Indicator) tức thì
     try:
-        target_chat_id = update.effective_chat.id if update.effective_chat else int(user_id)
         await context.bot.send_chat_action(chat_id=target_chat_id, action="typing")
     except Exception:
         pass
+
+    # 0.1 Tự động gửi ảnh QR và Danh thiếp Kênh Telegram chính thức trong tin nhắn đầu tiên của phiên
+    if not memory_store.get(f"{session_id}_sent_official_channel", False):
+        memory_store[f"{session_id}_sent_official_channel"] = True
+        try:
+            await send_official_channel_card(
+                chat_id=target_chat_id,
+                target_msg=target_msg,
+                context=context,
+                business_connection_id=conn_id
+            )
+        except Exception as e_ch:
+            print("Lỗi tự động gửi ảnh kênh chính thức đầu phiên:", e_ch)
+    else:
+        # Nếu khách hỏi thông tin liên hệ / kênh chính thức / nhân viên
+        contact_keywords = [
+            "admin", "nhân viên", "người thật", "kênh chính thức", "liên hệ", "số điện thoại",
+            "hotline", "channel", "human", "support", "человек", "оператор", "админ", "контакт", "менеджер"
+        ]
+        if any(k in text.lower() for k in contact_keywords):
+            try:
+                await send_official_channel_card(
+                    chat_id=target_chat_id,
+                    target_msg=target_msg,
+                    context=context,
+                    business_connection_id=conn_id
+                )
+            except Exception as e_req_card:
+                print("Lỗi gửi ảnh kênh chính thức theo yêu cầu:", e_req_card)
 
     # 1. Truy xuất / Tra soát hồ sơ khách hàng bền vững từ SQLite & CRM
     full_name_tg = update.effective_user.full_name if update.effective_user else None
