@@ -802,20 +802,19 @@ async def send_official_channel_card(
     """
     caption = (
         "🌟 **EASY TRIP & VISA — OFFICIAL TELEGRAM SUPPORT**\n\n"
-        "🇻🇳 **Kênh hỗ trợ & điều phối chính thức của Easy Trip:**\n"
-        "• 👤 **Telegram**: [@easytripvisa_co_ltd](https://t.me/easytripvisa_co_ltd)\n"
-        "• 📢 **Kênh tin tức & lịch xe**: [Easy Trip Channel](https://t.me/visaEASYTRIP)\n"
-        "• 📞 **Hotline/Zalo/WhatsApp**: `+84 853 201 277` (Open 24/7)\n"
-        "• 🌐 **Website**: [easytripvisa.com](https://www.easytripvisa.com)\n"
-        "• 📍 **Văn phòng**: 21 Phan Vinh, Nha Trang, Khánh Hòa\n\n"
-        "🇷🇺 **Официальный контакт и поддержка Easy Trip:**\n"
-        "• Поддержка 24/7, оформление виз и виза-ран.\n"
-        "• Нажмите на кнопки ниже для связи с менеджером!"
+        "Welcome to **Easy Trip & Visa Co. Ltd**!\n"
+        "For direct human assistance, real-time bus schedules, and visa consultation, please connect with our official channels:\n\n"
+        "• 👤 **Official Telegram**: [@easytripvisa_co_ltd](https://t.me/easytripvisa_co_ltd)\n"
+        "• 📢 **News & Bus Schedule Channel**: [Easy Trip Channel](https://t.me/visaEASYTRIP)\n"
+        "• 📞 **Hotline / WhatsApp / Zalo**: `+84 853 201 277` (Open 24/7)\n"
+        "• 🌐 **Official Website**: [easytripvisa.com](https://www.easytripvisa.com)\n"
+        "• 📍 **Head Office**: 21 Phan Vinh, Nha Trang, Khanh Hoa, Vietnam\n\n"
+        "👉 *Scan the QR code above or tap the buttons below to chat directly with our team!*"
     )
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("💬 Nhắn Telegram Chính Thức / Написать", url="https://t.me/easytripvisa_co_ltd")],
-        [InlineKeyboardButton("📢 Kênh Tin Tức / Канал", url="https://t.me/visaEASYTRIP")],
-        [InlineKeyboardButton("🌐 Website EasyTrip", url="https://www.easytripvisa.com")]
+        [InlineKeyboardButton("💬 Chat on Official Telegram", url="https://t.me/easytripvisa_co_ltd")],
+        [InlineKeyboardButton("📢 News & Schedule Channel", url="https://t.me/visaEASYTRIP")],
+        [InlineKeyboardButton("🌐 Visit Official Website", url="https://www.easytripvisa.com")]
     ])
     
     official_qr_file = "static/official_telegram_qr.png"
@@ -876,18 +875,18 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         del memory_store[f"{session_id}_awaiting_old_booking"]
 
     welcome_question = (
-        "👋 **Welcome to Easy Trip & Visa!**\n"
-        "Official Support: @easytripvisa_co_ltd | Hotline: +84 853 201 277\n\n"
-        "Have you (or a friend on your behalf) booked any service with us before?\n\n"
-        "👋 **Здравствуйте! Добро пожаловать в Easy Trip & Visa.**\n"
-        "Вы (или ваши знакомые для вас) уже пользовались нашими услугами ранее?"
+        "👋 **Welcome to Easy Trip & Visa!**\n\n"
+        "• 👤 **Official Support**: [@easytripvisa_co_ltd](https://t.me/easytripvisa_co_ltd)\n"
+        "• 📞 **Hotline / WhatsApp**: `+84 853 201 277` (Open 24/7)\n\n"
+        "Have you (or a friend on your behalf) booked any service with us before?\n"
+        "Please select an option below:"
     )
     
     keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("💬 Direct Telegram Support (@easytripvisa_co_ltd)", url="https://t.me/easytripvisa_co_ltd")],
-        [InlineKeyboardButton("📢 Official Channel / Канал", url="https://t.me/visaEASYTRIP")],
-        [InlineKeyboardButton("🌟 Returning / Friend Booked (Discount) / Постоянный клиент", callback_data="cust_type|returning")],
-        [InlineKeyboardButton("🆕 New Customer / Новый клиент", callback_data="cust_type|new")],
+        [InlineKeyboardButton("💬 Chat on Official Telegram (@easytripvisa_co_ltd)", url="https://t.me/easytripvisa_co_ltd")],
+        [InlineKeyboardButton("📢 News & Schedule Channel", url="https://t.me/visaEASYTRIP")],
+        [InlineKeyboardButton("🌟 Returning Customer (Loyalty Discount)", callback_data="cust_type|returning")],
+        [InlineKeyboardButton("🆕 New Customer", callback_data="cust_type|new")],
         [InlineKeyboardButton("💬 Direct WhatsApp Support", url="https://wa.me/84868462071")]
     ])
     
