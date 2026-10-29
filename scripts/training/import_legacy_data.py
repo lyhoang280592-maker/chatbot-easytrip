@@ -38,6 +38,8 @@ def safe_int(val: Any) -> int:
 def resolve_path(rel_path: str) -> str:
     """Tìm đường dẫn trong data/ hoặc root"""
     candidates = [
+        os.path.abspath(os.path.join(ROOT_DIR, "..", "contracts-easytrip", rel_path)),
+        os.path.abspath(os.path.join(ROOT_DIR, "..", "contracts-easytrip", "data", "contracts_and_crm", rel_path)),
         os.path.join(ROOT_DIR, "data", "contracts_and_crm", rel_path),
         os.path.join(ROOT_DIR, "data", "raw_chat_history", rel_path),
         os.path.join(ROOT_DIR, "data", "training_knowledge", rel_path),
