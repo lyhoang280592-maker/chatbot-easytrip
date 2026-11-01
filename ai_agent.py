@@ -182,18 +182,32 @@ CRITICAL OPERATIONS DIRECTIVES (NEVER DEVIATE OR INVENT):
    - The new e-visa is delivered via message/email between **11:30 AM and 12:00 PM**.
 4. **Visa Extension (Inside Vietnam)**:
    - Vietnam does **NOT** allow extensions for tourist visas inside the country. Extension is impossible (0 VND / Not available). The customer MUST do a visarun.
-5. **Route Eligibility & Official Website Packages (https://www.easytripvisa.com/russian)**:
-   - **Laos (Bo Y) Route**: Specifically for citizens EXEMPT from Laos visa (Russia, Belarus, Kazakhstan, South Korea, Japan, ASEAN, etc.). Russian citizens normally take the Laos (Bo Y) route to save costs:
-     * **Visarun Free Visa 45 days (Bo Y - Laos)**: **1,400,000 VND** for New Guests (**1,300,000 VND** for Returning Guests). Departs **DAILY** at **21:30** (40 Hon Chong) / **21:15** (04 Tran Phu). (+ 140,000 VND border stamping fee at checkpoint).
-     * **Visarun 90D Single Entry E-visa (Bo Y - Laos, 4h urgent)**: **3,400,000 VND** for Russian New Guests (**3,000,000 VND** for Returning Guests; **2,450,000 VND** if submitted >3 days early; **4,000,000 VND** for non-Russian urgent <2 days). Departs **Tuesday, Thursday, Sunday** at **21:30**.
-     * **Visarun 90D Multi Entry E-visa (Bo Y - Laos, 4h urgent)**: **4,400,000 VND** for Russian New Guests (**4,000,000 VND** for Returning Guests). Departs **Tuesday, Thursday, Sunday** at **21:30**.
-     * **Children under 9 years ("Free for baby's")**: **100% FREE bus ticket (0 VND)** when sharing a cabin bed with parents. Urgent 3-hour E-visa for children under 9 years: **1,480,000 VND**.
-   - **Cambodia (Moc Bai) Route**: Departs only on **Tuesdays, Thursdays, and Sundays** at **21:30** (40 Hon Chong) / **21:15** (04 Tran Phu). Required for nationalities NOT exempt from Laos visa (e.g. USA, Canada, Australia, UK, EU, Ukraine, etc.), or available as an all-inclusive package on our website:
-     * **Cambodia All-Inclusive Multi Package (Bus + 90D Multi Vietnam E-visa + Cambodia Visa included, 24h processing)**: **5,400,000 VND**.
-     * **Cambodia All-Inclusive Single Package (Bus + 90D Single Vietnam E-visa + Cambodia Visa included, 24h processing)**: **4,400,000 VND**.
-     * **Cambodia Standard 90D Package (Bus + 90D Vietnam E-visa; customer pays Cambodia visa $35-$50 at border)**: **4,000,000 VND** (**3,550,000 VND** for Returning Guests).
-     * **Cambodia 45D Visa-Free Bus Package (Bus only)**: **1,400,000 VND** (**1,300,000 VND** for Returning Guests).
-     * 💡 **Helpful Advice Rule**: If a Russian-speaking customer clicks a link for a **Cambodia (Moc Bai)** package (e.g. 5,400,000 VND or 4,400,000 VND), ALWAYS confirm the exact Cambodia package and price they selected first, AND politely inform them that if they hold a **Russian / Belarusian / Kazakh** passport, they are visa-exempt for Laos and can also choose the **Laos (Bo Y)** route which is cheaper (**3,400,000 VND** Single / **4,400,000 VND** Multi / **1,400,000 VND** 45D stamp), or proceed with **Cambodia (Moc Bai)** if they hold another passport (e.g. Ukraine, EU, USA) or prefer Moc Bai!
+5. **Route Eligibility & Official Website Packages (SPECIAL RULE FOR NHA TRANG VISARUN)**:
+   - **Nha Trang <=> Laos (Bo Y) Route — STRICTLY LIMITED TO SPECIFIC NATIONALITIES ONLY**:
+     * The route from **Nha Trang to Bo Y (Laos)** ONLY applies to citizens of:
+       1. **Russia (Nga / Россия)**
+       2. **Belarus (Беларусь)**
+       3. **South Korea (Hàn Quốc / Южная Корея)**
+       4. **Japan (Nhật Bản / Япония)**
+       5. **Luxembourg (Люксембург)**
+       6. **12 Southeast Asian countries (12 quốc gia Đông Nam Á / страны Юго-Восточной Азии: Brunei, Cambodia, Timor-Leste, Indonesia, Laos, Malaysia, Myanmar, Philippines, Singapore, Thailand, Vietnam, etc.)**
+     * **DOES NOT APPLY to any other countries in the world!**
+     * Packages on Laos (Bo Y) Route:
+       - **Visarun Free Visa 45 days (Bo Y - Laos)**: **1,400,000 VND** for New Guests (**1,300,000 VND** for Returning Guests). Departs **DAILY** at **21:30** (40 Hon Chong) / **21:15** (04 Tran Phu). (+ 140,000 VND border stamping fee at checkpoint).
+       - **Visarun 90D Single Entry E-visa (Bo Y - Laos, 4h urgent)**: **3,400,000 VND** for Russian/Belarusian New Guests (**3,000,000 VND** for Returning Guests; **2,450,000 VND** if submitted >3 days early; **4,000,000 VND** for non-Russian urgent <2 days). Departs **Tuesday, Thursday, Sunday** at **21:30**.
+       - **Visarun 90D Multi Entry E-visa (Bo Y - Laos, 4h urgent)**: **4,400,000 VND** for Russian/Belarusian New Guests (**4,000,000 VND** for Returning Guests). Departs **Tuesday, Thursday, Sunday** at **21:30**.
+       - **Children under 9 years ("Free for baby's")**: **100% FREE bus ticket (0 VND)** when sharing a cabin bed with parents. Urgent 3-hour E-visa for children under 9 years: **1,480,000 VND**.
+   - **Nha Trang <=> Cambodia (Moc Bai) Route — MANDATORY FOR ALL OTHER NATIONALITIES IN THE WORLD**:
+     * Citizens of **ALL OTHER COUNTRIES IN THE WORLD** (including **Kazakhstan, Ukraine, Uzbekistan, Kyrgyzstan, Tajikistan**, USA, Canada, Australia, UK, Germany, France, Italy, Spain, and all other countries not in the Bo Y list above) **CANNOT** go to Bo Y (Laos) from Nha Trang — they **MUST take the Cambodia (Moc Bai) route**!
+     * Schedule: Departs only on **Tuesdays, Thursdays, and Sundays** at **21:30** (40 Hon Chong) / **21:15** (04 Tran Phu).
+     * Packages on Cambodia (Moc Bai) Route:
+       - **Cambodia All-Inclusive Multi Package (Bus + 90D Multi Vietnam E-visa + Cambodia Visa included, 24h processing)**: **5,400,000 VND**.
+       - **Cambodia All-Inclusive Single Package (Bus + 90D Single Vietnam E-visa + Cambodia Visa included, 24h processing)**: **4,400,000 VND**.
+       - **Cambodia Standard 90D Package (Bus + 90D Vietnam E-visa; customer pays Cambodia visa $35-$50 at border)**: **4,000,000 VND** (**3,550,000 VND** for Returning Guests).
+       - **Cambodia 45D Visa-Free Bus Package (Bus only, for nationalities visa-exempt for Vietnam like UK, Germany, France, Italy, Spain, etc.)**: **1,400,000 VND** (**1,300,000 VND** for Returning Guests).
+     * 💡 **Helpful Advice Rule**:
+       - If a customer from **Kazakhstan, Ukraine, Uzbekistan, USA, Europe (except Luxembourg/Russia/Belarus)** asks to go to **Laos (Bo Y)** from Nha Trang, politely explain that the Nha Trang -> Bo Y (Laos) route **only applies to citizens of Russia, Belarus, South Korea, Japan, Luxembourg, and 12 Southeast Asian countries**, so they **must take the Cambodia (Moc Bai) route**, and introduce the Cambodia packages!
+       - If a Russian-speaking customer clicks a link for a **Cambodia (Moc Bai)** package (e.g. 5,400,000 VND or 4,400,000 VND) without stating their nationality yet, confirm the Cambodia package they selected, ask for their nationality & booking details, and politely note that if they hold a **Russian or Belarusian** passport, they can also choose the **Laos (Bo Y)** route, whereas all other nationalities (such as Kazakhstan, Ukraine, Uzbekistan, EU, USA, etc.) go via **Cambodia (Moc Bai)**!
 
 CRITICAL DIRECTIVE - LANGUAGE & NATIONALITY (MANDATORY):
 1. **Rule A (Nationality-based Native Language - HIGHEST PRIORITY)**:
@@ -594,38 +608,36 @@ def extract_date_and_nationality_from_history(history_messages: list[dict]):
         for k in ["лаос", "laos", "lào", "бо й", "bo y", "bờ y", "лаобао", "lao bao", "lao bảo"]
     )
     
-    # Russian, CIS, Belarusian, Korean, ASEAN citizens are exempt from Laos visa
+    # Nha Trang -> Laos (Bo Y) route ONLY applies to: Russia, Belarus, South Korea, Japan, Luxembourg, and 12 Southeast Asian countries
     is_laos_exempt = (
-        bool(re.search(r'\b(ru|russia|russian|россия|рф|nga|belarus|беларусь|kazakh|kazakhstan|казахстан|cis|kr|korea|korean|hàn quốc)\b', clean_user_text_lower))
-        or any(re.search(r'\b' + re.escape(rn) + r'\b', clean_user_text_lower) for rn in [
-            "dmitry", "dimitry", "dmitrii", "ivan", "alexey", "sergei", "vladimir", "ekaterina", 
-            "elena", "olga", "tatiana", "roman", "andrei", "nikita", "timofei", "tsarenko", "rodichev"
-        ])
+        bool(re.search(r'\b(ru|russia|russian|россия|рф|nga|belarus|беларусь|белорус|kr|korea|korean|hàn quốc|южная корея|корея|jp|japan|japanese|nhật|nhật bản|япония|luxembourg|люксембург|asean|malaysia|thailand|singapore|indonesia|philippines|brunei|myanmar|laos|cambodia|timor)\b', clean_user_text_lower))
     )
     
-    if user_explicit_cambodia and not user_explicit_laos:
+    cambodia_keywords = [
+        "us", "usa", "american", "uk", "british", "germany", "german", "france", "french", 
+        "canada", "canadian", "australia", "australian", "india", "indian", "ukraine", "ukrainian",
+        "kazakh", "kazakhstan", "uzbek", "uzbekistan", "kyrgyz", "kyrgyzstan", "tajik", "tajikistan",
+        "poland", "polish", "italy", "italian", "spain", "spanish", "czech",
+        "казах", "казахстан", "украин", "узбек", "узбекистан", "кыргыз", "киргиз", "таджик",
+        "сша", "великобритан", "герман", "франц", "канад", "австрал", "польш", "итал", "испан",
+        "mỹ", "nước anh", "quốc tịch anh", "nước pháp", "nước đức", "úc", "ý", "tây ban nha"
+    ]
+    
+    has_cambodia_keyword = False
+    for kw in cambodia_keywords:
+        if kw in ["us", "uk", "mỹ", "úc", "ý"]:
+            if re.search(r"\b" + re.escape(kw) + r"\b", clean_user_text_lower):
+                has_cambodia_keyword = True
+                break
+        else:
+            if kw in clean_user_text_lower:
+                has_cambodia_keyword = True
+                break
+
+    if has_cambodia_keyword:
         destination = "cambodia"
-    elif not is_laos_exempt:
-        cambodia_keywords = [
-            "us", "usa", "american", "uk", "british", "germany", "german", "france", "french", 
-            "canada", "canadian", "australia", "australian", "india", "indian", "ukraine", "ukrainian",
-            "украин", "сша", "великобритан", "герман", "франц", "канад", "австрал",
-            "mỹ", "nước anh", "quốc tịch anh", "nước pháp", "nước đức"
-        ]
-        
-        has_cambodia_keyword = False
-        for kw in cambodia_keywords:
-            if kw in ["us", "uk", "mỹ"]:
-                if re.search(r"\b" + re.escape(kw) + r"\b", clean_user_text_lower):
-                    has_cambodia_keyword = True
-                    break
-            else:
-                if kw in clean_user_text_lower:
-                    has_cambodia_keyword = True
-                    break
-                    
-        if has_cambodia_keyword:
-            destination = "cambodia"
+    elif user_explicit_cambodia and not user_explicit_laos:
+        destination = "cambodia"
         
     # 3. Extract visa type (45D vs 90D)
     visa_type = "90D"  # Default is 90D
@@ -647,7 +659,7 @@ async def process_chat(history_messages: list[dict], customer_profile: dict | No
     if customer_profile:
         prof_nat = (customer_profile.get("nationality") or "").lower()
         if not destination or destination == "laos":
-            if any(k in prof_nat for k in ["us", "uk", "american", "british", "french", "german", "canadian", "australian", "mỹ", "anh", "pháp", "đức"]):
+            if any(k in prof_nat for k in ["us", "uk", "american", "british", "french", "german", "canadian", "australian", "kazakh", "ukrain", "uzbek", "kyrgyz", "mỹ", "anh", "pháp", "đức", "úc"]):
                 destination = "cambodia"
     
     smart_departure_context = ""
@@ -659,7 +671,7 @@ async def process_chat(history_messages: list[dict], customer_profile: dict | No
     # Route directives to guide the LLM accurately without overriding explicit customer package requests
     if destination == "cambodia" and user_explicit_cambodia:
         route_directive_context = (
-            f"\nCRITICAL ROUTE & PACKAGE DIRECTIVE:\n"
+            f"\nCRITICAL ROUTE & PACKAGE DIRECTIVE (NHA TRANG VISARUN RULE):\n"
             f"- The customer explicitly asked about the **CAMBODIA (Moc Bai border)** visarun package.\n"
             f"- Confirm the exact Cambodia (Moc Bai) package and price they asked about:\n"
             f"  + **5,400,000 VND**: Bus + 90-day Multi Vietnam E-visa + Cambodia Visa included (24h processing).\n"
@@ -667,19 +679,20 @@ async def process_chat(history_messages: list[dict], customer_profile: dict | No
             f"  + **4,000,000 VND**: Bus + 90-day Vietnam E-visa (customer pays Cambodia visa $35-$50 at border).\n"
             f"  + **1,400,000 VND**: Bus only for 45-day Visa-Free stamp.\n"
             f"  + Schedule: Departs Tuesday, Thursday, and Sunday at 21:30 (40 Hon Chong) / 21:15 (04 Tran Phu).\n"
-            f"- If they are chatting in Russian and have not stated their nationality yet, also politely add a brief note that if they have a **Russian / Belarusian / Kazakh** passport, they are visa-exempt for Laos and can alternatively choose the **Laos (Bo Y)** route (3,400,000 VND for 90D Single / 4,400,000 VND for 90D Multi / 1,400,000 VND for 45D stamp), or stay with the Cambodia (Moc Bai) package as selected!\n"
+            f"- IMPORTANT NHA TRANG ROUTE RULE: The Nha Trang -> Laos (Bo Y) route ONLY applies to citizens of **Russia, Belarus, South Korea, Japan, Luxembourg, and 12 Southeast Asian countries**. All other nationalities in the world (including Kazakhstan, Ukraine, Uzbekistan, EU, USA, etc.) MUST go via **Cambodia (Moc Bai)**.\n"
             f"- Ask the customer for their booking details (1. Nationality, 2. Current visa expiry date or desired departure date, 3. Full Name + Year of birth, 4. Pickup point in Nha Trang, 5. Contact phone number) and WAIT for their reply!"
         )
     elif destination == "cambodia":
         route_directive_context = (
-            f"\nCRITICAL ROUTE DIRECTIVE:\n"
-            f"- Customer's nationality requires the **CAMBODIA route (Moc Bai border)** because they are not exempt from Laos visa at Bo Y border.\n"
-            f"- Recommend the CAMBODIA route (Moc Bai border) and ask for their booking details if not yet provided."
+            f"\nCRITICAL ROUTE DIRECTIVE (NHA TRANG VISARUN RULE):\n"
+            f"- For Visarun departing from Nha Trang, the **Laos (Bo Y) route ONLY applies to citizens of Russia, Belarus, South Korea, Japan, Luxembourg, and 12 Southeast Asian countries**.\n"
+            f"- Because the customer's nationality is NOT on that list, they **MUST take the CAMBODIA route (Moc Bai border)**! Even if they asked about Laos (Bo Y), politely explain this rule and guide them to the **Cambodia (Moc Bai)** packages (5,400,000 VND Multi w/ Cambodia Visa, 4,400,000 VND Single w/ Cambodia Visa, 4,000,000 VND 90D E-visa, or 1,400,000 VND 45D Visa-Free if eligible)."
         )
     else:
         route_directive_context = (
-            f"\nCRITICAL ROUTE DIRECTIVE:\n"
-            f"- For citizens exempt from Laos visa (Russia, Belarus, Kazakhstan, South Korea, ASEAN), the **LAOS route (Bo Y border)** is the most popular and economical route (1,400,000 VND for 45D Visa-Free; 3,400,000 VND for 90D Single E-visa; 4,400,000 VND for 90D Multi E-visa)."
+            f"\nCRITICAL ROUTE DIRECTIVE (NHA TRANG VISARUN RULE):\n"
+            f"- For Visarun departing from Nha Trang, the **LAOS route (Bo Y border)** applies ONLY to citizens of **Russia, Belarus, South Korea, Japan, Luxembourg, and 12 Southeast Asian countries** (1,400,000 VND for 45D Visa-Free; 3,400,000 VND for 90D Single E-visa; 4,400,000 VND for 90D Multi E-visa).\n"
+            f"- All other nationalities in the world MUST take the **CAMBODIA route (Moc Bai border)**. Always check the customer's nationality!"
         )
 
     if expiry_date:
@@ -980,9 +993,10 @@ async def process_staff_chat(question: str) -> str:
         "   - The new e-visa is delivered via message/email between 11:30 AM and 12:00 PM.\n"
         "4. Visa Extension (Inside Vietnam):\n"
         "   - Vietnam does NOT allow extensions for tourist visas inside the country. Extension is impossible (0 VND / Not available). The customer MUST do a visarun.\n"
-        "5. Route Eligibility:\n"
-        "   - Nationalities not exempt from Laos visa (e.g. USA, Canada, Australia, Brazil, UK, etc.) MUST take the Cambodia route. Laos is not available for them.\n"
-        "   - Cambodia visa run package costs 4,000,000 VND (includes round-trip bus + 90-day Vietnam E-visa). The customer must pay for their own Cambodia visa at the border (approx. 35$ - 50$). Cambodia bus departs only on Tuesdays, Thursdays, and Sundays.\n\n"
+        "5. Route Eligibility (Special Rule for Nha Trang Visarun):\n"
+        "   - The Nha Trang to Laos (Bo Y) route ONLY applies to citizens of Russia, Belarus, South Korea, Japan, Luxembourg, and 12 Southeast Asian countries. It does NOT apply to any other countries in the world.\n"
+        "   - All other nationalities in the world (including Kazakhstan, Ukraine, Uzbekistan, USA, Canada, Australia, UK, Europe except Luxembourg/Russia/Belarus, etc.) MUST take the Cambodia (Moc Bai) route.\n"
+        "   - Cambodia visa run packages from Nha Trang: 5,400,000 VND (Bus + 90D Multi Vietnam E-visa + Cambodia Visa included), 4,400,000 VND (Bus + 90D Single Vietnam E-visa + Cambodia Visa included), 4,000,000 VND (Bus + 90D Vietnam E-visa, customer pays Cambodia visa at border), or 1,400,000 VND (45D Bus only). Cambodia bus departs only on Tuesdays, Thursdays, and Sundays.\n\n"
         "Use the following core knowledge base about Easy Trip's services, pricing, and schedules to construct your response:\n"
         f"{KNOWLEDGE_BASE}\n"
     )

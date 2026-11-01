@@ -63,9 +63,13 @@ graph TD
 Khi khách hàng liên hệ, nhân viên văn phòng gửi ngay 3 câu hỏi định danh tiêu chuẩn:
 > *"Xin chào! Vui lòng cho EasyTrip biết: 1. Ngày hết hạn Visa của bạn? 2. Quốc tịch của bạn? 3. Thành phố hiện tại bạn đang ở (Nha Trang / Đà Nẵng)?"*
 
-#### A. Quy tắc phân loại quốc tịch và chọn tuyến cửa khẩu:
-* **Quốc tịch được miễn visa Lào (Nga, Belarus, Hàn Quốc, Malaysia, các nước ASEAN...):** Tư vấn đi **Tuyến Lào (Cửa khẩu Bờ Y)** để tiết kiệm chi phí visa Lào. Được chọn gói Miễn visa 45 ngày (`1.400.000 VNĐ`) hoặc E-visa 90 ngày (`3.400.000 VNĐ`).
-* **Quốc tịch KHÔNG được miễn visa Lào (Mỹ, Canada, Úc, Anh, Ukraine, Ai Cập, Ma-rốc, Thổ Nhĩ Kỳ...):** BẮT BUỘC ĐI **TUYẾN CAMPUCHIA (Cửa khẩu Mộc Bài)**. Khách nhóm này KHÔNG được chọn gói Miễn visa 45 ngày mà bắt buộc phải chọn gói E-visa 90 ngày (`4.000.000 VNĐ`).
+#### A. Quy tắc phân loại quốc tịch và chọn tuyến cửa khẩu (Lưu ý riêng biệt cho Visarun tại Nha Trang):
+* **Tuyến Nha Trang <=> Lào (Cửa khẩu Bờ Y) — CHỈ ÁP DỤNG CHO CÁC QUỐC TỊCH SAU:**
+  * Hành trình từ Nha Trang đến Bờ Y (Lào) **chỉ áp dụng duy nhất** cho công dân các quốc tịch: **Nga (Russia), Belarus, Hàn Quốc (South Korea), Nhật Bản (Japan), Luxembourg và 12 quốc gia Đông Nam Á**.
+  * Được chọn gói Miễn visa 45 ngày (`1.400.000 VNĐ`) hoặc E-visa 90 ngày (`3.400.000 VNĐ` Single / `4.400.000 VNĐ` Multi).
+* **Tuyến Nha Trang <=> Campuchia (Cửa khẩu Mộc Bài) — BẮT BUỘC CHO TẤT CẢ CÁC QUỐC GIA KHÁC TRÊN THẾ GIỚI:**
+  * **Không áp dụng tuyến Bờ Y (Lào) cho bất kỳ quốc gia nào khác ngoài danh sách trên** (kể cả Kazakhstan, Ukraine, Uzbekistan, Kyrgyzstan, Mỹ, Canada, Úc, Anh, Pháp, Đức, Tây Ban Nha, Ý...).
+  * Tất cả các quốc gia khác trên thế giới khi đi Visarun từ Nha Trang **BẮT BUỘC PHẢI ĐI TUYẾN CAMPUCHIA (Cửa khẩu Mộc Bài)** (Gói `1.400.000 VNĐ` 45 ngày nếu được miễn thị thực VN, hoặc `4.000.000 VNĐ` / `4.400.000 VNĐ` Single bao gồm visa Cam / `5.400.000 VNĐ` Multi bao gồm visa Cam).
 
 #### B. Thuật toán khớp lịch xe an toàn chống quá hạn visa (Anti-Overstay):
 * **Nguyên tắc cốt lõi:** Xe khởi hành ban đêm, sáng hôm sau (06:00) đến cửa khẩu. Do đó, **ngày xuất bến xe muộn nhất phải trước ngày hết hạn visa 1 ngày**.

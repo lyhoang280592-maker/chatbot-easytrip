@@ -167,26 +167,29 @@ def get_customer_service_type(data, history_text: str = "", user_only_text: str 
         return "NON_BUS"
 
     # 2. Kiểm tra nếu khách hoặc loai_visa đã chọn rõ tuyến Cambodia / Mộc Bài
-    if any(kw in check_text for kw in ["cambodia", "campuchia", "mộc bài", "moc bai", "камбоджа"]):
+    if any(kw in check_text for kw in ["cambodia", "campuchia", "mộc bài", "moc bai", "камбодж", "мокбай", "мок бай"]):
         return "Cambodia"
 
-    # 3. Kiểm tra nếu khách đã chọn rõ 90D hoặc 45D
+    # 3. Kiểm tra quốc tịch bắt buộc đi Cambodia (Nha Trang -> Bờ Y Lào chỉ áp dụng cho Nga, Belarus, Hàn Quốc, Nhật Bản, Luxembourg và 12 nước Đông Nam Á)
+    quoc_tich_lower = (getattr(data, "quoc_tich", "") or "").lower()
+    cambodia_mandatory_nationalities = [
+        "usa", "united states", "american", "united kingdom", "british", "great britain", 
+        "germany", "german", "france", "french", "canada", "canadian", "australia", "australian", 
+        "india", "indian", "kazakh", "kazakhstan", "ukraine", "ukrainian", "uzbek", "uzbekistan",
+        "kyrgyz", "kyrgyzstan", "tajik", "tajikistan", "poland", "italy", "spain", "czech",
+        "казах", "украин", "узбек", "кыргыз", "киргиз", "таджик", "сша", "великобритан", "герман", "франц",
+        "mỹ", "nước anh", "nước pháp", "nước đức", "úc", "ý", "tây ban nha"
+    ]
+    for nat in cambodia_mandatory_nationalities:
+        if nat in quoc_tich_lower:
+            return "Cambodia"
+
+    # 4. Kiểm tra nếu khách đã chọn rõ 90D hoặc 45D (tuyến Lào)
     if any(kw in check_text for kw in ["90d", "90 d", "90 ngày", "90 days", "90-day", "90 day", "90д", "90 д", "90 дней", "e-visa 90", "90"]):
         return "90D"
 
     if any(kw in check_text for kw in ["45d", "45 d", "45 ngày", "45 days", "45-day", "45 day", "45д", "45 д", "45 дней", "visa free", "miễn thị thực", "miễn visa"]):
         return "45D"
-
-    # 4. Kiểm tra quốc tịch Tây Phương bắt buộc đi Cambodia (khi đã đến bước chọn chuyến)
-    quoc_tich_lower = (getattr(data, "quoc_tich", "") or "").lower()
-    western_cambodia_nationalities = [
-        "usa", "united states", "american", "united kingdom", "british", "great britain", 
-        "germany", "german", "france", "french", "canada", "canadian", "australia", "australian", 
-        "india", "indian", "mỹ", "nước anh", "nước pháp", "nước đức"
-    ]
-    for nat in western_cambodia_nationalities:
-        if nat in quoc_tich_lower:
-            return "Cambodia"
 
     # Nếu chưa có thông tin chốt dịch vụ
     return None

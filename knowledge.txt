@@ -22,10 +22,18 @@ Core objective: Collect exactly 5 pieces of information to match the bus route &
    - The bus travels overnight, arriving at the border at 6:00 AM the next day (the expiry date) to complete procedures.
    - **Cambodia Route Constraint**: The bus to Cambodia departs ONLY on **Tuesdays, Thursdays, and Sundays**. Therefore, for Cambodia runs, the customer's Visa expiry date MUST fall on a **Monday, Wednesday, or Friday** (departure + 1 day). If it falls on another day, the customer must choose the nearest preceding Tuesday, Thursday, or Sunday departure date.
 
-👉 NATIONALITY & BORDER CHECKPOINT CLASSIFICATION:
-   - Citizens of Russia (Nga), South Korea (Hàn Quốc), Belarus, Malaysia, Czech Republic, and other ASEAN countries => Recommend LAOS route (Bo Y border).
-     * Reason: These nationalities enjoy visa exemption for Laos, saving the cost of a Laos visa.
-   - Citizens of USA (Mỹ), Canada, Australia, UK (Anh), Ukraine, Kyrgyz, Brazil, Uzbekistan, and others => Recommend CAMBODIA route (Moc Bai border).
+👉 NATIONALITY & BORDER CHECKPOINT CLASSIFICATION (SPECIAL RULE FOR NHA TRANG VISARUN):
+   - **Nha Trang <=> Laos Route (Bo Y Border) — STRICTLY LIMITED NATIONALITIES**:
+     * The journey from **Nha Trang to Bo Y (Laos)** ONLY applies to citizens of:
+       1. **Russia (Nga)**
+       2. **Belarus**
+       3. **South Korea (Hàn Quốc)**
+       4. **Japan (Nhật Bản)**
+       5. **Luxembourg**
+       6. **12 Southeast Asian countries (Đông Nam Á / ASEAN: Brunei, Cambodia, Timor-Leste, Indonesia, Laos, Malaysia, Myanmar, Philippines, Singapore, Thailand, Vietnam, etc.)**
+     * **DOES NOT APPLY to any other countries in the world!**
+   - **Nha Trang <=> Cambodia Route (Moc Bai Border) — MANDATORY FOR ALL OTHER NATIONALITIES**:
+     * Citizens of **ALL OTHER COUNTRIES IN THE WORLD** (including Kazakhstan, Ukraine, Uzbekistan, Kyrgyzstan, USA, Canada, Australia, UK, Germany, France, Italy, Spain, and all other European/global nationalities not listed above) **CANNOT** take the Nha Trang - Bo Y (Laos) route and **MUST take the CAMBODIA route (Moc Bai border)** when doing a visarun from Nha Trang!
 
 👉 VIETNAM VISA-EXEMPTION & PACKAGE AVAILABILITY RULE:
    - **Only** customers whose nationalities are visa-exempt for Vietnam (e.g., Russia, South Korea, Japan, Belarus, UK, France, Germany, Italy, Spain, ASEAN, etc.) can select the "45D Visa Free" (45 ngày miễn thị thực) package.
