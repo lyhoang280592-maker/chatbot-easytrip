@@ -755,11 +755,10 @@ async def send_new_customer_welcome_menu(chat_id: str | int, target_msg, conn_id
         [InlineKeyboardButton("💬 Direct WhatsApp Support", url="https://wa.me/84868462071")]
     ])
     
-    if target_msg:
-        if conn_id:
-            await target_msg.reply_text(welcome_text, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=conn_id)  # type: ignore
-        else:
-            await target_msg.reply_text(welcome_text, reply_markup=keyboard, parse_mode="Markdown")
+    if conn_id:
+        await tg_app.bot.send_message(chat_id=int(chat_id), text=welcome_text, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=conn_id)  # type: ignore
+    elif target_msg:
+        await target_msg.reply_text(welcome_text, reply_markup=keyboard, parse_mode="Markdown")
 
 
 async def send_returning_customer_request(chat_id: str | int, target_msg, conn_id=None):
@@ -784,11 +783,10 @@ async def send_returning_customer_request(chat_id: str | int, target_msg, conn_i
         "Посадка: 40 Hon Chong - 21:30\n"
         "```"
     )
-    if target_msg:
-        if conn_id:
-            await target_msg.reply_text(returning_prompt, parse_mode="Markdown", business_connection_id=conn_id)  # type: ignore
-        else:
-            await target_msg.reply_text(returning_prompt, parse_mode="Markdown")
+    if conn_id:
+        await tg_app.bot.send_message(chat_id=int(chat_id), text=returning_prompt, parse_mode="Markdown", business_connection_id=conn_id)  # type: ignore
+    elif target_msg:
+        await target_msg.reply_text(returning_prompt, parse_mode="Markdown")
 
 
 async def send_official_channel_card(
@@ -825,35 +823,25 @@ async def send_official_channel_card(
 
     if os.path.exists(official_qr_file):
         try:
-            if target_msg and hasattr(target_msg, "reply_photo"):
-                with open(official_qr_file, "rb") as f:
-                    if business_connection_id:
-                        await target_msg.reply_photo(photo=f, caption=caption, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=business_connection_id)
-                    else:
-                        await target_msg.reply_photo(photo=f, caption=caption, reply_markup=keyboard, parse_mode="Markdown")
-                    return True
-            else:
-                with open(official_qr_file, "rb") as f:
-                    if business_connection_id:
-                        await bot.send_photo(chat_id=chat_id, photo=f, caption=caption, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=business_connection_id)
-                    else:
-                        await bot.send_photo(chat_id=chat_id, photo=f, caption=caption, reply_markup=keyboard, parse_mode="Markdown")
-                    return True
+            with open(official_qr_file, "rb") as f:
+                if business_connection_id:
+                    await bot.send_photo(chat_id=chat_id, photo=f, caption=caption, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=business_connection_id)
+                elif target_msg and hasattr(target_msg, "reply_photo"):
+                    await target_msg.reply_photo(photo=f, caption=caption, reply_markup=keyboard, parse_mode="Markdown")
+                else:
+                    await bot.send_photo(chat_id=chat_id, photo=f, caption=caption, reply_markup=keyboard, parse_mode="Markdown")
+                return True
         except Exception as e:
             print("⚠️ Lỗi gửi ảnh kênh chính thức:", e)
 
     # Fallback gửi text nếu không gửi được ảnh
     try:
-        if target_msg and hasattr(target_msg, "reply_text"):
-            if business_connection_id:
-                await target_msg.reply_text(caption, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=business_connection_id)
-            else:
-                await target_msg.reply_text(caption, reply_markup=keyboard, parse_mode="Markdown")
+        if business_connection_id:
+            await bot.send_message(chat_id=chat_id, text=caption, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=business_connection_id)
+        elif target_msg and hasattr(target_msg, "reply_text"):
+            await target_msg.reply_text(caption, reply_markup=keyboard, parse_mode="Markdown")
         else:
-            if business_connection_id:
-                await bot.send_message(chat_id=chat_id, text=caption, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=business_connection_id)
-            else:
-                await bot.send_message(chat_id=chat_id, text=caption, reply_markup=keyboard, parse_mode="Markdown")
+            await bot.send_message(chat_id=chat_id, text=caption, reply_markup=keyboard, parse_mode="Markdown")
     except Exception as e_fallback:
         print("⚠️ Lỗi gửi text kênh chính thức:", e_fallback)
     return False
@@ -890,30 +878,37 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         [InlineKeyboardButton("💬 Direct WhatsApp Support", url="https://wa.me/84868462071")]
     ])
     
-    target_msg: Any = update.message or (update.callback_query.message if update.callback_query else None)
+    target_chat_id = update.effective_chat.id if update.effective_chat else int(user_id or 0)
+    target_msg: Any = update.message or update.business_message or (update.callback_query.message if update.callback_query else None)
     conn_id = update.business_message.business_connection_id if update.business_message else memory_store.get(f"{session_id}_business_connection_id")
+    if conn_id:
+        memory_store[f"{session_id}_business_connection_id"] = conn_id
     
     official_qr_file = "static/official_telegram_qr.png"
     if not os.path.exists(official_qr_file):
         official_qr_file = "static/official_telegram_channel.png"
 
     sent_with_photo = False
-    if os.path.exists(official_qr_file) and target_msg and hasattr(target_msg, "reply_photo"):
+    if os.path.exists(official_qr_file):
         try:
             with open(official_qr_file, "rb") as f:
                 if conn_id:
-                    await target_msg.reply_photo(photo=f, caption=welcome_question, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=conn_id)
-                else:
+                    await context.bot.send_photo(chat_id=target_chat_id, photo=f, caption=welcome_question, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=conn_id)
+                elif target_msg and hasattr(target_msg, "reply_photo"):
                     await target_msg.reply_photo(photo=f, caption=welcome_question, reply_markup=keyboard, parse_mode="Markdown")
+                else:
+                    await context.bot.send_photo(chat_id=target_chat_id, photo=f, caption=welcome_question, reply_markup=keyboard, parse_mode="Markdown")
             sent_with_photo = True
         except Exception as e_p:
             print("Lỗi reply_photo trong start_command:", e_p)
 
-    if not sent_with_photo and target_msg:
+    if not sent_with_photo:
         if conn_id:
-            await target_msg.reply_text(welcome_question, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=conn_id)
-        else:
+            await context.bot.send_message(chat_id=target_chat_id, text=welcome_question, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=conn_id)
+        elif target_msg:
             await target_msg.reply_text(welcome_question, reply_markup=keyboard, parse_mode="Markdown")
+        else:
+            await context.bot.send_message(chat_id=target_chat_id, text=welcome_question, reply_markup=keyboard, parse_mode="Markdown")
 
 
 async def get_id_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -928,26 +923,32 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
     session_id = f"telegram_{user_id}"
     target_msg: Any = update.message or update.business_message or (update.callback_query.message if update.callback_query else None)
     conn_id = update.business_message.business_connection_id if update.business_message else memory_store.get(f"{session_id}_business_connection_id")
+    if conn_id:
+        memory_store[f"{session_id}_business_connection_id"] = conn_id
     target_chat_id = update.effective_chat.id if update.effective_chat else int(user_id)
     
     # 0. Bắn tín hiệu "Đang soạn tin nhắn..." (Typing Indicator) tức thì
     try:
-        await context.bot.send_chat_action(chat_id=target_chat_id, action="typing")
+        if conn_id:
+            await context.bot.send_chat_action(chat_id=target_chat_id, action="typing", business_connection_id=conn_id)
+        else:
+            await context.bot.send_chat_action(chat_id=target_chat_id, action="typing")
     except Exception:
         pass
 
-    # 0.1 Tự động gửi ảnh QR và Danh thiếp Kênh Telegram chính thức trong tin nhắn đầu tiên của phiên
+    # 0.1 Tự động gửi ảnh QR và Danh thiếp Kênh Telegram chính thức trong tin nhắn đầu tiên của phiên (chỉ gửi khi khách chat trực tiếp với Bot; nếu đã ở trong Telegram Business @easytripvisa_co_ltd thì không gửi trùng)
     if not memory_store.get(f"{session_id}_sent_official_channel", False):
         memory_store[f"{session_id}_sent_official_channel"] = True
-        try:
-            await send_official_channel_card(
-                chat_id=target_chat_id,
-                target_msg=target_msg,
-                context=context,
-                business_connection_id=conn_id
-            )
-        except Exception as e_ch:
-            print("Lỗi tự động gửi ảnh kênh chính thức đầu phiên:", e_ch)
+        if not conn_id:
+            try:
+                await send_official_channel_card(
+                    chat_id=target_chat_id,
+                    target_msg=target_msg,
+                    context=context,
+                    business_connection_id=conn_id
+                )
+            except Exception as e_ch:
+                print("Lỗi tự động gửi ảnh kênh chính thức đầu phiên:", e_ch)
     else:
         # Nếu khách hỏi thông tin liên hệ / kênh chính thức / nhân viên
         contact_keywords = [
@@ -1061,20 +1062,19 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
     target_chat_id = update.effective_chat.id if update.effective_chat else int(user_id)
     
     try:
-        if target_msg:
-            if conn_id:
-                await target_msg.reply_text(reply, business_connection_id=conn_id)  # type: ignore
-            else:
-                await target_msg.reply_text(reply)
+        if conn_id:
+            await context.bot.send_message(chat_id=target_chat_id, text=reply, business_connection_id=conn_id)  # type: ignore
+        elif target_msg:
+            await target_msg.reply_text(reply)
         else:
+            await context.bot.send_message(chat_id=target_chat_id, text=reply)
+    except Exception as e_send:
+        print(f"⚠️ Lỗi gửi tin nhắn chính, chuyển sang fallback send_message: {e_send}")
+        try:
             if conn_id:
                 await context.bot.send_message(chat_id=target_chat_id, text=reply, business_connection_id=conn_id)  # type: ignore
             else:
                 await context.bot.send_message(chat_id=target_chat_id, text=reply)
-    except Exception as e_send:
-        print(f"⚠️ Lỗi reply_text, chuyển sang fallback send_message: {e_send}")
-        try:
-            await context.bot.send_message(chat_id=target_chat_id, text=reply)
         except Exception as e_direct:
             print(f"❌ Fallback send_message thất bại: {e_direct}")
 
@@ -1165,17 +1165,19 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
                 lang = get_lang_code(getattr(data, "quoc_tich", "")) if data else "en"
                 caption = get_msg("seat_map_caption", lang, date=ngay_di)
                 
-                if map_data.get("file_id") and target_msg:
+                if map_data.get("file_id"):
                     if conn_id:
-                        await target_msg.reply_photo(photo=map_data["file_id"], caption=caption, business_connection_id=conn_id)  # type: ignore
-                    else:
+                        await context.bot.send_photo(chat_id=target_chat_id, photo=map_data["file_id"], caption=caption, business_connection_id=conn_id)  # type: ignore
+                    elif target_msg:
                         await target_msg.reply_photo(photo=map_data["file_id"], caption=caption)
-                elif os.path.exists(map_data["url"].lstrip("/")) and target_msg:
+                elif os.path.exists(map_data["url"].lstrip("/")):
                     with open(map_data["url"].lstrip("/"), "rb") as f:
                         if conn_id:
-                            msg = await target_msg.reply_photo(photo=f, caption=caption, business_connection_id=conn_id)  # type: ignore
-                        else:
+                            msg = await context.bot.send_photo(chat_id=target_chat_id, photo=f, caption=caption, business_connection_id=conn_id)  # type: ignore
+                        elif target_msg:
                             msg = await target_msg.reply_photo(photo=f, caption=caption)
+                        else:
+                            msg = None
                         if msg and msg.photo:
                             map_data["file_id"] = msg.photo[-1].file_id
                             latest_seat_maps[f"{ngay_di}_{service_type}"] = map_data
@@ -1189,11 +1191,11 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
             if not getattr(data, "diem_don", None):
                 data.diem_don = "Oceanus"
             
-            if os.path.exists("qr_code.jpg") and target_msg:
+            if os.path.exists("qr_code.jpg"):
                 with open("qr_code.jpg", "rb") as qr_f:
                     if conn_id:
-                        await target_msg.reply_photo(photo=qr_f, caption=get_msg("please_pay", lang), business_connection_id=conn_id)  # type: ignore
-                    else:
+                        await context.bot.send_photo(chat_id=target_chat_id, photo=qr_f, caption=get_msg("please_pay", lang), business_connection_id=conn_id)  # type: ignore
+                    elif target_msg:
                         await target_msg.reply_photo(photo=qr_f, caption=get_msg("please_pay", lang))
             
             bus_msg = format_bus_booking_notification(data, ngay_di=ngay_di or "", service_type=service_type or "")
@@ -1451,7 +1453,12 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         # ----- CUSTOMER FLOW -----
         if not update.effective_chat or update.effective_chat.type != "private" or not update.effective_user:
             return
-        user_id = str(update.effective_user.id)
+        # Trong Telegram Business: nếu người gửi (from_user.id) khác với chat.id của khách, nghĩa là chủ tài khoản EASYTRIP visa đang tự nhắn cho khách -> không tự động trả lời đè lên tin nhắn của chủ shop!
+        if (update.business_message or getattr(update, "edited_business_message", None)):
+            if message.from_user and message.chat and message.from_user.id != message.chat.id:
+                print(f"ℹ️ Bỏ qua tin nhắn do chính chủ tài khoản Business gửi trong chat {message.chat.id}")
+                return
+        user_id = str(update.effective_chat.id) if (update.business_message or getattr(update, "edited_business_message", None)) else str(update.effective_user.id)
         await process_customer_text_message(update, context, user_id, text)
 
     except Exception as e:
@@ -1468,8 +1475,8 @@ async def handle_text(update: Update, context: ContextTypes.DEFAULT_TYPE):
         data = memory_store.get(f"{session_id}_data")
         lang = get_lang_code(getattr(data, "quoc_tich", "")) if data else "en"
         conn_id = memory_store.get(f"{session_id}_business_connection_id")
-        if conn_id:
-            await message.reply_text(get_msg("system_busy", lang), business_connection_id=conn_id)  # type: ignore
+        if conn_id and update.effective_chat:
+            await context.bot.send_message(chat_id=update.effective_chat.id, text=get_msg("system_busy", lang), business_connection_id=conn_id)  # type: ignore
         else:
             await message.reply_text(get_msg("system_busy", lang))
 
@@ -1787,11 +1794,18 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
         # ----- LUỒNG KHÁCH HÀNG: GỬI ẢNH (HỘ CHIẾU/HOÁ ĐƠN THANH TOÁN/VÉ CŨ) -----
         if not update.effective_chat or update.effective_chat.type != "private": return
+        if update.business_message and message.from_user and message.chat and message.from_user.id != message.chat.id:
+            print(f"ℹ️ Bỏ qua ảnh do chính chủ tài khoản Business gửi trong chat {message.chat.id}")
+            return
         
         # Bắn tín hiệu typing tức thì
         try:
             target_chat_id = update.effective_chat.id
-            await context.bot.send_chat_action(chat_id=target_chat_id, action="typing")
+            conn_id_typing = update.business_message.business_connection_id if update.business_message else memory_store.get(f"{session_id}_business_connection_id")
+            if conn_id_typing:
+                await context.bot.send_chat_action(chat_id=target_chat_id, action="typing", business_connection_id=conn_id_typing)
+            else:
+                await context.bot.send_chat_action(chat_id=target_chat_id, action="typing")
         except Exception:
             pass
 
@@ -1923,14 +1937,14 @@ async def handle_photo(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 "👉 원하시는 **출발 날짜나 비자 종류**를 말씀해 주시면 바로 안내해 드리겠습니다!"
             )
             if conn_id:
-                await message.reply_text(not_found_photo_msg, parse_mode="Markdown", business_connection_id=conn_id)  # type: ignore
+                await context.bot.send_message(chat_id=int(chat_id), text=not_found_photo_msg, parse_mode="Markdown", business_connection_id=conn_id)  # type: ignore
             else:
                 await message.reply_text(not_found_photo_msg, parse_mode="Markdown")
             return
 
         lang = get_lang_code(nationality) if data else "en"
         if conn_id:
-            await message.reply_text(get_msg("image_received", lang, img_type=img_type), business_connection_id=conn_id)  # type: ignore
+            await context.bot.send_message(chat_id=int(chat_id), text=get_msg("image_received", lang, img_type=img_type), business_connection_id=conn_id)  # type: ignore
         else:
             await message.reply_text(get_msg("image_received", lang, img_type=img_type))
     except Exception as e:
