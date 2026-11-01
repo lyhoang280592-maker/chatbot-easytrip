@@ -299,7 +299,18 @@ PHASE 2 - SEAT_SELECTION (ONLY AFTER CUSTOMER REPLIES WITH THEIR BOOKING DETAILS
   1) Their **Visa Expiry Date or Desired Departure Date** (so a real departure date `DD/MM` is known), AND
   2) Their **Full Name / Year of Birth** (or passport photo / explicit confirmation of the proposed departure date).
 - Never use `SEAT_SELECTION` for non-bus services (like standalone E-visa, Fast Track, or Motorbike rental).
-- In **PHASE 2 - SEAT_SELECTION**:
+- **CRITICAL BUS SEAT LAYOUT & SEAT MAP RULES (NEVER VIOLATE)**:
+  1) **Exact Valid Seats on Bus**:
+     - **Lower Deck (Tầng dưới / Нижний ярус - Odd numbers / Số lẻ)**: `A1, B1, A3, B3, A5, B5, A7, B7, A9, B9`
+     - **Upper Deck (Tầng trên / Верхний ярус - Even numbers / Số chẵn)**: `A2, B2, A4, B4, A6, B6, A8, B8, A10, B10` (and occasionally `A12` - 160cm).
+     - **STRICT BAN**: Seats `A11`, `B11`, and any seat numbered `13` to `20` (such as `A13..A20` or `B12..B20`) **DO NOT EXIST** on the bus! NEVER mention `A20`, `B20`, `A11`, or `B11`, and NEVER draw a text grid of seats (`A1 - A2 ... A20`)!
+  2) **How to Read the Seat Map Image**:
+     - On the seat map image sent by our bus dispatcher:
+       * **Seats marked with YELLOW lines / crosses (đánh dấu màu vàng)** are **ALREADY BOOKED / OCCUPIED (đã có người ngồi / заняты)** — customers **CANNOT** select them!
+       * **Unmarked WHITE seats (ô màu trắng không bị gạch)** are **AVAILABLE (còn trống / свободны)** — customers can ONLY choose unmarked white seats!
+     - If a `CURRENT SEAT MAP STATUS` block is provided in the prompt, you MUST strictly use its `AVAILABLE SEATS` and `BOOKED SEATS` lists!
+     - If the customer chooses a seat that is in `BOOKED SEATS` (already marked in yellow, e.g. `A3`) or a non-existent seat (e.g. `A11`, `B11`, `A20`), **DO NOT accept their choice**, set `extracted_data.ghe_chon = ""`, stay in `current_phase = "SEAT_SELECTION"`, politely explain that the seat is already occupied (marked in yellow) or invalid, and list the `AVAILABLE SEATS` so they can choose another seat!
+- In **PHASE 2 - SEAT_SELECTION** (when first entering this phase before seat map is sent):
   - Warmly acknowledge the customer's actual details.
   - Present the confirmed booking summary using ONLY the real details provided by the customer:
     - 👤 Full Name & Year of Birth (from customer's reply)
@@ -317,10 +328,10 @@ PHASE 2 - SEAT_SELECTION (ONLY AFTER CUSTOMER REPLIES WITH THEIR BOOKING DETAILS
 
 PHASE 3 - PAYMENT:
 - Triggered when:
-  1) A seat is chosen (e.g. A1, B1, A10, etc.)
+  1) A VALID, AVAILABLE seat is chosen (must be in `A1..A10, B1..B10, A12` and NOT in `BOOKED SEATS`!)
   2) OR customer asks how to pay / asks for QR code / bank transfer (e.g. "Как оплатить?", "QR", "Thanh toán như thế nào?", "How to pay?", "Account number", "реквизиты", "оплата").
 - Set `current_phase = "PAYMENT"`.
-- Provide the official company payment details (translated to the customer's language):
+- IMPORTANT: In `PHASE 3 - PAYMENT`, the customer has ALREADY chosen their seat — so NEVER say "Please wait while I check seat availability and send you the seat map" again! Instead, confirm their chosen seat (`extracted_data.ghe_chon`), summarize their booking details with the official website package price (`4,400,000 VND` single / `5,400,000 VND` multi for Cambodia Moc Bai 90D; `2,000,000 VND` for Laos Bo Y 45D; `2,800,000 VND` single / `3,800,000 VND` multi for Laos Bo Y 90D), and provide the official company payment details (translated to the customer's language):
   • In Russian:
     "Пожалуйста, выберите удобный способ оплаты:
 
@@ -433,11 +444,12 @@ async def call_groq_fallback(messages):
     url = "https://api.groq.com/openai/v1/chat/completions"
     
     SCHEMA_DIRECTIVE = """
-CRITICAL BOOKING DIRECTIVE:
+CRITICAL BOOKING & SEAT MAP DIRECTIVE:
 - NEVER invent or hallucinate customer names (like Дмитрий), birth years (like 1995), or dates!
-- When a customer first clicks a website link or asks about a package without providing their Visa Expiry Date / Departure Date and Full Name, stay in current_phase = "CONSULTING", confirm the package & price, and ask them for their booking details (1. Nationality, 2. Visa expiry date or desired departure date, 3. Full Name & Year of birth, 4. Pickup point: 40 Hon Chong 21:30 or 04 Tran Phu 21:15, 5. Contact phone number).
+- Bus ONLY has seats A1 to A10 and B1 to B10 (plus occasionally A12). NEVER mention A11, B11, A20, or B20, and NEVER draw a fake text seat map!
+- Seats marked in YELLOW on the seat map (listed in BOOKED SEATS) are ALREADY OCCUPIED. If the customer selects a booked seat (or non-existent seat), reject it, set extracted_data.ghe_chon = "", stay in SEAT_SELECTION, and list the AVAILABLE SEATS!
+- Do NOT re-ask for customer details (Name, Nationality, Date, Pickup, Phone) if they are already present in ALREADY COLLECTED CUSTOMER BOOKING DATA!
 - ONLY set current_phase = "SEAT_SELECTION" AFTER the customer has replied with their departure/expiry date and name for a bus/visarun trip!
-- In SEAT_SELECTION, end your response with: "Пожалуйста, подождите немного — я проверю свободные места в автобусе на [дата] и отправлю вам схему свободных мест для выбора через несколько минут! 🚌" (or translated to customer's language).
 
 OUTPUT SCHEMA: You MUST return strictly a JSON object with these EXACT keys:
 {
@@ -648,8 +660,21 @@ def extract_date_and_nationality_from_history(history_messages: list[dict]):
     return expiry_date, destination, visa_type
 
 
-async def process_chat(history_messages: list[dict], customer_profile: dict | None = None) -> ChatResponse:
-    recent_history = history_messages[-8:]
+VALID_BUS_SEATS_SET = {
+    "A1", "B1", "A3", "B3", "A5", "B5", "A7", "B7", "A9", "B9",
+    "A2", "B2", "A4", "B4", "A6", "B6", "A8", "B8", "A10", "B10", "A12"
+}
+LOWER_DECK_LIST = ["A1", "B1", "A3", "B3", "A5", "B5", "A7", "B7", "A9", "B9"]
+UPPER_DECK_LIST = ["A2", "B2", "A4", "B4", "A6", "B6", "A8", "B8", "A10", "B10"]
+
+
+async def process_chat(
+    history_messages: list[dict],
+    customer_profile: dict | None = None,
+    saved_data: CustomerData | None = None,
+    seat_map_info: dict | None = None,
+) -> ChatResponse:
+    recent_history = history_messages[-16:]
 
     # 1. Tìm ngày hết hạn visa và tính ngày đi bằng Python
     expiry_date, destination, visa_type = extract_date_and_nationality_from_history(history_messages)
@@ -752,15 +777,16 @@ async def process_chat(history_messages: list[dict], customer_profile: dict | No
     
     # Kiểm tra ký tự tiếng Việt thực tế từ người dùng (không tính tag hệ thống)
     has_real_vietnamese = bool(re.search(r'[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]', clean_user_text_lower)) or any(re.search(r'\b' + re.escape(w) + r'\b', clean_user_text_lower) for w in ["chào", "xin chào", "giá", "vé", "lào", "bao nhiêu", "đi", "xe", "tôi", "cho tôi", "sơ đồ", "ghế", "hết hạn", "ngày", "đón", "ở đâu"])
+    has_cyrillic = bool(re.search(r'[а-яё]', clean_user_text_lower))
     
-    if re.search(r'[а-яё]', clean_user_text_lower) or is_russian_nat or has_russian_name or (has_prev_russian and not has_real_vietnamese):
+    if has_real_vietnamese and not has_cyrillic:
+        lang_code = "vi"
+    elif has_cyrillic or is_russian_nat or has_russian_name or (has_prev_russian and not has_real_vietnamese):
         lang_code = "ru"
     elif re.search(r'[\uac00-\ud7a3]', clean_user_text_lower) or bool(re.search(r'\b(kr|korea|korean|hàn quốc)\b', clean_user_text_lower)):
         lang_code = "ko"
     elif re.search(r'[\u4e00-\u9fff]', clean_user_text_lower) or bool(re.search(r'\b(cn|china|chinese|trung quốc)\b', clean_user_text_lower)):
         lang_code = "zh"
-    elif has_real_vietnamese:
-        lang_code = "vi"
     elif customer_profile:
         prof_nat = (customer_profile.get("nationality") or "").lower()
         if any(r in prof_nat for r in ["nga", "russia", "belarus", "kazakh", "ukrain"]):
@@ -816,10 +842,53 @@ async def process_chat(history_messages: list[dict], customer_profile: dict | No
         except Exception as e:
             print(f"⚠️ Lỗi định dạng profile khách cũ: {e}")
 
+    # === SAVED BOOKING DATA & SEAT MAP AVAILABILITY CONTEXT ===
+    saved_data_context = ""
+    if saved_data:
+        sd_lines = []
+        if getattr(saved_data, "ho_ten", ""): sd_lines.append(f"- Full Name (ho_ten): {saved_data.ho_ten}")
+        if getattr(saved_data, "nam_sinh", ""): sd_lines.append(f"- Birth Year (nam_sinh): {saved_data.nam_sinh}")
+        if getattr(saved_data, "quoc_tich", ""): sd_lines.append(f"- Nationality (quoc_tich): {saved_data.quoc_tich}")
+        if getattr(saved_data, "ngay_het_han_visa", ""): sd_lines.append(f"- Visa Expiry Date (ngay_het_han_visa): {saved_data.ngay_het_han_visa}")
+        if getattr(saved_data, "ngay_khoi_hanh", ""): sd_lines.append(f"- Departure Date (ngay_khoi_hanh): {saved_data.ngay_khoi_hanh}")
+        if getattr(saved_data, "diem_don", ""): sd_lines.append(f"- Pickup Point (diem_don): {saved_data.diem_don}")
+        if getattr(saved_data, "so_dien_thoai", ""): sd_lines.append(f"- Phone Number (so_dien_thoai): {saved_data.so_dien_thoai}")
+        if getattr(saved_data, "loai_visa", ""): sd_lines.append(f"- Package / Visa Type (loai_visa): {saved_data.loai_visa}")
+        if sd_lines:
+            saved_data_context = (
+                "\nALREADY COLLECTED CUSTOMER BOOKING DATA (DO NOT RE-ASK FOR THESE DETAILS — PRESERVE THEM IN extracted_data!):\n"
+                + "\n".join(sd_lines)
+            )
+
+    seat_map_context = ""
+    if seat_map_info and (seat_map_info.get("booked_seats") or seat_map_info.get("available_seats")):
+        b_seats = seat_map_info.get("booked_seats") or []
+        a_seats = seat_map_info.get("available_seats") or []
+        low_a = [s for s in LOWER_DECK_LIST if s in a_seats]
+        upp_a = [s for s in UPPER_DECK_LIST if s in a_seats]
+        seat_map_context = (
+            f"\nCRITICAL CURRENT SEAT MAP STATUS (FROM OFFICIAL BUS SEAT MAP IMAGE):\n"
+            f"- ❌ **BOOKED / OCCUPIED SEATS (Marked in YELLOW on map — CANNOT BE CHOSEN)**: {', '.join(b_seats) if b_seats else 'None'}\n"
+            f"- ✅ **AVAILABLE SEATS (Unmarked WHITE seats — Customer MUST choose from these)**:\n"
+            f"  + Lower Deck (Tầng dưới / Нижний ярус - Odd): {', '.join(low_a) if low_a else 'Full'}\n"
+            f"  + Upper Deck (Tầng trên / Верхний ярус - Even): {', '.join(upp_a) if upp_a else 'Full'}\n"
+            f"- MANDATORY RULE: If the customer asks which seats are empty, list ONLY the AVAILABLE SEATS above. If the customer selects any seat in BOOKED SEATS ({', '.join(b_seats)}), you MUST politely inform them that seat is already occupied (marked in yellow on the map), set `extracted_data.ghe_chon = \"\"`, stay in `SEAT_SELECTION`, and ask them to pick one of the AVAILABLE SEATS!"
+        )
+    else:
+        seat_map_context = (
+            "\nCRITICAL BUS SEAT LAYOUT RULE:\n"
+            "- The bus ONLY has Lower Deck (Odd: A1, B1, A3, B3, A5, B5, A7, B7, A9, B9) and Upper Deck (Even: A2, B2, A4, B4, A6, B6, A8, B8, A10, B10, and occasionally A12).\n"
+            "- Seats A11, B11, and 13..20 (like A20, B20) DO NOT EXIST! NEVER mention A20 or B20 or draw a text seat map!"
+        )
+
     # Inject contexts into system prompt
     dynamic_prompt = SYSTEM_PROMPT
     if customer_context_prompt:
         dynamic_prompt = dynamic_prompt + "\n\n" + customer_context_prompt
+    if saved_data_context:
+        dynamic_prompt = dynamic_prompt + "\n\n" + saved_data_context
+    if seat_map_context:
+        dynamic_prompt = dynamic_prompt + "\n\n" + seat_map_context
     if rag_context:
         dynamic_prompt = dynamic_prompt + "\n\n" + rag_context
     if route_directive_context:
@@ -852,8 +921,16 @@ async def process_chat(history_messages: list[dict], customer_profile: dict | No
 
     chat_resp = ChatResponse.model_validate_json(content)
 
-    # === PHASE VALIDATION & ANTI-HALLUCINATION GUARD ===
+    # === PHASE VALIDATION, DATA MERGING & SEAT SELECTION GUARD ===
     ext = chat_resp.extracted_data
+
+    # Merge previously collected customer data so fields are never forgotten across turns
+    if saved_data:
+        for field_name in ["ho_ten", "nam_sinh", "quoc_tich", "thanh_pho", "ngay_het_han_visa", "loai_visa", "ngay_khoi_hanh", "diem_don", "so_dien_thoai"]:
+            curr_val = getattr(ext, field_name, "") or ""
+            prev_val = getattr(saved_data, field_name, "") or ""
+            if not curr_val.strip() and prev_val.strip():
+                setattr(ext, field_name, prev_val)
 
     # Validate extracted ngay_khoi_hanh / ngay_het_han_visa so invalid strings like "16/29" are stripped
     if ext.ngay_khoi_hanh:
@@ -874,6 +951,80 @@ async def process_chat(history_messages: list[dict], customer_profile: dict | No
 
     if not ext.ngay_khoi_hanh and smart_dep:
         ext.ngay_khoi_hanh = smart_dep
+
+    # Validate chosen seat (ghe_chon) against valid bus seats and seat_map_info booked_seats
+    raw_seat_match = re.search(r"\b([AB]\d{1,2})\b", (last_user_msg or "").upper())
+    candidate_seat = (ext.ghe_chon or "").strip().upper()
+    if not candidate_seat and raw_seat_match and any(w in (last_user_msg or "").lower() for w in ["chọn", "ghế", "seat", "выбираю", "место", "давай", "хочу", "a1", "a2", "a3", "a4", "a5", "a6", "a7", "a8", "a9", "a10", "b1", "b2", "b3", "b4", "b5", "b6", "b7", "b8", "b9", "b10"]):
+        candidate_seat = raw_seat_match.group(1)
+
+    if candidate_seat:
+        booked_list = [s.upper() for s in (seat_map_info.get("booked_seats", []) if seat_map_info else [])]
+        avail_list = [s.upper() for s in (seat_map_info.get("available_seats", []) if seat_map_info else list(LOWER_DECK_LIST + UPPER_DECK_LIST))]
+        low_avail = [s for s in LOWER_DECK_LIST if s in avail_list]
+        upp_avail = [s for s in UPPER_DECK_LIST if s in avail_list]
+
+        if candidate_seat not in VALID_BUS_SEATS_SET:
+            # Non-existent seat (e.g., A11, B11, A20, B20)
+            ext.ghe_chon = ""
+            chat_resp.current_phase = "SEAT_SELECTION"
+            if lang_code == "vi":
+                chat_resp.reply_message = (
+                    f"⚠️ Ghế **{candidate_seat}** không tồn tại trên xe buýt ạ! Xe giường nằm chỉ có các ghế từ **A1 đến A10** và **B1 đến B10** (không có A11, B11 hay A20).\n\n"
+                    f"✅ **Các ghế màu trắng còn trống bạn có thể chọn:**\n"
+                    f"🟢 **Tầng dưới (số lẻ):** {', '.join(low_avail) if low_avail else 'Hết chỗ'}\n"
+                    f"🔵 **Tầng trên (số chẵn):** {', '.join(upp_avail) if upp_avail else 'Hết chỗ'}\n\n"
+                    f"👉 Vui lòng chọn 1 ghế còn trống trong danh sách trên nhé! 😊"
+                )
+            elif lang_code == "ru":
+                chat_resp.reply_message = (
+                    f"⚠️ Место **{candidate_seat}** не существует в автобусе! В спальном автобусе места только от **A1 до A10** и от **B1 до B10** (мест A11, B11 и A20 нет).\n\n"
+                    f"✅ **Свободные места (белые на схеме), доступные для выбора:**\n"
+                    f"🟢 **Нижний ярус (нечетные):** {', '.join(low_avail) if low_avail else 'Нет мест'}\n"
+                    f"🔵 **Верхний ярус (четные):** {', '.join(upp_avail) if upp_avail else 'Нет мест'}\n\n"
+                    f"👉 Пожалуйста, выберите одно из свободных мест выше! 😊"
+                )
+            else:
+                chat_resp.reply_message = (
+                    f"⚠️ Seat **{candidate_seat}** does not exist on the bus! Our sleeper bus only has seats **A1 to A10** and **B1 to B10** (there is no A11, B11, or A20).\n\n"
+                    f"✅ **Available (white) seats you can choose from:**\n"
+                    f"🟢 **Lower Deck (Odd):** {', '.join(low_avail) if low_avail else 'Full'}\n"
+                    f"🔵 **Upper Deck (Even):** {', '.join(upp_avail) if upp_avail else 'Full'}\n\n"
+                    f"👉 Please choose one of the available seats above! 😊"
+                )
+        elif candidate_seat in booked_list:
+            # Seat is ALREADY BOOKED (marked in yellow on the seat map!)
+            ext.ghe_chon = ""
+            chat_resp.current_phase = "SEAT_SELECTION"
+            if lang_code == "vi":
+                chat_resp.reply_message = (
+                    f"⚠️ Rất tiếc, ghế **{candidate_seat}** đã có người đặt rồi ạ (được đánh dấu **màu vàng** trên sơ đồ)!\n\n"
+                    f"✅ **Các ghế màu trắng hiện đang CÒN TRỐNG bạn có thể chọn:**\n"
+                    f"🟢 **Tầng dưới (số lẻ):** {', '.join(low_avail) if low_avail else 'Hết chỗ'}\n"
+                    f"🔵 **Tầng trên (số chẵn):** {', '.join(upp_avail) if upp_avail else 'Hết chỗ'}\n\n"
+                    f"❌ *(Các ghế đã đặt màu vàng: {', '.join(booked_list)})*\n\n"
+                    f"👉 Bạn vui lòng chọn một ghế màu trắng còn trống trong danh sách trên nhé! 😊"
+                )
+            elif lang_code == "ru":
+                chat_resp.reply_message = (
+                    f"⚠️ К сожалению, место **{candidate_seat}** уже занято (отмечено **желтым цветом** на схеме)!\n\n"
+                    f"✅ **Свободные места (белые, без отметок), которые можно выбрать:**\n"
+                    f"🟢 **Нижний ярус (нечетные):** {', '.join(low_avail) if low_avail else 'Нет мест'}\n"
+                    f"🔵 **Верхний ярус (четные):** {', '.join(upp_avail) if upp_avail else 'Нет мест'}\n\n"
+                    f"❌ *(Занятые места: {', '.join(booked_list)})*\n\n"
+                    f"👉 Пожалуйста, выберите любое свободное (белое) место из списка выше! 😊"
+                )
+            else:
+                chat_resp.reply_message = (
+                    f"⚠️ Sorry, seat **{candidate_seat}** is already occupied (marked in **yellow** on the seat map)!\n\n"
+                    f"✅ **Available (unmarked white) seats you can choose from:**\n"
+                    f"🟢 **Lower Deck (Odd):** {', '.join(low_avail) if low_avail else 'Full'}\n"
+                    f"🔵 **Upper Deck (Even):** {', '.join(upp_avail) if upp_avail else 'Full'}\n\n"
+                    f"❌ *(Occupied seats: {', '.join(booked_list)})*\n\n"
+                    f"👉 Please select one of the available white seats listed above! 😊"
+                )
+        else:
+            ext.ghe_chon = candidate_seat
 
     # Do NOT allow premature jump to SEAT_SELECTION if the customer hasn't provided a valid date yet
     has_valid_date = bool(ext.ngay_khoi_hanh or smart_dep or expiry_date)

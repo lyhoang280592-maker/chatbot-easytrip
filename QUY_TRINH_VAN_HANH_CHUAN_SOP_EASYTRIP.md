@@ -84,9 +84,10 @@ Khi khách hàng liên hệ, nhân viên văn phòng gửi ngay 3 câu hỏi đ�
    * Cú pháp: `Scheme [ngày] + [loại dịch vụ]`
    * *Ví dụ: Scheme 13/09 45D Laos | Scheme 15/09 90D Laos | Scheme 15/09 Mộc Bài*
 2. **Nhận sơ đồ xe** từ Chị Ngọc Cao hoặc đại diện nhà xe Liên Hưng.
-3. **Gửi sơ đồ cho khách và hướng dẫn cấu trúc xe buýt:**
-   * 🟢 **TẦNG DƯỚI (Dãy số LẺ):** Gồm các cabin `A1`, `B1`, `A3`, `B3`, `A5`, `B5`, `A7`, `B7`, `A9`, `B9`, `A11` *(Phía cuối tầng dưới có Nhà vệ sinh WC cạnh A11)*.
-   * 🔵 **TẦNG TRÊN (Dãy số CHẴN):** Gồm các cabin `A2`, `B2`, `A4`, `B4`, `A6`, `B6`, `A8`, `B8`, `A10`, `B10`, `A12` *(Ghế A12 chiều dài 160 cm, tất cả các ghế còn lại dài 180 cm)*.
+3. **Gửi sơ đồ cho khách và hướng dẫn cấu trúc xe buýt chuẩn:**
+   * 🟢 **TẦNG DƯỚI (Нижний ярус - Dãy số LẺ):** Gồm 10 cabin: `A1`, `B1`, `A3`, `B3`, `A5`, `B5`, `A7`, `B7`, `A9`, `B9` *(Cuối tầng dưới là Nhà vệ sinh WC, KHÔNG có ghế A11 hay B11 cho khách ngồi)*.
+   * 🔵 **TẦNG TRÊN (Верхний ярус - Dãy số CHẴN):** Gồm 10 cabin: `A2`, `B2`, `A4`, `B4`, `A6`, `B6`, `A8`, `B8`, `A10`, `B10` và thi thoảng có thêm `A12` *(Ghế A12 chiều dài 160 cm, tất cả các ghế A1-A10 và B1-B10 dài 180 cm. Tuyệt đối KHÔNG có các ghế từ 13 đến 20 như A20, B20)*.
+   * 🟡 **Quy ước trên sơ đồ ảnh của điều hành xe (Chị Ngọc Cao):** Các ghế **bị gạch/đánh dấu màu vàng** là ghế **ĐÃ CÓ NGƯỜI NGỒI (đã đặt)**. Các ô **màu trắng không bị gạch** là ghế **CÒN TRỐNG**. Khách chỉ được chọn các ghế màu trắng còn trống.
    * **Phân bổ dãy:** Dãy **A** nằm bên trái (phía sau ghế tài xế), Dãy **B** nằm bên phải (phía cửa lên xuống).
 4. **Khóa ghế trên Telegram:** Ngay khi khách chọn số ghế, gửi lệnh vào đúng Topic chuyến xe tương ứng:
    ```text

@@ -184,8 +184,12 @@ Step 1: Date & Route Matching
   * Hạn visa cũ bắt buộc phải rơi vào Thứ 2, Thứ 4, hoặc Thứ 6.
 
 Step 2: Seat Map & Locking (Sơ đồ ghế & Khóa chỗ)
-- Show the interactive seat map (A1-A20, B1-B20) to the customer to let them choose their seat.
-- Once a seat is selected, execute the Telegram "Lock ghế" command:
+- **EXACT BUS SEAT LAYOUT (NEVER INVENT A11, B11, OR A13..A20 / B12..B20)**:
+  * The sleeper bus ONLY has seats from **A1 to A10** and **B1 to B10** (plus occasionally **A12** at the back of the upper deck, 160cm).
+  * **Lower Deck (Tầng dưới / Нижний ярус - Odd numbers / Số lẻ)**: `A1, B1, A3, B3, A5, B5, A7, B7, A9, B9`. (Note: There is NO passenger seat A11 or B11; the back of the lower deck has the WC toilet).
+  * **Upper Deck (Tầng trên / Верхний ярус - Even numbers / Số chẵn)**: `A2, B2, A4, B4, A6, B6, A8, B8, A10, B10` (and sometimes `A12`).
+  * **Yellow / Colored Marks on Seat Map**: Seats marked with yellow highlighter lines or crosses on the seat map image are **ALREADY BOOKED / OCCUPIED (đã có người ngồi)**. Customers can ONLY choose **unmarked white seats (ghế màu trắng còn trống)**!
+- Once a valid available seat is selected, execute the Telegram "Lock ghế" command:
   Format: [Ngày khởi hành] - [Loại dịch vụ] [Tên khách] [Số ghế] [Điểm đón] [Nguồn] [Trạng thái: Unpaid].
 - Keep the seat locked while waiting for payment.
 
