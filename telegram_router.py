@@ -93,12 +93,15 @@ def normalize_date(date_str: str) -> str:
             day, month = numeric_parts[0], numeric_parts[1]
             
         if day and month:
-            if len(day) == 1: day = "0" + day
-            if len(month) == 1: month = "0" + month
-            # Chỉ lấy 2 chữ số cuối nếu lỡ lấy nhầm năm
-            return f"{day[-2:]}/{month[-2:]}"
+            try:
+                d_val, m_val = int(day[-2:]), int(month[-2:])
+                if not (1 <= d_val <= 31 and 1 <= m_val <= 12):
+                    return ""
+                return f"{d_val:02d}/{m_val:02d}"
+            except Exception:
+                return ""
             
-    return str(date_str)
+    return ""
 
 
 def parse_topic_name(name: str) -> tuple[str, str]:
@@ -992,8 +995,24 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
     cust_id = cust_profile.get("customer_id") if cust_profile else None
 
 
+    # Nếu khách bấm link câu mẫu mới từ Website (ví dụ: "Здравствуйте, Easy Trip & Visa! ..."), làm mới lịch sử phiên để không bị nhiễu dữ liệu cũ
+    text_clean_lower = text.strip().lower()
+    website_prefill_prefixes = (
+        "здравствуйте, easy trip",
+        "здравствуйте! я хочу",
+        "hi easy trip",
+        "hello easy trip",
+        "xin chào easy trip",
+        "안녕하세요, easy trip",
+        "مرحباً easy trip",
+    )
+    if text_clean_lower.startswith(website_prefill_prefixes):
+        memory_store[session_id] = []
+        memory_store.pop(f"{session_id}_data", None)
+    else:
+        load_session_history(session_id)
+
     log_message(user_id, "Telegram", "User", text, customer_id=cust_id)
-    load_session_history(session_id)
     
     # Ghi nhận tên hiển thị & thời gian cập nhật cuối
     if update.effective_user:
@@ -1149,14 +1168,13 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
             should_send_map = True
         
         user_text_lower = text.lower()
-        reply_lower = reply.lower()
         map_keywords = [
-            "sơ đồ", "seat map", "chờ", "ghế trống", "vị trí", "chỗ", "sơ đồ ghế", "chọn ghế",
-            "map", "seat selection", "select seat", "available seats",
-            "карта мест", "выбор места", "схема мест", "свободные места", "карта",
-            "좌석", "좌석 배치도", "배치도"
+            "sơ đồ", "seat map", "ghế trống", "sơ đồ ghế", "chọn ghế",
+            "seat selection", "select seat", "available seats",
+            "карта мест", "выбор места", "схема мест", "свободные места",
+            "좌석 배치도", "배치도"
         ]
-        if any(kw in user_text_lower or kw in reply_lower for kw in map_keywords):
+        if any(kw in user_text_lower for kw in map_keywords):
             should_send_map = True
 
         if should_send_map:

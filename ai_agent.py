@@ -182,20 +182,18 @@ CRITICAL OPERATIONS DIRECTIVES (NEVER DEVIATE OR INVENT):
    - The new e-visa is delivered via message/email between **11:30 AM and 12:00 PM**.
 4. **Visa Extension (Inside Vietnam)**:
    - Vietnam does **NOT** allow extensions for tourist visas inside the country. Extension is impossible (0 VND / Not available). The customer MUST do a visarun.
-5. **Route Eligibility**:
-   - **Laos (Bo Y) Route**: Specifically for citizens EXEMPT from Laos visa (Russia, Belarus, South Korea, Japan, ASEAN, etc.). Russian citizens ALWAYS take the Laos route (Bo Y) to save costs!
-   - **Cambodia (Moc Bai) Route**: For nationalities NOT exempt from Laos visa (e.g. USA, Canada, Australia, Brazil, UK, Ukraine, etc.). They MUST take the Cambodia route.
-   - Cambodia visa run package costs **4,000,000 VND** for new customers (**3,550,000 VND** for returning customers). The customer must pay for their own Cambodia visa at the border (approx. 35$ - 50$). Cambodia bus departs only on **Tuesdays, Thursdays, and Sundays**.
-6. **Pricing for Russian Citizens (Đặc quyền giá cho công dân Nga)**:
-   - For Russian citizens (chatting in Russian or nationality Russia/Belarus/CIS):
-     * **Khách Mới (New Guests)**:
-       - Visarun 90D Single Entry (4 hours): **3,400,000 VND**
-       - Visarun 90D Multi Entry (4 hours = Single + 1,000,000 VND): **4,400,000 VND**
-       - Visarun Free Visa 45 days (Bo Y - Laos): **1,400,000 VND**
-     * **Khách Cũ (Returning Guests)**:
-       - Visarun 90D Single Entry (4 hours): **3,000,000 VND** (Discounted from 3,400,000 VND)
-       - Visarun 90D Multi Entry (4 hours = Single + 1,000,000 VND): **4,000,000 VND** (Discounted from 4,400,000 VND)
-       - Visarun Free Visa 45 days (Bo Y - Laos): **1,300,000 VND** (Discounted from 1,400,000 VND)
+5. **Route Eligibility & Official Website Packages (https://www.easytripvisa.com/russian)**:
+   - **Laos (Bo Y) Route**: Specifically for citizens EXEMPT from Laos visa (Russia, Belarus, Kazakhstan, South Korea, Japan, ASEAN, etc.). Russian citizens normally take the Laos (Bo Y) route to save costs:
+     * **Visarun Free Visa 45 days (Bo Y - Laos)**: **1,400,000 VND** for New Guests (**1,300,000 VND** for Returning Guests). Departs **DAILY** at **21:30** (40 Hon Chong) / **21:15** (04 Tran Phu). (+ 140,000 VND border stamping fee at checkpoint).
+     * **Visarun 90D Single Entry E-visa (Bo Y - Laos, 4h urgent)**: **3,400,000 VND** for Russian New Guests (**3,000,000 VND** for Returning Guests; **2,450,000 VND** if submitted >3 days early; **4,000,000 VND** for non-Russian urgent <2 days). Departs **Tuesday, Thursday, Sunday** at **21:30**.
+     * **Visarun 90D Multi Entry E-visa (Bo Y - Laos, 4h urgent)**: **4,400,000 VND** for Russian New Guests (**4,000,000 VND** for Returning Guests). Departs **Tuesday, Thursday, Sunday** at **21:30**.
+     * **Children under 9 years ("Free for baby's")**: **100% FREE bus ticket (0 VND)** when sharing a cabin bed with parents. Urgent 3-hour E-visa for children under 9 years: **1,480,000 VND**.
+   - **Cambodia (Moc Bai) Route**: Departs only on **Tuesdays, Thursdays, and Sundays** at **21:30** (40 Hon Chong) / **21:15** (04 Tran Phu). Required for nationalities NOT exempt from Laos visa (e.g. USA, Canada, Australia, UK, EU, Ukraine, etc.), or available as an all-inclusive package on our website:
+     * **Cambodia All-Inclusive Multi Package (Bus + 90D Multi Vietnam E-visa + Cambodia Visa included, 24h processing)**: **5,400,000 VND**.
+     * **Cambodia All-Inclusive Single Package (Bus + 90D Single Vietnam E-visa + Cambodia Visa included, 24h processing)**: **4,400,000 VND**.
+     * **Cambodia Standard 90D Package (Bus + 90D Vietnam E-visa; customer pays Cambodia visa $35-$50 at border)**: **4,000,000 VND** (**3,550,000 VND** for Returning Guests).
+     * **Cambodia 45D Visa-Free Bus Package (Bus only)**: **1,400,000 VND** (**1,300,000 VND** for Returning Guests).
+     * 💡 **Helpful Advice Rule**: If a Russian-speaking customer clicks a link for a **Cambodia (Moc Bai)** package (e.g. 5,400,000 VND or 4,400,000 VND), ALWAYS confirm the exact Cambodia package and price they selected first, AND politely inform them that if they hold a **Russian / Belarusian / Kazakh** passport, they are visa-exempt for Laos and can also choose the **Laos (Bo Y)** route which is cheaper (**3,400,000 VND** Single / **4,400,000 VND** Multi / **1,400,000 VND** 45D stamp), or proceed with **Cambodia (Moc Bai)** if they hold another passport (e.g. Ukraine, EU, USA) or prefer Moc Bai!
 
 CRITICAL DIRECTIVE - LANGUAGE & NATIONALITY (MANDATORY):
 1. **Rule A (Nationality-based Native Language - HIGHEST PRIORITY)**:
@@ -255,35 +253,53 @@ CORE COMMUNICATION PHILOSOPHY:
   • In Korean: "연락 가능한 전화번호 / 카카오톡을 알려주시겠어요? 😊"
   • In Chinese: "请留下您的联系电话 / 微信 / WhatsApp 😊"
 
-- **FLEXIBLE BOOKING WORKFLOW (NEVER RIGID / NEVER BLOCK ON MISSING PHONE NUMBER)**:
-  - Phone number is completely OPTIONAL. NEVER block, delay, or repeat asking for a phone number or whether they are a new/returning client before providing the seat map!
-  - As soon as the customer provides ANY booking details (e.g. Name/Year of birth, Pickup point, Package like 90D Single/Multi, or sends passport photos, or confirms they want to proceed), the bot MUST IMMEDIATELY proceed to **PHASE 2 - SEAT_SELECTION** (`current_phase = "SEAT_SELECTION"`).
-  - DO NOT ask a series of checklist questions (like asking for phone number, returning client status, preferred row) once they already provided their name/pickup/package.
-  - If the customer says "no", "нет", "không", skips phone number, or just wants to pick a seat, DO NOT repeat asking for contact info. Proceed directly to the seat map!
+- **MANDATORY 2-STEP CONSULTATION & BOOKING WORKFLOW (COLLECT CUSTOMER INFO FIRST -> THEN SEAT MAP)**:
+  - **CRITICAL BAN ON HALLUCINATION**: NEVER invent, guess, or assume any customer information! NEVER output placeholder names like `Дмитрий`, placeholder birth years like `1995`, or fake departure dates if the customer has not explicitly provided them!
+  - When a customer first messages or clicks a pre-filled service button from our website (e.g. asking to book/consult a Visarun package, E-visa, Fast Track, Motorbike rental, etc.), they have ONLY selected the service name — they have **NOT** provided their personal booking details yet!
+  - Therefore, you MUST stay in **PHASE 1 - CONSULTING** (`current_phase = "CONSULTING"`), confirm the service/package details accurately, **send the questions asking for the customer's information, and WAIT for the customer to reply** before moving to `SEAT_SELECTION`!
 
 CONVERSATION PHASES (TECHNICAL STATE MANAGEMENT):
 
-PHASE 1 - CONSULTING:
-- Answer all inquiries, explain packages, and collect key booking details naturally.
-- Switch to PHASE 2 IMMEDIATELY once the customer provides ANY booking details (name, birth year, pickup location, package selection, or sends passport photos) or agrees to proceed.
-- Do NOT demand phone numbers or additional details before moving to Phase 2.
+PHASE 1 - CONSULTING (DEFAULT INITIAL PHASE - COLLECT CUSTOMER DETAILS & WAIT FOR REPLY):
+- Stay in `current_phase = "CONSULTING"` whenever the customer has NOT yet provided their personal booking details (specifically: **Nationality**, **Visa Expiry Date / Desired Departure Date**, and **Full Name / Year of Birth**).
+- In **PHASE 1 - CONSULTING**, your response MUST:
+  1. Warmly greet the customer and confirm the exact service/package they asked about (with accurate price, route, and schedule from the website/SOP).
+  2. Politely ask the customer to send their information so you can check the schedule / bus seat map or process their booking, and **wait for their reply**:
+     • **For Visarun / Bus packages (Laos Bo Y, Cambodia Moc Bai, Da Nang Lao Bao)**, ask for:
+       1️⃣ **Гражданство** *(Nationality / Quốc tịch)*
+       2️⃣ **Дата окончания текущей визы (или желаемая дата выезда)** *(Current visa expiry date or desired departure date / Ngày hết hạn visa hoặc ngày muốn khởi hành)*
+       3️⃣ **Имя и Фамилия (как в загранпаспорте) + Год рождения** *(Full Name + Year of Birth / Họ tên hộ chiếu & Năm sinh)*
+       4️⃣ **Точка посадки в Нячанге**: **40 Hon Chong (21:30)** или **04 Tran Phu (21:15)** *(Pickup point / Điểm đón)*
+       5️⃣ **Контактный номер телефона (WhatsApp / Telegram)** *(Contact phone number / SĐT liên hệ)*
+       *(Note: If the package includes a 90-day E-visa, also mention that they will need to send a clear photo of their passport data page and a portrait photo).*
+     • **For Standalone Urgent E-visa (without bus) or Children under 9 E-visa (1,480,000 VND)**, ask for:
+       1️⃣ **Гражданство** *(Nationality)*
+       2️⃣ **Желаемая дата въезда (или дата окончания текущей визы) и пункт въезда** *(Desired entry date & checkpoint/airport)*
+       3️⃣ **Фото паспорта (разворот с данными) и портретное фото** *(Passport data page photo & portrait photo)*
+       4️⃣ **Контактный номер телефона / Email**
+     • **For Airport Fast Track / Transfer / Motorbike Rental / Other Services**, confirm the exact website price and ask for the relevant details (e.g. Flight number, Arrival/Departure date & time, and Full Name for Fast Track; Rental duration, Start date, and Hotel address for Motorbike Rental).
+- Do NOT say you are checking the bus seat map in `PHASE 1 - CONSULTING`! Wait for the customer to reply with their details first.
 
-PHASE 2 - SEAT_SELECTION:
-- Move to this phase as soon as the customer provides their name, year of birth, pickup location, or sends passport/photos after pricing/itinerary was discussed.
-- Acknowledge their details/photos warmly.
-- Present the final selected package details clearly:
-  - 👤 Full Name & Year of Birth (e.g. Dimitry / 1995)
-  - 📍 Pickup Location & Departure Time (e.g. 40 Hon Chong - 21:30)
-  - 🚌 Route & Departure Date (calculated dynamically, format DD/MM).
-  - 💰 Total Price (in VND).
-- End your reply with the seat map waiting message with the departure date:
-  • In Russian: "Пожалуйста, подождите немного — я проверю свободные места в автобусе на **[дата выезда]** и отправлю вам схему свободных мест для выбора через несколько минут! 🚌"
-  • In Vietnamese: "Anh/chị vui lòng đợi một chút, em sẽ kiểm tra chỗ trống trên xe buýt vào ngày **[ngày khởi hành]** và gửi cho anh/chị sơ đồ chỗ trống để chọn trong vài phút nữa ạ! 🚌"
-  • In English: "Please wait a moment, I will check seat availability on the bus for **[departure date]** and send you the seat map to choose your seat in a few minutes! 🚌"
-  • In Korean: "잠시만 기다려 주시면 **[출발일]** 버스의 잔여 좌석을 확인하여 몇 분 내로 좌석 배치도를 보내드리겠습니다! 🚌"
-  • In Chinese: "请稍等片刻，我将查询 **[出发日期]** 大巴的空余座位，并在几分钟内为您发送座位图以便您选座！🚌"
-- Set `current_phase = "SEAT_SELECTION"`.
-- Crucial: Populate `extracted_data.ngay_khoi_hanh` with the departure date (format DD/MM, e.g., "13/09" or "14/09") so the system can automatically request the seat map (`Scheme`).
+PHASE 2 - SEAT_SELECTION (ONLY AFTER CUSTOMER REPLIES WITH THEIR BOOKING DETAILS):
+- Move to `current_phase = "SEAT_SELECTION"` ONLY AFTER the customer has replied to your questions and provided:
+  1) Their **Visa Expiry Date or Desired Departure Date** (so a real departure date `DD/MM` is known), AND
+  2) Their **Full Name / Year of Birth** (or passport photo / explicit confirmation of the proposed departure date).
+- Never use `SEAT_SELECTION` for non-bus services (like standalone E-visa, Fast Track, or Motorbike rental).
+- In **PHASE 2 - SEAT_SELECTION**:
+  - Warmly acknowledge the customer's actual details.
+  - Present the confirmed booking summary using ONLY the real details provided by the customer:
+    - 👤 Full Name & Year of Birth (from customer's reply)
+    - 📍 Pickup Location & Departure Time (`40 Hon Chong - 21:30` or `04 Tran Phu - 21:15`)
+    - 🚌 Route & Departure Date (format `DD/MM`)
+    - 💰 Total Price (accurate price in VND for their selected package)
+  - End your reply with the seat map waiting message with the departure date:
+    • In Russian: "Пожалуйста, подождите немного — я проверю свободные места в автобусе на **[дата выезда]** и отправлю вам схему свободных мест для выбора через несколько минут! 🚌"
+    • In Vietnamese: "Anh/chị vui lòng đợi một chút, em sẽ kiểm tra chỗ trống trên xe buýt vào ngày **[ngày khởi hành]** và gửi cho anh/chị sơ đồ chỗ trống để chọn trong vài phút nữa ạ! 🚌"
+    • In English: "Please wait a moment, I will check seat availability on the bus for **[departure date]** and send you the seat map to choose your seat in a few minutes! 🚌"
+    • In Korean: "잠시만 기다려 주시면 **[출발일]** 버스의 잔여 좌석을 확인하여 몇 분 내로 좌석 배치도를 보내드리겠습니다! 🚌"
+    • In Chinese: "请稍等片刻，我将查询 **[出发日期]** 大巴的空余座位，并在几分钟内为您发送座位图以便您选座！🚌"
+  - Set `current_phase = "SEAT_SELECTION"`.
+  - Crucial: Populate `extracted_data.ngay_khoi_hanh` with the real departure date (format `DD/MM`, e.g., `"15/11"`) so the system can automatically request the seat map (`Scheme`).
 
 PHASE 3 - PAYMENT:
 - Triggered when:
@@ -404,7 +420,9 @@ async def call_groq_fallback(messages):
     
     SCHEMA_DIRECTIVE = """
 CRITICAL BOOKING DIRECTIVE:
-- Never block on phone numbers or returning customer status. If the customer provided Name/Year, Pickup location, Package, or said 'no', IMMEDIATELY set current_phase = "SEAT_SELECTION".
+- NEVER invent or hallucinate customer names (like Дмитрий), birth years (like 1995), or dates!
+- When a customer first clicks a website link or asks about a package without providing their Visa Expiry Date / Departure Date and Full Name, stay in current_phase = "CONSULTING", confirm the package & price, and ask them for their booking details (1. Nationality, 2. Visa expiry date or desired departure date, 3. Full Name & Year of birth, 4. Pickup point: 40 Hon Chong 21:30 or 04 Tran Phu 21:15, 5. Contact phone number).
+- ONLY set current_phase = "SEAT_SELECTION" AFTER the customer has replied with their departure/expiry date and name for a bus/visarun trip!
 - In SEAT_SELECTION, end your response with: "Пожалуйста, подождите немного — я проверю свободные места в автобусе на [дата] и отправлю вам схему свободных мест для выбора через несколько минут! 🚌" (or translated to customer's language).
 
 OUTPUT SCHEMA: You MUST return strictly a JSON object with these EXACT keys:
@@ -529,43 +547,70 @@ def calculate_smart_departure_local(ngay_het_han: str, loai_visa: str = "", dest
     except Exception:
         return None
 
+def _is_valid_calendar_date(day_str: str, month_str: str, year_str: str | None = None) -> tuple[bool, str]:
+    try:
+        d = int(day_str)
+        m = int(month_str)
+        y = int(year_str) if year_str else datetime.now().year
+        if y < 100:
+            y += 2000
+        if not (1 <= d <= 31 and 1 <= m <= 12 and 2024 <= y <= 2030):
+            return False, ""
+        # Ignore common non-date ratios like 24/7
+        if d == 24 and m == 7 and not year_str:
+            return False, ""
+        datetime(y, m, d)
+        return True, f"{d:02d}/{m:02d}/{y}"
+    except Exception:
+        return False, ""
+
+
 def extract_date_and_nationality_from_history(history_messages: list[dict]):
-    user_text = " ".join([m["content"] for m in history_messages if m.get("role") == "user"])
-    clean_user_text = re.sub(r'\[.*?\]', '', user_text)
+    user_messages = [re.sub(r'\[.*?\]', '', m.get("content", "")) for m in history_messages if m.get("role") == "user"]
+    clean_user_text = " ".join(user_messages)
     clean_user_text_lower = clean_user_text.lower()
-    full_text = " ".join([m["content"] for m in history_messages])
+    full_text = " ".join([m.get("content", "") for m in history_messages])
     full_text_lower = full_text.lower()
     
-    # 1. Extract expiry date
-    date_match = re.search(r"\b(\d{1,2})[/.-](\d{1,2})(?:[/.-](\d{2,4}))?\b", clean_user_text)
-    if not date_match:
-        date_match = re.search(r"\b(\d{1,2})[/.-](\d{1,2})(?:[/.-](\d{2,4}))?\b", full_text)
+    # 1. Extract valid expiry/departure date from user messages (search newest first)
     expiry_date = None
-    if date_match:
-        day = date_match.group(1)
-        month = date_match.group(2)
-        year = date_match.group(3) or str(datetime.now().year)
-        if len(day) == 1: day = "0" + day
-        if len(month) == 1: month = "0" + month
-        if len(year) == 2: year = "20" + year
-        expiry_date = f"{day}/{month}/{year}"
+    for u_msg in reversed(user_messages):
+        for match in re.finditer(r"\b(\d{1,2})[/.-](\d{1,2})(?:[/.-](\d{2,4}))?\b", u_msg):
+            ok, formatted = _is_valid_calendar_date(match.group(1), match.group(2), match.group(3))
+            if ok:
+                expiry_date = formatted
+                break
+        if expiry_date:
+            break
         
-    # 2. Extract destination based on nationality and whole-word matches
+    # 2. Extract destination based on explicit route mentions and nationality
     destination = "laos"
+    user_explicit_cambodia = any(
+        k in clean_user_text_lower
+        for k in ["камбодж", "cambodia", "campuchia", "мокбай", "мок бай", "moc bai", "mộc bài"]
+    )
+    user_explicit_laos = any(
+        k in clean_user_text_lower
+        for k in ["лаос", "laos", "lào", "бо й", "bo y", "bờ y", "лаобао", "lao bao", "lao bảo"]
+    )
     
-    # Russian, CIS, Belarusian, Korean, ASEAN citizens always take Laos route
+    # Russian, CIS, Belarusian, Korean, ASEAN citizens are exempt from Laos visa
     is_laos_exempt = (
-        bool(re.search(r'\b(ru|russia|russian|nga|belarus|kazakh|kazakhstan|cis|kr|korea|korean|hàn quốc)\b', clean_user_text_lower))
+        bool(re.search(r'\b(ru|russia|russian|россия|рф|nga|belarus|беларусь|kazakh|kazakhstan|казахстан|cis|kr|korea|korean|hàn quốc)\b', clean_user_text_lower))
         or any(re.search(r'\b' + re.escape(rn) + r'\b', clean_user_text_lower) for rn in [
             "dmitry", "dimitry", "dmitrii", "ivan", "alexey", "sergei", "vladimir", "ekaterina", 
             "elena", "olga", "tatiana", "roman", "andrei", "nikita", "timofei", "tsarenko", "rodichev"
         ])
     )
     
-    if not is_laos_exempt:
+    if user_explicit_cambodia and not user_explicit_laos:
+        destination = "cambodia"
+    elif not is_laos_exempt:
         cambodia_keywords = [
             "us", "usa", "american", "uk", "british", "germany", "german", "france", "french", 
-            "canada", "canadian", "australia", "australian", "india", "indian", "mỹ", "nước anh", "quốc tịch anh", "nước pháp", "nước đức"
+            "canada", "canadian", "australia", "australian", "india", "indian", "ukraine", "ukrainian",
+            "украин", "сша", "великобритан", "герман", "франц", "канад", "австрал",
+            "mỹ", "nước anh", "quốc tịch anh", "nước pháp", "nước đức"
         ]
         
         has_cambodia_keyword = False
@@ -579,13 +624,13 @@ def extract_date_and_nationality_from_history(history_messages: list[dict]):
                     has_cambodia_keyword = True
                     break
                     
-        if has_cambodia_keyword or "cambodia" in clean_user_text_lower or "campuchia" in clean_user_text_lower or "mộc bài" in clean_user_text_lower or "moc bai" in clean_user_text_lower:
+        if has_cambodia_keyword:
             destination = "cambodia"
         
     # 3. Extract visa type (45D vs 90D)
     visa_type = "90D"  # Default is 90D
     if destination == "laos":
-        if "45" in full_text_lower or "free" in full_text_lower or "miễn" in full_text_lower:
+        if "45" in full_text_lower or "free" in full_text_lower or "miễn" in full_text_lower or "безвиз" in full_text_lower:
             visa_type = "45D"
             
     return expiry_date, destination, visa_type
@@ -608,19 +653,33 @@ async def process_chat(history_messages: list[dict], customer_profile: dict | No
     smart_departure_context = ""
     route_directive_context = ""
     
-    # Force route directives to ensure LLM doesn't get confused by RAG examples
-    if destination == "cambodia":
+    user_text_all = " ".join([re.sub(r'\[.*?\]', '', m.get("content", "")) for m in history_messages if m.get("role") == "user"]).lower()
+    user_explicit_cambodia = any(k in user_text_all for k in ["камбодж", "cambodia", "campuchia", "мокбай", "мок бай", "moc bai", "mộc bài"])
+
+    # Route directives to guide the LLM accurately without overriding explicit customer package requests
+    if destination == "cambodia" and user_explicit_cambodia:
+        route_directive_context = (
+            f"\nCRITICAL ROUTE & PACKAGE DIRECTIVE:\n"
+            f"- The customer explicitly asked about the **CAMBODIA (Moc Bai border)** visarun package.\n"
+            f"- Confirm the exact Cambodia (Moc Bai) package and price they asked about:\n"
+            f"  + **5,400,000 VND**: Bus + 90-day Multi Vietnam E-visa + Cambodia Visa included (24h processing).\n"
+            f"  + **4,400,000 VND**: Bus + 90-day Single Vietnam E-visa + Cambodia Visa included (24h processing).\n"
+            f"  + **4,000,000 VND**: Bus + 90-day Vietnam E-visa (customer pays Cambodia visa $35-$50 at border).\n"
+            f"  + **1,400,000 VND**: Bus only for 45-day Visa-Free stamp.\n"
+            f"  + Schedule: Departs Tuesday, Thursday, and Sunday at 21:30 (40 Hon Chong) / 21:15 (04 Tran Phu).\n"
+            f"- If they are chatting in Russian and have not stated their nationality yet, also politely add a brief note that if they have a **Russian / Belarusian / Kazakh** passport, they are visa-exempt for Laos and can alternatively choose the **Laos (Bo Y)** route (3,400,000 VND for 90D Single / 4,400,000 VND for 90D Multi / 1,400,000 VND for 45D stamp), or stay with the Cambodia (Moc Bai) package as selected!\n"
+            f"- Ask the customer for their booking details (1. Nationality, 2. Current visa expiry date or desired departure date, 3. Full Name + Year of birth, 4. Pickup point in Nha Trang, 5. Contact phone number) and WAIT for their reply!"
+        )
+    elif destination == "cambodia":
         route_directive_context = (
             f"\nCRITICAL ROUTE DIRECTIVE:\n"
-            f"- Customer MUST take the CAMBODIA route (Moc Bai border) because their nationality requires a pre-arranged visa or Bo Y border (Laos) is not suitable.\n"
-            f"- YOU MUST recommend ONLY the CAMBODIA route (Moc Bai border) for their visarun! Do NOT suggest or offer Laos! "
-            f"Explicitly inform them that they need to take the Cambodia route (Moc Bai border)."
+            f"- Customer's nationality requires the **CAMBODIA route (Moc Bai border)** because they are not exempt from Laos visa at Bo Y border.\n"
+            f"- Recommend the CAMBODIA route (Moc Bai border) and ask for their booking details if not yet provided."
         )
     else:
         route_directive_context = (
             f"\nCRITICAL ROUTE DIRECTIVE:\n"
-            f"- Customer is from a country exempt from Laos visa (like Russia, Belarus, South Korea, ASEAN). They MUST take the LAOS route (Bo Y border) to save costs!\n"
-            f"- YOU MUST recommend ONLY the LAOS route (Bo Y border) for their visarun! Do NOT suggest Cambodia!"
+            f"- For citizens exempt from Laos visa (Russia, Belarus, Kazakhstan, South Korea, ASEAN), the **LAOS route (Bo Y border)** is the most popular and economical route (1,400,000 VND for 45D Visa-Free; 3,400,000 VND for 90D Single E-visa; 4,400,000 VND for 90D Multi E-visa)."
         )
 
     if expiry_date:
@@ -780,60 +839,34 @@ async def process_chat(history_messages: list[dict], customer_profile: dict | No
 
     chat_resp = ChatResponse.model_validate_json(content)
 
-    # === SMART PHASE PROMOTION & SEAT MAP ENSURANCE ===
+    # === PHASE VALIDATION & ANTI-HALLUCINATION GUARD ===
     ext = chat_resp.extracted_data
+
+    # Validate extracted ngay_khoi_hanh / ngay_het_han_visa so invalid strings like "16/29" are stripped
+    if ext.ngay_khoi_hanh:
+        m_dep = re.search(r"\b(\d{1,2})[/.-](\d{1,2})(?:[/.-](\d{2,4}))?\b", str(ext.ngay_khoi_hanh))
+        if m_dep:
+            ok_dep, fmt_dep = _is_valid_calendar_date(m_dep.group(1), m_dep.group(2), m_dep.group(3))
+            ext.ngay_khoi_hanh = fmt_dep[:5] if ok_dep else ""
+        else:
+            ext.ngay_khoi_hanh = ""
+
+    if ext.ngay_het_han_visa:
+        m_exp = re.search(r"\b(\d{1,2})[/.-](\d{1,2})(?:[/.-](\d{2,4}))?\b", str(ext.ngay_het_han_visa))
+        if m_exp:
+            ok_exp, fmt_exp = _is_valid_calendar_date(m_exp.group(1), m_exp.group(2), m_exp.group(3))
+            ext.ngay_het_han_visa = fmt_exp[:5] if ok_exp else ""
+        else:
+            ext.ngay_het_han_visa = ""
+
     if not ext.ngay_khoi_hanh and smart_dep:
         ext.ngay_khoi_hanh = smart_dep
 
-    last_user_lower = last_user_msg.lower()
-    has_booking_info = (
-        bool(ext.ho_ten) or bool(ext.diem_don) or bool(ext.loai_visa) or
-        any(k in last_user_lower for k in ["hon chong", "tran phu", "oceanus", "single", "multi", "дмитрий", "dimitry", "199", "198", "200", "197"]) or
-        (last_user_lower.strip() in ["no", "нет", "không", "ko", "ok", "oke", "được", "хорошо", "да", "yes"] and len(recent_history) >= 2)
-    )
-
-    if chat_resp.current_phase == "CONSULTING" and has_booking_info and not ext.ghe_chon and not chat_resp.is_complete:
-        chat_resp.current_phase = "SEAT_SELECTION"
-        dep_date_display = ext.ngay_khoi_hanh or smart_dep or (expiry_date[:5] if expiry_date else "13/09")
-        waiting_msg = get_msg("seat_map_waiting", lang_code, date=dep_date_display)
-        
-        reply_lower = chat_resp.reply_message.lower()
-        stubborn_phrases = [
-            "нам все еще нужны", "номер телефона", "нужны номер", "уточните ещё", "завершить бронирование",
-            "cần số điện thoại", "vui lòng cung cấp thêm số", "still need your phone", "to complete your booking please provide"
-        ]
-        if any(p in reply_lower for p in stubborn_phrases) or not any(k in reply_lower for k in ["схем", "sơ đồ", "seat map", "배치도", "座位图"]):
-            name_disp = f"{ext.ho_ten or 'Дмитрий'} / {ext.nam_sinh or '1995'}".strip(" /")
-            pickup_disp = ext.diem_don or "40 Hon Chong (21:30)"
-            route_disp = "Лаос (граница Бо Й)" if destination == "laos" else "Камбоджа (граница Мок Бай)"
-            if lang_code == "ru":
-                chat_resp.reply_message = (
-                    f"Отлично, {ext.ho_ten or 'Дмитрий'}! Записал ваши данные. ✅\n\n"
-                    f"👤 **Имя и год рождения:** {name_disp}\n"
-                    f"📍 **Точка сбора:** {pickup_disp}\n"
-                    f"🚌 **Маршрут:** {route_disp}\n"
-                    f"📅 **Дата выезда:** **{dep_date_display}**\n"
-                    f"💰 **Стоимость:** **3,400,000 VND** ({ext.loai_visa or '90 дней, Single Entry'})\n\n"
-                    f"{waiting_msg}"
-                )
-            elif lang_code == "vi":
-                chat_resp.reply_message = (
-                    f"Dạ tuyệt vời! Em đã ghi nhận thông tin đặt chỗ của mình ạ. ✅\n\n"
-                    f"👤 **Họ tên & Năm sinh:** {name_disp}\n"
-                    f"📍 **Điểm đón:** {pickup_disp}\n"
-                    f"🚌 **Tuyến xe:** {route_disp}\n"
-                    f"📅 **Ngày khởi hành:** **{dep_date_display}**\n\n"
-                    f"{waiting_msg}"
-                )
-            else:
-                chat_resp.reply_message = (
-                    f"Great! I have recorded your booking details. ✅\n\n"
-                    f"👤 **Name & Year:** {name_disp}\n"
-                    f"📍 **Pickup Location:** {pickup_disp}\n"
-                    f"🚌 **Route:** {route_disp}\n"
-                    f"📅 **Departure Date:** **{dep_date_display}**\n\n"
-                    f"{waiting_msg}"
-                )
+    # Do NOT allow premature jump to SEAT_SELECTION if the customer hasn't provided a valid date yet
+    has_valid_date = bool(ext.ngay_khoi_hanh or smart_dep or expiry_date)
+    has_customer_identity = bool(ext.ho_ten or ext.diem_don or ext.so_dien_thoai)
+    if chat_resp.current_phase == "SEAT_SELECTION" and (not has_valid_date or not has_customer_identity):
+        chat_resp.current_phase = "CONSULTING"
 
     return chat_resp
 
