@@ -825,12 +825,11 @@ ITINERARIES = {
             "4️⃣ Nhận vé điện tử xác nhận đặt chỗ. Biển số xe & số liên hệ tài xế sẽ được gửi trước giờ chạy 2 tiếng."
         ),
         "booking_ru": (
-            "⚠️ ОБЯЗАТЕЛЬНЫЕ ПРАВИЛА И СРОКИ РЕГИСТРАЦИИ (БО-И 90 ДНЕЙ):\n"
-            "1️⃣ Срок подачи на E-Visa: Документы (фото паспорта + фото 4x6 белый фон) необходимо отправить за 3–5 рабочих дней до даты рейса.\n"
-            "2️⃣ Рейсы в Воскресенье: Документы должны быть поданы не позднее среды/четверга (в сб и вс визовый отдел закрыт).\n"
-            "3️⃣ Срочный выезд: При бронировании за 1–2 дня до поездки требуется срочный тариф E-Visa (1–2 дня или 4 часа).\n"
-            "4️⃣ Распечатка: E-Visa ОБЯЗАТЕЛЬНО должна быть распечатана на бумаге (2 копии) для предъявления на КПП Бо-И.\n"
-            "5️⃣ Загранпаспорт: Срок действия строго более 6 месяцев.\n6️⃣ Льготы для детей до 9 лет (Babysitter Vietnam): 100% бесплатный билет на автобус при размещении с родителями + льготная E-Visa за 1.480.000 VND (требуется регистрация за 4 дня).\n\n"
+            "⚠️ ПРАВИЛА РЕГИСТРАЦИИ НА РЕЙС (БО-И 45 ДНЕЙ БЕЗВИЗ):\n"
+            "1️⃣ Документы: Четкое фото страницы загранпаспорта (срок действия строго более 6 месяцев).\n"
+            "2️⃣ Экспресс-оформление: Быстрая регистрация и подтверждение места на слипбасе в течение 15 минут.\n"
+            "3️⃣ Без распечатки на бумаге: На КПП Бо-И и Лаобао распечатывать визу НЕ ТРЕБУЕТСЯ.\n"
+            "4️⃣ Льготы для детей до 9 лет (Babysitter Vietnam): 100% БЕСПЛАТНЫЙ билет на автобус при размещении с родителями.\n\n"
             "👉 Нажмите дату выезда на календаре ниже (🟢 отмечены дни рейсов Вт, Чт, Вс) или выберите пакет:"
         ),
         "booking_en": (
@@ -856,7 +855,7 @@ ITINERARIES = {
             "• 06:00 (Sáng hôm sau): Đến cửa khẩu Bờ Y, nghỉ ngơi, ăn sáng, cafe.\n"
             "• 07:00: Cửa khẩu mở cửa. Xếp hàng làm thủ tục xuất cảnh Việt Nam.\n"
             "• 07:30: Đi bộ sang cửa khẩu Lào làm thủ tục đóng dấu nhập cảnh và xuất cảnh Lào.\n"
-            "• 08:30: Quay lại cửa khẩu Việt Nam xuất trình E-Visa 90 ngày (đã in sẵn ra giấy) để hải quan đóng dấu thời hạn 90 ngày mới.\n"
+            "• 08:30: Quay lại cửa khẩu Việt Nam xuất trình E-Visa 90 ngày (trên điện thoại hoặc bản in) để hải quan đóng dấu thời hạn 90 ngày mới.\n"
             "• 09:30: Lên xe buýt quay trở về Nha Trang (về tới nơi khoảng 18:30 - 19:00 chiều)."
         ),
         "schedule_ru": (
@@ -866,28 +865,29 @@ ITINERARIES = {
             "• 06:00 (следующее утро): Прибытие на границу Бо-И, завтрак, кофе, отдых.\n"
             "• 07:00: Открытие границы. Очередь и выезд из Вьетнама.\n"
             "• 07:30: Переход границы Лаоса, получение въездного и выездного штампа Лаоса.\n"
-            "• 08:30: Возвращение на вьетнамский КПП, предъявление распечатанной E-Visa 90 дней и получение штампа на 90 дней.\n"
+            "• 08:30: Возвращение на вьетнамский КПП, предъявление E-Visa 90 дней (в телефоне) и получение штампа на 90 дней.\n"
             "• 09:30: Посадка в автобус и выезд обратно в Нячанг (прибытие около 18:30 - 19:00)."
         ),
         "pickup_vi": "📍 Điểm đón: 40 Hòn Chồng = Oceanus Nha Trang (https://maps.app.goo.gl/y8DjaoCNDsRyZN9B8) hoặc Số 4 Trần Phú, Nha Trang.",
         "pickup_ru": "📍 Точка сбора: 40 Hon Chong = Oceanus Nha Trang (https://maps.app.goo.gl/y8DjaoCNDsRyZN9B8) или No. 4 Tran Phu, Нячанг.",
-        "border_vi": "⚠️ LƯU Ý TẠI CỬA KHẨU: Hộ chiếu gốc còn hạn trên 6 tháng; BẮT BUỘC in E-Visa ra giấy (2 bản); tiền mặt (khoảng 150.000 VND) nộp phí biên phòng.",
-        "border_ru": "⚠️ ВАЖНО НА ГРАНИЦЕ: Загранпаспорт сроком от 6 мес.; ОБЯЗАТЕЛЬНО распечатать E-Visa на бумаге (2 копии); наличные (ок. 150.000 VND) на пограничные сборы.",
+        "border_vi": "⚠️ LƯU Ý TẠI CỬA KHẨU BỜ Y: Hộ chiếu gốc còn hạn trên 6 tháng; TIỀN MẶT (khoảng 150.000 VND) nộp phí đóng dấu biên phòng (Riêng cửa khẩu Bờ Y và Lao Bảo KHÔNG CẦN in E-Visa ra giấy, chỉ cần lưu file ảnh trên điện thoại).",
+        "border_ru": "⚠️ ВАЖНО НА КПП БО-И: Загранпаспорт сроком от 6 мес.; наличные (ок. 150.000 VND) на оплату пограничных сборов (На КПП Бо-И и Лаобао РАСПЕЧАТЫВАТЬ E-Visa НА БУМАГЕ НЕ ТРЕБУЕТСЯ, достаточно файла на телефоне).",
         "booking_vi": (
             "⚠️ QUY TẮC ĐĂNG KÝ BẮT BUỘC (TUYẾN BỜ Y 90 NGÀY E-VISA):\n"
-            "1️⃣ Thời gian nộp hồ sơ: Gửi ảnh Hộ chiếu + ảnh thẻ 4x6 (nền trắng) trước ngày khởi hành tối thiểu 3–5 ngày làm việc để kịp duyệt E-Visa.\n"
-            "2️⃣ Chuyến đi Chủ Nhật: Hồ sơ phải nộp muộn nhất là Thứ 4 hoặc Thứ 5 tuần trước (vì Thứ 7 & Chủ Nhật Cổng dịch vụ công nghỉ duyệt).\n"
-            "3️⃣ Đi gấp trong 1–2 ngày: Bắt buộc chọn gói làm E-Visa khẩn cấp (1–2 ngày hoặc 4 giờ).\n"
-            "4️⃣ Bản in giấy: BẮT BUỘC in E-Visa ra giấy (2 bản) mang theo lên xe để hải quan Bờ Y đóng dấu.\n"
-            "5️⃣ Hộ chiếu gốc: Còn hạn sử dụng trên 6 tháng.\n6️⃣ Ưu đãi trẻ em dưới 9 tuổi (Babysitter Vietnam): 100% MIỄN PHÍ VÉ XE BUÝT (0 ₫) nằm chung giường với bố mẹ + gói E-Visa khẩn trợ giá chỉ 1.480.000 ₫ (đăng ký trước tối thiểu 4 ngày).\n\n"
+            "1️⃣ Hồ sơ đăng ký: Gửi ảnh chụp trang Hộ chiếu (rõ 4 góc, còn hạn trên 6 tháng) + 01 ảnh thẻ 4x6 nền trắng.\n"
+            "2️⃣ Thời gian xử lý: Gói trọn gói đã bao gồm visa xử lý khẩn cấp siêu tốc (trong 2.5 đến 3 giờ), nhận visa hoàn tất nhanh chóng trước chuyến đi.\n"
+            "3️⃣ Không cần in giấy: Cửa khẩu Bờ Y và Lao Bảo kiểm tra điện tử, quý khách KHÔNG CẦN in E-Visa ra giấy (chỉ cần lưu file ảnh trên điện thoại).\n"
+            "4️⃣ Hộ chiếu gốc: Còn hạn sử dụng trên 6 tháng.\n"
+            "5️⃣ Ưu đãi trẻ em dưới 9 tuổi (Babysitter Vietnam): 100% MIỄN PHÍ VÉ XE BUÝT (0 ₫) nằm chung giường với bố mẹ + gói E-Visa khẩn trợ giá chỉ 1.480.000 ₫ (đăng ký trước tối thiểu 4 ngày).\n\n"
             "👉 Vui lòng chọn ngày đi trên lịch bên dưới (🟢 ngày màu xanh là ngày xe chạy T3, T5, CN) hoặc chọn gói dịch vụ:"
         ),
         "booking_ru": (
-            "📝 КАК ЗАБРОНИРОВАТЬ И ОФОРМИТЬ E-VISA НА 90 ДНЕЙ:\n"
-            "1️⃣ Отправьте фото загранпаспорта + фото 4x6 (белый фон) за 3–5 рабочих дней до поездки для оформления E-Visa на КПП Бо-И (доступно срочное оформление 1–2 дня или 4 часа).\n"
-            "2️⃣ Выберите дату выезда (Вторник, Четверг, Воскресенье) и нажмите кнопку 'Запросить проверку мест и выбрать место'.\n"
-            "3️⃣ Нажмите кнопку 'Способы оплаты' для оплаты билета или полного пакета (Vietcombank, VRB, наличные в офисе).\n"
-            "4️⃣ Получите готовую распечатанную визу E-Visa 90 дней и электронный билет."
+            "⚠️ ПРАВИЛА РЕГИСТРАЦИИ (БО-И 90 ДНЕЙ E-VISA):\n"
+            "1️⃣ Документы: Фото загранпаспорта (срок более 6 мес.) + фото 4x6 на белом фоне.\n"
+            "2️⃣ Экспресс-оформление: Пакет включает срочную обработку E-Visa за 2.5–3 часа — виза будет готова точно к рейсу.\n"
+            "3️⃣ Без распечатки на бумаге: На КПП Бо-И и Лаобао распечатывать визу НЕ ТРЕБУЕТСЯ (достаточно показать файл с телефона).\n"
+            "4️⃣ Льготы для детей до 9 лет (Babysitter Vietnam): 100% БЕСПЛАТНЫЙ билет на автобус при размещении с родителями + льготная E-Visa за 1.480.000 VND (при бронировании за 4 дня).\n\n"
+            "👉 Нажмите дату выезда на календаре ниже (🟢 дни рейсов Вт, Чт, Вс) или выберите пакет:"
         ),
         "booking_en": (
             "📝 HOW TO REGISTER & APPLY FOR 90-DAY E-VISA:\n"
@@ -1220,7 +1220,7 @@ def get_bus_integrated_calendar_keyboard(route_key: str, year: int, month: int, 
     
     rows = []
     
-    # Hàng 1 & 2: Các nút chọn gói dịch vụ theo tuyến
+    # Hàng 1 & 2: Các nút chọn gói dịch vụ theo tuyến + nút Trẻ em dưới 9 tuổi
     if "laos" in route_key:
         if lang == "ru":
             rows.append([
@@ -1228,7 +1228,7 @@ def get_bus_integrated_calendar_keyboard(route_key: str, year: int, month: int, 
                 InlineKeyboardButton("📑 Пакет: Bus + E-Visa 90D (4.000.000 ₫)", callback_data="step|bus_pkg|laos_combo_90d")
             ])
             rows.append([
-                InlineKeyboardButton("⚡ Срочное оформление E-Visa (1–2 дня)", callback_data="step|svc|special_urgent_evisa")
+                InlineKeyboardButton("👶 Ребенок до 9 лет (1.480.000 ₫ + 100% Бесплатный автобус)", callback_data="step|bus_pkg|baby_under9")
             ])
         elif lang == "vi":
             rows.append([
@@ -1236,7 +1236,7 @@ def get_bus_integrated_calendar_keyboard(route_key: str, year: int, month: int, 
                 InlineKeyboardButton("📑 Trọn gói Bus + E-Visa 90 ngày (4.000.000 ₫)", callback_data="step|bus_pkg|laos_combo_90d")
             ])
             rows.append([
-                InlineKeyboardButton("⚡ Cần làm E-Visa khẩn cấp (1–2 ngày)", callback_data="step|svc|special_urgent_evisa")
+                InlineKeyboardButton("👶 Trẻ em dưới 9 tuổi (1.480.000 ₫ + Miễn phí 100% xe buýt)", callback_data="step|bus_pkg|baby_under9")
             ])
         else:
             rows.append([
@@ -1244,7 +1244,7 @@ def get_bus_integrated_calendar_keyboard(route_key: str, year: int, month: int, 
                 InlineKeyboardButton("📑 Bus + 90-Day E-Visa (4,000,000 VND)", callback_data="step|bus_pkg|laos_combo_90d")
             ])
             rows.append([
-                InlineKeyboardButton("⚡ Urgent E-Visa (1–2 Days)", callback_data="step|svc|special_urgent_evisa")
+                InlineKeyboardButton("👶 Child under 9 (1,480,000 VND + 100% Free Bus)", callback_data="step|bus_pkg|baby_under9")
             ])
     else:  # Cambodia Moc Bai
         if lang == "ru":
@@ -1256,6 +1256,9 @@ def get_bus_integrated_calendar_keyboard(route_key: str, year: int, month: int, 
                 InlineKeyboardButton("⭐ Пакет 24ч + виза Камбоджи (4.400.000 ₫)", callback_data="step|bus_pkg|mocbai_combo_24h"),
                 InlineKeyboardButton("⭐ Безвиз 45 дней (1.400.000 ₫)", callback_data="step|bus_pkg|mocbai_bus_only")
             ])
+            rows.append([
+                InlineKeyboardButton("👶 Ребенок до 9 лет (1.480.000 ₫ + 100% Бесплатный автобус)", callback_data="step|bus_pkg|baby_under9")
+            ])
         elif lang == "vi":
             rows.append([
                 InlineKeyboardButton("🚌 Vé xe khứ hồi (1.400.000 ₫)", callback_data="step|bus_pkg|mocbai_bus_only"),
@@ -1265,6 +1268,9 @@ def get_bus_integrated_calendar_keyboard(route_key: str, year: int, month: int, 
                 InlineKeyboardButton("⭐ Combo 24h + Visa Campuchia (4.400.000 ₫)", callback_data="step|bus_pkg|mocbai_combo_24h"),
                 InlineKeyboardButton("⭐ Miễn visa 45 ngày (1.400.000 ₫)", callback_data="step|bus_pkg|mocbai_bus_only")
             ])
+            rows.append([
+                InlineKeyboardButton("👶 Trẻ em dưới 9 tuổi (1.480.000 ₫ + Miễn phí 100% xe buýt)", callback_data="step|bus_pkg|baby_under9")
+            ])
         else:
             rows.append([
                 InlineKeyboardButton("🚌 Round-trip Bus (1,400,000 VND)", callback_data="step|bus_pkg|mocbai_bus_only"),
@@ -1273,6 +1279,9 @@ def get_bus_integrated_calendar_keyboard(route_key: str, year: int, month: int, 
             rows.append([
                 InlineKeyboardButton("⭐ Package 24h + Cambodia Visa (4,400,000 VND)", callback_data="step|bus_pkg|mocbai_combo_24h"),
                 InlineKeyboardButton("⭐ 45-Day Visa-Free (1,400,000 VND)", callback_data="step|bus_pkg|mocbai_bus_only")
+            ])
+            rows.append([
+                InlineKeyboardButton("👶 Child under 9 (1,480,000 VND + 100% Free Bus)", callback_data="step|bus_pkg|baby_under9")
             ])
 
     # Hàng điều hướng lịch tháng
@@ -2266,7 +2275,8 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
             "laos_combo_90d": ("Пакет: Bus + E-Visa 90 дней Lào Bờ Y (4.000.000 ₫)", "Trọn gói: Bus + E-Visa 90 ngày Lào Bờ Y (4.000.000 ₫)", "Combo: Bus + 90-Day E-Visa Laos Bo Y (4,000,000 VND)"),
             "mocbai_bus_only": ("Только билет на автобус Mộc Bài (1.400.000 ₫)", "Vé xe giường nằm Mộc Bài (1.400.000 ₫)", "Moc Bai Round-trip Bus Ticket (1,400,000 VND)"),
             "mocbai_combo_90d": ("Пакет: Bus + E-Visa 90 дней Mộc Bài (4.000.000 ₫)", "Trọn gói: Bus + E-Visa 90 ngày Mộc Bài (4.000.000 ₫)", "Combo: Bus + 90-Day E-Visa Moc Bai (4,000,000 VND)"),
-            "mocbai_combo_24h": ("Пакет: Bus + E-Visa 24ч + виза Камбоджи (4.400.000 ₫)", "Trọn gói: Bus + E-Visa 24h + Visa Campuchia (4.400.000 ₫)", "Combo: Bus + 24h E-Visa + Cambodia Visa (4,400,000 VND)")
+            "mocbai_combo_24h": ("Пакет: Bus + E-Visa 24ч + виза Камбоджи (4.400.000 ₫)", "Trọn gói: Bus + E-Visa 24h + Visa Campuchia (4.400.000 ₫)", "Combo: Bus + 24h E-Visa + Cambodia Visa (4,400,000 VND)"),
+            "baby_under9": ("Льготный тариф для детей до 9 лет (1.480.000 ₫ + 100% Бесплатный автобус)", "Ưu đãi trẻ em dưới 9 tuổi (1.480.000 ₫ + Miễn 100% vé xe)", "Subsidized Child Package under 9 (1,480,000 VND + 100% Free Bus)")
         }
         pkg_tuple = pkg_names.get(pkg_id, ("Dịch vụ xe buýt", "Dịch vụ xe buýt", "Bus Service"))
         pkg_name = pkg_tuple[0] if lang == "ru" else pkg_tuple[1] if lang == "vi" else pkg_tuple[2]
