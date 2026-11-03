@@ -497,7 +497,7 @@ def get_city_keyboard(lang: str = "en"):
         ]
     ])
 
-def get_calendar_keyboard(year: int, month: int, lang: str = "ru"):
+def get_calendar_keyboard(year: int, month: int, lang: str = "ru", prefix: str = "step|date"):
     """Bước 3: Lịch tháng tương tác chuẩn quốc tế (Calendar Picker)"""
     cal = calendar.monthcalendar(year, month)
     month_names = {
@@ -541,14 +541,14 @@ def get_calendar_keyboard(year: int, month: int, lang: str = "ru"):
                 date_str = f"{day:02d}/{month:02d}"
                 is_past = (year < now.year) or (year == now.year and month < now.month) or (year == now.year and month == now.month and day < now.day)
                 lbl = f"·{day}·" if is_past else str(day)
-                row.append(InlineKeyboardButton(lbl, callback_data=f"step|date|{date_str}"))
+                row.append(InlineKeyboardButton(lbl, callback_data=f"{prefix}|{date_str}"))
         rows.append(row)
         
     urgent_lbl = "⚡ Срочно (1-2 дня)" if lang == "ru" else "⚡ Khẩn cấp (1-2 ngày)" if lang == "vi" else "⚡ Urgent (1-2 days)"
     manual_lbl = "✍️ Ввести вручную" if lang == "ru" else "✍️ Nhập ngày khác" if lang == "vi" else "✍️ Enter date"
     rows.append([
-        InlineKeyboardButton(urgent_lbl, callback_data="step|date|urgent"),
-        InlineKeyboardButton(manual_lbl, callback_data="step|date|manual")
+        InlineKeyboardButton(urgent_lbl, callback_data=f"{prefix}|urgent"),
+        InlineKeyboardButton(manual_lbl, callback_data=f"{prefix}|manual")
     ])
     return InlineKeyboardMarkup(rows)
 
@@ -1303,6 +1303,306 @@ def generate_booking_final_message(data: Any, lang: str = "ru") -> str:
         )
 
 # ============================================================
+# BỘ ĐẾM THỜI GIAN & TÍNH TOÁN CẤP E-VISA KHẨN CẤP THÔNG MINH
+# (LOẠI TRỪ T7, CN - BẢO TOÀN 90 NGÀY - VÙNG ĐỆM AN TOÀN)
+# ============================================================
+
+def add_working_days(start_date: datetime, num_days: int) -> datetime:
+    """Cộng thêm số ngày làm việc (bỏ qua Thứ Bảy và Chủ Nhật)."""
+    cur = start_date
+    added = 0
+    while added < num_days:
+        cur += timedelta(days=1)
+        if cur.weekday() < 5:  # 0=T2, ..., 4=T6
+            added += 1
+    return cur
+
+def calculate_working_days_between(start_dt: datetime, end_dt: datetime) -> int:
+    """Đếm số ngày làm việc giữa 2 ngày (bỏ qua Thứ Bảy và Chủ Nhật)."""
+    cur = start_dt.date()
+    target = end_dt.date()
+    days = 0
+    while cur < target:
+        cur += timedelta(days=1)
+        if cur.weekday() < 5:
+            days += 1
+    return days
+
+def get_weekday_name(dt: datetime, lang: str = "vi") -> str:
+    weekday = dt.weekday()
+    names = {
+        "vi": ["Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy", "Chủ Nhật"],
+        "ru": ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"],
+        "en": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    }
+    return names.get(lang, names["en"])[weekday]
+
+def calculate_evisa_smart_schedule(
+    stay_type: str = None,
+    target_date_str: str = None,
+    now: datetime = None,
+    lang: str = "vi"
+) -> dict:
+    if not now:
+        now = datetime.now()
+
+    submit_dt = now
+    if submit_dt.weekday() >= 5:  # T7 hoặc CN
+        days_to_monday = 7 - submit_dt.weekday()
+        submit_dt = (submit_dt + timedelta(days=days_to_monday)).replace(hour=8, minute=30, second=0)
+    elif submit_dt.hour >= 14:
+        if stay_type not in ("1night", "4h"):
+            submit_dt = add_working_days(submit_dt, 1).replace(hour=8, minute=30, second=0)
+
+    # A. Phân loại theo số đêm lưu trú / gói giờ
+    if stay_type:
+        if stay_type in ("1night", "4h"):
+            delivery_dt = submit_dt.replace(hour=17, minute=30, second=0)
+            activation_dt = add_working_days(delivery_dt, 1)
+            return {
+                "package_id": "urgent_4h",
+                "package_name": {
+                    "vi": "⚡ GÓI SIÊU KHẨN CẤP 4 GIỜ (SUPER URGENT 4H)",
+                    "ru": "⚡ ТАРИФ СУПЕР-СРОЧНЫЙ 4 ЧАСА (SAME DAY)",
+                    "en": "⚡ SUPER URGENT 4-HOUR PACKAGE (SAME DAY)"
+                },
+                "price": "2.450.000 ₫ (Single) | 3.400.000 ₫ (Multi)",
+                "submit_time": f"13:30 {get_weekday_name(submit_dt, lang)} ({submit_dt.strftime('%d/%m')})",
+                "delivery_time": f"17:30 {get_weekday_name(delivery_dt, lang)} ({delivery_dt.strftime('%d/%m')})",
+                "activation_date": f"{activation_dt.strftime('%d/%m/%Y')} ({get_weekday_name(activation_dt, lang)})",
+                "buffer_note": {
+                    "vi": "🛡️ Trả visa lúc 17:30 chiều nay -> Khách kịp nhận file trước khi bay về sáng mai, đảm bảo check-in an toàn 100%.",
+                    "ru": "🛡️ Готовая виза в 17:30 сегодня -> Вы получаете файл до вылета завтра утром, гарантируя спокойную регистрацию на рейс.",
+                    "en": "🛡️ Delivered at 17:30 today -> Issued before tomorrow's return flight, ensuring smooth airport check-in."
+                },
+                "validity_note": {
+                    "vi": "📅 Visa kích hoạt đúng ngày hạ cánh Việt Nam -> Bảo toàn trọn vẹn 90 ngày lưu trú.",
+                    "ru": "📅 Виза активируется строго в день прилета -> Полные 90 дней пребывания без потерь.",
+                    "en": "📅 Activated on return entry date -> Full 90-day validity preserved."
+                }
+            }
+
+        elif stay_type == "2nights":
+            delivery_dt = add_working_days(submit_dt, 1).replace(hour=17, minute=30, second=0)
+            activation_dt = add_working_days(delivery_dt, 1)
+            return {
+                "package_id": "urgent_1day",
+                "package_name": {
+                    "vi": "⏱️ GÓI KHẨN CẤP 1 NGÀY LÀM VIỆC (1 WORKING DAY)",
+                    "ru": "⏱️ ТАРИФ СРОЧНЫЙ 1 РАБОЧИЙ ДЕНЬ (1 DAY)",
+                    "en": "⏱️ EXPEDITED 1 WORKING DAY PACKAGE"
+                },
+                "price": "1.950.000 ₫ (Single) | 2.950.000 ₫ (Multi)",
+                "submit_time": f"13:30 {get_weekday_name(submit_dt, lang)} ({submit_dt.strftime('%d/%m')})",
+                "delivery_time": f"17:30 {get_weekday_name(delivery_dt, lang)} ({delivery_dt.strftime('%d/%m')})",
+                "activation_date": f"{activation_dt.strftime('%d/%m/%Y')} ({get_weekday_name(activation_dt, lang)})",
+                "buffer_note": {
+                    "vi": "🛡️ Nhận visa lúc 17:30 trước ngày bay về 14–16 tiếng -> Vùng đệm an toàn tuyệt đối, phòng ngừa trễ chuyến hoặc nghẽn mạng.",
+                    "ru": "🛡️ Выдача в 17:30 накануне вылета (за 14–16 часов) -> Надежный запас времени для посадочных талонов.",
+                    "en": "🛡️ Issued at 17:30 the day prior to departure (14-16h buffer) -> Safe buffer against flight delays."
+                },
+                "validity_note": {
+                    "vi": "📅 Kích hoạt đúng ngày nhập cảnh -> Đủ 90 ngày tại Việt Nam (Không tính T7 & CN trong thời gian duyệt).",
+                    "ru": "📅 Активация в день въезда -> Полные 90 дней (Сб и Вс не учитываются в сроках).",
+                    "en": "📅 Active on entry date -> Full 90 days stay (Excludes Sat & Sun during processing)."
+                }
+            }
+
+        elif stay_type == "3nights":
+            delivery_dt = add_working_days(submit_dt, 2).replace(hour=17, minute=30, second=0)
+            activation_dt = add_working_days(delivery_dt, 1)
+            return {
+                "package_id": "urgent_2days",
+                "package_name": {
+                    "vi": "📅 GÓI KHẨN CẤP 2 NGÀY LÀM VIỆC (2 WORKING DAYS)",
+                    "ru": "📅 ТАРИФ СРОЧНЫЙ 2 РАБОЧИХ ДНЯ (2 DAYS)",
+                    "en": "📅 EXPEDITED 2 WORKING DAYS PACKAGE"
+                },
+                "price": "1.650.000 ₫ (Single) | 2.650.000 ₫ (Multi)",
+                "submit_time": f"13:30 {get_weekday_name(submit_dt, lang)} ({submit_dt.strftime('%d/%m')})",
+                "delivery_time": f"17:30 {get_weekday_name(delivery_dt, lang)} ({delivery_dt.strftime('%d/%m')})",
+                "activation_date": f"{activation_dt.strftime('%d/%m/%Y')} ({get_weekday_name(activation_dt, lang)})",
+                "buffer_note": {
+                    "vi": "🛡️ Trả visa lúc 17:30 trước ngày bay về -> Có trọn vẹn 1 buổi tối kiểm tra và in E-visa giấy.",
+                    "ru": "🛡️ Выдача в 17:30 за день до вылета -> Спокойный вечер для проверки визы.",
+                    "en": "🛡️ Issued at 17:30 before flight day -> Safe buffer to print paper visa."
+                },
+                "validity_note": {
+                    "vi": "📅 Kích hoạt đúng ngày bay về -> Tối đa 90 ngày lưu trú (Bộ đếm trừ T7, CN).",
+                    "ru": "📅 Активация в день въезда -> Полные 90 дней (Сб и Вс не считаются).",
+                    "en": "📅 Valid from arrival date -> Full 90-day stay preserved."
+                }
+            }
+
+        else:
+            delivery_dt = add_working_days(submit_dt, 3).replace(hour=17, minute=30, second=0)
+            activation_dt = add_working_days(delivery_dt, 1)
+            return {
+                "package_id": "urgent_3days",
+                "package_name": {
+                    "vi": "🏖️ GÓI TIÊU CHUẨN 3–5 NGÀY LÀM VIỆC (STANDARD EXPEDITED)",
+                    "ru": "🏖️ ТАРИФ СТАНДАРТ 3–5 РАБОЧИХ ДНЕЙ",
+                    "en": "🏖️ STANDARD 3-5 WORKING DAYS PACKAGE"
+                },
+                "price": "1.350.000 ₫ (3 Ngày) | 950.000 ₫ (5 Ngày)",
+                "submit_time": f"13:30 {get_weekday_name(submit_dt, lang)} ({submit_dt.strftime('%d/%m')})",
+                "delivery_time": f"17:30 {get_weekday_name(delivery_dt, lang)} ({delivery_dt.strftime('%d/%m')})",
+                "activation_date": f"{activation_dt.strftime('%d/%m/%Y')} ({get_weekday_name(activation_dt, lang)})",
+                "buffer_note": {
+                    "vi": "🛡️ Lựa chọn tiết kiệm chi phí nhất khi lưu trú dài ngày ở nước ngoài.",
+                    "ru": "🛡️ Самый экономичный тариф при длительном пребывании за границей.",
+                    "en": "🛡️ Most cost-effective option for longer overseas stays."
+                },
+                "validity_note": {
+                    "vi": "📅 Kích hoạt đúng ngày bay về -> Đủ 90 ngày (Bộ đếm trừ T7, CN).",
+                    "ru": "📅 Активация в день въезда -> Полные 90 дней.",
+                    "en": "📅 Valid from arrival date -> Full 90 days stay."
+                }
+            }
+
+    # B. Phân loại theo ngày mục tiêu khách chọn từ Calendar
+    if target_date_str:
+        try:
+            target_dt = datetime.strptime(target_date_str, "%d/%m/%Y")
+        except ValueError:
+            target_dt = datetime.strptime(target_date_str, "%d/%m").replace(year=now.year)
+        
+        work_days = calculate_working_days_between(submit_dt, target_dt)
+        if work_days <= 0:
+            return calculate_evisa_smart_schedule(stay_type="1night", now=now, lang=lang)
+        elif work_days == 1:
+            return calculate_evisa_smart_schedule(stay_type="2nights", now=now, lang=lang)
+        elif work_days == 2:
+            return calculate_evisa_smart_schedule(stay_type="3nights", now=now, lang=lang)
+        else:
+            return calculate_evisa_smart_schedule(stay_type="4plus", now=now, lang=lang)
+
+    return calculate_evisa_smart_schedule(stay_type="2nights", now=now, lang=lang)
+
+def get_evisa_main_keyboard(lang: str = "ru") -> InlineKeyboardMarkup:
+    """Bàn phím lựa chọn phân luồng E-visa ban đầu"""
+    if lang == "ru":
+        btn_flight = "🎫 У меня есть авиабилеты"
+        btn_no_flight = "📅 Еще нет билетов / За рубежом"
+        btn_quick = "⚡ Срочно в течение дня (4 часа)"
+        btn_back = "🔙 Назад к услугам"
+    elif lang == "vi":
+        btn_flight = "🎫 Tôi đã có vé máy bay"
+        btn_no_flight = "📅 Chưa mua vé / Đang ở nước ngoài"
+        btn_quick = "⚡ Cần gấp trong ngày (4 Giờ)"
+        btn_back = "🔙 Quay lại dịch vụ"
+    else:
+        btn_flight = "🎫 I have flight tickets"
+        btn_no_flight = "📅 No tickets yet / Currently Abroad"
+        btn_quick = "⚡ Same Day Urgent (4 Hours)"
+        btn_back = "🔙 Back to services"
+
+    return InlineKeyboardMarkup([
+        [InlineKeyboardButton(btn_flight, callback_data="step|evisa|has_flight")],
+        [InlineKeyboardButton(btn_no_flight, callback_data="step|evisa|no_flight")],
+        [InlineKeyboardButton(btn_quick, callback_data="step|evisa|quick_4h")],
+        [InlineKeyboardButton(btn_back, callback_data="step|back|services")]
+    ])
+
+def get_evisa_flight_keyboard(lang: str = "ru") -> InlineKeyboardMarkup:
+    """Bàn phím chọn số đêm lưu trú khi khách đã có vé"""
+    if lang == "ru":
+        return InlineKeyboardMarkup([
+            [InlineKeyboardButton("🌙 1 ночь за границей ➜ Тариф 4 Часа", callback_data="step|evisa|calc_stay|1night")],
+            [InlineKeyboardButton("🌙 2 ночи за границей ➜ Тариф 1 День", callback_data="step|evisa|calc_stay|2nights")],
+            [InlineKeyboardButton("🌙 3 ночи за границей ➜ Тариф 2 Дня", callback_data="step|evisa|calc_stay|3nights")],
+            [InlineKeyboardButton("🏖️ 4–5+ ночей ➜ Тариф 3–5 Дней", callback_data="step|evisa|calc_stay|4plus")],
+            [InlineKeyboardButton("🔙 Назад", callback_data="step|evisa|main")]
+        ])
+    elif lang == "vi":
+        return InlineKeyboardMarkup([
+            [InlineKeyboardButton("🌙 Ở lại 1 đêm ➜ Gói khẩn 4 Giờ", callback_data="step|evisa|calc_stay|1night")],
+            [InlineKeyboardButton("🌙 Ở lại 2 đêm ➜ Gói khẩn 1 Ngày", callback_data="step|evisa|calc_stay|2nights")],
+            [InlineKeyboardButton("🌙 Ở lại 3 đêm ➜ Gói khẩn 2 Ngày", callback_data="step|evisa|calc_stay|3nights")],
+            [InlineKeyboardButton("🏖️ Ở lại 4–5+ đêm ➜ Gói 3–5 Ngày", callback_data="step|evisa|calc_stay|4plus")],
+            [InlineKeyboardButton("🔙 Quay lại", callback_data="step|evisa|main")]
+        ])
+    else:
+        return InlineKeyboardMarkup([
+            [InlineKeyboardButton("🌙 1 night abroad ➜ 4-Hour Package", callback_data="step|evisa|calc_stay|1night")],
+            [InlineKeyboardButton("🌙 2 nights abroad ➜ 1-Day Package", callback_data="step|evisa|calc_stay|2nights")],
+            [InlineKeyboardButton("🌙 3 nights abroad ➜ 2-Day Package", callback_data="step|evisa|calc_stay|3nights")],
+            [InlineKeyboardButton("🏖️ 4–5+ nights ➜ 3–5 Day Package", callback_data="step|evisa|calc_stay|4plus")],
+            [InlineKeyboardButton("🔙 Back", callback_data="step|evisa|main")]
+        ])
+
+def generate_evisa_consultation_message(info: dict, lang: str = "ru") -> str:
+    """Soạn tin nhắn bảng tư vấn khoa học & minh bạch"""
+    pkg_name = info["package_name"].get(lang, info["package_name"]["en"])
+    price = info["price"]
+    sub_t = info["submit_time"]
+    del_t = info["delivery_time"]
+    act_d = info["activation_date"]
+    buf_n = info["buffer_note"].get(lang, info["buffer_note"]["en"])
+    val_n = info["validity_note"].get(lang, info["validity_note"]["en"])
+
+    if lang == "ru":
+        return (
+            f"⚡ **РАСЧЕТ И ПЛАН ОФОРМЛЕНИЯ СРОЧНОЙ E-VISA**\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"📦 **Рекомендуемый тариф:** {pkg_name}\n"
+            f"💰 **Стоимость оформления:** {price}\n\n"
+            f"📊 **НАУЧНЫЙ ГРАФИК ОБРАБОТКИ:**\n"
+            f"• 🕒 **Время подачи документов:** {sub_t}\n"
+            f"• 🕒 **Время выдачи готовой визы:** {del_t}\n"
+            f"• {buf_n}\n"
+            f"• 📅 **Дата активации визы:** {act_d}\n"
+            f"• {val_n}\n"
+            f"• 🚫 **Правило выходных:** Суббота и Воскресенье не входят в расчет Иммиграционной службы.\n\n"
+            f"📋 **ДОКУМЕНТЫ ДЛЯ СТАРТА ОФОРМЛЕНИЯ:**\n"
+            f"1️⃣ Четкое фото страницы загранпаспорта (без бликов, видны 4 угла)\n"
+            f"2️⃣ 01 Фото как на паспорт (4x6 см на белом фоне)\n"
+            f"3️⃣ Пункт въезда (Аэропорт или наземный КПП)\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"👉 Нажмите кнопки ниже для отправки фото или выбора оплаты:"
+        )
+    elif lang == "vi":
+        return (
+            f"⚡ **BẢNG TÍNH TOÁN & KẾ HOẠCH CẤP E-VISA KHẨN CẤP**\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"📦 **Gói dịch vụ đề xuất:** {pkg_name}\n"
+            f"💰 **Chi phí trọn gói:** {price}\n\n"
+            f"📊 **LỘ TRÌNH XỬ LÝ KHOA HỌC:**\n"
+            f"• 🕒 **Thời điểm nộp hồ sơ:** {sub_t}\n"
+            f"• 🕒 **Thời điểm trả E-visa:** {del_t}\n"
+            f"• {buf_n}\n"
+            f"• 📅 **Ngày kích hoạt E-visa:** {act_d}\n"
+            f"• {val_n}\n"
+            f"• 🚫 **Bộ đếm thời gian:** Không tính Thứ 7 & Chủ Nhật theo quy định Xuất nhập cảnh.\n\n"
+            f"📋 **HỒ SƠ CẦN GỬI ĐỂ TIẾN HÀNH:**\n"
+            f"1️⃣ Ảnh chụp trang Hộ chiếu (rõ nét, đủ 4 góc)\n"
+            f"2️⃣ 01 Ảnh thẻ 4x6 chân dung (nền trắng, chụp thẳng rõ mặt)\n"
+            f"3️⃣ Cửa khẩu nhập cảnh (Sân bay hoặc đường bộ)\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"👉 Vui lòng gửi ảnh Hộ chiếu hoặc bấm nút thanh toán bên dưới:"
+        )
+    else:
+        return (
+            f"⚡ **URGENT E-VISA SCHEDULE & SMART CALCULATION**\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"📦 **Recommended Package:** {pkg_name}\n"
+            f"💰 **Official Price:** {price}\n\n"
+            f"📊 **SCIENTIFIC PROCESSING TIMELINE:**\n"
+            f"• 🕒 **Submission Slot:** {sub_t}\n"
+            f"• 🕒 **E-visa Delivery:** {del_t}\n"
+            f"• {buf_n}\n"
+            f"• 📅 **Effective Entry Date:** {act_d}\n"
+            f"• {val_n}\n"
+            f"• 🚫 **Weekend Rule:** Saturdays & Sundays are excluded by Immigration.\n\n"
+            f"📋 **DOCUMENTS REQUIRED:**\n"
+            f"1️⃣ Clear photo of passport info page (4 corners visible)\n"
+            f"2️⃣ 4x6 passport photo (white background)\n"
+            f"3️⃣ Entry checkpoint (Airport or Border)\n"
+            f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+            f"👉 Click buttons below to send passport or proceed to payment:"
+        )
+
+# ============================================================
 # BỘ XỬ LÝ SỰ KIỆN CALLBACK TỪ NÚT BẤM (STEP HANDLER)
 # ============================================================
 
@@ -1330,6 +1630,103 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         memory_store[f"{session_id}_data"] = cust_data
         
     if step_type == "ignore":
+        return
+
+    # ⚡ BƯỚC XỬ LÝ E-VISA KHẨN CẤP THÔNG MINH (INTERACTIVE BUTTONS & COUNTDOWN)
+    if step_type == "evisa":
+        action = parts[2]
+        lang = memory_store.get(f"{session_id}_lang", "en")
+        
+        # 1. Menu chính E-visa
+        if action == "main":
+            intro_msg = {
+                "ru": "⚡ **СИСТЕМА РАСЧЕТА СРОЧНОЙ E-VISA:**\nПожалуйста, выберите ваш статус перелета:",
+                "vi": "⚡ **TÍNH TOÁN GÓI E-VISA KHẨN CẤP:**\nVui lòng chọn tình trạng chuyến bay của bạn:",
+                "en": "⚡ **SMART E-VISA SCHEDULE CALCULATOR:**\nPlease select your flight status:"
+            }
+            await send_step_reply(update, context, intro_msg.get(lang, intro_msg["en"]), reply_markup=get_evisa_main_keyboard(lang), parse_mode="Markdown")
+            return
+
+        # 2. Khách đã có vé -> Chọn số đêm ở nước ngoài
+        elif action == "has_flight":
+            stay_msg = {
+                "ru": (
+                    "✈️ **СКОЛЬКО НОЧЕЙ ВЫ ПРОВЕДЕТЕ ЗА ГРАНИЦЕЙ ДО ВОЗВРАЩЕНИЯ ВО ВЬЕТНАМ?**\n\n"
+                    "*(Время пребывания определяет безопасный тариф, чтобы виза была выдана ДО вашей посадки на рейс)*:"
+                ),
+                "vi": (
+                    "✈️ **BẠN DỰ KIẾN LƯU TRÚ Ở NƯỚC NGOÀI BAO LÂU TRƯỚC KHI BAY VỀ VIỆT NAM?**\n\n"
+                    "*(Thời gian ở nước ngoài quyết định gói E-visa an toàn nhất để visa được cấp TRƯỚC giờ bạn lên máy bay về lại VN)*:"
+                ),
+                "en": (
+                    "✈️ **HOW MANY NIGHTS WILL YOU STAY ABROAD BEFORE FLYING BACK TO VIETNAM?**\n\n"
+                    "*(Your stay duration determines the safest package so your visa is issued BEFORE your return flight check-in)*:"
+                )
+            }
+            await send_step_reply(update, context, stay_msg.get(lang, stay_msg["en"]), reply_markup=get_evisa_flight_keyboard(lang), parse_mode="Markdown")
+            return
+
+        # 3. Khách chưa có vé / đang ở nước ngoài -> Mở lịch chọn ngày
+        elif action == "no_flight":
+            cal_msg = {
+                "ru": "📅 **ВЫБЕРИТЕ ЖЕЛАЕМУЮ ДАТУ ПОЛУЧЕНИЯ ВИЗЫ / ВЪЕЗДА ВО ВЬЕТНАМ В КАЛЕНДАРЕ:**\n*(Умный счетчик автоматически исключит субботу и воскресенье)*:",
+                "vi": "📅 **CHỌN NGÀY BẠN MONG MUỐN NHẬN E-VISA / DỰ KIẾN BAY VÀO VIỆT NAM TRÊN LỊCH:**\n*(Bộ đếm thông minh sẽ tự động trừ Thứ 7 và Chủ Nhật)*:",
+                "en": "📅 **SELECT YOUR DESIRED VISA DELIVERY / ENTRY DATE ON THE CALENDAR:**\n*(The smart counter automatically excludes Saturdays & Sundays)*:"
+            }
+            now = datetime.now()
+            await send_step_reply(update, context, cal_msg.get(lang, cal_msg["en"]), reply_markup=get_calendar_keyboard(now.year, now.month, lang, prefix="step|evisa_date"))
+            return
+
+        # 4. Gói khẩn trong ngày (4h)
+        elif action == "quick_4h":
+            sched = calculate_evisa_smart_schedule(stay_type="1night", lang=lang)
+            cust_data.loai_visa = f"Urgent E-Visa (4H Same Day)"
+            msg = generate_evisa_consultation_message(sched, lang)
+            action_kb = InlineKeyboardMarkup([
+                [InlineKeyboardButton("📸 " + ("Отправить фото паспорта" if lang == "ru" else "Gửi ảnh Hộ chiếu & Ảnh thẻ" if lang == "vi" else "Send Passport Photo"), callback_data="step|request_seats")],
+                [InlineKeyboardButton("💳 " + ("Способы оплаты (VCB, VRB, Офис)" if lang == "ru" else "Phương thức thanh toán (VCB, VRB, VP)" if lang == "vi" else "Payment Methods (VCB, VRB, Office)"), callback_data="step|pay_menu")],
+                [InlineKeyboardButton("🔄 " + ("Выбрать другой вариант" if lang == "ru" else "Chọn phương án khác" if lang == "vi" else "Choose another option"), callback_data="step|evisa|main")],
+                [InlineKeyboardButton("💬 " + ("Менеджер поддержки" if lang == "ru" else "Chat với nhân viên hỗ trợ" if lang == "vi" else "Support Manager"), url="https://t.me/easytripvisa_co_ltd")]
+            ])
+            await send_step_reply(update, context, msg, reply_markup=action_kb, parse_mode="Markdown")
+            return
+
+        # 5. Tính toán theo số đêm lưu trú
+        elif action == "calc_stay":
+            stay_key = parts[3]
+            sched = calculate_evisa_smart_schedule(stay_type=stay_key, lang=lang)
+            pkg_title = sched["package_name"].get(lang, sched["package_name"]["en"])
+            cust_data.loai_visa = f"Urgent E-Visa ({pkg_title})"
+            msg = generate_evisa_consultation_message(sched, lang)
+            action_kb = InlineKeyboardMarkup([
+                [InlineKeyboardButton("📸 " + ("Отправить фото паспорта" if lang == "ru" else "Gửi ảnh Hộ chiếu & Ảnh thẻ" if lang == "vi" else "Send Passport Photo"), callback_data="step|request_seats")],
+                [InlineKeyboardButton("💳 " + ("Способы оплаты (VCB, VRB, Офис)" if lang == "ru" else "Phương thức thanh toán (VCB, VRB, VP)" if lang == "vi" else "Payment Methods (VCB, VRB, Office)"), callback_data="step|pay_menu")],
+                [InlineKeyboardButton("🔄 " + ("Выбрать другой вариант" if lang == "ru" else "Chọn thời gian khác" if lang == "vi" else "Change selection"), callback_data="step|evisa|has_flight")],
+                [InlineKeyboardButton("💬 " + ("Менеджер поддержки" if lang == "ru" else "Chat với nhân viên hỗ trợ" if lang == "vi" else "Support Manager"), url="https://t.me/easytripvisa_co_ltd")]
+            ])
+            await send_step_reply(update, context, msg, reply_markup=action_kb, parse_mode="Markdown")
+            return
+
+    # ⚡ KHÁCH CHỌN NGÀY E-VISA TỪ BỘ LỊCH THÔNG MINH
+    elif step_type == "evisa_date":
+        target_val = parts[2]
+        lang = memory_store.get(f"{session_id}_lang", "en")
+        
+        if target_val in ("urgent", "manual"):
+            sched = calculate_evisa_smart_schedule(stay_type="1night", lang=lang)
+        else:
+            sched = calculate_evisa_smart_schedule(target_date_str=target_val, lang=lang)
+            
+        pkg_title = sched["package_name"].get(lang, sched["package_name"]["en"])
+        cust_data.loai_visa = f"Urgent E-Visa ({pkg_title})"
+        msg = generate_evisa_consultation_message(sched, lang)
+        action_kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("📸 " + ("Отправить фото паспорта" if lang == "ru" else "Gửi ảnh Hộ chiếu & Ảnh thẻ" if lang == "vi" else "Send Passport Photo"), callback_data="step|request_seats")],
+            [InlineKeyboardButton("💳 " + ("Способы оплаты (VCB, VRB, Офис)" if lang == "ru" else "Phương thức thanh toán (VCB, VRB, VP)" if lang == "vi" else "Payment Methods (VCB, VRB, Office)"), callback_data="step|pay_menu")],
+            [InlineKeyboardButton("🔄 " + ("Выбрать другую дату" if lang == "ru" else "Chọn ngày khác" if lang == "vi" else "Pick another date"), callback_data="step|evisa|no_flight")],
+            [InlineKeyboardButton("💬 " + ("Менеджер поддержки" if lang == "ru" else "Chat với nhân viên hỗ trợ" if lang == "vi" else "Support Manager"), url="https://t.me/easytripvisa_co_ltd")]
+        ])
+        await send_step_reply(update, context, msg, reply_markup=action_kb, parse_mode="Markdown")
         return
 
     # 🟢 BƯỚC 1 -> BƯỚC 2: Chọn Quốc Gia
@@ -1479,56 +1876,27 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         lang = memory_store.get(f"{session_id}_lang", "en")
         city_key = cust_data.thanh_pho or "nhatrang"
         
-        # 1. Xử lý trường hợp dịch vụ khẩn cấp Urgent E-Visa
-        if "urgent" in svc_id:
+        # 1. Xử lý trường hợp dịch vụ khẩn cấp Urgent E-Visa với Bộ đếm & Nút bấm thông minh
+        if "urgent" in svc_id or svc_id == "special_urgent_evisa":
             cust_data.loai_visa = "Urgent E-Visa"
-            urgent_msg = {
+            intro_msg = {
                 "ru": (
-                    "⚡ **СРОЧНОЕ ОФОРМЛЕНИЕ E-VISA ВО ВЬЕТНАМ (URGENT E-VISA)**\n\n"
-                    "Easy Trip Visa гарантирует получение визы точно в срок:\n"
-                    "• 🚀 **Супер-срочно:** 1–2 часа\n"
-                    "• ⏱️ **В течение дня:** 4 часа\n"
-                    "• 📅 **Ускоренно:** 1–2 рабочих дня\n\n"
-                    "📋 **Для оформления отправьте прямо в этот чат:**\n"
-                    "1. Четкое фото страницы загранпаспорта (без бликов, видны 4 угла)\n"
-                    "2. Фото как на паспорт (4x6 см на белом фоне)\n"
-                    "3. Название пункта въезда (аэропорт или наземный КПП)\n"
-                    "4. Точную дату въезда во Вьетнам\n\n"
-                    "💳 Способы оплаты: Нажмите кнопку ниже для реквизитов (VCB, VRB, офис)."
+                    "⚡ **СИСТЕМА РАСЧЕТА И ВЫБОРА ТАРИФА СРОЧНОЙ E-VISA**\n\n"
+                    "Для точного расчета безопасного графика оформления, исключения задержек на рейсах "
+                    "и **сохранения полных 90 дней пребывания**, пожалуйста, выберите:"
                 ),
                 "vi": (
-                    "⚡ **DỊCH VỤ E-VISA CẤP TỐC / KHẨN CẤP (URGENT E-VISA)**\n\n"
-                    "Easy Trip Visa cam kết ra visa đúng hẹn, an toàn 100%:\n"
-                    "• 🚀 **Siêu tốc:** 1–2 giờ\n"
-                    "• ⏱️ **Trong ngày:** 4 giờ\n"
-                    "• 📅 **Khẩn thường:** 1–2 ngày làm việc\n\n"
-                    "📋 **Hồ sơ gửi ngay vào khung chat:**\n"
-                    "1. Ảnh chụp trang thông tin Hộ chiếu (rõ nét, đủ 4 góc)\n"
-                    "2. Ảnh thẻ 4x6 (nền trắng, chụp thẳng rõ mặt)\n"
-                    "3. Cửa khẩu nhập cảnh (Sân bay hoặc cửa khẩu đường bộ)\n"
-                    "4. Ngày dự kiến nhập cảnh\n\n"
-                    "💳 Thông tin thanh toán: Bấm nút bên dưới để chọn hình thức chuyển khoản (VCB, VRB, VP)."
+                    "⚡ **HỆ THỐNG TƯ VẤN & TÍNH TOÁN GÓI E-VISA KHẨN CẤP THÔNG MINH**\n\n"
+                    "Để xác định gói E-visa an toàn, phòng ngừa rủi ro trễ chuyến "
+                    "và **bảo toàn trọn vẹn đủ 90 ngày lưu trú tại Việt Nam**, vui lòng chọn:"
                 ),
                 "en": (
-                    "⚡ **VIETNAM URGENT E-VISA SERVICE**\n\n"
-                    "Easy Trip Visa provides guaranteed on-time processing:\n"
-                    "• 🚀 **Super Urgent:** 1–2 hours\n"
-                    "• ⏱️ **Same Day:** 4 hours\n"
-                    "• 📅 **Expedited:** 1–2 business days\n\n"
-                    "📋 **Please send in this chat:**\n"
-                    "1. Clear photo of passport info page (all 4 corners visible)\n"
-                    "2. Passport-style 4x6 portrait photo (white background)\n"
-                    "3. Entry port (Airport or Land Border)\n"
-                    "4. Expected date of entry\n\n"
-                    "💳 Payment details: Click the Payment button below for VCB, VRB, or cash."
+                    "⚡ **SMART URGENT E-VISA CALCULATOR & PACKAGE SELECTION**\n\n"
+                    "To determine the most accurate, risk-free schedule and **preserve your full 90-day stay**, please select:"
                 )
             }
-            kb_urgent = InlineKeyboardMarkup([
-                [InlineKeyboardButton("📸 " + ("Отправить фото паспорта" if lang == "ru" else "Gửi ảnh Hộ chiếu" if lang == "vi" else "Send Passport Photo"), callback_data="step|request_seats")],
-                [InlineKeyboardButton("💳 " + ("Способы оплаты (VCB, VRB, Офис)" if lang == "ru" else "Phương thức thanh toán (VCB, VRB, VP)" if lang == "vi" else "Payment Methods (VCB, VRB, Office)"), callback_data="step|pay_menu")],
-                [InlineKeyboardButton("💬 " + ("Менеджер поддержки" if lang == "ru" else "Chat với nhân viên hỗ trợ" if lang == "vi" else "Support Manager"), url="https://t.me/easytripvisa_co_ltd")]
-            ])
-            await send_step_reply(update, context, urgent_msg.get(lang, urgent_msg["en"]), reply_markup=kb_urgent, parse_mode="Markdown")
+            kb_main = get_evisa_main_keyboard(lang)
+            await send_step_reply(update, context, intro_msg.get(lang, intro_msg["en"]), reply_markup=kb_main, parse_mode="Markdown")
             return
             
         # 2. Xử lý trường hợp VIP Fast Track sân bay

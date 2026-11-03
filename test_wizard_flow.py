@@ -42,6 +42,10 @@ from wizard_flows import (
     generate_booking_final_message,
     identify_country,
     analyze_customer_incoming_message,
+    calculate_evisa_smart_schedule,
+    get_evisa_main_keyboard,
+    get_evisa_flight_keyboard,
+    generate_evisa_consultation_message,
 )
 from ai_agent import CustomerData
 
@@ -157,6 +161,25 @@ def test_full_flow():
     for text_in, desc in test_cases:
         res = analyze_customer_incoming_message(text_in)
         print(f"👉 [{desc}]: '{text_in}' => {res}")
+
+    print_separator("KIỂM THỬ BỘ ĐẾM E-VISA THÔNG MINH (4H, 1 NGÀY, 2 NGÀY, TRỪ T7 & CN)")
+    # Case 1: Khách ở 1 đêm (gói 4h)
+    tue = datetime(2026, 11, 4, 11, 0)
+    sched_1 = calculate_evisa_smart_schedule(stay_type="1night", now=tue, lang="vi")
+    print(f"👉 [Trường hợp 1 - Ở 1 đêm]: {sched_1['package_name']['vi']}")
+    print(f"   Nộp: {sched_1['submit_time']} | Trả: {sched_1['delivery_time']} | Kích hoạt: {sched_1['activation_date']}")
+
+    # Case 2: Khách ở 2 đêm (gói 1 ngày nộp Thứ Sáu -> Trả Thứ Hai)
+    fri = datetime(2026, 11, 6, 11, 0)
+    sched_2 = calculate_evisa_smart_schedule(stay_type="2nights", now=fri, lang="vi")
+    print(f"👉 [Trường hợp 2 - Nộp Thứ 6 vướng T7/CN]: {sched_2['package_name']['vi']}")
+    print(f"   Nộp: {sched_2['submit_time']} | Trả: {sched_2['delivery_time']} | Kích hoạt: {sched_2['activation_date']}")
+
+    # Case 3: Bàn phím phân luồng & Thẻ tư vấn khoa học
+    display_keyboard(get_evisa_main_keyboard("ru"), "Bàn phím lựa chọn E-visa chính (Tiếng Nga)")
+    display_keyboard(get_evisa_flight_keyboard("vi"), "Bàn phím chọn số đêm lưu trú (Tiếng Việt)")
+    print("\n📄 [Thẻ tư vấn khoa học mẫu]:")
+    print(generate_evisa_consultation_message(sched_2, "vi"))
 
 if __name__ == "__main__":
     test_full_flow()
