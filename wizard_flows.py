@@ -164,6 +164,148 @@ def is_country_exempt(country_name: str) -> bool:
             return True
     return False
 
+async def send_step_reply(update: Update, context: ContextTypes.DEFAULT_TYPE, text: str, reply_markup=None, parse_mode="Markdown"):
+    """Gửi phản hồi an toàn hỗ trợ cả Telegram Business và Chat cá nhân/nhóm thông thường"""
+    query = update.callback_query
+    chat_id = update.effective_chat.id if update.effective_chat else None
+    user_id = str(chat_id) if chat_id else (str(update.effective_user.id) if update.effective_user else "")
+    session_id = f"telegram_{user_id}"
+    conn_id = memory_store.get(f"{session_id}_business_connection_id") or getattr(getattr(update, "business_message", None), "business_connection_id", None)
+    bot = context.bot if context else None
+    
+    # 1. Nếu là Telegram Business connection (quản lý chat cá nhân giữa khách và shop có nút Stop)
+    if conn_id and chat_id and bot:
+        try:
+            return await bot.send_message(
+                chat_id=chat_id,
+                text=text,
+                reply_markup=reply_markup,
+                parse_mode=parse_mode,
+                business_connection_id=conn_id
+            )
+        except Exception as e_biz:
+            print(f"⚠️ Telegram Business send error: {e_biz}")
+
+    # 2. Phản hồi callback query
+    if query and query.message:
+        try:
+            return await send_step_reply(update, context, text, reply_markup=reply_markup, parse_mode=parse_mode)
+        except Exception as e_qm:
+            print(f"⚠️ query.message.reply_text error: {e_qm}")
+
+    # 3. Phản hồi tin nhắn thông thường
+    if update.message:
+        try:
+            return await update.message.reply_text(text, reply_markup=reply_markup, parse_mode=parse_mode)
+        except Exception as e_m:
+            print(f"⚠️ update.message.reply_text error: {e_m}")
+
+    # 4. Fallback gửi trực tiếp qua bot
+    if chat_id and bot:
+        return await bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_markup, parse_mode=parse_mode)
+
+
+def analyze_customer_incoming_message(text: str) -> dict:
+    """
+    Phân tích đoạn chat của khách hàng khi nhấn chuyển tiếp từ Website sang Telegram:
+    Tự động đọc ý định, tuyến xe, thành phố và dịch vụ để gợi ý quy trình các bước + nút bấm tương ứng.
+    """
+    t = (text or "").strip()
+    tl = t.lower()
+    if not tl:
+        return {"action": "general", "lang": "en"}
+        
+    # Phát hiện ngôn ngữ sơ bộ
+    detected_lang = "en"
+    if any(c in tl for c in ["здравствуйте", "привет", "добр", "хочу", "виза", "визаран", "паспорт", "росси", "дня", "дней", "муйне", "нячанг", "лаос", "камбодж", "оверстей", "срочн"]):
+        detected_lang = "ru"
+    elif any(c in tl for c in ["xin chào", "chào", "tôi muốn", "cho tôi", "báo giá", "làm visa", "hộ chiếu", "mũi né", "nha trang", "quá hạn", "khẩn", "cấp tốc", "tư vấn", "xe buýt", "xe bus", "đà nẵng", "hà nội", "sài gòn", "phí", "giá", "vé", "đặt xe", "chuyến", "lào", "campuchia"]):
+        detected_lang = "vi"
+    elif any(c in tl for c in ["안녕", "비자"]):
+        detected_lang = "ko"
+
+    # 1. Kiểm tra các dịch vụ đại lý chuyên biệt (Overstay, TRC, Work, Family)
+    if any(k in tl for k in ["overstay", "оверстей", "просрочк", "quá hạn", "hết hạn visa"]):
+        return {"action": "special_agent", "topic": "overstay", "lang": detected_lang}
+    if any(k in tl for k in ["trc", "внж", "tạm trú", "residence card", "карта резидента"]):
+        return {"action": "special_agent", "topic": "trc", "lang": detected_lang}
+    if any(k in tl for k in ["work permit", "work visa", "рабочая виза", "разрешение на работу", "lao động", "giấy phép lao động"]):
+        return {"action": "special_agent", "topic": "work", "lang": detected_lang}
+    if any(k in tl for k in ["family visa", "семейная виза", "виза для семьи", "thăm thân"]):
+        return {"action": "special_agent", "topic": "family", "lang": detected_lang}
+
+    # 2. Kiểm tra Fast Track và E-Visa cấp tốc
+    if any(k in tl for k in ["fast track", "fasttrack", "фаст трек", "đón sân bay"]):
+        return {"action": "special_service", "service_id": "special_fast_track", "lang": detected_lang}
+    if any(k in tl for k in ["urgent", "срочн", "cấp tốc", "khẩn"]):
+        return {"action": "special_service", "service_id": "special_urgent_evisa", "lang": detected_lang}
+
+    # 3. Kiểm tra Thành phố xuất phát & Tuyến xe
+    city = None
+    if any(k in tl for k in ["muine", "mui ne", "mũi né", "муйне", "phan thiết", "phan thiet"]):
+        city = "muine"
+    elif any(k in tl for k in ["nhatrang", "nha trang", "нячанг"]):
+        city = "nhatrang"
+    elif any(k in tl for k in ["danang", "da nang", "đà nẵng", "дананг", "hội an", "hoi an"]):
+        city = "danang"
+    elif any(k in tl for k in ["hcm", "hồ chí minh", "ho chi minh", "хошимин", "sài gòn", "saigon", "tp.hcm", "tp hcm", "tphcm"]):
+        city = "hcm"
+    elif any(k in tl for k in ["hanoi", "ha noi", "hà nội", "ханой"]):
+        city = "hanoi"
+    elif any(k in tl for k in ["abroad", "за рубежом", "nước ngoài"]):
+        city = "abroad"
+
+    # Nếu có đề cập tuyến xe hoặc xuất phát từ Website Booking Lead
+    is_web_booking_lead = (
+        city is not None or
+        any(k in tl for k in [
+            "express visa run booking", "визаран", "visarun", "visa run",
+            "vietnam visa pass", "камбодж", "лаос", "campuchia", "cambodia",
+            "lào", "laos", "xe buýt", "xe bus", "bus", "xe đi", "đặt xe"
+        ])
+    )
+    if is_web_booking_lead:
+        c_code = city or "nhatrang"
+        service_name = ""
+        if c_code == "muine" or any(k in tl for k in ["камбодж", "cambodia", "campuchia", "mộc bài", "moc bai"]):
+            c_code = "muine"
+            service_name = "Визаран Муйне ⇄ Камбоджа (Мокбай)" if detected_lang == "ru" else "Visarun Mũi Né ⇄ Campuchia (Mộc Bài)" if detected_lang == "vi" else "Visarun Mui Ne ⇄ Cambodia (Moc Bai)"
+        elif c_code == "danang" or any(k in tl for k in ["lao bảo", "lao bao", "лао бао"]):
+            c_code = "danang"
+            service_name = "Визаран Дананг ⇄ Лаос (Лао Бао)" if detected_lang == "ru" else "Visarun Đà Nẵng ⇄ Lào (Lao Bảo)" if detected_lang == "vi" else "Visarun Da Nang ⇄ Laos (Lao Bao)"
+        elif c_code == "hanoi" or any(k in tl for k in ["hữu nghị", "huu nghi", "хыу нги"]):
+            c_code = "hanoi"
+            service_name = "Визаран Ханой ⇄ Хыу Нги" if detected_lang == "ru" else "Visarun Hà Nội ⇄ Hữu Nghị" if detected_lang == "vi" else "Visarun Hanoi ⇄ Huu Nghi"
+        elif c_code == "hcm":
+            service_name = "Индивидуальный трансфер Хошимин ⇄ Мокбай" if detected_lang == "ru" else "Xe riêng TP.HCM ⇄ Mộc Bài" if detected_lang == "vi" else "Private Car HCMC ⇄ Moc Bai"
+        else:
+            service_name = "Визаран Нячанг ⇄ Лаос / Камбоджа" if detected_lang == "ru" else "Visarun Nha Trang ⇄ Lào / Campuchia" if detected_lang == "vi" else "Visarun Nha Trang ⇄ Laos / Cambodia"
+
+        return {
+            "action": "web_lead",
+            "city": c_code,
+            "service_name": service_name,
+            "lang": detected_lang
+        }
+
+    # 4. Kiểm tra nếu khách chỉ gõ tên quốc gia (VD: Russia, Kazakhstan, Đức, Pháp)
+    country_res = identify_country(t)
+    if country_res:
+        return {"action": "country_selected", "country": country_res[0], "lang": country_res[1]}
+
+    # 5. Kiểm tra Lời chào / Gợi ý bắt đầu từ Web hoặc /start
+    greetings = [
+        "/start", "hi", "hello", "hi easytrip", "hello easytrip", "hi easy trip", "hello easy trip",
+        "здравствуйте", "привет", "добрый день", "доброе утро", "добрый вечер",
+        "xin chào", "chào bạn", "chào bot", "chào easytrip", "chào easy trip",
+        "안녕하세요", "여보세요", "start"
+    ]
+    if (tl in greetings) or any(tl.startswith(g) for g in ["hi easytrip", "hello easytrip", "hi easy trip", "hello easy trip", "xin chào", "chào", "здравствуйте", "добрый день", "hello vietnam visa pass"]):
+        return {"action": "greeting", "lang": detected_lang}
+
+    return {"action": "general", "lang": detected_lang}
+
+
 # ============================================================
 # CÁC BÀN PHÍM BƯỚC 1, 2, 3
 # ============================================================
@@ -876,7 +1018,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                 "🌐 **Vui lòng nhập tên quốc gia của bạn** vào khung chat:"
             )
             if query.message:
-                await query.message.reply_text(prompt, parse_mode="Markdown")
+                await send_step_reply(update, context, prompt, parse_mode="Markdown")
             return
             
         nat_map = {
@@ -891,6 +1033,19 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         cust_data.quoc_tich = cname
         memory_store[f"{session_id}_lang"] = lang
         
+        # Nếu đã có sẵn thành phố từ Web Lead (VD: Khách chọn Mũi Né từ web) -> Tự động chuyển ngay sang Lịch Quốc Tế
+        if cust_data.thanh_pho and cust_data.thanh_pho in CITY_OPTIONS and cust_data.thanh_pho != "other":
+            now = datetime.now()
+            c_name_disp = CITY_OPTIONS[cust_data.thanh_pho].get(f"name_{lang}", cust_data.thanh_pho.upper())
+            cal_prompts = {
+                "ru": f"✅ Гражданство: **{cname}**\n📍 Город отправления: **{c_name_disp}**\n\n📅 **Выберите дату выезда в календаре**:",
+                "en": f"✅ Nationality: **{cname}**\n📍 Departure City: **{c_name_disp}**\n\n📅 **Please pick a departure date on the calendar**:",
+                "vi": f"✅ Quốc tịch: **{cname}**\n📍 Thành phố xuất phát: **{c_name_disp}**\n\n📅 **Vui lòng chọn ngày khởi hành trên lịch**:"
+            }
+            keyboard = get_calendar_keyboard(now.year, now.month, lang)
+            await send_step_reply(update, context, cal_prompts.get(lang, cal_prompts["en"]), reply_markup=keyboard)
+            return
+
         city_prompts = {
             "ru": f"✅ Гражданство: **{cname}**\n\n📍 **В каком городе Вьетнама вы сейчас находитесь?**\n(Или выберите 'За рубежом', если только планируете въезд):",
             "en": f"✅ Nationality: **{cname}**\n\n📍 **Which city in Vietnam are you currently staying in?**\n(Or select 'Currently Abroad' if you are planning to enter):",
@@ -898,8 +1053,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
             "ko": f"✅ 국적: **{cname}**\n\n📍 **현재 베트남 어느 도시에 머물고 계신가요?**:"
         }
         keyboard = get_city_keyboard(lang)
-        if query.message:
-            await query.message.reply_text(city_prompts.get(lang, city_prompts["en"]), reply_markup=keyboard, parse_mode="Markdown")
+        await send_step_reply(update, context, city_prompts.get(lang, city_prompts["en"]), reply_markup=keyboard)
         return
 
     # 🟢 BƯỚC 2 -> BƯỚC 3: Chọn Thành Phố / Vị trí
@@ -915,7 +1069,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                 "vi": "📍 **Vui lòng nhập tên thành phố hoặc vị trí hiện tại của bạn** vào khung chat.\nChúng tôi sẽ tính toán tuyến xe buýt hoặc phương án đón gần bạn nhất!"
             }
             if query.message:
-                await query.message.reply_text(msg.get(lang, msg["en"]), parse_mode="Markdown")
+                await send_step_reply(update, context, msg.get(lang, msg["en"]), parse_mode="Markdown")
             return
             
         cust_data.thanh_pho = city_key
@@ -931,7 +1085,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
             }
             kb = get_smart_advisory_keyboard("abroad", cust_data.quoc_tich or "", lang)
             if query.message:
-                await query.message.reply_text(svc_prompts.get(lang, svc_prompts["en"]), reply_markup=kb, parse_mode="Markdown")
+                await send_step_reply(update, context, svc_prompts.get(lang, svc_prompts["en"]), reply_markup=kb, parse_mode="Markdown")
             return
             
         # Ở trong nước -> Mở Lịch tháng tương tác chuẩn quốc tế
@@ -943,7 +1097,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         }
         keyboard = get_calendar_keyboard(now.year, now.month, lang)
         if query.message:
-            await query.message.reply_text(cal_prompts.get(lang, cal_prompts["en"]), reply_markup=keyboard, parse_mode="Markdown")
+            await send_step_reply(update, context, cal_prompts.get(lang, cal_prompts["en"]), reply_markup=keyboard, parse_mode="Markdown")
         return
 
     # 🟢 ĐIỀU HƯỚNG LỊCH THÁNG
@@ -992,7 +1146,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         }
         keyboard = get_smart_advisory_keyboard(city_key, cname, lang)
         if query.message:
-            await query.message.reply_text(advisory_header.get(lang, advisory_header["en"]), reply_markup=keyboard, parse_mode="Markdown")
+            await send_step_reply(update, context, advisory_header.get(lang, advisory_header["en"]), reply_markup=keyboard, parse_mode="Markdown")
         return
 
     # 🟢 BƯỚC 4: Khách chọn gói dịch vụ -> TRẢ VỀ BẢN TƯ VẤN LỊCH TRÌNH & LƯU Ý
@@ -1051,7 +1205,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                 [InlineKeyboardButton("💬 " + ("Менеджер поддержки" if lang == "ru" else "Chat với nhân viên hỗ trợ" if lang == "vi" else "Support Manager"), url="https://t.me/easytripvisa_co_ltd")]
             ])
             if query.message:
-                await query.message.reply_text(urgent_msg.get(lang, urgent_msg["en"]), reply_markup=kb_urgent, parse_mode="Markdown")
+                await send_step_reply(update, context, urgent_msg.get(lang, urgent_msg["en"]), reply_markup=kb_urgent, parse_mode="Markdown")
             return
             
         # 2. Xử lý trường hợp VIP Fast Track sân bay
@@ -1103,7 +1257,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                 [InlineKeyboardButton("💬 " + ("Менеджер поддержки" if lang == "ru" else "Chat với nhân viên hỗ trợ" if lang == "vi" else "Support Manager"), url="https://t.me/easytripvisa_co_ltd")]
             ])
             if query.message:
-                await query.message.reply_text(fasttrack_msg.get(lang, fasttrack_msg["en"]), reply_markup=kb_ft, parse_mode="Markdown")
+                await send_step_reply(update, context, fasttrack_msg.get(lang, fasttrack_msg["en"]), reply_markup=kb_ft, parse_mode="Markdown")
             return
 
         # 3. Xác định tuyến hành trình xe buýt để hiển thị lịch trình chi tiết
@@ -1133,7 +1287,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         ])
         
         if query.message:
-            await query.message.reply_text(itin_msg, reply_markup=next_action_kb, parse_mode="Markdown")
+            await send_step_reply(update, context, itin_msg, reply_markup=next_action_kb, parse_mode="Markdown")
             
         # Thông báo Admin Group
         from telegram_router import send_to_admin_group
@@ -1171,7 +1325,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         }
         kb_pay = get_payment_methods_keyboard(lang)
         if query.message:
-            await query.message.reply_text(seat_req_msg.get(lang, seat_req_msg["en"]), reply_markup=kb_pay, parse_mode="Markdown")
+            await send_step_reply(update, context, seat_req_msg.get(lang, seat_req_msg["en"]), reply_markup=kb_pay, parse_mode="Markdown")
             
         # Chuyển phase trong AI Agent sang SEAT_SELECTION
         simulated_text = f"Customer requested seat checking for {cust_data.loai_visa} on {cust_data.ngay_khoi_hanh}. Nationality: {cust_data.quoc_tich}."
@@ -1337,7 +1491,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         ])
         
         if query.message:
-            await query.message.reply_text(info.get(lang, info["en"]), reply_markup=kb_agent, parse_mode="Markdown")
+            await send_step_reply(update, context, info.get(lang, info["en"]), reply_markup=kb_agent, parse_mode="Markdown")
         return
 
     # 🟢 BƯỚC THANH TOÁN: Danh mục ngân hàng (VCB, VRB, Tiền mặt tại VP)
@@ -1359,7 +1513,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         }
         kb_pay = get_payment_methods_keyboard(lang)
         if query.message:
-            await query.message.reply_text(menu_title.get(lang, menu_title["en"]), reply_markup=kb_pay, parse_mode="Markdown")
+            await send_step_reply(update, context, menu_title.get(lang, menu_title["en"]), reply_markup=kb_pay, parse_mode="Markdown")
         return
 
     # 🟢 CHI TIẾT CÁCH THỨC CHUYỂN KHOẢN (VCB / VRB / TIỀN MẶT)
@@ -1369,7 +1523,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         detail_msg = get_payment_detail_message(method, lang)
         detail_kb = get_payment_detail_keyboard(lang)
         if query.message:
-            await query.message.reply_text(detail_msg, reply_markup=detail_kb, parse_mode="Markdown")
+            await send_step_reply(update, context, detail_msg, reply_markup=detail_kb, parse_mode="Markdown")
         return
 
     # 🟢 NÚT TRỞ VỀ THAO TÁC TRƯỚC ĐÓ (BACK TO PREVIOUS STEP)
@@ -1409,19 +1563,19 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
             }
             keyboard = get_smart_advisory_keyboard(city_key, cname, lang)
             if query.message:
-                await query.message.reply_text(advisory_header.get(lang, advisory_header["en"]), reply_markup=keyboard, parse_mode="Markdown")
+                await send_step_reply(update, context, advisory_header.get(lang, advisory_header["en"]), reply_markup=keyboard, parse_mode="Markdown")
             return
             
         # 2. Trở về chọn lại quốc gia
         elif back_target in ("nationality", "nat"):
             keyboard = get_nationality_keyboard()
             if query.message:
-                await query.message.reply_text("🌐 Chọn lại quốc gia / Выберите страну / Choose country:", reply_markup=keyboard)
+                await send_step_reply(update, context, "🌐 Chọn lại quốc gia / Выберите страну / Choose country:", reply_markup=keyboard)
             return
             
         # 3. Trở về chọn lại thành phố
         elif back_target == "city":
             keyboard = get_city_keyboard(lang)
             if query.message:
-                await query.message.reply_text("📍 Chọn lại thành phố / Выберите город / Choose city:", reply_markup=keyboard)
+                await send_step_reply(update, context, "📍 Chọn lại thành phố / Выберите город / Choose city:", reply_markup=keyboard)
             return

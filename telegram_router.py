@@ -29,6 +29,8 @@ from wizard_flows import (
     generate_booking_final_message,
     handle_step_callback,
     identify_country,
+    send_step_reply,
+    analyze_customer_incoming_message,
 )
 from lark_api import create_customer_record, upload_image_to_lark, update_customer_image, update_order_status, create_order, get_daily_harvest_report
 from i18n import get_lang_code, get_msg
@@ -1096,6 +1098,103 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
 
     target_msg: Any = update.message or update.business_message or (update.callback_query.message if update.callback_query else None)
 
+    # ─── BƯỚC THÔNG MINH: NHẬN DIỆN Ý ĐỊNH & TỰ GỢI Ý QUY TRÌNH NÚT BẤM TƯƠNG ỨNG ───
+    incoming_intent = analyze_customer_incoming_message(text)
+    intent_action = incoming_intent.get("action")
+    detected_lang = incoming_intent.get("lang", "ru")
+
+    # A. Khách gửi lời chào từ Web / Telegram (/start, hi easytrip, здравствуйте, xin chào...)
+    if intent_action == "greeting":
+        memory_store[session_id] = []
+        memory_store.pop(f"{session_id}_data", None)
+        welcome_msgs = {
+            "ru": (
+                "👋 **Здравствуйте! Добро пожаловать в Easy Trip & Visa!** 🚌✨\n\n"
+                "Мы помогаем организовать комфортный визаран и оформление виз во Вьетнаме (Камбоджа, Лаос, E-Visa, VIP Fast Track).\n\n"
+                "👉 **Шаг 1: Пожалуйста, выберите ваше гражданство ниже** (или напишите название вашей страны в чат):"
+            ),
+            "en": (
+                "👋 **Hello and welcome to Easy Trip & Visa!** 🚌✨\n\n"
+                "We provide professional Visa Run and Vietnam Visa services (Cambodia, Laos, E-Visa, VIP Fast Track).\n\n"
+                "👉 **Step 1: Please select your nationality below** (or type your country in this chat):"
+            ),
+            "vi": (
+                "👋 **Xin chào! Chào mừng bạn đến với Easy Trip & Visa!** 🚌✨\n\n"
+                "Chúng tôi chuyên xe buýt Visarun và dịch vụ thị thực Việt Nam (Campuchia, Lào, E-Visa, Fast Track).\n\n"
+                "👉 **Bước 1: Vui lòng chọn Quốc tịch của bạn bên dưới** (hoặc gõ tên quốc gia vào khung chat):"
+            )
+        }
+        await send_step_reply(
+            update,
+            context,
+            welcome_msgs.get(detected_lang, welcome_msgs["ru"]),
+            reply_markup=get_nationality_keyboard()
+        )
+        return
+
+    # B. Khách chuyển tiếp từ Website (chọn tuyến / điểm xuất phát trên web)
+    if intent_action == "web_lead":
+        c_code = incoming_intent.get("city", "nhatrang")
+        c_disp = CITY_OPTIONS.get(c_code, {}).get(f"name_{detected_lang}", c_code.upper())
+        svc_name = incoming_intent.get("service_name", "")
+        
+        cust_data = CustomerData()
+        cust_data.thanh_pho = c_code
+        cust_data.loai_visa = svc_name
+        memory_store[f"{session_id}_data"] = cust_data
+        memory_store[f"{session_id}_lang"] = detected_lang
+        
+        lead_msgs = {
+            "ru": (
+                f"👋 **Здравствуйте! Спасибо за обращение с сайта Easy Trip & Visa!** 🚌✨\n\n"
+                f"📍 Мы зафиксировали ваш предварительный выбор:\n"
+                f"• **Город отправления:** {c_disp}\n"
+                f"• **Направление:** {svc_name}\n\n"
+                "👉 **Шаг 1: Пожалуйста, выберите ваше гражданство ниже** (чтобы бот проверил безвизовый въезд и сразу открыл календарь дат):"
+            ),
+            "en": (
+                f"👋 **Hello! Thank you for contacting Easy Trip & Visa from our website!** 🚌✨\n\n"
+                f"📍 We received your booking selection:\n"
+                f"• **Departure City:** {c_disp}\n"
+                f"• **Service:** {svc_name}\n\n"
+                "👉 **Step 1: Please select your nationality below** (to verify visa-free eligibility and open departure dates):"
+            ),
+            "vi": (
+                f"👋 **Xin chào! Cảm ơn bạn đã liên hệ từ website Easy Trip & Visa!** 🚌✨\n\n"
+                f"📍 Yêu cầu bạn vừa chọn:\n"
+                f"• **Điểm xuất phát:** {c_disp}\n"
+                f"• **Tuyến dịch vụ:** {svc_name}\n\n"
+                "👉 **Bước 1: Vui lòng chọn Quốc tịch của bạn bên dưới** (để bot kiểm tra điều kiện miễn thị thực và mở lịch khởi hành):"
+            )
+        }
+        await send_step_reply(
+            update,
+            context,
+            lead_msgs.get(detected_lang, lead_msgs["ru"]),
+            reply_markup=get_nationality_keyboard()
+        )
+        return
+
+    # C. Khách yêu cầu tư vấn chuyên viên riêng (Overstay, TRC, Work permit, Family visa)
+    if intent_action == "special_agent":
+        await handle_step_callback(
+            update,
+            context,
+            ["step", "agent", incoming_intent["topic"]],
+            process_customer_text_message
+        )
+        return
+
+    # D. Khách yêu cầu dịch vụ đặc biệt (Fast Track, Urgent E-Visa)
+    if intent_action == "special_service":
+        await handle_step_callback(
+            update,
+            context,
+            ["step", "svc", incoming_intent["service_id"]],
+            process_customer_text_message
+        )
+        return
+
     # 1. Nhận diện nếu khách đang trả lời tên quốc gia (hoặc bấm Other Country)
     c_res = identify_country(text) if (memory_store.get(f"{session_id}_waiting_country") or len(text.split()) <= 4) else None
     if memory_store.get(f"{session_id}_waiting_country") or c_res:
@@ -1112,14 +1211,26 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
         memory_store[f"{session_id}_lang"] = lang
         memory_store[f"{session_id}_waiting_country"] = False
         
+        # Nếu đã có sẵn thành phố từ Web Lead (VD: Mũi Né) -> Chuyển ngay sang Lịch Quốc Tế
+        if cust_data.thanh_pho and cust_data.thanh_pho in CITY_OPTIONS and cust_data.thanh_pho != "other":
+            now = datetime.now()
+            c_name_disp = CITY_OPTIONS[cust_data.thanh_pho].get(f"name_{lang}", cust_data.thanh_pho.upper())
+            cal_prompts = {
+                "ru": f"✅ Гражданство: **{cname}**\n📍 Город отправления: **{c_name_disp}**\n\n📅 **Выберите дату выезда в календаре**:",
+                "en": f"✅ Nationality: **{cname}**\n📍 Departure City: **{c_name_disp}**\n\n📅 **Please pick a departure date on the calendar**:",
+                "vi": f"✅ Quốc tịch: **{cname}**\n📍 Thành phố xuất phát: **{c_name_disp}**\n\n📅 **Vui lòng chọn ngày khởi hành trên lịch**:"
+            }
+            kb_cal = get_calendar_keyboard(now.year, now.month, lang)
+            await send_step_reply(update, context, cal_prompts.get(lang, cal_prompts["en"]), reply_markup=kb_cal)
+            return
+
         city_prompts = {
             "ru": f"✅ Гражданство: **{cname}**\n\n📍 **В каком городе Вьетнама вы сейчас находитесь?**\n(Или выберите 'За рубежом', если только планируете въезд):",
             "en": f"✅ Nationality: **{cname}**\n\n📍 **Which city in Vietnam are you currently staying in?**\n(Or select 'Currently Abroad' if you are planning to enter):",
             "vi": f"✅ Quốc gia: **{cname}**\n\n📍 **Bạn hiện đang ở thành phố nào tại Việt Nam?**\n(Hoặc chọn 'Đang ở nước ngoài' nếu sắp bay vào VN):"
         }
         kb = get_city_keyboard(lang)
-        if target_msg:
-            await target_msg.reply_text(city_prompts.get(lang, city_prompts["en"]), reply_markup=kb, parse_mode="Markdown")
+        await send_step_reply(update, context, city_prompts.get(lang, city_prompts["en"]), reply_markup=kb)
         return
 
     # 2. Nhận diện nếu khách đang nhập thành phố khác
@@ -1139,8 +1250,7 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
             "vi": f"✅ Điểm của bạn: **{text.strip()}** (Đội ngũ sẽ tư vấn tuyến đón thuận tiện nhất!)\n\n📅 **Vui lòng chọn ngày trên lịch**:"
         }
         kb = get_calendar_keyboard(now.year, now.month, lang)
-        if target_msg:
-            await target_msg.reply_text(cal_prompts.get(lang, cal_prompts["en"]), reply_markup=kb, parse_mode="Markdown")
+        await send_step_reply(update, context, cal_prompts.get(lang, cal_prompts["en"]), reply_markup=kb)
         return
 
     # Kiểm tra chế độ Bot (Ưu tiên chế độ riêng của phiên, nếu chưa đặt thì lấy chế độ toàn hệ thống)
