@@ -34,3 +34,10 @@ temp_build_mau01/
 .DS_Store
 *.log
 node_modules/
+
+gcp_service_account.json
+*.bak
+debug_target.txt
+static/uploads/
+chat_history.json
+

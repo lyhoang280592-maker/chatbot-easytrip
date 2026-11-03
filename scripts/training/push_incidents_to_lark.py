@@ -14,7 +14,7 @@ async def push_incidents_to_lark():
         {"Q": "Khách muốn đổi ngày đi xe buýt", "A": "Báo khách gửi lại ngày mới. Nhân viên kiểm tra sơ đồ ghế. Nếu còn chỗ, hệ thống sẽ tự động cập nhật lại lệnh đăng ký và báo cho đội xe."},
         {"Q": "Lỗi chuyển khoản hoặc chưa nhận được tiền", "A": "Yêu cầu khách gửi ảnh chụp màn hình Bill chuyển khoản thành công có mã giao dịch. Admin sẽ kiểm tra tài khoản BIDV của Ly Viet Hoang để xác nhận."},
         {"Q": "Hộ chiếu khách bị mờ hoặc thiếu thông tin", "A": "Yêu cầu khách chụp lại ảnh gốc hộ chiếu rõ nét, không bị bóng đèn hoặc mất góc để làm thủ tục biên giới chính xác."},
-        {"Q": "Trường hợp khẩn cấp tại biên giới hoặc sát giờ xe", "A": "Cung cấp ngay hotline hỗ trợ 24/7 của Mr. Hoang: +84 896 916 361."}
+        {"Q": "Trường hợp khẩn cấp tại biên giới hoặc sát giờ xe", "A": "Cung cấp ngay hotline hỗ trợ 24/7 của Mr. Hoang: +84 85 320 1277."}
     ]
 
     async with httpx.AsyncClient(timeout=30) as http:

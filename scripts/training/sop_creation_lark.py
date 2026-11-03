@@ -47,7 +47,7 @@ async def create_sop_on_lark():
    - This message is automatically sent to the "Operation Group" for bus arrangements.
 
 6. STAGE 6: CUSTOMER SUPPORT
-   - Emergency Contact: Mr. Hoang (+84 896 916 361) for immediate assistance at the border.
+   - Emergency Contact: Mr. Hoang (+84 85 320 1277) for immediate assistance at the border.
     """
 
     async with httpx.AsyncClient(timeout=30) as http:

@@ -76,7 +76,7 @@ BẠN CẦN TẬP TRUNG TRÍCH XUẤT CÁC CÂU HỎI ĐÁP TIẾNG VIỆT SAU:
 4. Dịch vụ làm phiếu Lý lịch tư pháp (cho tất cả quốc tịch để làm GPLĐ, thẻ tạm trú).
 5. Tuyến Visarun từ ĐÀ NẴNG đi Lào (Giá vé các gói 2.150.000đ, 2.200.000đ, 2.600.000đ, 3.400.000đ, 4.600.000đ tùy thuộc vào thời gian xử lý e-visa khẩn; xe chạy lúc 5:30 sáng hằng ngày từ thứ 2 đến thứ 6/thứ 7).
 6. Dịch vụ cho thuê xe máy tại Nha Trang (xe mới, tiết kiệm xăng, giao tận nơi, có mũ bảo hiểm).
-7. Thông tin liên hệ của Easy Trip & Visa (Tên công ty, địa chỉ văn phòng tại 21 Phan Vinh, số Zalo/Whatsapp +84 868 462 071, Telegram @easytripvisa).
+7. Thông tin liên hệ của Easy Trip & Visa (Tên công ty, địa chỉ văn phòng tại 21 Phan Vinh, số Zalo/Whatsapp +84 85 320 1277, Telegram @easytripvisa).
 
 Hãy biên soạn thành các câu hỏi (Question) và câu trả lời (Answer) bằng TIẾNG VIỆT thật súc tích, đầy đủ và chuyên nghiệp.
 Yêu cầu trả về kết quả dưới dạng JSON chuẩn xác 100% như sau:

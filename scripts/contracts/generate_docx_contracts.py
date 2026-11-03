@@ -172,7 +172,7 @@ def build_contract_docx(output_docx_path: str, data: dict):
 
     add_p(doc, "English Name: EASY TRIP AND VISA COMPANY LIMITED", font_size=9, italic=True, space_after=2)
     add_p(doc, "Mã số thuế / Tax Code: 4202051389", font_size=9.5, space_after=2)
-    add_p(doc, "Địa chỉ / Address: 21 Phan Vinh, Phường Vĩnh Nguyên, TP. Nha Trang, tỉnh Khánh Hòa, Việt Nam", font_size=9.5, space_after=2)
+    add_p(doc, "Địa chỉ / Address: 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, tỉnh Khánh Hòa, Việt Nam", font_size=9.5, space_after=2)
 
     p_rep = add_p(doc, font_size=9.5, space_after=2)
     p_rep.add_run("Đại diện / Represented by: Ông/Bà ")
@@ -181,7 +181,7 @@ def build_contract_docx(output_docx_path: str, data: dict):
     p_rep.add_run(" (Mr./Ms. LY VIET HOANG)")
 
     add_p(doc, "Chức vụ / Position: Giám đốc / Director", font_size=9.5, space_after=2)
-    add_p(doc, "Điện thoại / Telephone: 0896916361 - Hotline: 0896916361", font_size=9.5, space_after=2)
+    add_p(doc, "Điện thoại / Telephone: +84 85 320 1277 - Hotline: +84 85 320 1277", font_size=9.5, space_after=2)
 
     p_acc = add_p(doc, font_size=9.5, space_after=4)
     p_acc.add_run("Tài khoản ngân hàng / Bank Account: VCB Khánh Hòa Số Tài khoản / Account No.: ")

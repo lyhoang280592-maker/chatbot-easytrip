@@ -18,7 +18,18 @@ from telegram.ext import (
 
 from memory_store import memory_store, load_session_history
 import customer_memory
-from ai_agent import process_chat, identify_image_type
+from ai_agent import process_chat, identify_image_type, CustomerData
+from wizard_flows import (
+    CITY_OPTIONS,
+    ROUTE_SERVICES,
+    get_nationality_keyboard,
+    get_city_keyboard,
+    get_calendar_keyboard,
+    get_routes_keyboard,
+    generate_booking_final_message,
+    handle_step_callback,
+    identify_country,
+)
 from lark_api import create_customer_record, upload_image_to_lark, update_customer_image, update_order_status, create_order, get_daily_harvest_report
 from i18n import get_lang_code, get_msg
 from seat_map_generator import (
@@ -814,25 +825,13 @@ async def notify_admin_incoming_message(
 
 async def send_new_customer_welcome_menu(chat_id: str | int, target_msg, conn_id=None):
     welcome_text = (
-        "Welcome to Easy Trip & Visa. I'm here to help you with your Visarun trip. \n"
-        "Could you please tell me: \n"
-        "Your nationality\n"
-        "Current city\n"
-        "visa expiry date?"
+        "👋 **Welcome to Easy Trip & Visa!** 🚌🌏\n\n"
+        "🇷🇺 Пожалуйста, выберите ваш язык и гражданство:\n"
+        "🇬🇧 Please select your language and nationality:\n"
+        "🇰🇷 언어와 국적을 선택해 주세요:\n"
+        "🇻🇳 Vui lòng chọn ngôn ngữ & quốc tịch:"
     )
-    
-    keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("🚌 Laos Visa Run 45 Days (Visa Free)", callback_data="service|laos_45d")],
-        [InlineKeyboardButton("🚌 Laos Visa Run 90 Days (E-Visa)", callback_data="service|laos_90d")],
-        [InlineKeyboardButton("🚌 Cambodia Visa Run 90 Days", callback_data="service|cambodia_90d")],
-        [
-            InlineKeyboardButton("⚡ Urgent E-Visa Service", callback_data="service|evisa_urgent"),
-            InlineKeyboardButton("✈️ Airport Fast Track & Motorbike", callback_data="service|fast_track")
-        ],
-        [InlineKeyboardButton("💬 Direct Telegram Support", url="https://t.me/easytripvisa_co_ltd")],
-        [InlineKeyboardButton("💬 Direct WhatsApp Support", url="https://wa.me/84868462071")]
-    ])
-    
+    keyboard = get_nationality_keyboard()
     if conn_id:
         await tg_app.bot.send_message(chat_id=int(chat_id), text=welcome_text, reply_markup=keyboard, parse_mode="Markdown", business_connection_id=conn_id)  # type: ignore
     elif target_msg:
@@ -989,6 +988,7 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await context.bot.send_message(chat_id=target_chat_id, text=welcome_question, reply_markup=keyboard, parse_mode="Markdown")
 
 
+
 async def get_id_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.message and update.effective_chat:
         await update.message.reply_text(f"📍 Chat ID: `{update.effective_chat.id}`\nType: {update.effective_chat.type}", parse_mode='Markdown')
@@ -1093,6 +1093,55 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
     if update.effective_user:
         memory_store[f"{session_id}_name"] = update.effective_user.full_name
     memory_store[f"{session_id}_last_update"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+    target_msg: Any = update.message or update.business_message or (update.callback_query.message if update.callback_query else None)
+
+    # 1. Nhận diện nếu khách đang trả lời tên quốc gia (hoặc bấm Other Country)
+    c_res = identify_country(text) if (memory_store.get(f"{session_id}_waiting_country") or len(text.split()) <= 4) else None
+    if memory_store.get(f"{session_id}_waiting_country") or c_res:
+        if c_res:
+            cname, lang = c_res
+        else:
+            cname, lang = text.strip().title(), "en"
+            
+        cust_data = memory_store.get(f"{session_id}_data")
+        if not cust_data or not isinstance(cust_data, CustomerData):
+            cust_data = CustomerData()
+            memory_store[f"{session_id}_data"] = cust_data
+        cust_data.quoc_tich = cname
+        memory_store[f"{session_id}_lang"] = lang
+        memory_store[f"{session_id}_waiting_country"] = False
+        
+        city_prompts = {
+            "ru": f"✅ Гражданство: **{cname}**\n\n📍 **В каком городе Вьетнама вы сейчас находитесь?**\n(Или выберите 'За рубежом', если только планируете въезд):",
+            "en": f"✅ Nationality: **{cname}**\n\n📍 **Which city in Vietnam are you currently staying in?**\n(Or select 'Currently Abroad' if you are planning to enter):",
+            "vi": f"✅ Quốc gia: **{cname}**\n\n📍 **Bạn hiện đang ở thành phố nào tại Việt Nam?**\n(Hoặc chọn 'Đang ở nước ngoài' nếu sắp bay vào VN):"
+        }
+        kb = get_city_keyboard(lang)
+        if target_msg:
+            await target_msg.reply_text(city_prompts.get(lang, city_prompts["en"]), reply_markup=kb, parse_mode="Markdown")
+        return
+
+    # 2. Nhận diện nếu khách đang nhập thành phố khác
+    if memory_store.get(f"{session_id}_waiting_other_city"):
+        cust_data = memory_store.get(f"{session_id}_data")
+        if not cust_data or not isinstance(cust_data, CustomerData):
+            cust_data = CustomerData()
+            memory_store[f"{session_id}_data"] = cust_data
+        cust_data.thanh_pho = text.strip()
+        memory_store[f"{session_id}_waiting_other_city"] = False
+        lang = memory_store.get(f"{session_id}_lang", "en")
+        
+        now = datetime.now()
+        cal_prompts = {
+            "ru": f"✅ Ваш город: **{text.strip()}** (Наш менеджер свяжется для подбора трансфера!)\n\n📅 **Выберите дату в календаре**:",
+            "en": f"✅ Your city: **{text.strip()}** (We will arrange the nearest pickup transfer!)\n\n📅 **Please pick a date on the calendar**:",
+            "vi": f"✅ Điểm của bạn: **{text.strip()}** (Đội ngũ sẽ tư vấn tuyến đón thuận tiện nhất!)\n\n📅 **Vui lòng chọn ngày trên lịch**:"
+        }
+        kb = get_calendar_keyboard(now.year, now.month, lang)
+        if target_msg:
+            await target_msg.reply_text(cal_prompts.get(lang, cal_prompts["en"]), reply_markup=kb, parse_mode="Markdown")
+        return
 
     # Kiểm tra chế độ Bot (Ưu tiên chế độ riêng của phiên, nếu chưa đặt thì lấy chế độ toàn hệ thống)
     global_mode = memory_store.get("GLOBAL_BOT_MODE", os.getenv("DEFAULT_BOT_MODE", "auto"))
@@ -2205,7 +2254,12 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
                 await send_returning_customer_request(user_id, target_msg, conn_id=conn_id)
             return
 
-        # 1. Xử lý các nút bấm dịch vụ từ phía Khách Hàng
+        # 1. Xử lý quy trình Wizard từng bước (Step-by-step Onboarding)
+        if parts[0] == "step":
+            await handle_step_callback(update, context, parts, process_customer_text_message)
+            return
+
+        # 2. Xử lý các nút bấm dịch vụ cũ (Tương thích ngược)
         if parts[0] == "service":
             service_key = parts[1]
             if not update.effective_user:
@@ -2243,10 +2297,12 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         if action == "paid":
             await update_order_status(record_id, "PAID")
             confirm_msg = get_msg("payment_confirmed", lang)
+            final_receipt = generate_booking_final_message(order_data, lang=lang)
             try:
                 if platform == "Telegram":
                     conn_id = memory_store.get(f"{session_id}_business_connection_id")
                     await context.bot.send_message(chat_id=uid, text=confirm_msg, business_connection_id=conn_id)  # type: ignore
+                    await context.bot.send_message(chat_id=uid, text=final_receipt, parse_mode="Markdown", business_connection_id=conn_id)  # type: ignore
                 elif platform == "Zalo": 
                     from main import send_zalo_message
                     await send_zalo_message(uid, confirm_msg)
