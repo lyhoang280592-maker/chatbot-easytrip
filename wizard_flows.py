@@ -825,11 +825,13 @@ ITINERARIES = {
             "4️⃣ Nhận vé điện tử xác nhận đặt chỗ. Biển số xe & số liên hệ tài xế sẽ được gửi trước giờ chạy 2 tiếng."
         ),
         "booking_ru": (
-            "📝 КАК ЗАБРОНИРОВАТЬ МЕСТО (ИНСТРУКЦИЯ ИЗ 4 ШАГОВ):\n"
-            "1️⃣ Отправьте фото страницы загранпаспорта (срок действия от 6 месяцев) прямо в этот чат.\n"
-            "2️⃣ Нажмите кнопку 'Запросить проверку мест и выбрать место' ниже, чтобы забронировать желаемую полку.\n"
-            "3️⃣ Нажмите кнопку 'Способы оплаты' для перевода (Vietcombank, VRB) или оплаты наличными в офисе Нячанга.\n"
-            "4️⃣ Получите официальный электронный посадочный талон. Контакты водителя и номер автобуса высылаются за 2 часа до отправления."
+            "⚠️ ОБЯЗАТЕЛЬНЫЕ ПРАВИЛА И СРОКИ РЕГИСТРАЦИИ (БО-И 90 ДНЕЙ):\n"
+            "1️⃣ Срок подачи на E-Visa: Документы (фото паспорта + фото 4x6 белый фон) необходимо отправить за 3–5 рабочих дней до даты рейса.\n"
+            "2️⃣ Рейсы в Воскресенье: Документы должны быть поданы не позднее среды/четверга (в сб и вс визовый отдел закрыт).\n"
+            "3️⃣ Срочный выезд: При бронировании за 1–2 дня до поездки требуется срочный тариф E-Visa (1–2 дня или 4 часа).\n"
+            "4️⃣ Распечатка: E-Visa ОБЯЗАТЕЛЬНО должна быть распечатана на бумаге (2 копии) для предъявления на КПП Бо-И.\n"
+            "5️⃣ Загранпаспорт: Срок действия строго более 6 месяцев.\n\n"
+            "👉 Нажмите дату выезда на календаре ниже (🟢 отмечены дни рейсов Вт, Чт, Вс) или выберите пакет:"
         ),
         "booking_en": (
             "📝 HOW TO REGISTER (SIMPLE 4-STEP BOOKING):\n"
@@ -872,11 +874,13 @@ ITINERARIES = {
         "border_vi": "⚠️ LƯU Ý TẠI CỬA KHẨU: Hộ chiếu gốc còn hạn trên 6 tháng; BẮT BUỘC in E-Visa ra giấy (2 bản); tiền mặt (khoảng 150.000 VND) nộp phí biên phòng.",
         "border_ru": "⚠️ ВАЖНО НА ГРАНИЦЕ: Загранпаспорт сроком от 6 мес.; ОБЯЗАТЕЛЬНО распечатать E-Visa на бумаге (2 копии); наличные (ок. 150.000 VND) на пограничные сборы.",
         "booking_vi": (
-            "📝 CÁCH THỨC ĐĂNG KÝ (COMBO E-VISA 90 NGÀY HOẶC ĐẶT XE):\n"
-            "1️⃣ Gửi ảnh Hộ chiếu + ảnh thẻ 4x6 (nền trắng) trước ngày đi 3–5 ngày để làm E-Visa cửa khẩu Bờ Y (có hỗ trợ gói khẩn 1–2 ngày / trong ngày nếu gấp).\n"
-            "2️⃣ Chọn ngày khởi hành (Thứ 3, Thứ 5, Chủ Nhật) và bấm nút 'Kiểm tra sơ đồ chỗ & Chọn số ghế'.\n"
-            "3️⃣ Bấm nút 'Phương thức thanh toán' để thanh toán vé hoặc trọn gói qua Vietcombank, VRB hoặc tiền mặt tại văn phòng Nha Trang.\n"
-            "4️⃣ Nhận file E-Visa 90 ngày in sẵn cùng vé xe điện tử để an tâm khởi hành."
+            "⚠️ QUY TẮC ĐĂNG KÝ BẮT BUỘC (TUYẾN BỜ Y 90 NGÀY E-VISA):\n"
+            "1️⃣ Thời gian nộp hồ sơ: Gửi ảnh Hộ chiếu + ảnh thẻ 4x6 (nền trắng) trước ngày khởi hành tối thiểu 3–5 ngày làm việc để kịp duyệt E-Visa.\n"
+            "2️⃣ Chuyến đi Chủ Nhật: Hồ sơ phải nộp muộn nhất là Thứ 4 hoặc Thứ 5 tuần trước (vì Thứ 7 & Chủ Nhật Cổng dịch vụ công nghỉ duyệt).\n"
+            "3️⃣ Đi gấp trong 1–2 ngày: Bắt buộc chọn gói làm E-Visa khẩn cấp (1–2 ngày hoặc 4 giờ).\n"
+            "4️⃣ Bản in giấy: BẮT BUỘC in E-Visa ra giấy (2 bản) mang theo lên xe để hải quan Bờ Y đóng dấu.\n"
+            "5️⃣ Hộ chiếu gốc: Còn hạn sử dụng trên 6 tháng.\n\n"
+            "👉 Vui lòng chọn ngày đi trên lịch bên dưới (🟢 ngày màu xanh là ngày xe chạy T3, T5, CN) hoặc chọn gói dịch vụ:"
         ),
         "booking_ru": (
             "📝 КАК ЗАБРОНИРОВАТЬ И ОФОРМИТЬ E-VISA НА 90 ДНЕЙ:\n"
@@ -1037,18 +1041,20 @@ ITINERARIES = {
         "border_vi": "⚠️ LƯU Ý TẠI CỬA KHẨU: Tiền mặt USD làm visa Campuchia; BẮT BUỘC in E-Visa ra giấy để cán bộ hải quan Mộc Bài đóng dấu.",
         "border_ru": "⚠️ ВАЖНО НА ГРАНИЦЕ: Наличные USD на камбоджийскую визу; ОБЯЗАТЕЛЬНО распечатать E-Visa на бумаге для пограничников Мокбай.",
         "booking_vi": (
-            "📝 CÁCH THỨC ĐĂNG KÝ (QUY TRÌNH 4 BƯỚC ĐƠN GIẢN):\n"
-            "1️⃣ Gửi ảnh Hộ chiếu + ảnh thẻ 4x6 (nền trắng) vào khung chat (để làm E-Visa nếu chọn gói 90 ngày).\n"
-            "2️⃣ Bấm nút 'Kiểm tra sơ đồ chỗ & Chọn số ghế' bên dưới để chọn ghế giường nằm.\n"
-            "3️⃣ Bấm nút 'Phương thức thanh toán' để thanh toán vé qua Vietcombank, VRB hoặc tiền mặt tại văn phòng Nha Trang.\n"
-            "4️⃣ Nhận vé điện tử xác nhận đặt chỗ. Biển số xe & số liên hệ tài xế sẽ được gửi trước giờ chạy 2 tiếng."
+            "⚠️ QUY TẮC ĐĂNG KÝ THEO TỪNG DIỆN (CAMPUCHIA MỘC BÀI):\n"
+            "1️⃣ Diện Miễn thị thực 45 ngày: Đặt chỗ trước 24 giờ. Chỉ cần hộ chiếu gốc còn hạn trên 6 tháng.\n"
+            "2️⃣ Combo E-Visa 90 ngày thường (4.000.000 VND): Gửi ảnh hộ chiếu + ảnh thẻ 4x6 trước ngày đi 3–5 ngày làm việc.\n"
+            "3️⃣ Combo E-Visa hỏa tốc 24 giờ (4.400.000 VND): Đăng ký trước ngày đi 1 ngày. E-Visa được in sẵn trao tận tay tại Mộc Bài lúc 11:30 trưa.\n"
+            "4️⃣ Lệ phí visa Campuchia: Chuẩn bị tiền mặt USD (khoảng 35$ - 50$) nộp tại cửa khẩu Campuchia.\n\n"
+            "👉 Vui lòng chọn ngày đi trên lịch bên dưới (🟢 ngày màu xanh là ngày xe chạy T3, T5, CN) hoặc chọn gói dịch vụ:"
         ),
         "booking_ru": (
-            "📝 КАК ЗАБРОНИРОВАТЬ МЕСТО (ИНСТРУКЦИЯ ИЗ 4 ШАГОВ):\n"
-            "1️⃣ Отправьте фото загранпаспорта + фото 4x6 (для визы) прямо в этот чат.\n"
-            "2️⃣ Нажмите кнопку 'Запросить проверку мест и выбрать место' ниже, чтобы выбрать спальное место.\n"
-            "3️⃣ Нажмите кнопку 'Способы оплаты' для перевода (Vietcombank, VRB) или оплаты наличными в офисе Нячанга.\n"
-            "4️⃣ Получите официальный электронный посадочный талон. Контакты водителя высылаются за 2 часа до отправления."
+            "⚠️ ПРАВИЛА РЕГИСТРАЦИИ ПО КАТЕГОРИЯМ (КАМБОДЖА МОКБАЙ):\n"
+            "1️⃣ Безвизовый въезд 45 дней: Бронирование за 24 часа. Нужен только загранпаспорт от 6 месяцев.\n"
+            "2️⃣ Стандартный пакет E-Visa 90 дней (4.000.000 VND): Подача фото паспорта и фото 4x6 за 3–5 рабочих дней до поездки.\n"
+            "3️⃣ Экспресс-пакет 24 часа (4.400.000 VND): Оформление за 1 день до выезда. E-Visa выдается в распечатанном виде на границе Мокбай в 11:30 утра.\n"
+            "4️⃣ Виза Камбоджи: Подготовьте наличные USD (ок. $35 – $50) для оплаты визового сбора на КПП Камбоджи.\n\n"
+            "👉 Выберите дату выезда в календаре ниже (🟢 дни рейсов Вт, Чт, Вс) или выберите пакет:"
         ),
         "booking_en": (
             "📝 HOW TO REGISTER (SIMPLE 4-STEP BOOKING):\n"
@@ -1114,6 +1120,208 @@ def get_itinerary_message(route_key: str, lang: str = "ru") -> str:
 # ============================================================
 # MẪU THÔNG TIN THANH TOÁN & BOOKING FINAL & CHÍNH SÁCH HUỶ - HOÀN
 # ============================================================
+
+
+def get_evisa_integrated_calendar_keyboard(year: int, month: int, lang: str = "ru") -> InlineKeyboardMarkup:
+    """Bàn phím tích hợp E-Visa: Các nút gói dịch vụ khẩn cấp + Lịch chọn ngày trực quan"""
+    cal = calendar.monthcalendar(year, month)
+    month_names = {
+        "ru": ["", "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+        "en": ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+        "vi": ["", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"]
+    }
+    m_name = month_names.get(lang, month_names["en"])[month]
+    
+    prev_y, prev_m = (year - 1, 12) if month == 1 else (year, month - 1)
+    next_y, next_m = (year + 1, 1) if month == 12 else (year, month + 1)
+    
+    rows = []
+    
+    # Hàng 1 & 2: Các nút chọn nhanh gói dịch vụ khẩn cấp
+    if lang == "ru":
+        rows.append([
+            InlineKeyboardButton("⚡ 4 часа (В день подачи)", callback_data="step|evisa|calc_stay|1night"),
+            InlineKeyboardButton("⏱️ 1 рабочий день", callback_data="step|evisa|calc_stay|2nights")
+        ])
+        rows.append([
+            InlineKeyboardButton("📅 2 рабочих дня", callback_data="step|evisa|calc_stay|3nights"),
+            InlineKeyboardButton("🗓️ 3–5 рабочих дней", callback_data="step|evisa|calc_stay|4plus")
+        ])
+    elif lang == "vi":
+        rows.append([
+            InlineKeyboardButton("⚡ Gói siêu khẩn 4 Giờ", callback_data="step|evisa|calc_stay|1night"),
+            InlineKeyboardButton("⏱️ Gói khẩn 1 Ngày", callback_data="step|evisa|calc_stay|2nights")
+        ])
+        rows.append([
+            InlineKeyboardButton("📅 Gói khẩn 2 Ngày", callback_data="step|evisa|calc_stay|3nights"),
+            InlineKeyboardButton("🗓️ Gói thường 3–5 Ngày", callback_data="step|evisa|calc_stay|4plus")
+        ])
+    else:
+        rows.append([
+            InlineKeyboardButton("⚡ Same-Day (4 Hours)", callback_data="step|evisa|calc_stay|1night"),
+            InlineKeyboardButton("⏱️ 1 Working Day", callback_data="step|evisa|calc_stay|2nights")
+        ])
+        rows.append([
+            InlineKeyboardButton("📅 2 Working Days", callback_data="step|evisa|calc_stay|3nights"),
+            InlineKeyboardButton("🗓️ 3–5 Working Days", callback_data="step|evisa|calc_stay|4plus")
+        ])
+
+    # Hàng điều hướng lịch tháng
+    rows.append([
+        InlineKeyboardButton("◀", callback_data=f"step|evisa_cal_nav|{prev_y}|{prev_m}"),
+        InlineKeyboardButton(f"📅 {m_name} {year}", callback_data="step|ignore"),
+        InlineKeyboardButton("▶", callback_data=f"step|evisa_cal_nav|{next_y}|{next_m}")
+    ])
+    
+    # Header thứ trong tuần
+    if lang == "ru":
+        days_header = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
+    elif lang == "vi":
+        days_header = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"]
+    else:
+        days_header = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"]
+    rows.append([InlineKeyboardButton(d, callback_data="step|ignore") for d in days_header])
+    
+    # Bàn cờ các ngày
+    now = datetime.now()
+    for week in cal:
+        row = []
+        for day in week:
+            if day == 0:
+                row.append(InlineKeyboardButton(" ", callback_data="step|ignore"))
+            else:
+                date_str = f"{day:02d}/{month:02d}"
+                is_past = (year < now.year) or (year == now.year and month < now.month) or (year == now.year and month == now.month and day < now.day)
+                lbl = f"·{day}·" if is_past else str(day)
+                row.append(InlineKeyboardButton(lbl, callback_data=f"step|evisa_date|{date_str}"))
+        rows.append(row)
+        
+    back_lbl = "🔙 " + ("Назад к услугам" if lang == "ru" else "Quay lại dịch vụ" if lang == "vi" else "Back to Services")
+    mgr_lbl = "💬 " + ("Менеджер" if lang == "ru" else "Hỗ trợ" if lang == "vi" else "Support")
+    rows.append([
+        InlineKeyboardButton(back_lbl, callback_data="step|back|services"),
+        InlineKeyboardButton(mgr_lbl, url="https://t.me/easytripvisa_co_ltd")
+    ])
+    return InlineKeyboardMarkup(rows)
+
+
+def get_bus_integrated_calendar_keyboard(route_key: str, year: int, month: int, lang: str = "ru") -> InlineKeyboardMarkup:
+    """Bàn phím tích hợp Lịch xe buýt: Nút chọn gói + Lịch tháng làm nổi bật ngày xe chạy (Thứ 3, 5, CN)"""
+    cal = calendar.monthcalendar(year, month)
+    month_names = {
+        "ru": ["", "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+        "en": ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+        "vi": ["", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"]
+    }
+    m_name = month_names.get(lang, month_names["en"])[month]
+    
+    prev_y, prev_m = (year - 1, 12) if month == 1 else (year, month - 1)
+    next_y, next_m = (year + 1, 1) if month == 12 else (year, month + 1)
+    
+    rows = []
+    
+    # Hàng 1 & 2: Các nút chọn gói dịch vụ theo tuyến
+    if "laos" in route_key:
+        if lang == "ru":
+            rows.append([
+                InlineKeyboardButton("🚌 Только билет на автобус (1.400.000 ₫)", callback_data="step|bus_pkg|laos_bus_only"),
+                InlineKeyboardButton("📑 Пакет: Bus + E-Visa 90D (4.000.000 ₫)", callback_data="step|bus_pkg|laos_combo_90d")
+            ])
+            rows.append([
+                InlineKeyboardButton("⚡ Срочное оформление E-Visa (1–2 дня)", callback_data="step|svc|special_urgent_evisa")
+            ])
+        elif lang == "vi":
+            rows.append([
+                InlineKeyboardButton("🚌 Vé xe khứ hồi (1.400.000 ₫)", callback_data="step|bus_pkg|laos_bus_only"),
+                InlineKeyboardButton("📑 Trọn gói Bus + E-Visa 90 ngày (4.000.000 ₫)", callback_data="step|bus_pkg|laos_combo_90d")
+            ])
+            rows.append([
+                InlineKeyboardButton("⚡ Cần làm E-Visa khẩn cấp (1–2 ngày)", callback_data="step|svc|special_urgent_evisa")
+            ])
+        else:
+            rows.append([
+                InlineKeyboardButton("🚌 Round-trip Bus Ticket (1,400,000 VND)", callback_data="step|bus_pkg|laos_bus_only"),
+                InlineKeyboardButton("📑 Bus + 90-Day E-Visa (4,000,000 VND)", callback_data="step|bus_pkg|laos_combo_90d")
+            ])
+            rows.append([
+                InlineKeyboardButton("⚡ Urgent E-Visa (1–2 Days)", callback_data="step|svc|special_urgent_evisa")
+            ])
+    else:  # Cambodia Moc Bai
+        if lang == "ru":
+            rows.append([
+                InlineKeyboardButton("🚌 Только билет на автобус (1.400.000 ₫)", callback_data="step|bus_pkg|mocbai_bus_only"),
+                InlineKeyboardButton("📑 Пакет: Bus + E-Visa 90D (4.000.000 ₫)", callback_data="step|bus_pkg|mocbai_combo_90d")
+            ])
+            rows.append([
+                InlineKeyboardButton("⭐ Пакет 24ч + виза Камбоджи (4.400.000 ₫)", callback_data="step|bus_pkg|mocbai_combo_24h"),
+                InlineKeyboardButton("⭐ Безвиз 45 дней (1.400.000 ₫)", callback_data="step|bus_pkg|mocbai_bus_only")
+            ])
+        elif lang == "vi":
+            rows.append([
+                InlineKeyboardButton("🚌 Vé xe khứ hồi (1.400.000 ₫)", callback_data="step|bus_pkg|mocbai_bus_only"),
+                InlineKeyboardButton("📑 Combo Bus + E-Visa 90 ngày (4.000.000 ₫)", callback_data="step|bus_pkg|mocbai_combo_90d")
+            ])
+            rows.append([
+                InlineKeyboardButton("⭐ Combo 24h + Visa Campuchia (4.400.000 ₫)", callback_data="step|bus_pkg|mocbai_combo_24h"),
+                InlineKeyboardButton("⭐ Miễn visa 45 ngày (1.400.000 ₫)", callback_data="step|bus_pkg|mocbai_bus_only")
+            ])
+        else:
+            rows.append([
+                InlineKeyboardButton("🚌 Round-trip Bus (1,400,000 VND)", callback_data="step|bus_pkg|mocbai_bus_only"),
+                InlineKeyboardButton("📑 Package: Bus + 90-Day E-Visa (4,000,000 VND)", callback_data="step|bus_pkg|mocbai_combo_90d")
+            ])
+            rows.append([
+                InlineKeyboardButton("⭐ Package 24h + Cambodia Visa (4,400,000 VND)", callback_data="step|bus_pkg|mocbai_combo_24h"),
+                InlineKeyboardButton("⭐ 45-Day Visa-Free (1,400,000 VND)", callback_data="step|bus_pkg|mocbai_bus_only")
+            ])
+
+    # Hàng điều hướng lịch tháng
+    rows.append([
+        InlineKeyboardButton("◀", callback_data=f"step|bus_cal_nav|{route_key}|{prev_y}|{prev_m}"),
+        InlineKeyboardButton(f"📅 {m_name} {year}", callback_data="step|ignore"),
+        InlineKeyboardButton("▶", callback_data=f"step|bus_cal_nav|{route_key}|{next_y}|{next_m}")
+    ])
+    
+    # Days header
+    if lang == "ru":
+        days_header = ["Пн", "Вт*", "Ср", "Чт*", "Пт", "Сб", "Вс*"]
+    elif lang == "vi":
+        days_header = ["T2", "T3*", "T4", "T5*", "T6", "T7", "CN*"]
+    else:
+        days_header = ["Mo", "Tu*", "We", "Th*", "Fr", "Sa", "Su*"]
+    rows.append([InlineKeyboardButton(d, callback_data="step|ignore") for d in days_header])
+    
+    # Grid of days (Lào và Campuchia chạy Thứ 3=1, Thứ 5=3, Chủ Nhật=6)
+    now = datetime.now()
+    for week in cal:
+        row = []
+        for day_idx, day in enumerate(week):
+            if day == 0:
+                row.append(InlineKeyboardButton(" ", callback_data="step|ignore"))
+            else:
+                date_str = f"{day:02d}/{month:02d}"
+                is_past = (year < now.year) or (year == now.year and month < now.month) or (year == now.year and month == now.month and day < now.day)
+                is_bus_operating = day_idx in (1, 3, 6)
+                if is_past:
+                    lbl = f"·{day}·"
+                elif is_bus_operating:
+                    lbl = f"🟢{day}"
+                else:
+                    lbl = str(day)
+                row.append(InlineKeyboardButton(lbl, callback_data=f"step|bus_date|{route_key}|{date_str}"))
+        rows.append(row)
+        
+    seat_lbl = "💺 " + ("Запросить место" if lang == "ru" else "Kiểm tra số ghế" if lang == "vi" else "Select Seat")
+    pay_lbl = "💳 " + ("Способы оплаты" if lang == "ru" else "Phương thức thanh toán" if lang == "vi" else "Payment Methods")
+    back_lbl = "🔙 " + ("Назад к услугам" if lang == "ru" else "Quay lại danh sách" if lang == "vi" else "Back to Services")
+    rows.append([
+        InlineKeyboardButton(seat_lbl, callback_data="step|request_seats"),
+        InlineKeyboardButton(pay_lbl, callback_data="step|pay_menu")
+    ])
+    rows.append([
+        InlineKeyboardButton(back_lbl, callback_data="step|back|services")
+    ])
+    return InlineKeyboardMarkup(rows)
 
 def get_payment_methods_keyboard(lang: str = "ru"):
     """Bàn phím chọn 2 ngân hàng VCB và VRB hoặc tiền mặt tại VP Nha Trang"""
@@ -1928,7 +2136,127 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         await send_step_reply(update, context, cal_prompts.get(lang, cal_prompts["en"]), reply_markup=keyboard, parse_mode="Markdown")
         return
 
-    # 🟢 ĐIỀU HƯỚNG LỊCH THÁNG
+    # 🟢 ĐIỀU HƯỚNG LỊCH THÁNG TÍCH HỢP CHO E-VISA
+    elif step_type == "evisa_cal_nav":
+        nav_y = int(parts[2])
+        nav_m = int(parts[3])
+        lang = memory_store.get(f"{session_id}_lang", "en")
+        keyboard = get_evisa_integrated_calendar_keyboard(nav_y, nav_m, lang)
+        if query and query.message:
+            try:
+                await query.message.edit_reply_markup(reply_markup=keyboard)
+            except Exception:
+                pass
+        return
+
+    # 🟢 ĐIỀU HƯỚNG LỊCH THÁNG TÍCH HỢP CHO XE BUÝT (LÀO / CAMPUCHIA)
+    elif step_type == "bus_cal_nav":
+        route_key = parts[2]
+        nav_y = int(parts[3])
+        nav_m = int(parts[4])
+        lang = memory_store.get(f"{session_id}_lang", "en")
+        keyboard = get_bus_integrated_calendar_keyboard(route_key, nav_y, nav_m, lang)
+        if query and query.message:
+            try:
+                await query.message.edit_reply_markup(reply_markup=keyboard)
+            except Exception:
+                pass
+        return
+
+    # 🟢 KHÁCH CHỌN NGÀY TỪ LỊCH XE BUÝT TÍCH HỢP
+    elif step_type == "bus_date":
+        route_key = parts[2]
+        date_val = parts[3]
+        lang = memory_store.get(f"{session_id}_lang", "en")
+        cust_data.ngay_khoi_hanh = date_val
+        cust_data.ngay_het_han_visa = date_val
+        
+        # Kiểm tra ngày trong tuần (0=T2, 1=T3, 2=T4, 3=T5, 4=T6, 5=T7, 6=CN)
+        day_num, month_num = [int(x) for x in date_val.split("/")]
+        now_dt = datetime.now()
+        cur_year = now_dt.year if month_num >= now_dt.month else now_dt.year + 1
+        sel_dt = datetime(cur_year, month_num, day_num)
+        is_bus_operating = sel_dt.weekday() in (1, 3, 6)
+        
+        wk_name = get_weekday_name(sel_dt, lang)
+        
+        if is_bus_operating:
+            confirm_msg = {
+                "ru": (
+                    f"✅ Вы выбрали дату выезда: **{date_val}** ({wk_name}) 🚌✨\n"
+                    f"Маршрут: {cust_data.loai_visa or 'Visarun'}\n\n"
+                    "Рейс подтвержден! Пожалуйста, отправьте фото страницы загранпаспорта в этот чат и нажмите кнопку ниже, чтобы проверить свободные места и выбрать спальную полку:"
+                ),
+                "vi": (
+                    f"✅ Bạn đã chọn ngày khởi hành: **{date_val}** ({wk_name}) 🚌✨\n"
+                    f"Tuyến xe: {cust_data.loai_visa or 'Visarun'}\n\n"
+                    "Lịch xe hoàn toàn chính xác! Quý khách vui lòng gửi ảnh chụp trang Hộ chiếu vào đây và bấm nút bên dưới để chọn số ghế nằm mong muốn:"
+                ),
+                "en": (
+                    f"✅ Selected departure date: **{date_val}** ({wk_name}) 🚌✨\n"
+                    f"Route: {cust_data.loai_visa or 'Visarun'}\n\n"
+                    "Bus schedule confirmed! Please send your passport info page in this chat and click below to reserve your sleeper bed:"
+                )
+            }
+            action_kb = InlineKeyboardMarkup([
+                [InlineKeyboardButton("💺 " + ("Запросить проверку мест и выбрать место" if lang == "ru" else "Kiểm tra sơ đồ chỗ & Chọn số ghế" if lang == "vi" else "Select Seat"), callback_data="step|request_seats")],
+                [InlineKeyboardButton("💳 " + ("Способы оплаты" if lang == "ru" else "Phương thức thanh toán" if lang == "vi" else "Payment Methods"), callback_data="step|pay_menu")],
+                [InlineKeyboardButton("🔙 " + ("Выбрать другую дату" if lang == "ru" else "Chọn ngày khác" if lang == "vi" else "Pick another date"), callback_data=f"step|svc|{route_key}")]
+            ])
+            await send_step_reply(update, context, confirm_msg.get(lang, confirm_msg["en"]), reply_markup=action_kb, parse_mode="Markdown")
+            return
+        else:
+            warn_msg = {
+                "ru": (
+                    f"⚠️ Внимание: **{date_val}** ({wk_name}) — в этот день рейса нет!\n\n"
+                    "Автобус по этому маршруту отправляется ТОЛЬКО по **Вторникам (Вт), Четвергам (Чт) и Воскресеньям (Вс)**.\n\n"
+                    "Пожалуйста, выберите на календаре зеленую дату (🟢), соответствующую расписанию рейсов:"
+                ),
+                "vi": (
+                    f"⚠️ Lưu ý: Ngày **{date_val}** ({wk_name}) không có chuyến xe chạy!\n\n"
+                    "Tuyến xe này chỉ khởi hành cố định vào **Thứ 3, Thứ 5 và Chủ Nhật** hàng tuần.\n\n"
+                    "Quý khách vui lòng chọn ngày có chấm xanh (🟢) trên lịch để đảm bảo đúng lịch xe chạy:"
+                ),
+                "en": (
+                    f"⚠️ Notice: **{date_val}** ({wk_name}) is a non-operating day!\n\n"
+                    "The bus strictly operates on **Tuesdays, Thursdays, and Sundays**.\n\n"
+                    "Please select one of the green dates (🟢) on the calendar:"
+                )
+            }
+            now = datetime.now()
+            kb_bus = get_bus_integrated_calendar_keyboard(route_key, now.year, now.month, lang)
+            await send_step_reply(update, context, warn_msg.get(lang, warn_msg["en"]), reply_markup=kb_bus, parse_mode="Markdown")
+            return
+
+    # 🟢 KHÁCH CHỌN GÓI DỊCH VỤ XE BUÝT CỤ THỂ
+    elif step_type == "bus_pkg":
+        pkg_id = parts[2]
+        lang = memory_store.get(f"{session_id}_lang", "en")
+        
+        pkg_names = {
+            "laos_bus_only": ("Только билет на автобус Lào Bờ Y (1.400.000 ₫)", "Vé xe giường nằm Lào Bờ Y (1.400.000 ₫)", "Laos Bo Y Round-trip Bus Ticket (1,400,000 VND)"),
+            "laos_combo_90d": ("Пакет: Bus + E-Visa 90 дней Lào Bờ Y (4.000.000 ₫)", "Trọn gói: Bus + E-Visa 90 ngày Lào Bờ Y (4.000.000 ₫)", "Combo: Bus + 90-Day E-Visa Laos Bo Y (4,000,000 VND)"),
+            "mocbai_bus_only": ("Только билет на автобус Mộc Bài (1.400.000 ₫)", "Vé xe giường nằm Mộc Bài (1.400.000 ₫)", "Moc Bai Round-trip Bus Ticket (1,400,000 VND)"),
+            "mocbai_combo_90d": ("Пакет: Bus + E-Visa 90 дней Mộc Bài (4.000.000 ₫)", "Trọn gói: Bus + E-Visa 90 ngày Mộc Bài (4.000.000 ₫)", "Combo: Bus + 90-Day E-Visa Moc Bai (4,000,000 VND)"),
+            "mocbai_combo_24h": ("Пакет: Bus + E-Visa 24ч + виза Камбоджи (4.400.000 ₫)", "Trọn gói: Bus + E-Visa 24h + Visa Campuchia (4.400.000 ₫)", "Combo: Bus + 24h E-Visa + Cambodia Visa (4,400,000 VND)")
+        }
+        pkg_tuple = pkg_names.get(pkg_id, ("Dịch vụ xe buýt", "Dịch vụ xe buýt", "Bus Service"))
+        pkg_name = pkg_tuple[0] if lang == "ru" else pkg_tuple[1] if lang == "vi" else pkg_tuple[2]
+        cust_data.loai_visa = pkg_name
+        
+        now = datetime.now()
+        r_key = "laos_boy_90d" if "laos" in pkg_id else "cambodia_mocbai"
+        
+        cal_prompt = {
+            "ru": f"✅ Вы выбрали: **{pkg_name}**\n\n📅 Пожалуйста, выберите дату выезда на календаре ниже (🟢 зеленые даты — дни рейсов Вт, Чт, Вс):",
+            "vi": f"✅ Bạn đã chọn: **{pkg_name}**\n\n📅 Vui lòng bấm chọn ngày đi trên lịch bên dưới (🟢 ngày có chấm xanh là ngày xe chạy T3, T5, CN):",
+            "en": f"✅ You selected: **{pkg_name}**\n\n📅 Please select your departure date on the calendar below (🟢 green dates = operating days):"
+        }
+        kb = get_bus_integrated_calendar_keyboard(r_key, now.year, now.month, lang)
+        await send_step_reply(update, context, cal_prompt.get(lang, cal_prompt["en"]), reply_markup=kb, parse_mode="Markdown")
+        return
+
+    # 🟢 ĐIỀU HƯỚNG LỊCH THÁNG CHUẨN
     elif step_type == "cal_nav":
         nav_y = int(parts[2])
         nav_m = int(parts[3])
@@ -1985,27 +2313,56 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         lang = memory_store.get(f"{session_id}_lang", "en")
         city_key = cust_data.thanh_pho or "nhatrang"
         
-        # 1. Xử lý trường hợp dịch vụ khẩn cấp Urgent E-Visa với Bộ đếm & Nút bấm thông minh
+        # 1. Xử lý dịch vụ khẩn cấp Urgent E-Visa với Quy tắc đăng ký khoa học + Bàn phím tích hợp Lịch
         if "urgent" in svc_id or svc_id == "special_urgent_evisa":
             cust_data.loai_visa = "Urgent E-Visa"
+            now = datetime.now()
             intro_msg = {
                 "ru": (
-                    "⚡ Система расчета и выбора тарифа срочной E-Visa\n\n"
-                    "Для точного расчета безопасного графика оформления, исключения задержек на рейсах "
-                    "и **сохранения полных 90 дней пребывания**, пожалуйста, выберите:"
+                    "⚡ СИСТЕМА И ПРАВИЛА ОФОРМЛЕНИЯ СРОЧНОЙ E-VISA\n"
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    "📌 ПРАВИЛА И СРОКИ РАССМОТРЕНИЯ:\n"
+                    "• 🚫 Нерабочие дни: Суббота и воскресенье НЕ учитываются в сроках (по регламенту Иммиграционной службы Вьетнама).\n"
+                    "• 📅 Сохранение 90 дней: Дата начала действия визы регистрируется точно в день вашего прилета во Вьетнам — вы не теряете ни одного дня пребывания!\n"
+                    "• 🛡️ Безопасный буфер: Готовая E-Visa выдается в 17:30 (за 14–16 часов до вылета) для гарантированной защиты от задержек рейсов и сбоев.\n\n"
+                    "📊 РЕКОМЕНДУЕМЫЕ ТАРИФЫ:\n"
+                    "1. Вылет сегодня/завтра (1 ночь за рубежом) ➜ Тариф 4 часа (выдача в 17:30 сегодня).\n"
+                    "2. 2 ночи за рубежом ➜ Тариф 1 рабочий день (выдача в 17:30 следующего рабочего дня).\n"
+                    "3. 3 ночи за рубежом ➜ Тариф 2 рабочих дня.\n"
+                    "4. 4–5+ ночей ➜ Тариф 3–5 рабочих дней.\n\n"
+                    "👉 Выберите тариф вверху или нажмите дату въезда в календаре ниже:"
                 ),
                 "vi": (
-                    "⚡ Hệ thống tư vấn & tính toán gói E-visa khẩn cấp thông minh\n\n"
-                    "Để xác định gói E-visa an toàn, phòng ngừa rủi ro trễ chuyến "
-                    "và **bảo toàn trọn vẹn đủ 90 ngày lưu trú tại Việt Nam**, vui lòng chọn:"
+                    "⚡ HỆ THỐNG & QUY TẮC ĐĂNG KÝ E-VISA KHẨN CẤP\n"
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    "📌 QUY TẮC TÍNH TOÁN & THỜI GIAN DUYỆT:\n"
+                    "• 🚫 Loại trừ ngày nghỉ: Thời gian làm việc KHÔNG tính Thứ 7 & Chủ Nhật (theo quy định của Cục Quản lý Xuất nhập cảnh).\n"
+                    "• 📅 Bảo toàn đủ 90 ngày: Ngày kích hoạt E-visa được cấp đúng vào ngày chuyến bay hạ cánh nhập cảnh Việt Nam — bạn không bị mất một ngày lưu trú nào!\n"
+                    "• 🛡️ Vùng đệm an toàn: E-visa luôn được trả lúc 17:30 của ngày trả (trước giờ bay từ 14–16 tiếng) nhằm đảm bảo an toàn tuyệt đối khi gặp sự cố delay hoặc nghẽn mạng.\n\n"
+                    "📊 CÁC GÓI ĐĂNG KÝ PHÙ HỢP:\n"
+                    "1. Ở nước ngoài 1 đêm ➜ Gói siêu khẩn 4 Giờ (nhận lúc 17:30 trong ngày).\n"
+                    "2. Ở nước ngoài 2 đêm ➜ Gói khẩn 1 Ngày làm việc (nhận lúc 17:30 ngày làm việc tiếp theo).\n"
+                    "3. Ở nước ngoài 3 đêm ➜ Gói khẩn 2 Ngày làm việc.\n"
+                    "4. Ở nước ngoài 4–5+ đêm ➜ Gói 3–5 Ngày làm việc.\n\n"
+                    "👉 Bấm chọn gói dịch vụ bên trên hoặc bấm ngày dự kiến bay vào Việt Nam trên lịch bên dưới:"
                 ),
                 "en": (
-                    "⚡ Smart Urgent E-Visa Calculator\n\n"
-                    "To determine the most accurate, risk-free schedule and **preserve your full 90-day stay**, please select:"
+                    "⚡ SMART URGENT E-VISA SCHEDULE & REGISTRATION RULES\n"
+                    "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                    "📌 IMMIGRATION RULES & TIMELINES:\n"
+                    "• 🚫 Weekend Exclusion: Processing time strictly EXCLUDES Saturdays & Sundays (Vietnamese Immigration regulations).\n"
+                    "• 📅 Full 90-Day Stay Preserved: Your visa activation date starts exactly on your return flight arrival date — you do not lose a single day!\n"
+                    "• 🛡️ Safe Buffer: Visas are delivered at 17:30 on the delivery date (14–16 hours prior to departure) to ensure complete protection against airline delays or system backlogs.\n\n"
+                    "📊 RECOMMENDED PACKAGES:\n"
+                    "1. 1 night abroad ➜ Super Urgent 4 Hours (delivery at 17:30 same day).\n"
+                    "2. 2 nights abroad ➜ Urgent 1 Working Day (delivery at 17:30 next working day).\n"
+                    "3. 3 nights abroad ➜ Urgent 2 Working Days.\n"
+                    "4. 4–5+ nights ➜ Standard 3–5 Working Days.\n\n"
+                    "👉 Select a package above or click your arrival date on the calendar below:"
                 )
             }
-            kb_main = get_evisa_main_keyboard(lang)
-            await send_step_reply(update, context, intro_msg.get(lang, intro_msg["en"]), reply_markup=kb_main, parse_mode="Markdown")
+            kb_integrated = get_evisa_integrated_calendar_keyboard(now.year, now.month, lang)
+            await send_step_reply(update, context, intro_msg.get(lang, intro_msg["en"]), reply_markup=kb_integrated, parse_mode="Markdown")
             return
             
         # 2. Xử lý trường hợp VIP Fast Track sân bay
@@ -2078,18 +2435,22 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
             
         cust_data.loai_visa = route_name
         
-        # Lấy bản thông tin lịch trình chi tiết
+        # Lấy bản thông tin lịch trình chi tiết kèm Quy tắc đăng ký
         itin_msg = get_itinerary_message(route_key, lang)
+        now = datetime.now()
         
-        # Bàn phím hành động tiếp theo (Có nút chọn VCB, VRB, Tiền mặt & Nút quay lại)
-        next_action_kb = InlineKeyboardMarkup([
-            [InlineKeyboardButton("💺 " + ("Запросить проверку мест и выбрать место" if lang == "ru" else "Kiểm tra sơ đồ chỗ & Chọn số ghế" if lang == "vi" else "Check availability & Select Seat"), callback_data="step|request_seats")],
-            [InlineKeyboardButton("💳 " + ("Способы оплаты (VCB, VRB, Офис)" if lang == "ru" else "Phương thức thanh toán (VCB, VRB, VP)" if lang == "vi" else "Payment Methods (VCB, VRB, Office)"), callback_data="step|pay_menu")],
-            [
-                InlineKeyboardButton("🔙 " + ("Назад к услугам" if lang == "ru" else "Quay lại danh sách dịch vụ" if lang == "vi" else "Back to Services"), callback_data="step|back|services"),
-                InlineKeyboardButton("💬 " + ("Менеджер" if lang == "ru" else "Hỗ trợ" if lang == "vi" else "Support"), url="https://t.me/easytripvisa_co_ltd")
-            ]
-        ])
+        # Với tuyến xe buýt Nha Trang - Lào và Nha Trang - Campuchia: Sử dụng Bàn phím tích hợp (Nút gói + Lịch xe chạy T3, T5, CN)
+        if route_key in ("laos_boy_90d", "cambodia_mocbai", "laos_boy_45d"):
+            next_action_kb = get_bus_integrated_calendar_keyboard(route_key, now.year, now.month, lang)
+        else:
+            next_action_kb = InlineKeyboardMarkup([
+                [InlineKeyboardButton("💺 " + ("Запросить проверку мест и выбрать место" if lang == "ru" else "Kiểm tra sơ đồ chỗ & Chọn số ghế" if lang == "vi" else "Check availability & Select Seat"), callback_data="step|request_seats")],
+                [InlineKeyboardButton("💳 " + ("Способы оплаты (VCB, VRB, Офис)" if lang == "ru" else "Phương thức thanh toán (VCB, VRB, VP)" if lang == "vi" else "Payment Methods (VCB, VRB, Office)"), callback_data="step|pay_menu")],
+                [
+                    InlineKeyboardButton("🔙 " + ("Назад к услугам" if lang == "ru" else "Quay lại danh sách dịch vụ" if lang == "vi" else "Back to Services"), callback_data="step|back|services"),
+                    InlineKeyboardButton("💬 " + ("Менеджер" if lang == "ru" else "Hỗ trợ" if lang == "vi" else "Support"), url="https://t.me/easytripvisa_co_ltd")
+                ]
+            ])
         
         await send_step_reply(update, context, itin_msg, reply_markup=next_action_kb, parse_mode="Markdown")
             
