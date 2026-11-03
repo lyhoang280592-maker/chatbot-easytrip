@@ -775,13 +775,28 @@ async def process_chat(
     prev_assistant_texts = " ".join([m.get("content", "") for m in history_messages if m.get("role") in ["assistant", "model", "agent"]])
     has_prev_russian = bool(re.search(r'[а-яё]', prev_assistant_texts.lower()))
     
-    # Kiểm tra ký tự tiếng Việt thực tế từ người dùng (không tính tag hệ thống)
-    has_real_vietnamese = bool(re.search(r'[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]', clean_user_text_lower)) or any(re.search(r'\b' + re.escape(w) + r'\b', clean_user_text_lower) for w in ["chào", "xin chào", "giá", "vé", "lào", "bao nhiêu", "đi", "xe", "tôi", "cho tôi", "sơ đồ", "ghế", "hết hạn", "ngày", "đón", "ở đâu"])
+    # Kiểm tra ký tự tiếng Việt thực tế từ người dùng (loại trừ từ "lào" nếu chỉ nằm trong tên tuyến)
+    vietnamese_keywords = ["chào", "xin chào", "giá", "vé", "bao nhiêu", "cho tôi", "sơ đồ", "hết hạn", "đón ở đâu", "tư vấn giúp"]
+    has_real_vietnamese = bool(re.search(r'[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]', clean_user_text_lower)) or any(re.search(r'\b' + re.escape(w) + r'\b', clean_user_text_lower) for w in vietnamese_keywords)
     has_cyrillic = bool(re.search(r'[а-яё]', clean_user_text_lower))
     
-    if has_real_vietnamese and not has_cyrillic:
+    # Ưu tiên tuyệt đối quốc tịch Nga / CIS đã lưu trong hồ sơ khách
+    saved_nat = (getattr(saved_data, "quoc_tich", "") or "").lower() if saved_data else ""
+    prof_nat = (customer_profile.get("nationality", "") or "").lower() if customer_profile else ""
+    is_russian_profile = any(k in saved_nat or k in prof_nat for k in ["russia", "россия", "nga", "cis", "kazakh", "kyrgyz", "belarus"])
+    is_vietnamese_profile = any(k in saved_nat or k in prof_nat for k in ["việt nam", "vietnam", "vietnamese"])
+    
+    if has_cyrillic:
+        lang_code = "ru"
+    elif is_russian_profile or is_russian_nat or has_russian_name:
+        # Khách Nga / CIS: luôn luôn trả lời tiếng Nga (kể cả khi khách gõ tên tuyến xe có chữ Lào hoặc tiếng Anh như OK, YES)
+        if has_real_vietnamese and is_vietnamese_profile:
+            lang_code = "vi"
+        else:
+            lang_code = "ru"
+    elif has_real_vietnamese and not has_cyrillic:
         lang_code = "vi"
-    elif has_cyrillic or is_russian_nat or has_russian_name or (has_prev_russian and not has_real_vietnamese):
+    elif has_prev_russian and not has_real_vietnamese:
         lang_code = "ru"
     elif re.search(r'[\uac00-\ud7a3]', clean_user_text_lower) or bool(re.search(r'\b(kr|korea|korean|hàn quốc)\b', clean_user_text_lower)):
         lang_code = "ko"

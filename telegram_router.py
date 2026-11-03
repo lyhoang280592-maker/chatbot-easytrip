@@ -941,21 +941,59 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if f"{session_id}_awaiting_old_booking" in memory_store:
         del memory_store[f"{session_id}_awaiting_old_booking"]
 
-    welcome_question = (
-        "👋 **Welcome to Easy Trip & Visa!**\n\n"
-        "• 👤 **Official Support**: [@easytripvisa_co_ltd](https://t.me/easytripvisa_co_ltd)\n"
-        "• 📞 **Hotline / WhatsApp**: `+84 853 201 277` (Open 24/7)\n\n"
-        "Have you (or a friend on your behalf) booked any service with us before?\n"
-        "Please select an option below:"
-    )
-    
-    keyboard = InlineKeyboardMarkup([
-        [InlineKeyboardButton("💬 Chat on Official Telegram (@easytripvisa_co_ltd)", url="https://t.me/easytripvisa_co_ltd")],
-        [InlineKeyboardButton("📢 News & Schedule Channel", url="https://t.me/visaEASYTRIP")],
-        [InlineKeyboardButton("🌟 Returning Customer (Loyalty Discount)", callback_data="cust_type|returning")],
-        [InlineKeyboardButton("🆕 New Customer", callback_data="cust_type|new")],
-        [InlineKeyboardButton("💬 Direct WhatsApp Support", url="https://wa.me/84868462071")]
-    ])
+    user_lang = "en"
+    if update.effective_user and getattr(update.effective_user, "language_code", None):
+        lc = (update.effective_user.language_code or "").lower()
+        if lc.startswith("ru"):
+            user_lang = "ru"
+        elif lc.startswith("vi"):
+            user_lang = "vi"
+
+    if user_lang == "ru":
+        welcome_question = (
+            "👋 **Добро пожаловать в Easy Trip & Visa!** 🚌✨\n\n"
+            "• 👤 **Поддержка в Telegram**: [@easytripvisa_co_ltd](https://t.me/easytripvisa_co_ltd)\n"
+            "• 📞 **Горячая линия / WhatsApp**: `+84 853 201 277` (24/7)\n\n"
+            "Вы или ваши знакомые ранее пользовались нашими услугами?\n"
+            "Пожалуйста, выберите вариант ниже:"
+        )
+        keyboard = InlineKeyboardMarkup([
+            [InlineKeyboardButton("💬 Чат с менеджером (@easytripvisa_co_ltd)", url="https://t.me/easytripvisa_co_ltd")],
+            [InlineKeyboardButton("📢 Канал новостей и расписания", url="https://t.me/visaEASYTRIP")],
+            [InlineKeyboardButton("🌟 Постоянный клиент (Скидка)", callback_data="cust_type|returning")],
+            [InlineKeyboardButton("🆕 Новый клиент", callback_data="cust_type|new")],
+            [InlineKeyboardButton("💬 Поддержка в WhatsApp", url="https://wa.me/84853201277")]
+        ])
+    elif user_lang == "vi":
+        welcome_question = (
+            "👋 **Chào mừng bạn đến với Easy Trip & Visa!** 🚌✨\n\n"
+            "• 👤 **Hỗ trợ chính thức**: [@easytripvisa_co_ltd](https://t.me/easytripvisa_co_ltd)\n"
+            "• 📞 **Hotline / WhatsApp**: `+84 853 201 277` (24/7)\n\n"
+            "Bạn (hoặc người thân được giới thiệu) đã từng đặt dịch vụ trước đây chưa?\n"
+            "Vui lòng chọn một lựa chọn bên dưới:"
+        )
+        keyboard = InlineKeyboardMarkup([
+            [InlineKeyboardButton("💬 Chat với nhân viên (@easytripvisa_co_ltd)", url="https://t.me/easytripvisa_co_ltd")],
+            [InlineKeyboardButton("📢 Kênh thông báo lịch xe", url="https://t.me/visaEASYTRIP")],
+            [InlineKeyboardButton("🌟 Khách hàng cũ (Ưu đãi thân thiết)", callback_data="cust_type|returning")],
+            [InlineKeyboardButton("🆕 Khách hàng mới", callback_data="cust_type|new")],
+            [InlineKeyboardButton("💬 Hỗ trợ WhatsApp trực tiếp", url="https://wa.me/84853201277")]
+        ])
+    else:
+        welcome_question = (
+            "👋 **Welcome to Easy Trip & Visa!**\n\n"
+            "• 👤 **Official Support**: [@easytripvisa_co_ltd](https://t.me/easytripvisa_co_ltd)\n"
+            "• 📞 **Hotline / WhatsApp**: `+84 853 201 277` (Open 24/7)\n\n"
+            "Have you (or a friend on your behalf) booked any service with us before?\n"
+            "Please select an option below:"
+        )
+        keyboard = InlineKeyboardMarkup([
+            [InlineKeyboardButton("💬 Chat on Official Telegram (@easytripvisa_co_ltd)", url="https://t.me/easytripvisa_co_ltd")],
+            [InlineKeyboardButton("📢 News & Schedule Channel", url="https://t.me/visaEASYTRIP")],
+            [InlineKeyboardButton("🌟 Returning Customer (Loyalty Discount)", callback_data="cust_type|returning")],
+            [InlineKeyboardButton("🆕 New Customer", callback_data="cust_type|new")],
+            [InlineKeyboardButton("💬 Direct WhatsApp Support", url="https://wa.me/84853201277")]
+        ])
     
     target_chat_id = update.effective_chat.id if update.effective_chat else int(user_id or 0)
     target_msg: Any = update.message or update.business_message or (update.callback_query.message if update.callback_query else None)

@@ -477,22 +477,45 @@ def get_nationality_keyboard():
 
 def get_city_keyboard(lang: str = "en"):
     """Bước 2: Chọn Thành phố (Abroad lên đầu, Nha Trang, Mũi Né...)"""
-    abroad_lbl = "✈️ За рубежом (Въезд во Вьетнам)" if lang == "ru" else "✈️ Đang ở nước ngoài (Nhập cảnh vào VN)" if lang == "vi" else "✈️ Currently Abroad (Entering Vietnam)"
-    other_lbl = "📍 Другой город" if lang == "ru" else "📍 Thành phố khác" if lang == "vi" else "📍 Other City"
+    if lang == "ru":
+        abroad_lbl = "✈️ За рубежом (Въезд во Вьетнам)"
+        nt_lbl = "🏖️ Нячанг"
+        mn_lbl = "🏖️ Муйне (Фантхьет)"
+        dn_lbl = "🌊 Дананг / Хойан"
+        hcm_lbl = "🏙️ Хошимин (Сайгон)"
+        hn_lbl = "🏛️ Ханой"
+        other_lbl = "📍 Другой город"
+    elif lang == "vi":
+        abroad_lbl = "✈️ Đang ở nước ngoài (Nhập cảnh VN)"
+        nt_lbl = "🏖️ Nha Trang"
+        mn_lbl = "🏖️ Mũi Né (Phan Thiết)"
+        dn_lbl = "🌊 Đà Nẵng / Hội An"
+        hcm_lbl = "🏙️ TP. Hồ Chí Minh"
+        hn_lbl = "🏛️ Hà Nội"
+        other_lbl = "📍 Thành phố khác"
+    else:
+        abroad_lbl = "✈️ Currently Abroad (Entering Vietnam)"
+        nt_lbl = "🏖️ Nha Trang"
+        mn_lbl = "🏖️ Mui Ne (Phan Thiet)"
+        dn_lbl = "🌊 Da Nang / Hoi An"
+        hcm_lbl = "🏙️ Ho Chi Minh City"
+        hn_lbl = "🏛️ Hanoi"
+        other_lbl = "📍 Other City"
+
     return InlineKeyboardMarkup([
         [
             InlineKeyboardButton(abroad_lbl, callback_data="step|city|abroad")
         ],
         [
-            InlineKeyboardButton("🏖️ Nha Trang", callback_data="step|city|nhatrang"),
-            InlineKeyboardButton("🏖️ Mũi Né (Phan Thiết)", callback_data="step|city|muine")
+            InlineKeyboardButton(nt_lbl, callback_data="step|city|nhatrang"),
+            InlineKeyboardButton(mn_lbl, callback_data="step|city|muine")
         ],
         [
-            InlineKeyboardButton("🌊 Đà Nẵng / Hội An", callback_data="step|city|danang"),
-            InlineKeyboardButton("🏙️ TP. Hồ Chí Minh", callback_data="step|city|hcm")
+            InlineKeyboardButton(dn_lbl, callback_data="step|city|danang"),
+            InlineKeyboardButton(hcm_lbl, callback_data="step|city|hcm")
         ],
         [
-            InlineKeyboardButton("🏛️ Hà Nội", callback_data="step|city|hanoi"),
+            InlineKeyboardButton(hn_lbl, callback_data="step|city|hanoi"),
             InlineKeyboardButton(other_lbl, callback_data="step|city|other")
         ]
     ])
@@ -563,57 +586,124 @@ def get_smart_advisory_keyboard(city: str, country: str, lang: str = "en"):
     
     # 1. Đề xuất tuyến Visarun chính theo thành phố
     if city == "danang":
-        rows.append([InlineKeyboardButton("🚌 Visarun Đà Nẵng Lao Bao - Lao Bảo Laos (90D)", callback_data="step|svc|dn_bus")])
-        if exempt:
-            rows.append([InlineKeyboardButton("⭐ Miễn thị thực 45 ngày (Lao Bảo) - 850.000 ₫", callback_data="step|svc|dn_bus")])
-            rows.append([InlineKeyboardButton("📑 Combo trọn gói E-Visa 90 ngày (Lao Bảo) - 3.900.000 ₫", callback_data="step|svc|dn_combo_ultra")])
+        if lang == "ru":
+            rows.append([InlineKeyboardButton("🚌 Визаран Дананг ⇄ Лаос (Лао Бао)", callback_data="step|svc|dn_bus")])
+            if exempt:
+                rows.append([InlineKeyboardButton("⭐ Безвиз 45 дней (Лао Бао) — 850.000 ₫", callback_data="step|svc|dn_bus")])
+                rows.append([InlineKeyboardButton("📑 Пакет: Bus + E-Visa 90 дней (Лао Бао) — 3.900.000 ₫", callback_data="step|svc|dn_combo_ultra")])
+            else:
+                rows.append([InlineKeyboardButton("📑 Пакет: Bus + E-Visa 90 дней (Лао Бао) — 3.900.000 ₫", callback_data="step|svc|dn_combo_ultra")])
+        elif lang == "vi":
+            rows.append([InlineKeyboardButton("🚌 Visarun Đà Nẵng ⇄ Lao Bảo (Lào)", callback_data="step|svc|dn_bus")])
+            if exempt:
+                rows.append([InlineKeyboardButton("⭐ Miễn thị thực 45 ngày (Lao Bảo) - 850.000 ₫", callback_data="step|svc|dn_bus")])
+                rows.append([InlineKeyboardButton("📑 Combo trọn gói E-Visa 90 ngày (Lao Bảo) - 3.900.000 ₫", callback_data="step|svc|dn_combo_ultra")])
+            else:
+                rows.append([InlineKeyboardButton("📑 Combo trọn gói E-Visa 90 ngày (Lao Bảo) - 3.900.000 ₫", callback_data="step|svc|dn_combo_ultra")])
         else:
-            rows.append([InlineKeyboardButton("📑 Combo trọn gói E-Visa 90 ngày (Lao Bảo) - 3.900.000 ₫", callback_data="step|svc|dn_combo_ultra")])
+            rows.append([InlineKeyboardButton("🚌 Visarun Da Nang ⇄ Lao Bao (Laos)", callback_data="step|svc|dn_bus")])
+            if exempt:
+                rows.append([InlineKeyboardButton("⭐ 45-Day Visa-Free (Lao Bao) - 850,000 VND", callback_data="step|svc|dn_bus")])
+                rows.append([InlineKeyboardButton("📑 90-Day E-Visa Package (Lao Bao) - 3,900,000 VND", callback_data="step|svc|dn_combo_ultra")])
+            else:
+                rows.append([InlineKeyboardButton("📑 90-Day E-Visa Package (Lao Bao) - 3,900,000 VND", callback_data="step|svc|dn_combo_ultra")])
             
     elif city == "nhatrang":
         if lang == "ru":
-            rows.append([InlineKeyboardButton("🚌 Визаран Nha Trang - Lào Bờ Y 45 ngày (Безвиз)", callback_data="step|svc|nt_bus_laos_45d")])
-            rows.append([InlineKeyboardButton("🚌 Визаран Nha Trang - Lào Bờ Y 90 ngày (E-Visa)", callback_data="step|svc|nt_bus_laos_90d")])
-            rows.append([InlineKeyboardButton("🚌 Visarun Nha Trang - Cambodia (30/45/90D)", callback_data="step|svc|nt_bus_cambodia")])
+            rows.append([InlineKeyboardButton("🚌 Визаран Нячанг ⇄ Лаос (Бо-И) 45 дней (Безвиз)", callback_data="step|svc|nt_bus_laos_45d")])
+            rows.append([InlineKeyboardButton("🚌 Визаран Нячанг ⇄ Лаос (Бо-И) 90 дней (E-Visa)", callback_data="step|svc|nt_bus_laos_90d")])
+            rows.append([InlineKeyboardButton("🚌 Визаран Нячанг ⇄ Камбоджа (Мокбай) (30/45/90 дней)", callback_data="step|svc|nt_bus_cambodia")])
+            if exempt:
+                rows.append([InlineKeyboardButton("⭐ Безвиз 45 дней (Лаос Бо-И) — 1.400.000 ₫", callback_data="step|svc|nt_bus_laos_45d")])
+                rows.append([InlineKeyboardButton("📑 Пакет E-Visa 90 дней (Лаос Бо-И) — 4.000.000 ₫", callback_data="step|svc|nt_bus_laos_90d")])
+                rows.append([InlineKeyboardButton("📑 Пакет E-Visa 90 дней (Камбоджа Мокбай) — 4.400.000 ₫", callback_data="step|svc|nt_combo_evisa")])
+            else:
+                rows.append([InlineKeyboardButton("📑 Пакет E-Visa 90 дней (Лаос Бо-И) — 4.000.000 ₫", callback_data="step|svc|nt_bus_laos_90d")])
+                rows.append([InlineKeyboardButton("📑 Пакет E-Visa 90 дней (Камбоджа Мокбай) — 4.400.000 ₫", callback_data="step|svc|nt_combo_evisa")])
         elif lang == "vi":
             rows.append([InlineKeyboardButton("🚌 Visarun Nha Trang - Lào Bờ Y 45 ngày", callback_data="step|svc|nt_bus_laos_45d")])
             rows.append([InlineKeyboardButton("🚌 Visarun Nha Trang - Lào Bờ Y 90 ngày", callback_data="step|svc|nt_bus_laos_90d")])
             rows.append([InlineKeyboardButton("🚌 Visarun Nha Trang - Cambodia (30/45/90D)", callback_data="step|svc|nt_bus_cambodia")])
+            if exempt:
+                rows.append([InlineKeyboardButton("⭐ Miễn thị thực 45 ngày (Lào Bờ Y) - 1.400.000 ₫", callback_data="step|svc|nt_bus_laos_45d")])
+                rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Lào Bờ Y) - 4.000.000 ₫", callback_data="step|svc|nt_bus_laos_90d")])
+                rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Campuchia Mộc Bài) - 4.400.000 ₫", callback_data="step|svc|nt_combo_evisa")])
+            else:
+                rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Lào Bờ Y) - 4.000.000 ₫", callback_data="step|svc|nt_bus_laos_90d")])
+                rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Campuchia Mộc Bài) - 4.400.000 ₫", callback_data="step|svc|nt_combo_evisa")])
         else:
             rows.append([InlineKeyboardButton("🚌 Visarun Nha Trang - Laos Bo Y 45 Days (Visa-Free)", callback_data="step|svc|nt_bus_laos_45d")])
             rows.append([InlineKeyboardButton("🚌 Visarun Nha Trang - Laos Bo Y 90 Days (E-Visa)", callback_data="step|svc|nt_bus_laos_90d")])
             rows.append([InlineKeyboardButton("🚌 Visarun Nha Trang - Cambodia (30/45/90D)", callback_data="step|svc|nt_bus_cambodia")])
-
-        if exempt:
-            rows.append([InlineKeyboardButton("⭐ Miễn thị thực 45 ngày (Lào Bờ Y) - 1.400.000 ₫" if lang == "vi" else "⭐ Безвиз 45 дней (Лаос Бо-И) - 1.400.000 ₫" if lang == "ru" else "⭐ 45-Day Visa-Free (Laos Bo Y) - 1,400,000 VND", callback_data="step|svc|nt_bus_laos_45d")])
-            rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Lào Bờ Y) - 4.000.000 ₫" if lang == "vi" else "📑 Пакет E-Visa 90 дней (Лаос Бо-И) - 4.000.000 ₫" if lang == "ru" else "📑 90-Day E-Visa Package (Laos Bo Y) - 4,000,000 VND", callback_data="step|svc|nt_bus_laos_90d")])
-            rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Campuchia Mộc Bài) - 4.400.000 ₫" if lang == "vi" else "📑 Пакет E-Visa 90 дней (Камбоджа Мокбай) - 4.400.000 ₫" if lang == "ru" else "📑 90-Day E-Visa Package (Cambodia Moc Bai) - 4,400,000 VND", callback_data="step|svc|nt_combo_evisa")])
-        else:
-            # Khách không miễn visa
-            rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Lào Bờ Y) - 4.000.000 ₫" if lang == "vi" else "📑 Пакет E-Visa 90 дней (Лаос Бо-И) - 4.000.000 ₫" if lang == "ru" else "📑 90-Day E-Visa Package (Laos Bo Y) - 4,000,000 VND", callback_data="step|svc|nt_bus_laos_90d")])
-            rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Campuchia Mộc Bài) - 4.400.000 ₫" if lang == "vi" else "📑 Пакет E-Visa 90 дней (Мокбай) - 4.400.000 ₫" if lang == "ru" else "📑 90-Day E-Visa Package (Moc Bai) - 4,400,000 VND", callback_data="step|svc|nt_combo_evisa")])
+            if exempt:
+                rows.append([InlineKeyboardButton("⭐ 45-Day Visa-Free (Laos Bo Y) - 1,400,000 VND", callback_data="step|svc|nt_bus_laos_45d")])
+                rows.append([InlineKeyboardButton("📑 90-Day E-Visa Package (Laos Bo Y) - 4,000,000 VND", callback_data="step|svc|nt_bus_laos_90d")])
+                rows.append([InlineKeyboardButton("📑 90-Day E-Visa Package (Cambodia Moc Bai) - 4,400,000 VND", callback_data="step|svc|nt_combo_evisa")])
+            else:
+                rows.append([InlineKeyboardButton("📑 90-Day E-Visa Package (Laos Bo Y) - 4,000,000 VND", callback_data="step|svc|nt_bus_laos_90d")])
+                rows.append([InlineKeyboardButton("📑 90-Day E-Visa Package (Cambodia Moc Bai) - 4,400,000 VND", callback_data="step|svc|nt_combo_evisa")])
             
     elif city == "muine":
-        rows.append([InlineKeyboardButton("🚌 Visarun Mũi Né - Cambodia (30/45/90D)", callback_data="step|svc|mn_bus_cambodia")])
-        if exempt:
-            rows.append([InlineKeyboardButton("⭐ Vé xe Mũi Né ⇄ Campuchia (Miễn visa) - 1.400.000 ₫", callback_data="step|svc|mn_bus_cambodia")])
-            rows.append([InlineKeyboardButton("📑 Trọn gói Bus Mũi Né + E-Visa 90 ngày - 4.000.000 ₫", callback_data="step|svc|mn_combo_evisa")])
+        if lang == "ru":
+            rows.append([InlineKeyboardButton("🚌 Визаран Муйне ⇄ Камбоджа (Мокбай) (30/45/90 дней)", callback_data="step|svc|mn_bus_cambodia")])
+            if exempt:
+                rows.append([InlineKeyboardButton("⭐ Билет Муйне ⇄ Камбоджа (Безвиз) — 1.400.000 ₫", callback_data="step|svc|mn_bus_cambodia")])
+                rows.append([InlineKeyboardButton("📑 Пакet: Bus + E-Visa 90 дней — 4.000.000 ₫", callback_data="step|svc|mn_combo_evisa")])
+            else:
+                rows.append([InlineKeyboardButton("📑 Пакет: Bus + E-Visa 90 дней — 4.000.000 ₫", callback_data="step|svc|mn_combo_evisa")])
+        elif lang == "vi":
+            rows.append([InlineKeyboardButton("🚌 Visarun Mũi Né - Cambodia (30/45/90D)", callback_data="step|svc|mn_bus_cambodia")])
+            if exempt:
+                rows.append([InlineKeyboardButton("⭐ Vé xe Mũi Né ⇄ Campuchia (Miễn visa) - 1.400.000 ₫", callback_data="step|svc|mn_bus_cambodia")])
+                rows.append([InlineKeyboardButton("📑 Trọn gói Bus Mũi Né + E-Visa 90 ngày - 4.000.000 ₫", callback_data="step|svc|mn_combo_evisa")])
+            else:
+                rows.append([InlineKeyboardButton("📑 Trọn gói Bus Mũi Né + E-Visa 90 ngày - 4.000.000 ₫", callback_data="step|svc|mn_combo_evisa")])
         else:
-            rows.append([InlineKeyboardButton("📑 Trọn gói Bus Mũi Né + E-Visa 90 ngày - 4.000.000 ₫", callback_data="step|svc|mn_combo_evisa")])
+            rows.append([InlineKeyboardButton("🚌 Visarun Mui Ne - Cambodia (30/45/90D)", callback_data="step|svc|mn_bus_cambodia")])
+            if exempt:
+                rows.append([InlineKeyboardButton("⭐ Bus Ticket Mui Ne ⇄ Cambodia (Visa-Free) - 1,400,000 VND", callback_data="step|svc|mn_bus_cambodia")])
+                rows.append([InlineKeyboardButton("📑 Package: Bus + 90-Day E-Visa - 4,000,000 VND", callback_data="step|svc|mn_combo_evisa")])
+            else:
+                rows.append([InlineKeyboardButton("📑 Package: Bus + 90-Day E-Visa - 4,000,000 VND", callback_data="step|svc|mn_combo_evisa")])
             
     elif city == "hanoi":
-        rows.append([InlineKeyboardButton("🚌 Визаран Hà Nội - Hữu Nghị (45/90D)", callback_data="step|svc|hn_bus_huunghi")])
-        if exempt:
-            rows.append([InlineKeyboardButton("⭐ Vé VIP Limousine Hà Nội ⇄ Hữu Nghị (Miễn visa 45D) - 1.200.000 ₫", callback_data="step|svc|hn_bus_huunghi")])
-        rows.append([InlineKeyboardButton("📑 Trọn gói VIP Limousine + E-Visa 90 ngày Hữu Nghị", callback_data="step|svc|hn_bus_huunghi")])
+        if lang == "ru":
+            rows.append([InlineKeyboardButton("🚌 Визаран Ханой ⇄ Хыу Нги (45/90 дней)", callback_data="step|svc|hn_bus_huunghi")])
+            if exempt:
+                rows.append([InlineKeyboardButton("⭐ VIP Лимузин Ханой ⇄ Хыу Нги (Безвиз 45 дней) — 1.200.000 ₫", callback_data="step|svc|hn_bus_huunghi")])
+            rows.append([InlineKeyboardButton("📑 Пакет: VIP Лимузин + E-Visa 90 дней (Хыу Нги)", callback_data="step|svc|hn_bus_huunghi")])
+        elif lang == "vi":
+            rows.append([InlineKeyboardButton("🚌 Visarun Hà Nội - Hữu Nghị (45/90D)", callback_data="step|svc|hn_bus_huunghi")])
+            if exempt:
+                rows.append([InlineKeyboardButton("⭐ Vé VIP Limousine Hà Nội ⇄ Hữu Nghị (Miễn visa 45D) - 1.200.000 ₫", callback_data="step|svc|hn_bus_huunghi")])
+            rows.append([InlineKeyboardButton("📑 Trọn gói VIP Limousine + E-Visa 90 ngày Hữu Nghị", callback_data="step|svc|hn_bus_huunghi")])
+        else:
+            rows.append([InlineKeyboardButton("🚌 Visarun Hanoi - Huu Nghi (45/90D)", callback_data="step|svc|hn_bus_huunghi")])
+            if exempt:
+                rows.append([InlineKeyboardButton("⭐ VIP Limousine Hanoi ⇄ Huu Nghi (45D Visa-Free) - 1,200,000 VND", callback_data="step|svc|hn_bus_huunghi")])
+            rows.append([InlineKeyboardButton("📑 Package: VIP Limousine + 90-Day E-Visa Huu Nghi", callback_data="step|svc|hn_bus_huunghi")])
         
     elif city == "hcm":
-        rows.append([InlineKeyboardButton("🚗 Xe Ô Tô Riêng 4–7 Chỗ TP.HCM ⇄ Mộc Bài - 2.300.000 ₫", callback_data="step|svc|hcm_car_private")])
-        rows.append([InlineKeyboardButton("✈️ VIP Fast Track Sân Bay Tân Sơn Nhất - 1.200.000 ₫", callback_data="step|svc|hcm_fasttrack")])
+        if lang == "ru":
+            rows.append([InlineKeyboardButton("🚗 Индивидуальное авто Хошимин ⇄ Мокбай — 2.300.000 ₫", callback_data="step|svc|hcm_car_private")])
+            rows.append([InlineKeyboardButton("✈️ VIP Fast Track Аэропорт Таншоннят (SGN) — 1.200.000 ₫", callback_data="step|svc|hcm_fasttrack")])
+        elif lang == "vi":
+            rows.append([InlineKeyboardButton("🚗 Xe Ô Tô Riêng 4–7 Chỗ TP.HCM ⇄ Mộc Bài - 2.300.000 ₫", callback_data="step|svc|hcm_car_private")])
+            rows.append([InlineKeyboardButton("✈️ VIP Fast Track Sân Bay Tân Sơn Nhất - 1.200.000 ₫", callback_data="step|svc|hcm_fasttrack")])
+        else:
+            rows.append([InlineKeyboardButton("🚗 Private Car HCMC ⇄ Moc Bai - 2,300,000 VND", callback_data="step|svc|hcm_car_private")])
+            rows.append([InlineKeyboardButton("✈️ VIP Fast Track Tan Son Nhat Airport (SGN) - 1,200,000 VND", callback_data="step|svc|hcm_fasttrack")])
         
     elif city == "abroad":
-        rows.append([InlineKeyboardButton("⚡ Urgent E-visa (Làm visa cấp tốc trước khi bay)", callback_data="step|svc|abroad_evisa_urgent")])
-        rows.append([InlineKeyboardButton("✈️ Airport VIP Fast Track Đón Cửa Máy Bay", callback_data="step|svc|abroad_fasttrack")])
+        if lang == "ru":
+            rows.append([InlineKeyboardButton("⚡ Срочная E-Visa (до вылета во Вьетнам)", callback_data="step|svc|abroad_evisa_urgent")])
+            rows.append([InlineKeyboardButton("✈️ Airport VIP Fast Track (встреча у трапа)", callback_data="step|svc|abroad_fasttrack")])
+        elif lang == "vi":
+            rows.append([InlineKeyboardButton("⚡ Urgent E-visa (Làm visa cấp tốc trước khi bay)", callback_data="step|svc|abroad_evisa_urgent")])
+            rows.append([InlineKeyboardButton("✈️ Airport VIP Fast Track Đón Cửa Máy Bay", callback_data="step|svc|abroad_fasttrack")])
+        else:
+            rows.append([InlineKeyboardButton("⚡ Urgent E-Visa (Before departure)", callback_data="step|svc|abroad_evisa_urgent")])
+            rows.append([InlineKeyboardButton("✈️ Airport VIP Fast Track Gate Escort", callback_data="step|svc|abroad_fasttrack")])
 
     # 2. Các nút dịch vụ đặc biệt: Tách riêng 4 nút chuyên biệt (Overstay, TRC, Work, Family)
     if lang == "ru":
@@ -700,6 +790,9 @@ ITINERARIES = {
         "title_ru": "🚌 МАРШРУТ: НЯЧАНГ ⇄ КПП БО-И (ЛАОС) — БЕЗВИЗ 45 ДНЕЙ",
         "title_en": "🚌 ROUTE: NHA TRANG ⇄ BO Y BORDER (LAOS) — 45-DAY VISA-FREE",
         "price": "1.400.000 VND (Vé xe giường nằm khứ hồi)",
+        "price_vi": "1.400.000 VND (Vé xe giường nằm khứ hồi)",
+        "price_ru": "1.400.000 VND (Билет на комфортабельный слипбас туда и обратно)",
+        "price_en": "1,400,000 VND (Round-trip sleeper bus ticket)",
         "schedule_vi": (
             "⏰ LỊCH TRÌNH CHI TIẾT (XE CHẠY MỖI NGÀY):\n"
             "• 21:00: Tập trung tại điểm đón xe buýt ở Nha Trang.\n"
@@ -751,6 +844,9 @@ ITINERARIES = {
         "title_ru": "🚌 МАРШРУТ: НЯЧАНГ ⇄ КПП БО-И (ЛАОС) — E-VISA 90 ДНЕЙ",
         "title_en": "🚌 ROUTE: NHA TRANG ⇄ BO Y BORDER (LAOS) — 90-DAY E-VISA",
         "price": "1.400.000 VND (Chỉ vé xe khứ hồi) | 4.000.000 VND (Combo Trọn Gói Bus + E-Visa 90 ngày)",
+        "price_vi": "1.400.000 VND (Chỉ vé xe khứ hồi) | 4.000.000 VND (Combo Trọn Gói Bus + E-Visa 90 ngày)",
+        "price_ru": "1.400.000 VND (Только билет на автобус) | 4.000.000 VND (Пакет: Автобус + E-Visa на 90 дней)",
+        "price_en": "1,400,000 VND (Bus only) | 4,000,000 VND (Package: Bus + 90-day E-Visa)",
         "schedule_vi": (
             "⏰ LỊCH TRÌNH CHI TIẾT (XE CHẠY THỨ 3, THỨ 5, CHỦ NHẬT):\n"
             "• 21:00: Tập trung tại điểm đón xe buýt ở Nha Trang.\n"
@@ -802,6 +898,12 @@ ITINERARIES = {
         "title_ru": "🚌 МАРШРУТ: НЯЧАНГ ⇄ КПП БО-И (ЛАОС) — 45/90 ДНЕЙ",
         "title_en": "🚌 ROUTE: NHA TRANG ⇄ BO Y BORDER (LAOS) — 45/90 DAYS",
         "price": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo Bus + E-Visa 90 ngày) | 4.400.000 VND (Combo Bus + E-Visa 90 ngày + Visa Campuchia 24h)",
+        "price_vi": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo Bus + E-Visa 90 ngày) | 4.400.000 VND (Combo Bus + E-Visa 90 ngày + Visa Campuchia 24h)",
+        "price_ru": "1.400.000 VND (Билет туда-обратно) | 4.000.000 VND (Пакет Bus + E-Visa 90 дней) | 4.400.000 VND (Пакет Bus + E-Visa 90 дней + виза Камбоджи за 24ч)",
+        "price_en": "1,400,000 VND (Round-trip bus) | 4,000,000 VND (Package: Bus + 90-Day E-Visa) | 4,400,000 VND (Package: Bus + E-Visa + Cambodia 24h Visa)",
+        "price_vi": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo Bus + E-Visa 90 ngày) | 4.400.000 VND (Combo Bus + E-Visa 90 ngày + Visa Campuchia 24h)",
+        "price_ru": "1.400.000 VND (Билет туда-обратно) | 4.000.000 VND (Пакет Bus + E-Visa 90 дней) | 4.400.000 VND (Пакет Bus + E-Visa 90 дней + виза Камбоджи за 24ч)",
+        "price_en": "1,400,000 VND (Round-trip bus) | 4,000,000 VND (Package: Bus + 90-Day E-Visa) | 4,400,000 VND (Package: Bus + E-Visa + Cambodia 24h Visa)",
         "schedule_vi": (
             "⏰ LỊCH TRÌNH CHI TIẾT (ITINERARY):\n"
             "• 21:00: Tập trung tại điểm đón xe buýt.\n"
@@ -853,6 +955,9 @@ ITINERARIES = {
         "title_ru": "🚌 МАРШРУТ: ХАНОЙ ⇄ МЕЖДУНАРОДНЫЙ КПП ХЫУ НГИ (45/90 ДНЕЙ)",
         "title_en": "🚌 ROUTE: HANOI ⇄ HUU NGHI INTERNATIONAL BORDER (45/90 DAYS)",
         "price": "1.200.000 VND (Vé VIP Limousine khứ hồi)",
+        "price_vi": "1.200.000 VND (Vé VIP Limousine khứ hồi)",
+        "price_ru": "1.200.000 VND (Билет на VIP Лимузин туда и обратно)",
+        "price_en": "1,200,000 VND (Round-trip VIP Limousine ticket)",
         "schedule_vi": (
             "⏰ LỊCH TRÌNH CHI TIẾT (ITINERARY):\n"
             "• 08:30: Tập trung tại điểm đón (Văn phòng VIP Limousine Hà Nội).\n"
@@ -904,6 +1009,9 @@ ITINERARIES = {
         "title_ru": "🚌 МАРШРУТ: НЯЧАНГ / МУЙНЕ ⇄ МОКБАЙ (КАМБОДЖА) (30/45/90 ДНЕЙ)",
         "title_en": "🚌 ROUTE: NHA TRANG / MUI NE ⇄ MOC BAI (CAMBODIA)",
         "price": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo Bus + E-Visa 90 ngày) | 4.400.000 VND (Combo Bus + E-Visa 90 ngày + Visa Campuchia 24h)",
+        "price_vi": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo Bus + E-Visa 90 ngày) | 4.400.000 VND (Combo Bus + E-Visa 90 ngày + Visa Campuchia 24h)",
+        "price_ru": "1.400.000 VND (Билет туда-обратно) | 4.000.000 VND (Пакет Bus + E-Visa 90 дней) | 4.400.000 VND (Пакет Bus + E-Visa 90 дней + виза Камбоджи за 24ч)",
+        "price_en": "1,400,000 VND (Round-trip bus) | 4,000,000 VND (Package: Bus + 90-Day E-Visa) | 4,400,000 VND (Package: Bus + E-Visa + Cambodia 24h Visa)",
         "schedule_vi": (
             "⏰ LỊCH TRÌNH CHI TIẾT (ITINERARY):\n"
             "• Nha Trang: 21:00 đón tại DUY NHẤT 40 Hòn Chồng = Oceanus (https://maps.app.goo.gl/y8DjaoCNDsRyZN9B8) (Thứ 3, T5, CN).\n"
@@ -955,6 +1063,7 @@ ITINERARIES = {
 def get_itinerary_message(route_key: str, lang: str = "ru") -> str:
     itin = ITINERARIES.get(route_key, ITINERARIES.get("laos_boy_45d", ITINERARIES["laos_boy"]))
     title = itin.get(f"title_{lang}", itin["title_en"])
+    price = itin.get(f"price_{lang}", itin.get("price_ru" if lang == "ru" else "price"))
     sched = itin.get(f"schedule_{lang}", itin["schedule_vi"])
     pickup = itin.get(f"pickup_{lang}", itin["pickup_vi"])
     border = itin.get(f"border_{lang}", itin["border_vi"])
@@ -965,7 +1074,7 @@ def get_itinerary_message(route_key: str, lang: str = "ru") -> str:
     if lang == "ru":
         return (
             f"📋 **{title}**\n"
-            f"💰 **Стоимость:** {itin['price']}\n"
+            f"💰 **Стоимость:** {price}\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             f"{sched}\n\n"
             f"{pickup}\n\n"
@@ -1053,7 +1162,7 @@ def get_payment_detail_message(method: str, lang: str = "ru") -> str:
                 "🌐 **SWIFT-код:** `BFTVVNVX`\n"
                 "📝 **Назначение перевода:** `[Имя Фамилия] [Год рождения]`\n"
                 "*(Пример: IVANOV 1997)*\n\n"
-                "📲 **Mã QR & Hướng dẫn chính thức (QR-код и подробности):**\n"
+                "📲 **Официальный QR-код и банковские реквизиты:**\n"
                 "🏢 **Оплата наличными в офисе:**\n"
                 "📍 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
                 "🗺️ Карты: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
@@ -1103,13 +1212,13 @@ def get_payment_detail_message(method: str, lang: str = "ru") -> str:
                 "🏦 **Банк:** Вьетнамско-Российский Совместный Банк (Vietnam - Russia Joint Venture Bank - VRB)\n"
                 "📍 **Филиал:** Khánh Hòa (Нячанг)\n"
                 "👤 **Получатель (Beneficiary):** CONG TY TNHH EASY TRIP & VISA\n"
-                "🔢 **Номер счета:** `1068582577` (hoặc chuyển khoản liên ngân hàng Napas 24/7 đến VRB)\n"
+                "🔢 **Номер счета:** `1068582577` (или межбанковский перевод Napas 24/7 на счет VRB)\n"
                 "📝 **Назначение перевода:** `[Имя Фамилия] [Год рождения]`\n"
                 "*(Пример: IVANOV 1997)*\n\n"
                 "🌟 **Преимущества расчетов через VRB:**\n"
                 "• Прямые взаиморасчеты Россия – Вьетнам (в RUB и VND)\n"
                 "• Удобно для переводов картами МИР и через банки-партнеры РФ\n"
-                "📲 **Mã QR & Hướng dẫn chính thức:**\n"
+                "📲 **Официальный QR-код и реквизиты компании:**\n"
                 "🏢 **Оплата наличными в офисе:**\n"
                 "📍 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
                 "🗺️ Карты: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
@@ -2021,9 +2130,9 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         kb_pay = get_payment_methods_keyboard(lang)
         await send_step_reply(update, context, seat_req_msg.get(lang, seat_req_msg["en"]), reply_markup=kb_pay, parse_mode="Markdown")
             
-        # Chuyển phase trong AI Agent sang SEAT_SELECTION
-        simulated_text = f"Customer requested seat checking for {cust_data.loai_visa} on {cust_data.ngay_khoi_hanh}. Nationality: {cust_data.quoc_tich}."
-        await process_customer_text_message_fn(update, context, user_id, simulated_text)
+        # Ghi nhận trạng thái đang chọn ghế vào CustomerData và phiên chat
+        cust_data.ghe_chon = "Chờ khách chọn ghế / Ожидание выбора места"
+        memory_store[session_id].append({"role": "assistant", "content": seat_req_msg.get(lang, seat_req_msg["en"])})
         return
 
     # 🟢 DỊCH VỤ ĐẶC BIỆT: TÁCH RIÊNG 4 NÚT CHUYÊN BIỆT (Overstay, TRC, Work, Family)
@@ -2259,11 +2368,11 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         # 2. Trở về chọn lại quốc gia
         elif back_target in ("nationality", "nat"):
             keyboard = get_nationality_keyboard()
-            await send_step_reply(update, context, "🌐 Chọn lại quốc gia / Выберите страну / Choose country:", reply_markup=keyboard)
+            await send_step_reply(update, context, "🌐 " + ("Выберите страну:" if lang == "ru" else "Chọn lại quốc tịch:" if lang == "vi" else "Choose country:"), reply_markup=keyboard)
             return
             
         # 3. Trở về chọn lại thành phố
         elif back_target == "city":
             keyboard = get_city_keyboard(lang)
-            await send_step_reply(update, context, "📍 Chọn lại thành phố / Выберите город / Choose city:", reply_markup=keyboard)
+            await send_step_reply(update, context, "📍 " + ("Выберите город:" if lang == "ru" else "Chọn lại thành phố:" if lang == "vi" else "Choose city:"), reply_markup=keyboard)
             return
