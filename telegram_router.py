@@ -31,6 +31,8 @@ from wizard_flows import (
     identify_country,
     send_step_reply,
     analyze_customer_incoming_message,
+    get_payment_instruction_text,
+    get_payment_methods_keyboard,
 )
 from lark_api import create_customer_record, upload_image_to_lark, update_customer_image, update_order_status, create_order, get_daily_harvest_report
 from i18n import get_lang_code, get_msg
@@ -1135,6 +1137,151 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
     memory_store[f"{session_id}_last_update"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     target_msg: Any = update.message or update.business_message or (update.callback_query.message if update.callback_query else None)
+
+    # ─── BƯỚC: TỰ ĐỘNG NHẬN DIỆN KHÁCH CHỌN GHẾ SAU KHI GỬI SƠ ĐỒ XE ───
+    pending_booking = memory_store.get(f"{session_id}_pending_seats")
+    raw_found_seats = re.findall(r"\b([AB]\d{1,2})\b", text.upper())
+    valid_found_seats = [s for s in dict.fromkeys(raw_found_seats) if s in VALID_BUS_SEATS]
+
+    if valid_found_seats and (pending_booking or (memory_store.get(f"{session_id}_data") and getattr(memory_store.get(f"{session_id}_data"), "ghe_chon", None) and "Chờ" in str(memory_store.get(f"{session_id}_data").ghe_chon))):
+        lang = memory_store.get(f"{session_id}_lang", "ru")
+        u_name = (pending_booking.get("customer_name") if pending_booking else None) or getattr(update.effective_user, "full_name", "Easy Trip Visa")
+        u_handle = (pending_booking.get("customer_handle") if pending_booking else None) or getattr(update.effective_user, "username", "")
+        user_disp = f"{u_name} (@{u_handle})" if u_handle and u_handle != "N/A" else u_name
+        
+        cust_data = memory_store.get(f"{session_id}_data")
+        if not cust_data or not isinstance(cust_data, CustomerData):
+            cust_data = CustomerData()
+            memory_store[f"{session_id}_data"] = cust_data
+
+        if pending_booking:
+            total_needed = pending_booking.get("total_seats_needed", 1)
+            if len(valid_found_seats) < total_needed:
+                insufficient_prompts = {
+                    "vi": (
+                        f"⚠️ Quý khách đã đăng ký **{total_needed} giường** nhưng mới chọn **{len(valid_found_seats)} ghế** ({', '.join(valid_found_seats)}).\n\n"
+                        f"👉 Quý khách vui lòng chọn thêm **{total_needed - len(valid_found_seats)} ghế nữa** trên sơ đồ nhé! 😊"
+                    ),
+                    "ru": (
+                        f"⚠️ Вы бронируете **{total_needed} спальных места**, но указали только **{len(valid_found_seats)}** ({', '.join(valid_found_seats)}).\n\n"
+                        f"👉 Пожалуйста, выберите еще **{total_needed - len(valid_found_seats)} места** на актуальной схеме! 😊"
+                    ),
+                    "en": (
+                        f"⚠️ You reserved **{total_needed} beds**, but specified only **{len(valid_found_seats)}** ({', '.join(valid_found_seats)}).\n\n"
+                        f"👉 Please choose **{total_needed - len(valid_found_seats)} more seats** on the layout! 😊"
+                    )
+                }
+                await send_step_reply(update, context, insufficient_prompts.get(lang, insufficient_prompts["ru"]), parse_mode="Markdown")
+                return
+
+            chosen_seats = valid_found_seats[:total_needed]
+            seat_str = ", ".join(chosen_seats)
+            cust_data.ghe_chon = seat_str
+            cust_data.ngay_khoi_hanh = pending_booking.get("date_val", cust_data.ngay_khoi_hanh or "")
+            cust_data.loai_visa = pending_booking.get("route_name", cust_data.loai_visa or "Nha Trang ⇄ Lào Bờ Y (90 Ngày)")
+            
+            adults = pending_booking.get("adults", 1)
+            kids_over9 = pending_booking.get("kids_over9", 0)
+            kids_under9 = pending_booking.get("kids_under9", 0)
+            grand_total = pending_booking.get("grand_total", 4000000)
+            route_disp = pending_booking.get("route_name", cust_data.loai_visa or "Nha Trang ⇄ Lào Bờ Y (90 Ngày)")
+            date_val = pending_booking.get("date_val", cust_data.ngay_khoi_hanh or "")
+            
+            members_vi = f"{adults} người lớn"
+            if kids_over9 > 0: members_vi += f" + {kids_over9} trẻ ≥ 9T"
+            if kids_under9 > 0: members_vi += f" + {kids_under9} trẻ < 9T"
+
+            members_ru = f"{adults} взр."
+            if kids_over9 > 0: members_ru += f" + {kids_over9} детей ≥ 9 лет"
+            if kids_under9 > 0: members_ru += f" + {kids_under9} детей < 9 лет"
+
+            members_en = f"{adults} adults"
+            if kids_over9 > 0: members_en += f" + {kids_over9} kids ≥ 9yo"
+            if kids_under9 > 0: members_en += f" + {kids_under9} kids < 9yo"
+            
+            memory_store.pop(f"{session_id}_pending_seats", None)
+        else:
+            seat_str = valid_found_seats[0]
+            cust_data.ghe_chon = seat_str
+            route_disp = cust_data.loai_visa or "Nha Trang ⇄ Lào Bờ Y (90 Ngày)"
+            date_val = cust_data.ngay_khoi_hanh or datetime.now().strftime("%d/%m")
+            grand_total = 4000000 if "90" in route_disp else 1400000
+            members_vi = "1 người lớn"
+            members_ru = "1 взр."
+            members_en = "1 adult"
+
+        # Soạn tin nhắn Final Booking chính thức
+        if lang == "ru":
+            final_booking_msg = (
+                f"🎉 **ОФИЦИАЛЬНОЕ ПОДТВЕРЖДЕНИЕ БРОНИРОВАНИЯ (FINAL BOOKING)**\n"
+                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                f"👤 **Представитель:** {user_disp}\n"
+                f"📍 **Маршрут:** {route_disp}\n"
+                f"📅 **Дата выезда:** {date_val}\n"
+                f"💺 **Выбранные места:** **{seat_str}**\n"
+                f"👥 **Состав:** {members_ru}\n"
+                f"💰 **ИТОГО К ОПЛАТЕ:** **{grand_total:,.0f} VND**\n"
+                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+                + get_payment_instruction_text(lang)
+            )
+        elif lang == "vi":
+            final_booking_msg = (
+                f"🎉 **XÁC NHẬN GIỮ CHỖ CHÍNH THỨC (FINAL BOOKING)**\n"
+                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                f"👤 **Đại diện:** {user_disp}\n"
+                f"📍 **Tuyến:** {route_disp}\n"
+                f"📅 **Ngày khởi hành:** {date_val}\n"
+                f"💺 **Vị trí ghế đã chốt:** **{seat_str}**\n"
+                f"👥 **Thành viên:** {members_vi}\n"
+                f"💰 **TỔNG CỘNG THANH TOÁN:** **{grand_total:,.0f} VND**\n"
+                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+                + get_payment_instruction_text(lang)
+            )
+        else:
+            final_booking_msg = (
+                f"🎉 **OFFICIAL BOOKING CONFIRMATION (FINAL BOOKING)**\n"
+                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                f"👤 **Representative:** {user_disp}\n"
+                f"📍 **Route:** {route_disp}\n"
+                f"📅 **Departure Date:** {date_val}\n"
+                f"💺 **Confirmed Seats:** **{seat_str}**\n"
+                f"👥 **Passengers:** {members_en}\n"
+                f"💰 **TOTAL PAYMENT:** **{grand_total:,.0f} VND**\n"
+                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n"
+                + get_payment_instruction_text(lang)
+            )
+
+        pay_kb = get_payment_methods_keyboard(lang)
+        await send_step_reply(update, context, final_booking_msg, reply_markup=pay_kb, parse_mode="Markdown")
+
+        # Gửi kèm ảnh QR thanh toán nếu có
+        if os.path.exists("qr_code.jpg"):
+            try:
+                with open("qr_code.jpg", "rb") as qr_f:
+                    if conn_id:
+                        await context.bot.send_photo(chat_id=target_chat_id, photo=qr_f, caption="💳 Easy Trip & Visa Banking QR Code", business_connection_id=conn_id)
+                    elif target_msg:
+                        await target_msg.reply_photo(photo=qr_f, caption="💳 Easy Trip & Visa Banking QR Code")
+            except Exception as e_qr:
+                print(f"⚠️ Gửi QR code thất bại: {e_qr}")
+
+        # Báo ngay vào Admin Group
+        admin_final_alert = (
+            f"🎉 **KHÁCH ĐÃ CHỐT GHẾ (FINAL BOOKING)!**\n"
+            f"👤 Đại diện: {user_disp}\n"
+            f"📍 Tuyến: {route_disp}\n"
+            f"📅 Ngày đi: {date_val}\n"
+            f"💺 Ghế đã chốt: {seat_str}\n"
+            f"👥 Thành viên: {members_vi}\n"
+            f"💰 Tổng tiền thanh toán: {grand_total:,.0f} VND\n"
+            f"👉 ĐÃ GỬI THÔNG TIN VÀ NÚT BẤM THANH TOÁN CHO KHÁCH!"
+        )
+        await send_to_admin_group(context, admin_final_alert)
+
+        # Gửi thông tin vào Topic đối tác
+        reg_cmd = f"📌 ĐẶT CHỖ: {u_name} - Ghế {seat_str} ({date_val} {route_disp})"
+        await send_to_bus_group(context, reg_cmd, date=date_val)
+        return
 
     # ─── BƯỚC THÔNG MINH: NHẬN DIỆN Ý ĐỊNH & TỰ GỢI Ý QUY TRÌNH NÚT BẤM TƯƠNG ỨNG ───
     incoming_intent = analyze_customer_incoming_message(text)
