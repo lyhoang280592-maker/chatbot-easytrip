@@ -6,10 +6,10 @@ Cung cấp luồng Tư Vấn Thông Minh (Intelligent Consultation Engine):
 3. Lịch tháng tương tác chuẩn quốc tế (Calendar Picker)
 4. BƯỚC TƯ VẤN THÔNG TIN & ĐỀ XUẤT NÚT BẤM PHÙ HỢP (Khớp Quốc tịch + Hạn visa + Lịch xe + Dịch vụ visa)
 5. Chi tiết Lịch trình chuẩn xác (Lào Bờ Y 07:00 & 09:30, Hà Nội Hữu Nghị 09:00 - 19:00, Campuchia Mũi Né/Nha Trang)
-6. Bước tiếp theo kiểm tra sơ đồ chỗ trống, chọn số ghế, gửi ảnh hộ chiếu, thanh toán https://t.me/visaEASYTRIP/118, Admin duyệt, Vé Final + Chính sách hủy hoàn
 """
 
 import calendar
+import re
 from datetime import datetime, timedelta
 from typing import Any
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
@@ -152,9 +152,14 @@ COUNTRY_LOOKUP = {
 
 def identify_country(text: str) -> tuple[str, str] | None:
     t = text.lower().strip()
+    words = set(re.findall(r'[\w\u00C0-\u1EF9]+', t))
     for kw, (cname, clang) in COUNTRY_LOOKUP.items():
-        if kw in t:
-            return cname, clang
+        if " " in kw:
+            if kw in t:
+                return cname, clang
+        else:
+            if kw in words or t == kw:
+                return cname, clang
     return None
 
 def is_country_exempt(country_name: str) -> bool:
@@ -181,7 +186,8 @@ async def send_step_reply(update: Update, context: ContextTypes.DEFAULT_TYPE, te
                 text=text,
                 reply_markup=reply_markup,
                 parse_mode=parse_mode,
-                business_connection_id=conn_id
+                business_connection_id=conn_id,
+                disable_web_page_preview=True
             )
         except Exception as e_biz:
             print(f"⚠️ Telegram Business send error with {parse_mode}: {e_biz}. Retrying plain text...")
@@ -190,7 +196,8 @@ async def send_step_reply(update: Update, context: ContextTypes.DEFAULT_TYPE, te
                     chat_id=chat_id,
                     text=text,
                     reply_markup=reply_markup,
-                    business_connection_id=conn_id
+                    business_connection_id=conn_id,
+                    disable_web_page_preview=True
                 )
             except Exception as e_biz2:
                 print(f"❌ Telegram Business send failed completely: {e_biz2}")
@@ -198,10 +205,10 @@ async def send_step_reply(update: Update, context: ContextTypes.DEFAULT_TYPE, te
     # 2. Phản hồi callback query
     if query and query.message:
         try:
-            return await query.message.reply_text(text, reply_markup=reply_markup, parse_mode=parse_mode)
+            return await query.message.reply_text(text, reply_markup=reply_markup, parse_mode=parse_mode, disable_web_page_preview=True)
         except Exception as e_qm:
             try:
-                return await query.message.reply_text(text, reply_markup=reply_markup)
+                return await query.message.reply_text(text, reply_markup=reply_markup, disable_web_page_preview=True)
             except Exception as e_qm2:
                 print(f"⚠️ query.message.reply_text error: {e_qm2}")
 
@@ -209,25 +216,26 @@ async def send_step_reply(update: Update, context: ContextTypes.DEFAULT_TYPE, te
     target_msg = getattr(update, "message", None) or getattr(update, "business_message", None) or getattr(update, "edited_business_message", None)
     if target_msg:
         try:
-            return await target_msg.reply_text(text, reply_markup=reply_markup, parse_mode=parse_mode)
+            return await target_msg.reply_text(text, reply_markup=reply_markup, parse_mode=parse_mode, disable_web_page_preview=True)
         except Exception as e_m:
             try:
-                return await target_msg.reply_text(text, reply_markup=reply_markup)
+                return await target_msg.reply_text(text, reply_markup=reply_markup, disable_web_page_preview=True)
             except Exception as e_m2:
                 print(f"⚠️ target_msg.reply_text error: {e_m2}")
 
     # 4. Fallback gửi trực tiếp qua bot
     if chat_id and bot:
         try:
-            return await bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_markup, parse_mode=parse_mode)
+            return await bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_markup, parse_mode=parse_mode, disable_web_page_preview=True)
         except Exception:
-            return await bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_markup)
+            return await bot.send_message(chat_id=chat_id, text=text, reply_markup=reply_markup, disable_web_page_preview=True)
 
 
 def analyze_customer_incoming_message(text: str) -> dict:
     """
     Phân tích đoạn chat của khách hàng khi nhấn chuyển tiếp từ Website sang Telegram:
-    Tự động đọc ý định, tuyến xe, thành phố và dịch vụ để gợi ý quy trình các bước + nút bấm tương ứng.
+    Đảm bảo mọi khách hàng bắt đầu từ Web hoặc gửi lời chào ĐỀU được dẫn dắt theo đúng trình tự các bước:
+    Bước 1: Chọn Quốc Tịch -> Bước 2: Chọn Thành Phố -> Bước 3: Lịch Tháng -> Bước 4: Bảng Dịch Vụ Phù Hợp.
     """
     t = (text or "").strip()
     tl = t.lower()
@@ -236,30 +244,26 @@ def analyze_customer_incoming_message(text: str) -> dict:
         
     # Phát hiện ngôn ngữ sơ bộ
     detected_lang = "en"
-    if any(c in tl for c in ["здравствуйте", "привет", "добр", "хочу", "виза", "визаран", "паспорт", "росси", "дня", "дней", "муйне", "нячанг", "лаос", "камбодж", "оверстей", "срочн"]):
+    if any(c in tl for c in ["здравствуйте", "привет", "добр", "хочу", "виза", "визаран", "паспорт", "росси", "дня", "дней", "муйне", "нячанг", "лаос", "камбодж", "оверстей", "срочн", "продлен"]):
         detected_lang = "ru"
     elif any(c in tl for c in ["xin chào", "chào", "tôi muốn", "cho tôi", "báo giá", "làm visa", "hộ chiếu", "mũi né", "nha trang", "quá hạn", "khẩn", "cấp tốc", "tư vấn", "xe buýt", "xe bus", "đà nẵng", "hà nội", "sài gòn", "phí", "giá", "vé", "đặt xe", "chuyến", "lào", "campuchia"]):
         detected_lang = "vi"
     elif any(c in tl for c in ["안녕", "비자"]):
         detected_lang = "ko"
 
-    # 1. Kiểm tra các dịch vụ đại lý chuyên biệt (Overstay, TRC, Work, Family)
-    if any(k in tl for k in ["overstay", "оверстей", "просрочк", "quá hạn", "hết hạn visa"]):
-        return {"action": "special_agent", "topic": "overstay", "lang": detected_lang}
-    if any(k in tl for k in ["trc", "внж", "tạm trú", "residence card", "карта резидента"]):
-        return {"action": "special_agent", "topic": "trc", "lang": detected_lang}
-    if any(k in tl for k in ["work permit", "work visa", "рабочая виза", "разрешение на работу", "lao động", "giấy phép lao động"]):
-        return {"action": "special_agent", "topic": "work", "lang": detected_lang}
-    if any(k in tl for k in ["family visa", "семейная виза", "виза для семьи", "thăm thân"]):
-        return {"action": "special_agent", "topic": "family", "lang": detected_lang}
+    # 1. Kiểm tra Lời chào / Câu mẫu bắt đầu từ Website (VD: "Здравствуйте, Easy Trip & Visa! Мне нужна консультация...")
+    is_initial_onboarding = (
+        tl in ["/start", "hi", "hello", "start"] or
+        any(tl.startswith(g) for g in [
+            "здравствуйте, easy trip", "здравствуйте! я хочу", "здравствуйте! хочу", "здравствуйте", "привет",
+            "добрый день", "доброе утро", "добрый вечер",
+            "hi easy trip", "hello easy trip", "hi easytrip", "hello easytrip",
+            "xin chào", "chào bạn", "chào bot", "chào easytrip", "chào easy trip",
+            "hello vietnam visa pass"
+        ])
+    )
 
-    # 2. Kiểm tra Fast Track và E-Visa cấp tốc
-    if any(k in tl for k in ["fast track", "fasttrack", "фаст трек", "đón sân bay"]):
-        return {"action": "special_service", "service_id": "special_fast_track", "lang": detected_lang}
-    if any(k in tl for k in ["urgent", "срочн", "cấp tốc", "khẩn"]):
-        return {"action": "special_service", "service_id": "special_urgent_evisa", "lang": detected_lang}
-
-    # 3. Kiểm tra Thành phố xuất phát & Tuyến xe
+    # 2. Kiểm tra Thành phố xuất phát & Tuyến xe
     city = None
     if any(k in tl for k in ["muine", "mui ne", "mũi né", "муйне", "phan thiết", "phan thiet"]):
         city = "muine"
@@ -274,17 +278,16 @@ def analyze_customer_incoming_message(text: str) -> dict:
     elif any(k in tl for k in ["abroad", "за рубежом", "nước ngoài"]):
         city = "abroad"
 
-    # Nếu có đề cập tuyến xe hoặc xuất phát từ Website Booking Lead
-    is_web_booking_lead = (
+    # Nếu khách chuyển tiếp từ Web kèm tuyến xe/thành phố cụ thể (hoặc tin nhắn có đề cập thành phố)
+    is_web_or_city = (
         city is not None or
         any(k in tl for k in [
             "express visa run booking", "визаран", "visarun", "visa run",
-            "vietnam visa pass", "камбодж", "лаос", "campuchia", "cambodia",
-            "lào", "laos", "xe buýt", "xe bus", "bus", "xe đi", "đặt xe"
+            "vietnam visa pass", "xe buýt", "xe bus", "chuyến xe", "đặt xe"
         ])
     )
-    if is_web_booking_lead:
-        c_code = city or "nhatrang"
+    if is_web_or_city:
+        c_code = city
         service_name = ""
         if c_code == "muine" or any(k in tl for k in ["камбодж", "cambodia", "campuchia", "mộc bài", "moc bai"]):
             c_code = "muine"
@@ -307,23 +310,32 @@ def analyze_customer_incoming_message(text: str) -> dict:
             "lang": detected_lang
         }
 
-    # 4. Kiểm tra nếu khách chỉ gõ tên quốc gia (VD: Russia, Kazakhstan, Đức, Pháp)
+    # Nếu là lời chào mở đầu / câu hỏi từ website (kể cả hỏi gia hạn visa / visa khẩn) -> Khởi động Bước 1 Chọn Quốc Tịch
+    if is_initial_onboarding:
+        return {"action": "greeting", "lang": detected_lang}
+
+    # 3. Kiểm tra nếu khách chỉ gõ tên quốc gia (VD: Russia, Kazakhstan, Đức, Pháp)
     country_res = identify_country(t)
     if country_res:
         return {"action": "country_selected", "country": country_res[0], "lang": country_res[1]}
 
-    # 5. Kiểm tra Lời chào / Gợi ý bắt đầu từ Web hoặc /start
-    greetings = [
-        "/start", "hi", "hello", "hi easytrip", "hello easytrip", "hi easy trip", "hello easy trip",
-        "здравствуйте", "привет", "добрый день", "доброе утро", "добрый вечер",
-        "xin chào", "chào bạn", "chào bot", "chào easytrip", "chào easy trip",
-        "안녕하세요", "여보세요", "start"
-    ]
-    if (tl in greetings) or any(tl.startswith(g) for g in ["hi easytrip", "hello easytrip", "hi easy trip", "hello easy trip", "xin chào", "chào", "здравствуйте", "добрый день", "hello vietnam visa pass"]):
-        return {"action": "greeting", "lang": detected_lang}
+    # 4. Khi đang trong cuộc trò chuyện, khách hỏi trực tiếp về Overstay, TRC, Work, Family
+    if any(k in tl for k in ["overstay", "оверстей", "просрочк", "quá hạn", "hết hạn visa"]):
+        return {"action": "special_agent", "topic": "overstay", "lang": detected_lang}
+    if any(k in tl for k in ["trc", "внж", "tạm trú", "residence card", "карта резидента"]):
+        return {"action": "special_agent", "topic": "trc", "lang": detected_lang}
+    if any(k in tl for k in ["work permit", "work visa", "рабочая виза", "разрешение на работу", "lao động", "giấy phép lao động"]):
+        return {"action": "special_agent", "topic": "work", "lang": detected_lang}
+    if any(k in tl for k in ["family visa", "семейная виза", "виза для семьи", "thăm thân"]):
+        return {"action": "special_agent", "topic": "family", "lang": detected_lang}
+
+    # 5. Fast Track và E-Visa cấp tốc khi khách yêu cầu rõ
+    if any(k in tl for k in ["fast track", "fasttrack", "фаст трек", "đón sân bay"]):
+        return {"action": "special_service", "service_id": "special_fast_track", "lang": detected_lang}
+    if any(k in tl for k in ["urgent", "срочн", "cấp tốc", "khẩn"]):
+        return {"action": "special_service", "service_id": "special_urgent_evisa", "lang": detected_lang}
 
     return {"action": "general", "lang": detected_lang}
-
 
 # ============================================================
 # CÁC BÀN PHÍM BƯỚC 1, 2, 3
@@ -927,7 +939,6 @@ def get_payment_detail_message(method: str, lang: str = "ru") -> str:
                 "📝 **Назначение перевода:** `[Имя Фамилия] [Год рождения]`\n"
                 "*(Пример: IVANOV 1997)*\n\n"
                 "📲 **Mã QR & Hướng dẫn chính thức (QR-код и подробности):**\n"
-                "👉 https://t.me/visaEASYTRIP/118\n\n"
                 "🏢 **Оплата наличными в офисе:**\n"
                 "📍 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
                 "🗺️ Карты: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
@@ -945,7 +956,6 @@ def get_payment_detail_message(method: str, lang: str = "ru") -> str:
                 "📝 **Cú pháp nội dung:** `[Họ tên khách] [năm sinh]`\n"
                 "*(Ví dụ: IVANOV 1997)*\n\n"
                 "📲 **Mã QR & Hướng dẫn chính thức:**\n"
-                "👉 https://t.me/visaEASYTRIP/118\n\n"
                 "🏢 **Thanh toán tiền mặt tại văn phòng:**\n"
                 "📍 Địa chỉ: 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
                 "🗺️ Bản đồ: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
@@ -963,7 +973,6 @@ def get_payment_detail_message(method: str, lang: str = "ru") -> str:
                 "📝 **Transfer Memo:** `[Full Name] [Year of Birth]`\n"
                 "*(Example: IVANOV 1997)*\n\n"
                 "📲 **Official QR Code & Instructions:**\n"
-                "👉 https://t.me/visaEASYTRIP/118\n\n"
                 "🏢 **Cash Payment at Office:**\n"
                 "📍 Address: 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
                 "🗺️ Map: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
@@ -986,7 +995,6 @@ def get_payment_detail_message(method: str, lang: str = "ru") -> str:
                 "• Прямые взаиморасчеты Россия – Вьетнам (в RUB и VND)\n"
                 "• Удобно для переводов картами МИР и через банки-партнеры РФ\n"
                 "📲 **Mã QR & Hướng dẫn chính thức:**\n"
-                "👉 https://t.me/visaEASYTRIP/118\n\n"
                 "🏢 **Оплата наличными в офисе:**\n"
                 "📍 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
                 "🗺️ Карты: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
@@ -1007,7 +1015,6 @@ def get_payment_detail_message(method: str, lang: str = "ru") -> str:
                 "• Cổng thanh toán song phương trực tiếp Việt Nam – LB Nga (đồng VND & RUB)\n"
                 "• Thuận tiện cho kiều bào, du khách Nga sử dụng thẻ MIR và ngân hàng Nga\n"
                 "📲 **Mã QR & Hướng dẫn chính thức:**\n"
-                "👉 https://t.me/visaEASYTRIP/118\n\n"
                 "🏢 **Thanh toán tiền mặt tại văn phòng:**\n"
                 "📍 Địa chỉ: 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
                 "🗺️ Bản đồ: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
@@ -1028,7 +1035,6 @@ def get_payment_detail_message(method: str, lang: str = "ru") -> str:
                 "• Direct bilateral payment gateway between Vietnam & Russia (RUB & VND)\n"
                 "• Convenient for Russian payment systems and MIR transactions\n"
                 "📲 **Official QR Code & Instructions:**\n"
-                "👉 https://t.me/visaEASYTRIP/118\n\n"
                 "🏢 **Cash Payment at Office:**\n"
                 "📍 Address: 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
                 "🗺️ Map: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
@@ -1072,7 +1078,6 @@ def get_payment_instruction_text(lang: str = "ru") -> str:
     if lang == "ru":
         return (
             "💳 **ОФИЦИАЛЬНЫЕ СПОСОБЫ ОПЛАТЫ (EASY TRIP & VISA)**\n"
-            "Инструкция и QR-коды: https://t.me/visaEASYTRIP/118\n\n"
             "🏦 **1. Vietcombank (VCB):** `1068582577` (EASY TRIP & VISA CO. LTD)\n"
             "   📝 Назначение: `[Имя Фамилия] [Год рождения]` (Пример: IVANOV 1997)\n"
             "🏦 **2. VRB Bank (Вьетнамско-Российский банк):** `1068582577`\n"
@@ -1086,7 +1091,6 @@ def get_payment_instruction_text(lang: str = "ru") -> str:
     elif lang == "vi":
         return (
             "💳 **THÔNG TIN THANH TOÁN CHÍNH THỨC (EASY TRIP & VISA)**\n"
-            "Chi tiết hướng dẫn và mã QR: https://t.me/visaEASYTRIP/118\n\n"
             "🏦 **1. Vietcombank (VCB):** `1068582577` (CONG TY TNHH EASY TRIP & VISA)\n"
             "   📝 Cú pháp nội dung: `[Họ tên khách] [năm sinh]` (Ví dụ: IVANOV 1997)\n"
             "🏦 **2. Ngân hàng Liên doanh Việt - Nga (VRB):** `1068582577`\n"
@@ -1100,7 +1104,6 @@ def get_payment_instruction_text(lang: str = "ru") -> str:
     else:
         return (
             "💳 **OFFICIAL PAYMENT DETAILS (EASY TRIP & VISA)**\n"
-            "Official instructions and QR code: https://t.me/visaEASYTRIP/118\n\n"
             "🏦 **1. Vietcombank (VCB):** `1068582577` (EASY TRIP & VISA CO. LTD)\n"
             "   📝 Memo: `[Full Name] [Year of Birth]` (Example: IVANOV 1997)\n"
             "🏦 **2. VRB Bank (Vietnam - Russia Bank):** `1068582577`\n"
@@ -1376,7 +1379,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                     "2. Фото как на паспорт (4x6 см на белом фоне)\n"
                     "3. Название пункта въезда (аэропорт или наземный КПП)\n"
                     "4. Точную дату въезда во Вьетнам\n\n"
-                    "💳 Официальные реквизиты: https://t.me/visaEASYTRIP/118"
+                    "💳 Способы оплаты: Нажмите кнопку ниже для реквизитов (VCB, VRB, офис)."
                 ),
                 "vi": (
                     "⚡ **DỊCH VỤ E-VISA CẤP TỐC / KHẨN CẤP (URGENT E-VISA)**\n\n"
@@ -1389,7 +1392,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                     "2. Ảnh thẻ 4x6 (nền trắng, chụp thẳng rõ mặt)\n"
                     "3. Cửa khẩu nhập cảnh (Sân bay hoặc cửa khẩu đường bộ)\n"
                     "4. Ngày dự kiến nhập cảnh\n\n"
-                    "💳 Thông tin thanh toán: https://t.me/visaEASYTRIP/118"
+                    "💳 Thông tin thanh toán: Bấm nút bên dưới để chọn hình thức chuyển khoản (VCB, VRB, VP)."
                 ),
                 "en": (
                     "⚡ **VIETNAM URGENT E-VISA SERVICE**\n\n"
@@ -1402,12 +1405,12 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                     "2. Passport-style 4x6 portrait photo (white background)\n"
                     "3. Entry port (Airport or Land Border)\n"
                     "4. Expected date of entry\n\n"
-                    "💳 Official payment details: https://t.me/visaEASYTRIP/118"
+                    "💳 Payment details: Click the Payment button below for VCB, VRB, or cash."
                 )
             }
             kb_urgent = InlineKeyboardMarkup([
                 [InlineKeyboardButton("📸 " + ("Отправить фото паспорта" if lang == "ru" else "Gửi ảnh Hộ chiếu" if lang == "vi" else "Send Passport Photo"), callback_data="step|request_seats")],
-                [InlineKeyboardButton("💳 " + ("Официальные реквизиты" if lang == "ru" else "Thông tin thanh toán" if lang == "vi" else "Payment Details"), url="https://t.me/visaEASYTRIP/118")],
+                [InlineKeyboardButton("💳 " + ("Способы оплаты (VCB, VRB, Офис)" if lang == "ru" else "Phương thức thanh toán (VCB, VRB, VP)" if lang == "vi" else "Payment Methods (VCB, VRB, Office)"), callback_data="step|pay_menu")],
                 [InlineKeyboardButton("💬 " + ("Менеджер поддержки" if lang == "ru" else "Chat với nhân viên hỗ trợ" if lang == "vi" else "Support Manager"), url="https://t.me/easytripvisa_co_ltd")]
             ])
             await send_step_reply(update, context, urgent_msg.get(lang, urgent_msg["en"]), reply_markup=kb_urgent, parse_mode="Markdown")
@@ -1458,7 +1461,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                 )
             }
             kb_ft = InlineKeyboardMarkup([
-                [InlineKeyboardButton("💳 " + ("Официальные реквизиты" if lang == "ru" else "Thông tin thanh toán" if lang == "vi" else "Payment Details"), url="https://t.me/visaEASYTRIP/118")],
+                [InlineKeyboardButton("💳 " + ("Способы оплаты (VCB, VRB, Офис)" if lang == "ru" else "Phương thức thanh toán (VCB, VRB, VP)" if lang == "vi" else "Payment Methods (VCB, VRB, Office)"), callback_data="step|pay_menu")],
                 [InlineKeyboardButton("💬 " + ("Менеджер поддержки" if lang == "ru" else "Chat với nhân viên hỗ trợ" if lang == "vi" else "Support Manager"), url="https://t.me/easytripvisa_co_ltd")]
             ])
             await send_step_reply(update, context, fasttrack_msg.get(lang, fasttrack_msg["en"]), reply_markup=kb_ft, parse_mode="Markdown")
