@@ -1102,6 +1102,8 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
     incoming_intent = analyze_customer_incoming_message(text)
     intent_action = incoming_intent.get("action")
     detected_lang = incoming_intent.get("lang", "ru")
+    if detected_lang:
+        memory_store[f"{session_id}_lang"] = detected_lang
 
     # A. Khách gửi lời chào từ Web / Telegram (/start, hi easytrip, здравствуйте, xin chào...)
     if intent_action == "greeting":
