@@ -4,7 +4,10 @@ test_wizard_flow.py - Bộ công cụ kiểm thử toàn diện quy trình Wizar
 1. Quốc gia (Country Names) + Nhận diện khi khách gõ tên nước
 2. Vị trí/Thành phố (Abroad, Nha Trang, Mũi Né, Đà Nẵng, TP.HCM xe riêng, Hà Nội, Khác)
 3. Lịch tháng tương tác chuẩn quốc tế (Calendar Picker)
-4. Dịch vụ cụ thể (Mũi Né đi Campuchia, TP.HCM xe riêng 2.300.000đ, link thanh toán https://t.me/visaEASYTRIP/118)
+4. Dịch vụ cụ thể:
+   - Tách riêng: Nha Trang - Lào Bờ Y 45 ngày & Nha Trang - Lào Bờ Y 90 ngày
+   - Gửi thông tin hành trình chi tiết và cách thức đăng ký từng bước
+   - Mũi Né đi Campuchia, TP.HCM xe riêng, link thanh toán https://t.me/visaEASYTRIP/118
 5. 4 nút tư vấn chuyên viên tách riêng (Overstay, TRC, Work Visa, Family Visa)
 6. Phương thức thanh toán chuẩn hóa:
    - 🏦 Vietcombank (VCB)
@@ -29,13 +32,16 @@ from wizard_flows import (
     get_nationality_keyboard,
     get_city_keyboard,
     get_calendar_keyboard,
+    get_smart_advisory_keyboard,
     get_routes_keyboard,
+    get_itinerary_message,
     get_payment_methods_keyboard,
     get_payment_detail_keyboard,
     get_payment_detail_message,
     get_payment_instruction_text,
     generate_booking_final_message,
     identify_country,
+    analyze_customer_incoming_message,
 )
 from ai_agent import CustomerData
 
@@ -57,7 +63,7 @@ def display_keyboard(kb, label="BÀN PHÍM NÚT BẤM TELEGRAM"):
         print("   " + "  |  ".join(row_str))
 
 def test_full_flow():
-    print_separator("TEST LUỒNG MỚI: 2 NGÂN HÀNG VCB & VRB + TIỀN MẶT VP + NÚT TRỞ VỀ")
+    print_separator("TEST LUỒNG: TÁCH RIÊNG NHA TRANG LÀO BỜ Y 45D & 90D + HƯỚNG DẪN ĐĂNG KÝ")
     
     # 1. BƯỚC 1: Lời chào & Chọn Quốc gia
     print("\n[BƯỚC 1]: Chọn Quốc Gia (Country Names)")
@@ -70,18 +76,18 @@ def test_full_flow():
     detected = identify_country(test_country_input)
     print(f"🔍 Kết quả nhận diện khi khách nhắn '{test_country_input}': {detected}")
     
-    # Chọn Kazakhstan
-    cust_data = CustomerData(quoc_tich="Kazakhstan")
+    # Chọn Nga / Kazakhstan
+    cust_data = CustomerData(quoc_tich="Russia")
     lang = "ru"
     
-    # 2. BƯỚC 2: Chọn Thành phố (Abroad lên đầu, có Mũi Né)
+    # 2. BƯỚC 2: Chọn Thành phố (Abroad lên đầu, Nha Trang, Mũi Né...)
     print("\n[BƯỚC 2]: Chọn Vị trí / Thành phố (Abroad mục 1, Nha Trang, Mũi Né, TP.HCM xe riêng...)")
     kb2 = get_city_keyboard(lang)
     display_keyboard(kb2, "Bước 2 - Vị trí lưu trú")
     
-    # Khách chọn Mũi Né
-    print("\n👉 Giả lập: Khách bấm chọn [🏖️ Mũi Né (Phan Thiết)]")
-    cust_data.thanh_pho = "muine"
+    # Khách chọn Nha Trang
+    print("\n👉 Giả lập: Khách bấm chọn [🏖️ Nha Trang]")
+    cust_data.thanh_pho = "nhatrang"
     
     # 3. BƯỚC 3: Lịch tháng chuẩn quốc tế
     print("\n[BƯỚC 3]: Lịch tháng tương tác chuẩn quốc tế (Calendar Picker)")
@@ -89,23 +95,33 @@ def test_full_flow():
     kb3 = get_calendar_keyboard(now.year, now.month, lang)
     display_keyboard(kb3, f"Bước 3 - Lịch Tháng {now.month}/{now.year} (Tiêu chuẩn Quốc Tế)")
     
-    # Khách chọn ngày 15 trong tháng
-    chosen_date = f"15/{now.month:02d}"
-    print(f"\n👉 Giả lập: Khách chạm chọn ngày: [📅 {chosen_date}]")
-    cust_data.ngay_het_han_visa = chosen_date
-    cust_data.ngay_khoi_hanh = chosen_date
+    # 4. BƯỚC 4: Bảng dịch vụ Nha Trang (ĐÃ TÁCH RIÊNG 45D & 90D)
+    print_separator("BƯỚC 4: BẢNG DỊCH VỤ NHA TRANG (ĐÃ TÁCH RIÊNG 45D & 90D)")
+    kb4 = get_smart_advisory_keyboard("nhatrang", "Russia", lang="ru")
+    display_keyboard(kb4, "Bước 4 - Bảng đề xuất thông minh Nha Trang (Tiếng Nga)")
+
+    kb4_vi = get_smart_advisory_keyboard("nhatrang", "Vietnam", lang="vi")
+    display_keyboard(kb4_vi, "Bước 4 - Bảng đề xuất thông minh Nha Trang (Tiếng Việt)")
     
-    # 4. BƯỚC 4: Bảng dịch vụ Mũi Né (Có đầy đủ 4 nút chuyên viên + 2 nút trở về đổi thành phố/quốc gia)
-    print("\n[BƯỚC 4]: Dịch vụ Mũi Né (Đón 01:00-02:00 sáng đi Campuchia + Nút Trở Về)")
-    kb4 = get_routes_keyboard("muine", lang, country="Kazakhstan")
-    display_keyboard(kb4, "Bước 4 - Bảng đề xuất thông minh (Tiếng Nga)")
+    # 5. TEST CHI TIẾT HÀNH TRÌNH & CÁCH THỨC ĐĂNG KÝ
+    print_separator("CHI TIẾT HÀNH TRÌNH & CÁCH THỨC ĐĂNG KÝ: LÀO BỜ Y 45 NGÀY (TIẾNG VIỆT)")
+    print(get_itinerary_message("laos_boy_45d", "vi"))
+
+    print_separator("CHI TIẾT HÀNH TRÌNH & CÁCH THỨC ĐĂNG KÝ: LÀO BỜ Y 90 NGÀY (TIẾNG VIỆT)")
+    print(get_itinerary_message("laos_boy_90d", "vi"))
+
+    print_separator("CHI TIẾT HÀNH TRÌNH & CÁCH THỨC ĐĂNG KÝ: LÀO BỜ Y 45 NGÀY (TIẾNG NGA)")
+    print(get_itinerary_message("laos_boy_45d", "ru"))
+
+    print_separator("CHI TIẾT HÀNH TRÌNH & CÁCH THỨC ĐĂNG KÝ: LÀO BỜ Y 90 NGÀY (TIẾNG NGA)")
+    print(get_itinerary_message("laos_boy_90d", "ru"))
     
-    # 5. BƯỚC 5: Danh mục chọn Phương thức thanh toán (VCB, VRB, Tiền mặt tại VP)
+    # 6. BƯỚC 5: Danh mục chọn Phương thức thanh toán (VCB, VRB, Tiền mặt tại VP)
     print_separator("DANH MỤC PHƯƠNG THỨC THANH TOÁN (VCB, VRB, TIỀN MẶT TẠI VP + NÚT TRỞ VỀ)")
     kb_pay_menu = get_payment_methods_keyboard(lang)
     display_keyboard(kb_pay_menu, "Bàn phím lựa chọn phương thức thanh toán")
     
-    # 6. BƯỚC 6: Chi tiết cách thức chuyển khoản từng ngân hàng
+    # 7. BƯỚC 6: Chi tiết cách thức chuyển khoản từng ngân hàng
     print_separator("CHI TIẾT CHUYỂN KHOẢN: VIETCOMBANK (VCB)")
     print(get_payment_detail_message("vcb", lang))
     kb_detail = get_payment_detail_keyboard(lang)
@@ -115,27 +131,31 @@ def test_full_flow():
     print(get_payment_detail_message("vrb", lang))
     display_keyboard(kb_detail, "Bàn phím sau khi xem VRB")
     
-    print_separator("CHI TIẾT THANH TOÁN: TIỀN MẶT TẠI VĂN PHÒNG NHA TRANG")
-    print(get_payment_detail_message("cash", lang))
-    display_keyboard(kb_detail, "Bàn phím sau khi xem Tiền mặt tại VP")
-    
-    # Kiểm tra giao diện Tiếng Việt
-    print_separator("KIỂM TRA GIAO DIỆN PHƯƠNG THỨC THANH TOÁN TIẾNG VIỆT")
-    kb_pay_vi = get_payment_methods_keyboard("vi")
-    display_keyboard(kb_pay_vi, "Bàn phím thanh toán Tiếng Việt")
-    print("\n[Chi tiết VCB Tiếng Việt]:")
-    print(get_payment_detail_message("vcb", "vi"))
-    print("\n[Chi tiết VRB Tiếng Việt]:")
-    print(get_payment_detail_message("vrb", "vi"))
-    
-    # 7. Booking Final + Nhắc trước 2 tiếng + Chính sách hủy/hoàn
+    # 8. Booking Final + Nhắc trước 2 tiếng + Chính sách hủy/hoàn
     print_separator("VÉ BOOKING FINAL TIẾNG NGA (KÈM NHẮC XE TRƯỚC 2 TIẾNG & CHÍNH SÁCH)")
-    cust_data.ho_ten = "AZAMAT NURGALIYEV"
+    cust_data.ho_ten = "IVANOV SERGEI"
     cust_data.ghe_chon = "A04 (Tầng 1)"
-    cust_data.loai_visa = "🚌 Муйне ⇄ Мокбай (Камбоджа) Слипбас"
-    cust_data.diem_don = "04 Trần Phú, Mũi Né (https://maps.app.goo.gl/vysXaB9b4BeauGgV9)"
+    cust_data.loai_visa = "🚌 Nha Trang ⇄ Lào Bờ Y (90 Ngày E-Visa)"
+    cust_data.diem_don = "40 Hòn Chồng = Oceanus Nha Trang (https://maps.app.goo.gl/y8DjaoCNDsRyZN9B8)"
     receipt = generate_booking_final_message(cust_data, lang=lang)
     print(receipt)
+
+    # 9. KIỂM THỬ BẮT ĐOẠN CHAT THÔNG MINH TỪ WEB & LỜI CHÀO TELEGRAM BUSINESS
+    print_separator("KIỂM THỬ BẮT Ý ĐỊNH ĐOẠN CHAT TỰ ĐỘNG (WEB LEAD, GREETING, OVERSTAY, FAST TRACK)")
+    test_cases = [
+        ("hi easytrip", "Chào hỏi đầu phiên"),
+        ("/start", "Lệnh khởi động Bot"),
+        ("Здравствуйте! Хочу заказать визаран из Нячанга в Лаос", "Web Lead: Nha Trang -> Lào"),
+        ("Tư vấn xe buýt Đà Nẵng đi Lào Lao Bảo", "Web Lead: Đà Nẵng -> Lào"),
+        ("Tôi bị quá hạn visa 5 ngày (visa overstay)", "Dịch vụ chuyên biệt: Overstay"),
+        ("Cần thẻ tạm trú TRC cho gia đình", "Dịch vụ chuyên biệt: TRC"),
+        ("Airport VIP Fast Track tại sân bay Cam Ranh", "Dịch vụ: Fast Track"),
+        ("Kazakhstan", "Khách tự gõ tên quốc tịch"),
+    ]
+    
+    for text_in, desc in test_cases:
+        res = analyze_customer_incoming_message(text_in)
+        print(f"👉 [{desc}]: '{text_in}' => {res}")
 
 if __name__ == "__main__":
     test_full_flow()

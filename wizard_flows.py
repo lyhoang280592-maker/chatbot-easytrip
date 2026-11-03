@@ -426,14 +426,26 @@ def get_smart_advisory_keyboard(city: str, country: str, lang: str = "en"):
             rows.append([InlineKeyboardButton("📑 Combo trọn gói E-Visa 90 ngày (Lao Bảo) - 3.900.000 ₫", callback_data="step|svc|dn_combo_ultra")])
             
     elif city == "nhatrang":
-        rows.append([InlineKeyboardButton("🚌 Визаран Nha Trang - Lào Bờ Y (45/90D)", callback_data="step|svc|nt_bus_laos")])
-        rows.append([InlineKeyboardButton("🚌 Visarun Nha Trang - Cambodia (30/45/90D)", callback_data="step|svc|nt_bus_cambodia")])
-        if exempt:
-            rows.append([InlineKeyboardButton("⭐ Miễn thị thực 45 ngày (Lào Bờ Y) - 1.400.000 ₫", callback_data="step|svc|nt_bus_laos")])
-            rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Lào / Campuchia) - 4.000.000 ₫", callback_data="step|svc|nt_combo_evisa")])
+        if lang == "ru":
+            rows.append([InlineKeyboardButton("🚌 Визаран Nha Trang - Lào Bờ Y 45 ngày (Безвиз)", callback_data="step|svc|nt_bus_laos_45d")])
+            rows.append([InlineKeyboardButton("🚌 Визаран Nha Trang - Lào Bờ Y 90 ngày (E-Visa)", callback_data="step|svc|nt_bus_laos_90d")])
+            rows.append([InlineKeyboardButton("🚌 Visarun Nha Trang - Cambodia (30/45/90D)", callback_data="step|svc|nt_bus_cambodia")])
+        elif lang == "vi":
+            rows.append([InlineKeyboardButton("🚌 Visarun Nha Trang - Lào Bờ Y 45 ngày", callback_data="step|svc|nt_bus_laos_45d")])
+            rows.append([InlineKeyboardButton("🚌 Visarun Nha Trang - Lào Bờ Y 90 ngày", callback_data="step|svc|nt_bus_laos_90d")])
+            rows.append([InlineKeyboardButton("🚌 Visarun Nha Trang - Cambodia (30/45/90D)", callback_data="step|svc|nt_bus_cambodia")])
         else:
-            # Khách không miễn visa -> Khuyến nghị đi Campuchia Mộc Bài
-            rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Khuyến nghị: Campuchia Mộc Bài)", callback_data="step|svc|nt_combo_evisa")])
+            rows.append([InlineKeyboardButton("🚌 Visarun Nha Trang - Laos Bo Y 45 Days (Visa-Free)", callback_data="step|svc|nt_bus_laos_45d")])
+            rows.append([InlineKeyboardButton("🚌 Visarun Nha Trang - Laos Bo Y 90 Days (E-Visa)", callback_data="step|svc|nt_bus_laos_90d")])
+            rows.append([InlineKeyboardButton("🚌 Visarun Nha Trang - Cambodia (30/45/90D)", callback_data="step|svc|nt_bus_cambodia")])
+
+        if exempt:
+            rows.append([InlineKeyboardButton("⭐ Miễn thị thực 45 ngày (Lào Bờ Y) - 1.400.000 ₫" if lang == "vi" else "⭐ Безвиз 45 дней (Лаос Бо-И) - 1.400.000 ₫" if lang == "ru" else "⭐ 45-Day Visa-Free (Laos Bo Y) - 1,400,000 VND", callback_data="step|svc|nt_bus_laos_45d")])
+            rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Lào Bờ Y) - 4.000.000 ₫" if lang == "vi" else "📑 Пакет E-Visa 90 дней (Лаос Бо-И) - 4.000.000 ₫" if lang == "ru" else "📑 90-Day E-Visa Package (Laos Bo Y) - 4,000,000 VND", callback_data="step|svc|nt_bus_laos_90d")])
+        else:
+            # Khách không miễn visa
+            rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Lào Bờ Y) - 4.000.000 ₫" if lang == "vi" else "📑 Пакет E-Visa 90 дней (Лаос Бо-И) - 4.000.000 ₫" if lang == "ru" else "📑 90-Day E-Visa Package (Laos Bo Y) - 4,000,000 VND", callback_data="step|svc|nt_bus_laos_90d")])
+            rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Campuchia Mộc Bài) - 4.000.000 ₫" if lang == "vi" else "📑 Пакет E-Visa 90 дней (Мокбай) - 4.000.000 ₫" if lang == "ru" else "📑 90-Day E-Visa Package (Moc Bai) - 4,000,000 VND", callback_data="step|svc|nt_combo_evisa")])
             
     elif city == "muine":
         rows.append([InlineKeyboardButton("🚌 Visarun Mũi Né - Cambodia (30/45/90D)", callback_data="step|svc|mn_bus_cambodia")])
@@ -509,7 +521,8 @@ def get_routes_keyboard(city: str, lang: str = "en", country: str = ""):
 
 ROUTE_SERVICES = {
     "nhatrang": [
-        {"id": "nt_bus_laos", "name_vi": "🚌 Sleeper Bus Nha Trang ⇄ Bờ Y (Lào)", "price": 1400000},
+        {"id": "nt_bus_laos_45d", "name_vi": "🚌 Sleeper Bus Nha Trang ⇄ Bờ Y (45 Ngày Miễn Visa)", "price": 1400000},
+        {"id": "nt_bus_laos_90d", "name_vi": "🚌 Sleeper Bus Nha Trang ⇄ Bờ Y (90 Ngày E-Visa)", "price": 1400000},
         {"id": "nt_bus_cambodia", "name_vi": "🚌 Sleeper Bus Nha Trang ⇄ Mộc Bài (Campuchia)", "price": 1400000},
         {"id": "nt_combo_evisa", "name_vi": "⭐ Combo Trọn Gói: Bus + E-Visa 90 Ngày", "price": 4000000}
     ],
@@ -536,10 +549,112 @@ ROUTE_SERVICES = {
 # ============================================================
 
 ITINERARIES = {
+    "laos_boy_45d": {
+        "title_vi": "🚌 TUYẾN: NHA TRANG ⇄ CỬA KHẨU BỜ Y (LÀO) — MIỄN THỊ THỰC 45 NGÀY",
+        "title_ru": "🚌 МАРШРУТ: НЯЧАНГ ⇄ КПП БО-И (ЛАОС) — БЕЗВИЗ 45 ДНЕЙ",
+        "title_en": "🚌 ROUTE: NHA TRANG ⇄ BO Y BORDER (LAOS) — 45-DAY VISA-FREE",
+        "price": "1.400.000 VND (Vé xe giường nằm khứ hồi)",
+        "schedule_vi": (
+            "⏰ LỊCH TRÌNH CHI TIẾT (XE CHẠY MỖI NGÀY):\n"
+            "• 21:00: Tập trung tại điểm đón xe buýt ở Nha Trang.\n"
+            "• 21:15 - 21:30: Xe giường nằm khởi hành đi Cửa khẩu Quốc tế Bờ Y (Kon Tum).\n"
+            "• 06:00 (Sáng hôm sau): Đến cửa khẩu Bờ Y, nghỉ ngơi, ăn sáng, cafe.\n"
+            "• 07:00: Cửa khẩu mở cửa. Xếp hàng và xuất cảnh cùng với những hành khách khác.\n"
+            "• 07:30: Đi bộ sang cửa khẩu Lào làm thủ tục đóng dấu nhập cảnh và xuất cảnh Lào.\n"
+            "• 08:30: Quay lại làm thủ tục nhập cảnh Việt Nam, nhận dấu miễn thị thực 45 ngày mới.\n"
+            "• 09:30: Lên xe buýt quay trở về Nha Trang (về tới nơi khoảng 18:30 - 19:00 chiều)."
+        ),
+        "schedule_ru": (
+            "⏰ ДЕТАЛЬНОЕ РАСПИСАНИЕ (АВТОБУС ХОДИТ ЕЖЕДНЕВНО):\n"
+            "• 21:00: Сбор на посадочной точке в Нячанге.\n"
+            "• 21:15 - 21:30: Отправление комфортабельного слипбаса в сторону КПП Бо-И (Контум).\n"
+            "• 06:00 (следующее утро): Прибытие на границу Бо-И, завтрак, кофе, отдых.\n"
+            "• 07:00: Открытие границы. Очередь и выезд из Вьетнама вместе с другими пассажирами.\n"
+            "• 07:30: Переход границы Лаоса, получение въездного и выездного штампа Лаоса.\n"
+            "• 08:30: Возвращение на КПП Вьетнама, получение нового 45-дневного безвизового штампа.\n"
+            "• 09:30: Посадка в автобус и выезд обратно в Нячанг (прибытие около 18:30 - 19:00 вечера)."
+        ),
+        "pickup_vi": "📍 Điểm đón: 40 Hòn Chồng = Oceanus Nha Trang (https://maps.app.goo.gl/y8DjaoCNDsRyZN9B8) hoặc Số 4 Trần Phú, Nha Trang.",
+        "pickup_ru": "📍 Точка сбора: 40 Hon Chong = Oceanus Nha Trang (https://maps.app.goo.gl/y8DjaoCNDsRyZN9B8) или No. 4 Tran Phu, Нячанг.",
+        "border_vi": "⚠️ LƯU Ý TẠI CỬA KHẨU: Hộ chiếu gốc còn hạn trên 6 tháng; tiền mặt (khoảng 150.000 VND) nộp phí thủ tục biên phòng.",
+        "border_ru": "⚠️ ВАЖНО НА ГРАНИЦЕ: Загранпаспорт сроком от 6 мес.; наличные (ок. 150.000 VND) на оплату пограничных сборов.",
+        "booking_vi": (
+            "📝 CÁCH THỨC ĐĂNG KÝ (QUY TRÌNH 4 BƯỚC ĐƠN GIẢN):\n"
+            "1️⃣ Gửi ảnh chụp trang Hộ chiếu (rõ 4 góc, còn hạn trên 6 tháng) vào khung chat này.\n"
+            "2️⃣ Bấm nút 'Kiểm tra sơ đồ chỗ & Chọn số ghế' bên dưới để chọn vị trí nằm mong muốn.\n"
+            "3️⃣ Bấm nút 'Phương thức thanh toán' để chuyển khoản (VCB / VRB) hoặc nộp tiền mặt tại văn phòng Nha Trang.\n"
+            "4️⃣ Nhận vé điện tử xác nhận đặt chỗ. Biển số xe & số liên hệ tài xế sẽ được gửi trước giờ chạy 2 tiếng."
+        ),
+        "booking_ru": (
+            "📝 КАК ЗАБРОНИРОВАТЬ МЕСТО (ИНСТРУКЦИЯ ИЗ 4 ШАГОВ):\n"
+            "1️⃣ Отправьте фото страницы загранпаспорта (срок действия от 6 месяцев) прямо в этот чат.\n"
+            "2️⃣ Нажмите кнопку 'Запросить проверку мест и выбрать место' ниже, чтобы забронировать желаемую полку.\n"
+            "3️⃣ Нажмите кнопку 'Способы оплаты' для перевода (Vietcombank, VRB) или оплаты наличными в офисе Нячанга.\n"
+            "4️⃣ Получите официальный электронный посадочный талон. Контакты водителя и номер автобуса высылаются за 2 часа до отправления."
+        ),
+        "booking_en": (
+            "📝 HOW TO REGISTER (SIMPLE 4-STEP BOOKING):\n"
+            "1️⃣ Send a clear photo of your passport page (valid 6+ months) in this chat.\n"
+            "2️⃣ Click 'Check availability & Select Seat' below to select your desired sleeper bed.\n"
+            "3️⃣ Click 'Payment Methods' to pay via Vietcombank, VRB Bank, or Cash at our Nha Trang office.\n"
+            "4️⃣ Receive your booking confirmation receipt. Bus info and driver contact will be sent 2 hours before departure."
+        )
+    },
+    "laos_boy_90d": {
+        "title_vi": "🚌 TUYẾN: NHA TRANG ⇄ CỬA KHẨU BỜ Y (LÀO) — E-VISA 90 NGÀY",
+        "title_ru": "🚌 МАРШРУТ: НЯЧАНГ ⇄ КПП БО-И (ЛАОС) — E-VISA 90 ДНЕЙ",
+        "title_en": "🚌 ROUTE: NHA TRANG ⇄ BO Y BORDER (LAOS) — 90-DAY E-VISA",
+        "price": "1.400.000 VND (Chỉ vé xe khứ hồi) | 4.000.000 VND (Combo Trọn Gói Bus + E-Visa 90 ngày)",
+        "schedule_vi": (
+            "⏰ LỊCH TRÌNH CHI TIẾT (XE CHẠY THỨ 3, THỨ 5, CHỦ NHẬT):\n"
+            "• 21:00: Tập trung tại điểm đón xe buýt ở Nha Trang.\n"
+            "• 21:15 - 21:30: Xe giường nằm khởi hành đi Cửa khẩu Quốc tế Bờ Y.\n"
+            "• 06:00 (Sáng hôm sau): Đến cửa khẩu Bờ Y, nghỉ ngơi, ăn sáng, cafe.\n"
+            "• 07:00: Cửa khẩu mở cửa. Xếp hàng làm thủ tục xuất cảnh Việt Nam.\n"
+            "• 07:30: Đi bộ sang cửa khẩu Lào làm thủ tục đóng dấu nhập cảnh và xuất cảnh Lào.\n"
+            "• 08:30: Quay lại cửa khẩu Việt Nam xuất trình E-Visa 90 ngày (đã in sẵn ra giấy) để hải quan đóng dấu thời hạn 90 ngày mới.\n"
+            "• 09:30: Lên xe buýt quay trở về Nha Trang (về tới nơi khoảng 18:30 - 19:00 chiều)."
+        ),
+        "schedule_ru": (
+            "⏰ ДЕТАЛЬНОЕ РАСПИСАНИЕ (АВТОБУС ХОДИТ ВО ВТ, ЧТ, ВС):\n"
+            "• 21:00: Сбор на посадочной точке в Нячанге.\n"
+            "• 21:15 - 21:30: Отправление комфортабельного слипбаса в сторону КПП Бо-И.\n"
+            "• 06:00 (следующее утро): Прибытие на границу Бо-И, завтрак, кофе, отдых.\n"
+            "• 07:00: Открытие границы. Очередь и выезд из Вьетнама.\n"
+            "• 07:30: Переход границы Лаоса, получение въездного и выездного штампа Лаоса.\n"
+            "• 08:30: Возвращение на вьетнамский КПП, предъявление распечатанной E-Visa 90 дней и получение штампа на 90 дней.\n"
+            "• 09:30: Посадка в автобус и выезд обратно в Нячанг (прибытие около 18:30 - 19:00)."
+        ),
+        "pickup_vi": "📍 Điểm đón: 40 Hòn Chồng = Oceanus Nha Trang (https://maps.app.goo.gl/y8DjaoCNDsRyZN9B8) hoặc Số 4 Trần Phú, Nha Trang.",
+        "pickup_ru": "📍 Точка сбора: 40 Hon Chong = Oceanus Nha Trang (https://maps.app.goo.gl/y8DjaoCNDsRyZN9B8) или No. 4 Tran Phu, Нячанг.",
+        "border_vi": "⚠️ LƯU Ý TẠI CỬA KHẨU: Hộ chiếu gốc còn hạn trên 6 tháng; BẮT BUỘC in E-Visa ra giấy (2 bản); tiền mặt (khoảng 150.000 VND) nộp phí biên phòng.",
+        "border_ru": "⚠️ ВАЖНО НА ГРАНИЦЕ: Загранпаспорт сроком от 6 мес.; ОБЯЗАТЕЛЬНО распечатать E-Visa на бумаге (2 копии); наличные (ок. 150.000 VND) на пограничные сборы.",
+        "booking_vi": (
+            "📝 CÁCH THỨC ĐĂNG KÝ (COMBO E-VISA 90 NGÀY HOẶC ĐẶT XE):\n"
+            "1️⃣ Gửi ảnh Hộ chiếu + ảnh thẻ 4x6 (nền trắng) trước ngày đi 3–5 ngày để làm E-Visa cửa khẩu Bờ Y (có hỗ trợ gói khẩn 1–2 ngày / trong ngày nếu gấp).\n"
+            "2️⃣ Chọn ngày khởi hành (Thứ 3, Thứ 5, Chủ Nhật) và bấm nút 'Kiểm tra sơ đồ chỗ & Chọn số ghế'.\n"
+            "3️⃣ Bấm nút 'Phương thức thanh toán' để thanh toán vé hoặc trọn gói qua Vietcombank, VRB hoặc tiền mặt tại văn phòng Nha Trang.\n"
+            "4️⃣ Nhận file E-Visa 90 ngày in sẵn cùng vé xe điện tử để an tâm khởi hành."
+        ),
+        "booking_ru": (
+            "📝 КАК ЗАБРОНИРОВАТЬ И ОФОРМИТЬ E-VISA НА 90 ДНЕЙ:\n"
+            "1️⃣ Отправьте фото загранпаспорта + фото 4x6 (белый фон) за 3–5 рабочих дней до поездки для оформления E-Visa на КПП Бо-И (доступно срочное оформление 1–2 дня или 4 часа).\n"
+            "2️⃣ Выберите дату выезда (Вторник, Четверг, Воскресенье) и нажмите кнопку 'Запросить проверку мест и выбрать место'.\n"
+            "3️⃣ Нажмите кнопку 'Способы оплаты' для оплаты билета или полного пакета (Vietcombank, VRB, наличные в офисе).\n"
+            "4️⃣ Получите готовую распечатанную визу E-Visa 90 дней и электронный билет."
+        ),
+        "booking_en": (
+            "📝 HOW TO REGISTER & APPLY FOR 90-DAY E-VISA:\n"
+            "1️⃣ Send passport photo + 4x6 photo 3–5 days prior to departure for Bo Y border E-Visa (urgent 1–2 days / 4 hours available).\n"
+            "2️⃣ Choose departure date (Tuesday, Thursday, Sunday) and click 'Check availability & Select Seat'.\n"
+            "3️⃣ Click 'Payment Methods' to pay via Vietcombank, VRB, or Cash at office.\n"
+            "4️⃣ Receive your printed 90-Day E-Visa and bus ticket confirmation."
+        )
+    },
     "laos_boy": {
-        "title_vi": "🚌 TUYẾN: NHA TRANG ⇄ CỬA KHẨU BỜ Y (LÀO) (45/90 NGÀY)",
-        "title_ru": "🚌 МАРШРУТ: НЯЧАНГ ⇄ КПП БО-И (ЛАОС) (45/90 ДНЕЙ)",
-        "title_en": "🚌 ROUTE: NHA TRANG ⇄ BO Y BORDER (LAOS) (45/90 DAYS)",
+        "title_vi": "🚌 TUYẾN: NHA TRANG ⇄ CỬA KHẨU BỜ Y (LÀO) — 45/90 NGÀY",
+        "title_ru": "🚌 МАРШРУТ: НЯЧАНГ ⇄ КПП БО-И (ЛАОС) — 45/90 ДНЕЙ",
+        "title_en": "🚌 ROUTE: NHA TRANG ⇄ BO Y BORDER (LAOS) — 45/90 DAYS",
         "price": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo E-visa 90 ngày)",
         "schedule_vi": (
             "⏰ LỊCH TRÌNH CHI TIẾT (ITINERARY):\n"
@@ -564,7 +679,28 @@ ITINERARIES = {
         "pickup_vi": "📍 Điểm đón: 40 Hòn Chồng = Oceanus Nha Trang (https://maps.app.goo.gl/y8DjaoCNDsRyZN9B8) hoặc Số 4 Trần Phú, Nha Trang.",
         "pickup_ru": "📍 Точка сбора: 40 Hon Chong = Oceanus Nha Trang (https://maps.app.goo.gl/y8DjaoCNDsRyZN9B8) или No. 4 Tran Phu, Нячанг.",
         "border_vi": "⚠️ LƯU Ý TẠI CỬA KHẨU: Hộ chiếu gốc còn hạn trên 6 tháng; 02 ảnh thẻ 4x6 nền trắng; tiền mặt (khoảng 150.000 VND) nộp phí dán tem biên phòng.",
-        "border_ru": "⚠️ ВАЖНО НА ГРАНИЦЕ: Загранпаспорт сроком от 6 мес.; 2 фото 4x6 см (белый фон); наличные (ок. 150.000 VND) на оплату пограничных сборов."
+        "border_ru": "⚠️ ВАЖНО НА ГРАНИЦЕ: Загранпаспорт сроком от 6 мес.; 2 фото 4x6 см (белый фон); наличные (ок. 150.000 VND) на оплату пограничных сборов.",
+        "booking_vi": (
+            "📝 CÁCH THỨC ĐĂNG KÝ (QUY TRÌNH 4 BƯỚC ĐƠN GIẢN):\n"
+            "1️⃣ Gửi ảnh chụp trang Hộ chiếu (rõ 4 góc, còn hạn trên 6 tháng) vào khung chat này.\n"
+            "2️⃣ Bấm nút 'Kiểm tra sơ đồ chỗ & Chọn số ghế' bên dưới để chọn vị trí nằm mong muốn.\n"
+            "3️⃣ Bấm nút 'Phương thức thanh toán' để chuyển khoản (VCB / VRB) hoặc nộp tiền mặt tại văn phòng Nha Trang.\n"
+            "4️⃣ Nhận vé điện tử xác nhận đặt chỗ. Biển số xe & số liên hệ tài xế sẽ được gửi trước giờ chạy 2 tiếng."
+        ),
+        "booking_ru": (
+            "📝 КАК ЗАБРОНИРОВАТЬ МЕСТО (ИНСТРУКЦИЯ ИЗ 4 ШАГОВ):\n"
+            "1️⃣ Отправьте фото страницы загранпаспорта прямо в этот чат.\n"
+            "2️⃣ Нажмите кнопку 'Запросить проверку мест и выбрать место' ниже.\n"
+            "3️⃣ Нажмите кнопку 'Способы оплаты' для перевода (VCB / VRB) или оплаты наличными в офисе.\n"
+            "4️⃣ Получите официальный электронный посадочный талон."
+        ),
+        "booking_en": (
+            "📝 HOW TO REGISTER (SIMPLE 4-STEP BOOKING):\n"
+            "1️⃣ Send a clear photo of your passport page in this chat.\n"
+            "2️⃣ Click 'Check availability & Select Seat' below to select your desired sleeper bed.\n"
+            "3️⃣ Click 'Payment Methods' to pay via VCB, VRB, or Cash at office.\n"
+            "4️⃣ Receive your booking confirmation receipt."
+        )
     },
     "hanoi_huunghi": {
         "title_vi": "🚌 TUYẾN: HÀ NỘI ⇄ CỬA KHẨU QUỐC TẾ HỮU NGHỊ (45/90 NGÀY)",
@@ -594,7 +730,28 @@ ITINERARIES = {
         "pickup_vi": "📍 Điểm đón: Văn phòng VIP Limousine Hà Nội (Hoặc đón tại Sân bay Nội Bài theo yêu cầu).",
         "pickup_ru": "📍 Точка сбора: Офис VIP Лимузинов в Ханое (или встреча в аэропорту Нойбай).",
         "border_vi": "⚠️ LƯU Ý TẠI CỬA KHẨU: Hộ chiếu gốc còn hạn trên 6 tháng; 02 ảnh thẻ 4x6; in sẵn bản E-Visa ra giấy (nếu đi diện 90 ngày).",
-        "border_ru": "⚠️ ВАЖНО НА ГРАНИЦЕ: Загранпаспорт (от 6 мес.); 2 фото 4x6; распечатанная на бумаге E-Visa (если оформляете 90 дней)."
+        "border_ru": "⚠️ ВАЖНО НА ГРАНИЦЕ: Загранпаспорт (от 6 мес.); 2 фото 4x6; распечатанная на бумаге E-Visa (если оформляете 90 дней).",
+        "booking_vi": (
+            "📝 CÁCH THỨC ĐĂNG KÝ (QUY TRÌNH 4 BƯỚC ĐƠN GIẢN):\n"
+            "1️⃣ Gửi ảnh Hộ chiếu vào khung chat này để kiểm tra điều kiện xuất nhập cảnh.\n"
+            "2️⃣ Bấm nút 'Kiểm tra sơ đồ chỗ & Chọn số ghế' để chọn chỗ ngồi Limousine.\n"
+            "3️⃣ Bấm nút 'Phương thức thanh toán' để thanh toán vé qua VCB, VRB hoặc tiền mặt.\n"
+            "4️⃣ Nhận vé xác nhận điện tử và hướng dẫn đón xe tại Hà Nội."
+        ),
+        "booking_ru": (
+            "📝 КАК ЗАБРОНИРОВАТЬ МЕСТО (ИНСТРУКЦИЯ ИЗ 4 ШАГОВ):\n"
+            "1️⃣ Отправьте фото загранпаспорта прямо в этот чат.\n"
+            "2️⃣ Нажмите кнопку 'Запросить проверку мест и выбрать место' ниже.\n"
+            "3️⃣ Нажмите кнопку 'Способы оплаты' для перевода (VCB, VRB) или наличными.\n"
+            "4️⃣ Получите подтверждение бронирования и адрес посадки в Ханое."
+        ),
+        "booking_en": (
+            "📝 HOW TO REGISTER (SIMPLE 4-STEP BOOKING):\n"
+            "1️⃣ Send passport photo in this chat.\n"
+            "2️⃣ Click 'Check availability & Select Seat' below.\n"
+            "3️⃣ Click 'Payment Methods' to pay via VCB, VRB, or Cash.\n"
+            "4️⃣ Receive your booking confirmation receipt."
+        )
     },
     "cambodia_mocbai": {
         "title_vi": "🚌 TUYẾN: NHA TRANG / MŨI NÉ ⇄ MỘC BÀI (CAMPUCHIA) (30/45/90 NGÀY)",
@@ -624,16 +781,40 @@ ITINERARIES = {
         "pickup_vi": "📍 Điểm đón: Nha Trang đón duy nhất 40 Hòn Chồng = Oceanus. Mũi Né đón 04 Trần Phú hoặc dọc Nguyễn Đình Chiểu / Huỳnh Thúc Kháng.",
         "pickup_ru": "📍 Точка сбора: Нячанг — только 40 Hon Chong = Oceanus. Муйне — 04 Tran Phu или по ул. Nguyen Dinh Chieu.",
         "border_vi": "⚠️ LƯU Ý TẠI CỬA KHẨU: Tiền mặt USD làm visa Campuchia; BẮT BUỘC in E-Visa ra giấy để cán bộ hải quan Mộc Bài đóng dấu.",
-        "border_ru": "⚠️ ВАЖНО НА ГРАНИЦЕ: Наличные USD на камбоджийскую визу; ОБЯЗАТЕЛЬНО распечатать E-Visa на бумаге для пограничников Мокбай."
+        "border_ru": "⚠️ ВАЖНО НА ГРАНИЦЕ: Наличные USD на камбоджийскую визу; ОБЯЗАТЕЛЬНО распечатать E-Visa на бумаге для пограничников Мокбай.",
+        "booking_vi": (
+            "📝 CÁCH THỨC ĐĂNG KÝ (QUY TRÌNH 4 BƯỚC ĐƠN GIẢN):\n"
+            "1️⃣ Gửi ảnh Hộ chiếu + ảnh thẻ 4x6 (nền trắng) vào khung chat (để làm E-Visa nếu chọn gói 90 ngày).\n"
+            "2️⃣ Bấm nút 'Kiểm tra sơ đồ chỗ & Chọn số ghế' bên dưới để chọn ghế giường nằm.\n"
+            "3️⃣ Bấm nút 'Phương thức thanh toán' để thanh toán vé qua Vietcombank, VRB hoặc tiền mặt tại văn phòng Nha Trang.\n"
+            "4️⃣ Nhận vé điện tử xác nhận đặt chỗ. Biển số xe & số liên hệ tài xế sẽ được gửi trước giờ chạy 2 tiếng."
+        ),
+        "booking_ru": (
+            "📝 КАК ЗАБРОНИРОВАТЬ МЕСТО (ИНСТРУКЦИЯ ИЗ 4 ШАГОВ):\n"
+            "1️⃣ Отправьте фото загранпаспорта + фото 4x6 (для визы) прямо в этот чат.\n"
+            "2️⃣ Нажмите кнопку 'Запросить проверку мест и выбрать место' ниже, чтобы выбрать спальное место.\n"
+            "3️⃣ Нажмите кнопку 'Способы оплаты' для перевода (Vietcombank, VRB) или оплаты наличными в офисе Нячанга.\n"
+            "4️⃣ Получите официальный электронный посадочный талон. Контакты водителя высылаются за 2 часа до отправления."
+        ),
+        "booking_en": (
+            "📝 HOW TO REGISTER (SIMPLE 4-STEP BOOKING):\n"
+            "1️⃣ Send a clear photo of your passport page + 4x6 photo in this chat.\n"
+            "2️⃣ Click 'Check availability & Select Seat' below to select your desired sleeper bed.\n"
+            "3️⃣ Click 'Payment Methods' to pay via Vietcombank, VRB Bank, or Cash at our Nha Trang office.\n"
+            "4️⃣ Receive your booking confirmation receipt. Bus info will be sent 2 hours before departure."
+        )
     }
 }
 
 def get_itinerary_message(route_key: str, lang: str = "ru") -> str:
-    itin = ITINERARIES.get(route_key, ITINERARIES["laos_boy"])
+    itin = ITINERARIES.get(route_key, ITINERARIES.get("laos_boy_45d", ITINERARIES["laos_boy"]))
     title = itin.get(f"title_{lang}", itin["title_en"])
     sched = itin.get(f"schedule_{lang}", itin["schedule_vi"])
     pickup = itin.get(f"pickup_{lang}", itin["pickup_vi"])
     border = itin.get(f"border_{lang}", itin["border_vi"])
+    booking = itin.get(f"booking_{lang}", itin.get("booking_vi", ""))
+    
+    booking_section = f"\n\n{booking}" if booking else ""
     
     if lang == "ru":
         return (
@@ -642,10 +823,11 @@ def get_itinerary_message(route_key: str, lang: str = "ru") -> str:
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             f"{sched}\n\n"
             f"{pickup}\n\n"
-            f"{border}\n"
+            f"{border}"
+            f"{booking_section}\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             "👉 **СЛЕДУЮЩИЙ ШАГ:**\n"
-            "Пожалуйста, нажмите кнопку ниже, чтобы запросить проверку свободных мест, выбрать место в автобусе и отправить фото паспорта для бронирования!"
+            "Пожалуйста, нажмите кнопку ниже, чтобы проверить свободные места, выбрать место в автобусе и отправить фото паспорта для бронирования!"
         )
     elif lang == "vi":
         return (
@@ -654,10 +836,11 @@ def get_itinerary_message(route_key: str, lang: str = "ru") -> str:
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             f"{sched}\n\n"
             f"{pickup}\n\n"
-            f"{border}\n"
+            f"{border}"
+            f"{booking_section}\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             "👉 **BƯỚC TIẾP THEO:**\n"
-            "Vui lòng bấm nút bên dưới để yêu cầu nhân viên kiểm tra sơ đồ chỗ trống, chọn số ghế trên xe và gửi ảnh Hộ chiếu để chúng tôi giữ chỗ cho bạn!"
+            "Vui lòng bấm nút bên dưới để kiểm tra sơ đồ chỗ trống, chọn số ghế trên xe và gửi ảnh Hộ chiếu để chúng tôi giữ chỗ cho bạn!"
         )
     else:
         return (
@@ -666,7 +849,8 @@ def get_itinerary_message(route_key: str, lang: str = "ru") -> str:
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             f"{sched}\n\n"
             f"{pickup}\n\n"
-            f"{border}\n"
+            f"{border}"
+            f"{booking_section}\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             "👉 **NEXT STEP:**\n"
             "Please click the button below to check seat availability, select your preferred seat, and send your passport photo to reserve!"
@@ -1264,12 +1448,18 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         if "hanoi" in svc_id or city_key == "hanoi":
             route_key = "hanoi_huunghi"
             route_name = "Hà Nội ⇄ Hữu Nghị"
-        elif "cambodia" in svc_id or "mocbai" in svc_id or city_key == "muine":
+        elif "cambodia" in svc_id or "mocbai" in svc_id or city_key == "muine" or svc_id == "mn_bus_cambodia":
             route_key = "cambodia_mocbai"
             route_name = "Nha Trang / Mũi Né ⇄ Campuchia Mộc Bài"
+        elif "45" in svc_id or svc_id == "nt_bus_laos_45d":
+            route_key = "laos_boy_45d"
+            route_name = "Nha Trang ⇄ Lào Bờ Y (45 Ngày)"
+        elif "90" in svc_id or svc_id in ("nt_bus_laos_90d", "nt_combo_evisa"):
+            route_key = "laos_boy_90d"
+            route_name = "Nha Trang ⇄ Lào Bờ Y (90 Ngày)"
         else:
-            route_key = "laos_boy"
-            route_name = "Nha Trang ⇄ Lào Bờ Y"
+            route_key = "laos_boy_45d"
+            route_name = "Nha Trang ⇄ Lào Bờ Y (45 Ngày)"
             
         cust_data.loai_visa = route_name
         
