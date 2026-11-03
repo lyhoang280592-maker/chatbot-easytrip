@@ -830,7 +830,7 @@ ITINERARIES = {
             "2️⃣ Рейсы в Воскресенье: Документы должны быть поданы не позднее среды/четверга (в сб и вс визовый отдел закрыт).\n"
             "3️⃣ Срочный выезд: При бронировании за 1–2 дня до поездки требуется срочный тариф E-Visa (1–2 дня или 4 часа).\n"
             "4️⃣ Распечатка: E-Visa ОБЯЗАТЕЛЬНО должна быть распечатана на бумаге (2 копии) для предъявления на КПП Бо-И.\n"
-            "5️⃣ Загранпаспорт: Срок действия строго более 6 месяцев.\n\n"
+            "5️⃣ Загранпаспорт: Срок действия строго более 6 месяцев.\n6️⃣ Льготы для детей до 9 лет (Babysitter Vietnam): 100% бесплатный билет на автобус при размещении с родителями + льготная E-Visa за 1.480.000 VND (требуется регистрация за 4 дня).\n\n"
             "👉 Нажмите дату выезда на календаре ниже (🟢 отмечены дни рейсов Вт, Чт, Вс) или выберите пакет:"
         ),
         "booking_en": (
@@ -879,7 +879,7 @@ ITINERARIES = {
             "2️⃣ Chuyến đi Chủ Nhật: Hồ sơ phải nộp muộn nhất là Thứ 4 hoặc Thứ 5 tuần trước (vì Thứ 7 & Chủ Nhật Cổng dịch vụ công nghỉ duyệt).\n"
             "3️⃣ Đi gấp trong 1–2 ngày: Bắt buộc chọn gói làm E-Visa khẩn cấp (1–2 ngày hoặc 4 giờ).\n"
             "4️⃣ Bản in giấy: BẮT BUỘC in E-Visa ra giấy (2 bản) mang theo lên xe để hải quan Bờ Y đóng dấu.\n"
-            "5️⃣ Hộ chiếu gốc: Còn hạn sử dụng trên 6 tháng.\n\n"
+            "5️⃣ Hộ chiếu gốc: Còn hạn sử dụng trên 6 tháng.\n6️⃣ Ưu đãi trẻ em dưới 9 tuổi (Babysitter Vietnam): 100% MIỄN PHÍ VÉ XE BUÝT (0 ₫) nằm chung giường với bố mẹ + gói E-Visa khẩn trợ giá chỉ 1.480.000 ₫ (đăng ký trước tối thiểu 4 ngày).\n\n"
             "👉 Vui lòng chọn ngày đi trên lịch bên dưới (🟢 ngày màu xanh là ngày xe chạy T3, T5, CN) hoặc chọn gói dịch vụ:"
         ),
         "booking_ru": (
@@ -1045,7 +1045,7 @@ ITINERARIES = {
             "1️⃣ Diện Miễn thị thực 45 ngày: Đặt chỗ trước 24 giờ. Chỉ cần hộ chiếu gốc còn hạn trên 6 tháng.\n"
             "2️⃣ Combo E-Visa 90 ngày thường (4.000.000 VND): Gửi ảnh hộ chiếu + ảnh thẻ 4x6 trước ngày đi 3–5 ngày làm việc.\n"
             "3️⃣ Combo E-Visa hỏa tốc 24 giờ (4.400.000 VND): Đăng ký trước ngày đi 1 ngày. E-Visa được in sẵn trao tận tay tại Mộc Bài lúc 11:30 trưa.\n"
-            "4️⃣ Lệ phí visa Campuchia: Chuẩn bị tiền mặt USD (khoảng 35$ - 50$) nộp tại cửa khẩu Campuchia.\n\n"
+            "4️⃣ Lệ phí visa Campuchia: Chuẩn bị tiền mặt USD (khoảng 35$ - 50$) nộp tại cửa khẩu Campuchia.\n5️⃣ Chính sách trẻ em dưới 9 tuổi: Miễn phí 100% vé xe buýt (0 ₫ khi nằm chung bố mẹ) + E-visa khẩn 1.480.000 ₫ (đăng ký trước 4 ngày).\n\n"
             "👉 Vui lòng chọn ngày đi trên lịch bên dưới (🟢 ngày màu xanh là ngày xe chạy T3, T5, CN) hoặc chọn gói dịch vụ:"
         ),
         "booking_ru": (
@@ -1053,7 +1053,7 @@ ITINERARIES = {
             "1️⃣ Безвизовый въезд 45 дней: Бронирование за 24 часа. Нужен только загранпаспорт от 6 месяцев.\n"
             "2️⃣ Стандартный пакет E-Visa 90 дней (4.000.000 VND): Подача фото паспорта и фото 4x6 за 3–5 рабочих дней до поездки.\n"
             "3️⃣ Экспресс-пакет 24 часа (4.400.000 VND): Оформление за 1 день до выезда. E-Visa выдается в распечатанном виде на границе Мокбай в 11:30 утра.\n"
-            "4️⃣ Виза Камбоджи: Подготовьте наличные USD (ок. $35 – $50) для оплаты визового сбора на КПП Камбоджи.\n\n"
+            "4️⃣ Виза Камбоджи: Подготовьте наличные USD (ок. $35 – $50) для оплаты визового сбора на КПП Камбоджи.\n5️⃣ Программа поддержки детей до 9 лет: 100% бесплатный билет на автобус (0 VND) + E-Visa за 1.480.000 VND при регистрации за 4 дня.\n\n"
             "👉 Выберите дату выезда в календаре ниже (🟢 дни рейсов Вт, Чт, Вс) или выберите пакет:"
         ),
         "booking_en": (
@@ -1673,6 +1673,31 @@ def calculate_evisa_smart_schedule(
 
     # A. Phân loại theo số đêm lưu trú / gói giờ
     if stay_type:
+        if stay_type == "baby_under9":
+            delivery_dt = submit_dt.replace(hour=17, minute=30, second=0)
+            activation_dt = add_working_days(delivery_dt, 1)
+            return {
+                "package_id": "urgent_baby_under9",
+                "package_name": {
+                    "vi": "👶 GÓI E-VISA NHÂN ĐẠO TRẺ EM DƯỚI 9 TUỔI (BABYSITTER VIETNAM)",
+                    "ru": "👶 ЛЬГОТНЫЙ ТАРИФ ДЛЯ ДЕТЕЙ ДО 9 ЛЕТ (BABYSITTER VIETNAM)",
+                    "en": "👶 SUBSIDIZED E-VISA FOR CHILDREN UNDER 9 (BABYSITTER VIETNAM)"
+                },
+                "price": "1.480.000 ₫ (Single) | 100% Miễn phí vé xe buýt (0 ₫ khi đi cùng bố mẹ)",
+                "submit_time": f"13:30 {get_weekday_name(submit_dt, lang)} ({submit_dt.strftime('%d/%m')})",
+                "delivery_time": f"17:30 {get_weekday_name(delivery_dt, lang)} ({delivery_dt.strftime('%d/%m')})",
+                "activation_date": f"{activation_dt.strftime('%d/%m/%Y')} ({get_weekday_name(activation_dt, lang)})",
+                "buffer_note": {
+                    "vi": "💛 Chương trình xã hội Babysitter Vietnam: 100% tài trợ vé xe buýt khứ hồi + E-visa khẩn cấp siêu tốc 3-4 giờ.",
+                    "ru": "💛 Гуманитарная программа Babysitter Vietnam: 100% бесплатный билет на автобус + E-Visa за 3-4 часа всего 1.480.000 VND.",
+                    "en": "💛 Babysitter Vietnam Social Program: 100% Free sleeper bus ticket + 3-4H urgent E-visa at 1,480,000 VND."
+                },
+                "validity_note": {
+                    "vi": "📌 Điều kiện: Đăng ký trước ngày kích hoạt tối thiểu 4 ngày. Trẻ em nằm chung giường với bố mẹ.",
+                    "ru": "📌 Условия: Предварительная регистрация за 4 дня до выезда. Ребенок делит спальное место с родителями.",
+                    "en": "📌 Requirements: Advance registration at least 4 days before travel. Child shares sleeper bed with parents."
+                }
+            }
         if stay_type in ("1night", "4h"):
             delivery_dt = submit_dt.replace(hour=17, minute=30, second=0)
             activation_dt = add_working_days(delivery_dt, 1)
@@ -1829,6 +1854,7 @@ def get_evisa_flight_keyboard(lang: str = "ru") -> InlineKeyboardMarkup:
             [InlineKeyboardButton("🌙 2 ночи за границей ➜ Тариф 1 День", callback_data="step|evisa|calc_stay|2nights")],
             [InlineKeyboardButton("🌙 3 ночи за границей ➜ Тариф 2 Дня", callback_data="step|evisa|calc_stay|3nights")],
             [InlineKeyboardButton("🏖️ 4–5+ ночей ➜ Тариф 3–5 Дней", callback_data="step|evisa|calc_stay|4plus")],
+            [InlineKeyboardButton("👶 Ребенок до 9 лет (1.480.000 ₫ + 100% Бесплатный автобус)", callback_data="step|evisa|calc_stay|baby_under9")],
             [InlineKeyboardButton("🔙 Назад", callback_data="step|evisa|main")]
         ])
     elif lang == "vi":
@@ -1837,6 +1863,7 @@ def get_evisa_flight_keyboard(lang: str = "ru") -> InlineKeyboardMarkup:
             [InlineKeyboardButton("🌙 Ở lại 2 đêm ➜ Gói khẩn 1 Ngày", callback_data="step|evisa|calc_stay|2nights")],
             [InlineKeyboardButton("🌙 Ở lại 3 đêm ➜ Gói khẩn 2 Ngày", callback_data="step|evisa|calc_stay|3nights")],
             [InlineKeyboardButton("🏖️ Ở lại 4–5+ đêm ➜ Gói 3–5 Ngày", callback_data="step|evisa|calc_stay|4plus")],
+            [InlineKeyboardButton("👶 Trẻ em dưới 9 tuổi (1.480.000 ₫ + Miễn phí 100% xe buýt)", callback_data="step|evisa|calc_stay|baby_under9")],
             [InlineKeyboardButton("🔙 Quay lại", callback_data="step|evisa|main")]
         ])
     else:
@@ -1845,6 +1872,7 @@ def get_evisa_flight_keyboard(lang: str = "ru") -> InlineKeyboardMarkup:
             [InlineKeyboardButton("🌙 2 nights abroad ➜ 1-Day Package", callback_data="step|evisa|calc_stay|2nights")],
             [InlineKeyboardButton("🌙 3 nights abroad ➜ 2-Day Package", callback_data="step|evisa|calc_stay|3nights")],
             [InlineKeyboardButton("🏖️ 4–5+ nights ➜ 3–5 Day Package", callback_data="step|evisa|calc_stay|4plus")],
+            [InlineKeyboardButton("👶 Child under 9 (1,480,000 VND + 100% Free Bus)", callback_data="step|evisa|calc_stay|baby_under9")],
             [InlineKeyboardButton("🔙 Back", callback_data="step|evisa|main")]
         ])
 
