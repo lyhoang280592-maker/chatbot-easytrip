@@ -1680,10 +1680,10 @@ def calculate_evisa_smart_schedule(
                 "package_id": "urgent_4h",
                 "package_name": {
                     "vi": "⚡ GÓI SIÊU KHẨN CẤP 4 GIỜ (SUPER URGENT 4H)",
-                    "ru": "⚡ ТАРИФ СУПЕР-СРОЧНЫЙ 4 ЧАСА (SAME DAY)",
+                    "ru": "⚡ ТАРИФ СУПЕР-СРОЧНЫЙ (ЗА 4 ЧАСА)",
                     "en": "⚡ SUPER URGENT 4-HOUR PACKAGE (SAME DAY)"
                 },
-                "price": "2.450.000 ₫ (Single) | 3.400.000 ₫ (Multi)",
+                "price": "2.600.000 ₫ (Single) | 3.600.000 ₫ (Multi)",
                 "submit_time": f"13:30 {get_weekday_name(submit_dt, lang)} ({submit_dt.strftime('%d/%m')})",
                 "delivery_time": f"17:30 {get_weekday_name(delivery_dt, lang)} ({delivery_dt.strftime('%d/%m')})",
                 "activation_date": f"{activation_dt.strftime('%d/%m/%Y')} ({get_weekday_name(activation_dt, lang)})",
@@ -1706,10 +1706,10 @@ def calculate_evisa_smart_schedule(
                 "package_id": "urgent_1day",
                 "package_name": {
                     "vi": "⏱️ GÓI KHẨN CẤP 1 NGÀY LÀM VIỆC (1 WORKING DAY)",
-                    "ru": "⏱️ ТАРИФ СРОЧНЫЙ 1 РАБОЧИЙ ДЕНЬ (1 DAY)",
+                    "ru": "⏱️ ТАРИФ СРОЧНЫЙ (ЗА 1 ДЕНЬ)",
                     "en": "⏱️ EXPEDITED 1 WORKING DAY PACKAGE"
                 },
-                "price": "1.950.000 ₫ (Single) | 2.950.000 ₫ (Multi)",
+                "price": "2.200.000 ₫ (Single) | 3.200.000 ₫ (Multi)",
                 "submit_time": f"13:30 {get_weekday_name(submit_dt, lang)} ({submit_dt.strftime('%d/%m')})",
                 "delivery_time": f"17:30 {get_weekday_name(delivery_dt, lang)} ({delivery_dt.strftime('%d/%m')})",
                 "activation_date": f"{activation_dt.strftime('%d/%m/%Y')} ({get_weekday_name(activation_dt, lang)})",
@@ -1732,10 +1732,10 @@ def calculate_evisa_smart_schedule(
                 "package_id": "urgent_2days",
                 "package_name": {
                     "vi": "📅 GÓI KHẨN CẤP 2 NGÀY LÀM VIỆC (2 WORKING DAYS)",
-                    "ru": "📅 ТАРИФ СРОЧНЫЙ 2 РАБОЧИХ ДНЯ (2 DAYS)",
+                    "ru": "📅 ТАРИФ СРОЧНЫЙ (ЗА 2 ДНЯ)",
                     "en": "📅 EXPEDITED 2 WORKING DAYS PACKAGE"
                 },
-                "price": "1.650.000 ₫ (Single) | 2.650.000 ₫ (Multi)",
+                "price": "2.150.000 ₫ (Single) | 3.150.000 ₫ (Multi)",
                 "submit_time": f"13:30 {get_weekday_name(submit_dt, lang)} ({submit_dt.strftime('%d/%m')})",
                 "delivery_time": f"17:30 {get_weekday_name(delivery_dt, lang)} ({delivery_dt.strftime('%d/%m')})",
                 "activation_date": f"{activation_dt.strftime('%d/%m/%Y')} ({get_weekday_name(activation_dt, lang)})",
@@ -1758,10 +1758,10 @@ def calculate_evisa_smart_schedule(
                 "package_id": "urgent_3days",
                 "package_name": {
                     "vi": "🏖️ GÓI TIÊU CHUẨN 3–5 NGÀY LÀM VIỆC (STANDARD EXPEDITED)",
-                    "ru": "🏖️ ТАРИФ СТАНДАРТ 3–5 РАБОЧИХ ДНЕЙ",
+                    "ru": "🏖️ ТАРИФ СТАНДАРТ (ЗА 3–5 ДНЕЙ)",
                     "en": "🏖️ STANDARD 3-5 WORKING DAYS PACKAGE"
                 },
-                "price": "1.350.000 ₫ (3 Ngày) | 950.000 ₫ (5 Ngày)",
+                "price": "1.810.000 ₫ (Single) | 2.810.000 ₫ (Multi)",
                 "submit_time": f"13:30 {get_weekday_name(submit_dt, lang)} ({submit_dt.strftime('%d/%m')})",
                 "delivery_time": f"17:30 {get_weekday_name(delivery_dt, lang)} ({delivery_dt.strftime('%d/%m')})",
                 "activation_date": f"{activation_dt.strftime('%d/%m/%Y')} ({get_weekday_name(activation_dt, lang)})",
