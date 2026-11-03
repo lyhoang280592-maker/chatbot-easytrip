@@ -1321,18 +1321,21 @@ def get_party_counter_keyboard(route_key: str, date_val: str, adults: int, kids_
     
     rows = [
         [
-            InlineKeyboardButton(f"{lbl_adults}: {adults}", callback_data="step|ignore"),
+            InlineKeyboardButton(lbl_adults, callback_data="step|ignore"),
             InlineKeyboardButton("➖", callback_data=f"step|party|{route_key}|{date_val}|{max(1, adults-1)}|{kids_under9}|{kids_over9}"),
+            InlineKeyboardButton(f" {adults} ", callback_data="step|ignore"),
             InlineKeyboardButton("➕", callback_data=f"step|party|{route_key}|{date_val}|{adults+1}|{kids_under9}|{kids_over9}")
         ],
         [
-            InlineKeyboardButton(f"{lbl_k_over9}: {kids_over9}", callback_data="step|ignore"),
+            InlineKeyboardButton(lbl_k_over9, callback_data="step|ignore"),
             InlineKeyboardButton("➖", callback_data=f"step|party|{route_key}|{date_val}|{adults}|{kids_under9}|{max(0, kids_over9-1)}"),
+            InlineKeyboardButton(f" {kids_over9} ", callback_data="step|ignore"),
             InlineKeyboardButton("➕", callback_data=f"step|party|{route_key}|{date_val}|{adults}|{kids_under9}|{kids_over9+1}")
         ],
         [
-            InlineKeyboardButton(f"{lbl_k_under9}: {kids_under9}", callback_data="step|ignore"),
+            InlineKeyboardButton(lbl_k_under9, callback_data="step|ignore"),
             InlineKeyboardButton("➖", callback_data=f"step|party|{route_key}|{date_val}|{adults}|{max(0, kids_under9-1)}|{kids_over9}"),
+            InlineKeyboardButton(f" {kids_under9} ", callback_data="step|ignore"),
             InlineKeyboardButton("➕", callback_data=f"step|party|{route_key}|{date_val}|{adults}|{kids_under9+1}|{kids_over9}")
         ],
         [
