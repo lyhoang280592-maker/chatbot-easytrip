@@ -1206,84 +1206,24 @@ def get_evisa_integrated_calendar_keyboard(year: int, month: int, lang: str = "r
 
 
 def get_bus_integrated_calendar_keyboard(route_key: str, year: int, month: int, lang: str = "ru") -> InlineKeyboardMarkup:
-    """Bàn phím tích hợp Lịch xe buýt: Nút chọn gói + Lịch tháng làm nổi bật ngày xe chạy (Thứ 3, 5, CN)"""
+    """Bàn phím Lịch tháng thông minh cho xe buýt (chỉ tập trung chọn ngày khởi hành, các ngày chạy xe T3, T5, CN được đánh dấu 🟢)"""
+    import calendar
     cal = calendar.monthcalendar(year, month)
-    month_names = {
-        "ru": ["", "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
-        "en": ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
-        "vi": ["", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"]
-    }
-    m_name = month_names.get(lang, month_names["en"])[month]
     
-    prev_y, prev_m = (year - 1, 12) if month == 1 else (year, month - 1)
-    next_y, next_m = (year + 1, 1) if month == 12 else (year, month + 1)
+    # Month navigation
+    prev_m = 12 if month == 1 else month - 1
+    prev_y = year - 1 if month == 1 else year
+    next_m = 1 if month == 12 else month + 1
+    next_y = year + 1 if month == 12 else year
+    
+    m_names_ru = ["", "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"]
+    m_names_vi = ["", "Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"]
+    m_names_en = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    
+    m_name = m_names_ru[month] if lang == "ru" else m_names_vi[month] if lang == "vi" else m_names_en[month]
     
     rows = []
     
-    # Hàng 1 & 2: Các nút chọn gói dịch vụ theo tuyến + nút Trẻ em dưới 9 tuổi
-    if "laos" in route_key:
-        if lang == "ru":
-            rows.append([
-                InlineKeyboardButton("🚌 Только билет на автобус (1.400.000 ₫)", callback_data="step|bus_pkg|laos_bus_only"),
-                InlineKeyboardButton("📑 Пакет: Bus + E-Visa 90D (4.000.000 ₫)", callback_data="step|bus_pkg|laos_combo_90d")
-            ])
-            rows.append([
-                InlineKeyboardButton("👶 Ребенок до 9 лет (1.480.000 ₫ + 100% Бесплатный автобус)", callback_data="step|bus_pkg|baby_under9")
-            ])
-        elif lang == "vi":
-            rows.append([
-                InlineKeyboardButton("🚌 Vé xe khứ hồi (1.400.000 ₫)", callback_data="step|bus_pkg|laos_bus_only"),
-                InlineKeyboardButton("📑 Trọn gói Bus + E-Visa 90 ngày (4.000.000 ₫)", callback_data="step|bus_pkg|laos_combo_90d")
-            ])
-            rows.append([
-                InlineKeyboardButton("👶 Trẻ em dưới 9 tuổi (1.480.000 ₫ + Miễn phí 100% xe buýt)", callback_data="step|bus_pkg|baby_under9")
-            ])
-        else:
-            rows.append([
-                InlineKeyboardButton("🚌 Round-trip Bus Ticket (1,400,000 VND)", callback_data="step|bus_pkg|laos_bus_only"),
-                InlineKeyboardButton("📑 Bus + 90-Day E-Visa (4,000,000 VND)", callback_data="step|bus_pkg|laos_combo_90d")
-            ])
-            rows.append([
-                InlineKeyboardButton("👶 Child under 9 (1,480,000 VND + 100% Free Bus)", callback_data="step|bus_pkg|baby_under9")
-            ])
-    else:  # Cambodia Moc Bai
-        if lang == "ru":
-            rows.append([
-                InlineKeyboardButton("🚌 Только билет на автобус (1.400.000 ₫)", callback_data="step|bus_pkg|mocbai_bus_only"),
-                InlineKeyboardButton("📑 Пакет: Bus + E-Visa 90D (4.000.000 ₫)", callback_data="step|bus_pkg|mocbai_combo_90d")
-            ])
-            rows.append([
-                InlineKeyboardButton("⭐ Пакет 24ч + виза Камбоджи (4.400.000 ₫)", callback_data="step|bus_pkg|mocbai_combo_24h"),
-                InlineKeyboardButton("⭐ Безвиз 45 дней (1.400.000 ₫)", callback_data="step|bus_pkg|mocbai_bus_only")
-            ])
-            rows.append([
-                InlineKeyboardButton("👶 Ребенок до 9 лет (1.480.000 ₫ + 100% Бесплатный автобус)", callback_data="step|bus_pkg|baby_under9")
-            ])
-        elif lang == "vi":
-            rows.append([
-                InlineKeyboardButton("🚌 Vé xe khứ hồi (1.400.000 ₫)", callback_data="step|bus_pkg|mocbai_bus_only"),
-                InlineKeyboardButton("📑 Combo Bus + E-Visa 90 ngày (4.000.000 ₫)", callback_data="step|bus_pkg|mocbai_combo_90d")
-            ])
-            rows.append([
-                InlineKeyboardButton("⭐ Combo 24h + Visa Campuchia (4.400.000 ₫)", callback_data="step|bus_pkg|mocbai_combo_24h"),
-                InlineKeyboardButton("⭐ Miễn visa 45 ngày (1.400.000 ₫)", callback_data="step|bus_pkg|mocbai_bus_only")
-            ])
-            rows.append([
-                InlineKeyboardButton("👶 Trẻ em dưới 9 tuổi (1.480.000 ₫ + Miễn phí 100% xe buýt)", callback_data="step|bus_pkg|baby_under9")
-            ])
-        else:
-            rows.append([
-                InlineKeyboardButton("🚌 Round-trip Bus (1,400,000 VND)", callback_data="step|bus_pkg|mocbai_bus_only"),
-                InlineKeyboardButton("📑 Package: Bus + 90-Day E-Visa (4,000,000 VND)", callback_data="step|bus_pkg|mocbai_combo_90d")
-            ])
-            rows.append([
-                InlineKeyboardButton("⭐ Package 24h + Cambodia Visa (4,400,000 VND)", callback_data="step|bus_pkg|mocbai_combo_24h"),
-                InlineKeyboardButton("⭐ 45-Day Visa-Free (1,400,000 VND)", callback_data="step|bus_pkg|mocbai_bus_only")
-            ])
-            rows.append([
-                InlineKeyboardButton("👶 Child under 9 (1,480,000 VND + 100% Free Bus)", callback_data="step|bus_pkg|baby_under9")
-            ])
-
     # Hàng điều hướng lịch tháng
     rows.append([
         InlineKeyboardButton("◀", callback_data=f"step|bus_cal_nav|{route_key}|{prev_y}|{prev_m}"),
@@ -1320,16 +1260,88 @@ def get_bus_integrated_calendar_keyboard(route_key: str, year: int, month: int, 
                 row.append(InlineKeyboardButton(lbl, callback_data=f"step|bus_date|{route_key}|{date_str}"))
         rows.append(row)
         
-    seat_lbl = "💺 " + ("Запросить место" if lang == "ru" else "Kiểm tra số ghế" if lang == "vi" else "Select Seat")
-    pay_lbl = "💳 " + ("Способы оплаты" if lang == "ru" else "Phương thức thanh toán" if lang == "vi" else "Payment Methods")
     back_lbl = "🔙 " + ("Назад к услугам" if lang == "ru" else "Quay lại danh sách" if lang == "vi" else "Back to Services")
-    rows.append([
-        InlineKeyboardButton(seat_lbl, callback_data="step|request_seats"),
-        InlineKeyboardButton(pay_lbl, callback_data="step|pay_menu")
-    ])
     rows.append([
         InlineKeyboardButton(back_lbl, callback_data="step|back|services")
     ])
+    return InlineKeyboardMarkup(rows)
+
+
+def calculate_party_pricing(route_key: str, adults: int, kids_under9: int, kids_over9: int) -> dict:
+    """Tính toán chi phí minh bạch cho gia đình/nhóm khách"""
+    is_cambodia = "cambodia" in route_key or "mocbai" in route_key
+    is_45d = "45d" in route_key
+    
+    # Giá vé người lớn / trẻ trên 9 tuổi
+    if is_45d:
+        adult_unit = 1_400_000
+        service_title = "45-Day Visa-Free (Miễn thị thực 45 ngày)"
+    elif is_cambodia:
+        adult_unit = 4_400_000
+        service_title = "Cambodia Moc Bai Combo 90D"
+    else:
+        # Lào Bờ Y 90D
+        adult_unit = 4_000_000
+        service_title = "Nha Trang - Laos Bo Y Combo 90D"
+
+    # Trẻ em dưới 9 tuổi: 100% miễn phí vé xe (0 VND), E-visa khẩn trợ giá 1.480.000 VND (nếu đi 90D) hoặc 0 VND (nếu 45D)
+    child_unit = 0 if is_45d else 1_480_000
+    
+    total_adults_count = adults + kids_over9
+    total_adults_price = total_adults_count * adult_unit
+    total_kids_under9_price = kids_under9 * child_unit
+    
+    grand_total = total_adults_price + total_kids_under9_price
+    bus_ticket_saved = kids_under9 * 1_400_000
+    
+    return {
+        "adult_unit": adult_unit,
+        "child_unit": child_unit,
+        "total_adults_count": total_adults_count,
+        "adults": adults,
+        "kids_over9": kids_over9,
+        "kids_under9": kids_under9,
+        "total_adults_price": total_adults_price,
+        "total_kids_under9_price": total_kids_under9_price,
+        "grand_total": grand_total,
+        "bus_ticket_saved": bus_ticket_saved,
+        "service_title": service_title
+    }
+
+def get_party_counter_keyboard(route_key: str, date_val: str, adults: int, kids_under9: int, kids_over9: int, lang: str = "ru") -> InlineKeyboardMarkup:
+    """Bàn phím bộ đếm thông minh tăng giảm số lượng thành viên trong gia đình/nhóm"""
+    total = (adults + kids_over9) * (1_400_000 if "45d" in route_key else (4_400_000 if "cambodia" in route_key else 4_000_000)) + kids_under9 * (0 if "45d" in route_key else 1_480_000)
+    
+    lbl_adults = "👨 Взрослые" if lang == "ru" else "👨 Người lớn" if lang == "vi" else "👨 Adults"
+    lbl_k_over9 = "👦 Дети ≥ 9 лет" if lang == "ru" else "👦 Trẻ em ≥ 9 tuổi" if lang == "vi" else "👦 Kids ≥ 9yo"
+    lbl_k_under9 = "👶 Дети < 9 лет" if lang == "ru" else "👶 Trẻ em < 9 tuổi" if lang == "vi" else "👶 Kids < 9yo"
+    
+    confirm_lbl = f"✅ Подтвердить ({total:,.0f} ₫)" if lang == "ru" else f"✅ Xác nhận ({total:,.0f} ₫)" if lang == "vi" else f"✅ Confirm ({total:,.0f} VND)"
+    change_date_lbl = "📅 Сменить дату" if lang == "ru" else "📅 Chọn ngày khác" if lang == "vi" else "📅 Change date"
+    
+    rows = [
+        [
+            InlineKeyboardButton(f"{lbl_adults}: {adults}", callback_data="step|ignore"),
+            InlineKeyboardButton("➖", callback_data=f"step|party|{route_key}|{date_val}|{max(1, adults-1)}|{kids_under9}|{kids_over9}"),
+            InlineKeyboardButton("➕", callback_data=f"step|party|{route_key}|{date_val}|{adults+1}|{kids_under9}|{kids_over9}")
+        ],
+        [
+            InlineKeyboardButton(f"{lbl_k_over9}: {kids_over9}", callback_data="step|ignore"),
+            InlineKeyboardButton("➖", callback_data=f"step|party|{route_key}|{date_val}|{adults}|{kids_under9}|{max(0, kids_over9-1)}"),
+            InlineKeyboardButton("➕", callback_data=f"step|party|{route_key}|{date_val}|{adults}|{kids_under9}|{kids_over9+1}")
+        ],
+        [
+            InlineKeyboardButton(f"{lbl_k_under9}: {kids_under9}", callback_data="step|ignore"),
+            InlineKeyboardButton("➖", callback_data=f"step|party|{route_key}|{date_val}|{adults}|{max(0, kids_under9-1)}|{kids_over9}"),
+            InlineKeyboardButton("➕", callback_data=f"step|party|{route_key}|{date_val}|{adults}|{kids_under9+1}|{kids_over9}")
+        ],
+        [
+            InlineKeyboardButton(confirm_lbl, callback_data=f"step|party_confirm|{route_key}|{date_val}|{adults}|{kids_under9}|{kids_over9}")
+        ],
+        [
+            InlineKeyboardButton(change_date_lbl, callback_data=f"step|svc|{route_key}")
+        ]
+    ]
     return InlineKeyboardMarkup(rows)
 
 def get_payment_methods_keyboard(lang: str = "ru"):
@@ -2218,29 +2230,36 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         wk_name = get_weekday_name(sel_dt, lang)
         
         if is_bus_operating:
-            confirm_msg = {
+            # Chuyển sang bước chọn số lượng thành viên trong đoàn / gia đình
+            party_msg = {
                 "ru": (
-                    f"✅ Вы выбрали дату выезда: **{date_val}** ({wk_name}) 🚌✨\n"
+                    f"✅ Дата подтверждена: **{date_val}** ({wk_name}) 🚌✨\n"
                     f"Маршрут: {cust_data.loai_visa or 'Visarun'}\n\n"
-                    "Рейс подтвержден! Пожалуйста, отправьте фото страницы загранпаспорта в этот чат и нажмите кнопку ниже, чтобы проверить свободные места и выбрать спальную полку:"
+                    "👨‍👩‍👧 **ВЫБЕРИТЕ СОСТАВ ПАССАЖИРОВ ВАШЕЙ СЕМЬИ / ГРУППЫ:**\n"
+                    "• Взрослые и дети от 9 лет: отдельное спальное место + виза\n"
+                    "• Дети до 9 лет (Babysitter Vietnam): 100% бесплатный автобус (0 ₫) + субсидированная E-Visa 1.480.000 ₫\n\n"
+                    "👉 Нажимайте кнопки ➖ / ➕ ниже для настройки количества участников:"
                 ),
                 "vi": (
-                    f"✅ Bạn đã chọn ngày khởi hành: **{date_val}** ({wk_name}) 🚌✨\n"
+                    f"✅ Xác nhận ngày khởi hành: **{date_val}** ({wk_name}) 🚌✨\n"
                     f"Tuyến xe: {cust_data.loai_visa or 'Visarun'}\n\n"
-                    "Lịch xe hoàn toàn chính xác! Quý khách vui lòng gửi ảnh chụp trang Hộ chiếu vào đây và bấm nút bên dưới để chọn số ghế nằm mong muốn:"
+                    "👨‍👩‍👧 **CHỌN SỐ LƯỢNG THÀNH VIÊN TRONG GIA ĐÌNH / ĐOÀN CỦA BẠN:**\n"
+                    "• Người lớn & Trẻ em ≥ 9 tuổi: 1 giường nằm riêng + gói visa\n"
+                    "• Trẻ em dưới 9 tuổi (Babysitter Vietnam): Miễn phí 100% vé xe (0 ₫) + E-Visa khẩn trợ giá 1.480.000 ₫\n\n"
+                    "👉 Bấm các nút ➖ / ➕ bên dưới để điều chỉnh số lượng thành viên:"
                 ),
                 "en": (
-                    f"✅ Selected departure date: **{date_val}** ({wk_name}) 🚌✨\n"
+                    f"✅ Departure Date Confirmed: **{date_val}** ({wk_name}) 🚌✨\n"
                     f"Route: {cust_data.loai_visa or 'Visarun'}\n\n"
-                    "Bus schedule confirmed! Please send your passport info page in this chat and click below to reserve your sleeper bed:"
+                    "👨‍👩‍👧 **SELECT YOUR FAMILY / GROUP PASSENGERS:**\n"
+                    "• Adults & Kids ≥ 9yo: Individual sleeper bed + visa\n"
+                    "• Kids < 9yo (Babysitter Vietnam): 100% Free Bus (0 VND) + Subsidized E-Visa 1,480,000 VND\n\n"
+                    "👉 Use ➖ / ➕ buttons below to adjust passenger count:"
                 )
             }
-            action_kb = InlineKeyboardMarkup([
-                [InlineKeyboardButton("💺 " + ("Запросить проверку мест и выбрать место" if lang == "ru" else "Kiểm tra sơ đồ chỗ & Chọn số ghế" if lang == "vi" else "Select Seat"), callback_data="step|request_seats")],
-                [InlineKeyboardButton("💳 " + ("Способы оплаты" if lang == "ru" else "Phương thức thanh toán" if lang == "vi" else "Payment Methods"), callback_data="step|pay_menu")],
-                [InlineKeyboardButton("🔙 " + ("Выбрать другую дату" if lang == "ru" else "Chọn ngày khác" if lang == "vi" else "Pick another date"), callback_data=f"step|svc|{route_key}")]
-            ])
-            await send_step_reply(update, context, confirm_msg.get(lang, confirm_msg["en"]), reply_markup=action_kb, parse_mode="Markdown")
+            # Mặc định ban đầu: 1 người lớn, 0 trẻ dưới 9, 0 trẻ trên 9
+            kb_party = get_party_counter_keyboard(route_key, date_val, adults=1, kids_under9=0, kids_over9=0, lang=lang)
+            await send_step_reply(update, context, party_msg.get(lang, party_msg["en"]), reply_markup=kb_party, parse_mode="Markdown")
             return
         else:
             warn_msg = {
@@ -2266,6 +2285,148 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
             return
 
     # 🟢 KHÁCH CHỌN GÓI DỊCH VỤ XE BUÝT CỤ THỂ
+    
+    # 🟢 BỘ ĐẾM GIA ĐÌNH/NHÓM: ĐIỀU CHỈNH SỐ LƯỢNG THÀNH VIÊN (➖ / ➕)
+    elif step_type == "party":
+        route_key = parts[2]
+        date_val = parts[3]
+        adults = int(parts[4])
+        kids_under9 = int(parts[5])
+        kids_over9 = int(parts[6])
+        lang = memory_store.get(f"{session_id}_lang", "en")
+        
+        kb_party = get_party_counter_keyboard(route_key, date_val, adults, kids_under9, kids_over9, lang)
+        if query and query.message:
+            try:
+                await query.message.edit_reply_markup(reply_markup=kb_party)
+            except Exception:
+                pass
+        return
+
+    # 🟢 XÁC NHẬN THÀNH VIÊN ĐOÀN -> TỔNG HỢP CHI PHÍ & CHỜ NHÂN VIÊN GỬI SƠ ĐỒ CHỖ
+    elif step_type == "party_confirm":
+        route_key = parts[2]
+        date_val = parts[3]
+        adults = int(parts[4])
+        kids_under9 = int(parts[5])
+        kids_over9 = int(parts[6])
+        lang = memory_store.get(f"{session_id}_lang", "en")
+        
+        pricing = calculate_party_pricing(route_key, adults, kids_under9, kids_over9)
+        cust_data.ngay_khoi_hanh = date_val
+        
+        # Ghi nhận tổng số chỗ cần xếp
+        total_seats_needed = adults + kids_over9
+        cust_data.ghe_chon = f"Chờ nhân viên gửi sơ đồ ({total_seats_needed} giường người lớn/trẻ lớn + {kids_under9} bé chung giường)"
+        
+        # Soạn bảng tổng hợp đơn hàng chi tiết & khoa học
+        if lang == "ru":
+            summary_msg = (
+                f"🧾 **СВОДКА БРОНИРОВАНИЯ ДЛЯ СЕМЬИ / ГРУППЫ**\n"
+                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                f"🚌 **Маршрут:** {cust_data.loai_visa or 'Visarun'}\n"
+                f"📅 **Дата выезда:** {date_val}\n\n"
+                f"👥 **Состав пассажиров:**\n"
+                f"• 👨 Взрослые: **{adults} чел.** × {pricing['adult_unit']:,.0f} ₫ = **{adults * pricing['adult_unit']:,.0f} ₫**\n"
+            )
+            if kids_over9 > 0:
+                summary_msg += f"• 👦 Дети от 9 лет (отдельное место): **{kids_over9} чел.** × {pricing['adult_unit']:,.0f} ₫ = **{kids_over9 * pricing['adult_unit']:,.0f} ₫**\n"
+            if kids_under9 > 0:
+                summary_msg += (
+                    f"• 👶 Дети до 9 лет (Babysitter Vietnam): **{kids_under9} чел.**\n"
+                    f"   └ 🚌 Билет на автобус: **100% БЕСПЛАТНО (0 ₫)** (экономия {kids_under9 * 1_400_000:,.0f} ₫)\n"
+                    f"   └ ⚡ E-Visa со скидкой: **{pricing['total_kids_under9_price']:,.0f} ₫**\n"
+                )
+            summary_msg += (
+                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                f"💰 **ИТОГО К ОПЛАТЕ:** **{pricing['grand_total']:,.0f} VND**\n"
+                f"🛏️ **Количество спальных мест на рейсе:** **{total_seats_needed} места**\n"
+                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                f"👉 **Следующий шаг:**\n"
+                f"1️⃣ Наш менеджер прямо сейчас отправит вам актуальную схему свободных мест в автобусе для выбора удобных полок.\n"
+                f"2️⃣ Пожалуйста, пришлите в этот чат четкие фото загранпаспортов всех участников поездки.\n"
+                f"3️⃣ После согласования мест нажмите кнопку оплаты ниже:"
+            )
+        elif lang == "vi":
+            summary_msg = (
+                f"🧾 **BẢNG TỔNG HỢP ĐƠN HÀNG GIA ĐÌNH / ĐOÀN**\n"
+                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                f"🚌 **Tuyến dịch vụ:** {cust_data.loai_visa or 'Visarun'}\n"
+                f"📅 **Ngày khởi hành:** {date_val}\n\n"
+                f"👥 **Chi tiết thành viên & chi phí:**\n"
+                f"• 👨 Người lớn: **{adults} khách** × {pricing['adult_unit']:,.0f} ₫ = **{adults * pricing['adult_unit']:,.0f} ₫**\n"
+            )
+            if kids_over9 > 0:
+                summary_msg += f"• 👦 Trẻ em ≥ 9 tuổi (giường riêng): **{kids_over9} bé** × {pricing['adult_unit']:,.0f} ₫ = **{kids_over9 * pricing['adult_unit']:,.0f} ₫**\n"
+            if kids_under9 > 0:
+                summary_msg += (
+                    f"• 👶 Trẻ em < 9 tuổi (Babysitter Vietnam): **{kids_under9} bé**\n"
+                    f"   └ 🚌 Vé xe buýt: **100% MIỄN PHÍ (0 ₫)** (tiết kiệm {kids_under9 * 1_400_000:,.0f} ₫)\n"
+                    f"   └ ⚡ E-Visa khẩn trợ giá: **{pricing['total_kids_under9_price']:,.0f} ₫**\n"
+                )
+            summary_msg += (
+                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                f"💰 **TỔNG CỘNG THANH TOÁN:** **{pricing['grand_total']:,.0f} VND**\n"
+                f"🛏️ **Tổng số giường nằm cần giữ chỗ:** **{total_seats_needed} giường**\n"
+                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                f"👉 **Các bước tiếp theo:**\n"
+                f"1️⃣ Chuyên viên Easy Trip sẽ gửi ngay sơ đồ chỗ trống mới nhất để quý khách chọn số ghế phù hợp cho gia đình.\n"
+                f"2️⃣ Vui lòng gửi ảnh Hộ chiếu của tất cả thành viên vào khung chat này để công ty làm thủ tục.\n"
+                f"3️⃣ Sau khi chọn ghế xong, quý khách bấm nút bên dưới để thanh toán:"
+            )
+        else:
+            summary_msg = (
+                f"🧾 **FAMILY / GROUP BOOKING SUMMARY**\n"
+                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                f"🚌 **Service Route:** {cust_data.loai_visa or 'Visarun'}\n"
+                f"📅 **Departure Date:** {date_val}\n\n"
+                f"👥 **Passenger Breakdown:**\n"
+                f"• 👨 Adults: **{adults} pax** × {pricing['adult_unit']:,.0f} VND = **{adults * pricing['adult_unit']:,.0f} VND**\n"
+            )
+            if kids_over9 > 0:
+                summary_msg += f"• 👦 Kids ≥ 9yo (Separate Bed): **{kids_over9} pax** × {pricing['adult_unit']:,.0f} VND = **{kids_over9 * pricing['adult_unit']:,.0f} VND**\n"
+            if kids_under9 > 0:
+                summary_msg += (
+                    f"• 👶 Kids < 9yo (Babysitter Vietnam): **{kids_under9} pax**\n"
+                    f"   └ 🚌 Bus ticket: **100% FREE (0 VND)** (Saved {kids_under9 * 1_400_000:,.0f} VND)\n"
+                    f"   └ ⚡ Subsidized E-Visa: **{pricing['total_kids_under9_price']:,.0f} VND**\n"
+                )
+            summary_msg += (
+                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                f"💰 **TOTAL AMOUNT:** **{pricing['grand_total']:,.0f} VND**\n"
+                f"🛏️ **Total Sleeper Beds Required:** **{total_seats_needed} beds**\n"
+                f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
+                f"👉 **Next Steps:**\n"
+                f"1️⃣ Our consultant is sending the live bus seat layout for your family to select preferred beds.\n"
+                f"2️⃣ Please upload clear passport photos for all passengers in this chat.\n"
+                f"3️⃣ Proceed with payment using the buttons below:"
+            )
+            
+        action_kb = InlineKeyboardMarkup([
+            [InlineKeyboardButton("💺 " + ("Запросить схему мест и подтвердить полки" if lang == "ru" else "Xem sơ đồ chỗ & Chọn ghế" if lang == "vi" else "Select Bus Seats"), callback_data="step|request_seats")],
+            [InlineKeyboardButton("💳 " + ("Способы оплаты (VCB, VRB, Офис)" if lang == "ru" else "Phương thức thanh toán (VCB, VRB, VP)" if lang == "vi" else "Payment Methods (VCB, VRB, Office)"), callback_data="step|pay_menu")],
+            [InlineKeyboardButton("🔄 " + ("Изменить состав группы" if lang == "ru" else "Thay đổi số lượng người" if lang == "vi" else "Modify party count"), callback_data=f"step|bus_date|{route_key}|{date_val}")],
+            [InlineKeyboardButton("💬 " + ("Менеджер поддержки" if lang == "ru" else "Chat với nhân viên hỗ trợ" if lang == "vi" else "Support Manager"), url="https://t.me/easytripvisa_co_ltd")]
+        ])
+        
+        await send_step_reply(update, context, summary_msg, reply_markup=action_kb, parse_mode="Markdown")
+        
+        # Báo ngay vào Admin Group kèm thông tin đoàn
+        from telegram_router import send_to_admin_group
+        u_name = getattr(update.effective_user, "full_name", "Customer")
+        u_handle = getattr(update.effective_user, "username", "N/A")
+        await send_to_admin_group(
+            context,
+            f"👨‍👩‍👧 **KHÁCH ĐẶT ĐOÀN / GIA ĐÌNH ({total_seats_needed} GIƯỜNG + {kids_under9} EM BÉ)**\n"
+            f"👤 Đại diện: {u_name} (@{u_handle})\n"
+            f"📍 Tuyến: {cust_data.loai_visa}\n"
+            f"📅 Ngày đi: {date_val}\n"
+            f"👥 Thành viên: {adults} người lớn + {kids_over9} trẻ ≥ 9T + {kids_under9} trẻ < 9T\n"
+            f"💰 Tổng tiền dự kiến: {pricing['grand_total']:,.0f} VND\n"
+            f"👉 HÃY GỬI SƠ ĐỒ CHỖ CHO KHÁCH CHỌN GHẾ!"
+        )
+        return
+
     elif step_type == "bus_pkg":
         pkg_id = parts[2]
         lang = memory_store.get(f"{session_id}_lang", "en")
