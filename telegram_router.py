@@ -827,7 +827,7 @@ async def notify_admin_incoming_message(
 
 async def send_new_customer_welcome_menu(chat_id: str | int, target_msg, conn_id=None):
     welcome_text = (
-        "👋 **Welcome to Easy Trip & Visa!** 🚌🌏\n\n"
+        "👋 Welcome to Easy Trip & Visa! 🚌🌏\n\n"
         "🇷🇺 Пожалуйста, выберите ваш язык и гражданство:\n"
         "🇬🇧 Please select your language and nationality:\n"
         "🇰🇷 언어와 국적을 선택해 주세요:\n"
@@ -842,9 +842,9 @@ async def send_new_customer_welcome_menu(chat_id: str | int, target_msg, conn_id
 
 async def send_returning_customer_request(chat_id: str | int, target_msg, conn_id=None):
     returning_prompt = (
-        "🌟 **RETURNING CUSTOMER / FRIEND REFERRAL LOYALTY DISCOUNT**\n\n"
+        "🌟 Ưu đãi khách hàng cũ / Giới thiệu bạn bè\n\n"
         "If you are a returning customer, **or a friend/relative booked on your behalf in the past**, or you previously used **another account/channel**, please send your **previous booking confirmation message, ticket screenshot, or your Full Passport Name / Phone number** to verify and receive your exclusive discount.\n\n"
-        "📌 **Example Booking Format:**\n"
+        "📌 Mẫu thông tin:\n"
         "```text\n"
         "10/09 - 90D - Laos\n"
         "FULL NAME (As on Passport)\n"
@@ -951,9 +951,9 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     if user_lang == "ru":
         welcome_question = (
-            "👋 **Добро пожаловать в Easy Trip & Visa!** 🚌✨\n\n"
-            "• 👤 **Поддержка в Telegram**: [@easytripvisa_co_ltd](https://t.me/easytripvisa_co_ltd)\n"
-            "• 📞 **Горячая линия / WhatsApp**: `+84 853 201 277` (24/7)\n\n"
+            "👋 Добро пожаловать в Easy Trip & Visa! 🚌✨\n\n"
+            "• 👤 Поддержка: [@easytripvisa_co_ltd](https://t.me/easytripvisa_co_ltd)\n"
+            "• 📞 Горячая линия / WhatsApp: `+84 853 201 277` (24/7)\n\n"
             "Вы или ваши знакомые ранее пользовались нашими услугами?\n"
             "Пожалуйста, выберите вариант ниже:"
         )
@@ -966,8 +966,8 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ])
     elif user_lang == "vi":
         welcome_question = (
-            "👋 **Chào mừng bạn đến với Easy Trip & Visa!** 🚌✨\n\n"
-            "• 👤 **Hỗ trợ chính thức**: [@easytripvisa_co_ltd](https://t.me/easytripvisa_co_ltd)\n"
+            "👋 Chào mừng bạn đến với Easy Trip & Visa! 🚌✨\n\n"
+            "• 👤 Hỗ trợ: [@easytripvisa_co_ltd](https://t.me/easytripvisa_co_ltd)\n"
             "• 📞 **Hotline / WhatsApp**: `+84 853 201 277` (24/7)\n\n"
             "Bạn (hoặc người thân được giới thiệu) đã từng đặt dịch vụ trước đây chưa?\n"
             "Vui lòng chọn một lựa chọn bên dưới:"
@@ -981,8 +981,8 @@ async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
         ])
     else:
         welcome_question = (
-            "👋 **Welcome to Easy Trip & Visa!**\n\n"
-            "• 👤 **Official Support**: [@easytripvisa_co_ltd](https://t.me/easytripvisa_co_ltd)\n"
+            "👋 Welcome to Easy Trip & Visa!\n\n"
+            "• 👤 Support: [@easytripvisa_co_ltd](https://t.me/easytripvisa_co_ltd)\n"
             "• 📞 **Hotline / WhatsApp**: `+84 853 201 277` (Open 24/7)\n\n"
             "Have you (or a friend on your behalf) booked any service with us before?\n"
             "Please select an option below:"
@@ -1151,17 +1151,17 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
             "ru": (
                 "👋 **Здравствуйте! Добро пожаловать в Easy Trip & Visa!** 🚌✨\n\n"
                 "Мы помогаем организовать комфортный визаран и оформление виз во Вьетнаме (Камбоджа, Лаос, E-Visa, VIP Fast Track).\n\n"
-                "👉 **Шаг 1: Пожалуйста, выберите ваше гражданство ниже** (или напишите название вашей страны в чат):"
+                "👉 Шаг 1: Пожалуйста, выберите ваше гражданство ниже (или напишите название вашей страны в чат):"
             ),
             "en": (
                 "👋 **Hello and welcome to Easy Trip & Visa!** 🚌✨\n\n"
                 "We provide professional Visa Run and Vietnam Visa services (Cambodia, Laos, E-Visa, VIP Fast Track).\n\n"
-                "👉 **Step 1: Please select your nationality below** (or type your country in this chat):"
+                "👉 Step 1: Please select your nationality below (or type your country in this chat):"
             ),
             "vi": (
                 "👋 **Xin chào! Chào mừng bạn đến với Easy Trip & Visa!** 🚌✨\n\n"
                 "Chúng tôi chuyên xe buýt Visarun và dịch vụ thị thực Việt Nam (Campuchia, Lào, E-Visa, Fast Track).\n\n"
-                "👉 **Bước 1: Vui lòng chọn Quốc tịch của bạn bên dưới** (hoặc gõ tên quốc gia vào khung chat):"
+                "👉 Bước 1: Vui lòng chọn Quốc tịch của bạn bên dưới (hoặc gõ tên quốc gia vào khung chat):"
             )
         }
         await send_step_reply(
@@ -1186,25 +1186,25 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
         
         lead_msgs = {
             "ru": (
-                f"👋 **Здравствуйте! Спасибо за обращение с сайта Easy Trip & Visa!** 🚌✨\n\n"
+                f"👋 Здравствуйте! Спасибо за обращение с сайта Easy Trip & Visa! 🚌✨\n\n"
                 f"📍 Мы зафиксировали ваш предварительный выбор:\n"
-                f"• **Город отправления:** {c_disp}\n"
-                f"• **Направление:** {svc_name}\n\n"
-                "👉 **Шаг 1: Пожалуйста, выберите ваше гражданство ниже** (чтобы бот проверил безвизовый въезд и сразу открыл календарь дат):"
+                f"• Город отправления: {c_disp}\n"
+                f"• Направление: {svc_name}\n\n"
+                "👉 Шаг 1: Пожалуйста, выберите ваше гражданство ниже (чтобы бот проверил безвизовый въезд и сразу открыл календарь дат):"
             ),
             "en": (
-                f"👋 **Hello! Thank you for contacting Easy Trip & Visa from our website!** 🚌✨\n\n"
+                f"👋 Hello! Thank you for contacting Easy Trip & Visa from our website! 🚌✨\n\n"
                 f"📍 We received your booking selection:\n"
-                f"• **Departure City:** {c_disp}\n"
-                f"• **Service:** {svc_name}\n\n"
-                "👉 **Step 1: Please select your nationality below** (to verify visa-free eligibility and open departure dates):"
+                f"• Departure City: {c_disp}\n"
+                f"• Service: {svc_name}\n\n"
+                "👉 Step 1: Please select your nationality below (to verify visa-free eligibility and open departure dates):"
             ),
             "vi": (
-                f"👋 **Xin chào! Cảm ơn bạn đã liên hệ từ website Easy Trip & Visa!** 🚌✨\n\n"
+                f"👋 Xin chào! Cảm ơn bạn đã liên hệ từ website Easy Trip & Visa! 🚌✨\n\n"
                 f"📍 Yêu cầu bạn vừa chọn:\n"
-                f"• **Điểm xuất phát:** {c_disp}\n"
-                f"• **Tuyến dịch vụ:** {svc_name}\n\n"
-                "👉 **Bước 1: Vui lòng chọn Quốc tịch của bạn bên dưới** (để bot kiểm tra điều kiện miễn thị thực và mở lịch khởi hành):"
+                f"• Điểm xuất phát: {c_disp}\n"
+                f"• Tuyến dịch vụ: {svc_name}\n\n"
+                "👉 Bước 1: Vui lòng chọn Quốc tịch của bạn bên dưới (để bot kiểm tra điều kiện miễn thị thực và mở lịch khởi hành):"
             )
         }
         await send_step_reply(
@@ -2429,7 +2429,7 @@ async def handle_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
             # Gửi tin nhắn xác nhận nút đã chọn
             if query.message:
                 q_msg: Any = query.message
-                await q_msg.reply_text(f"👉 You selected: **{user_text}**", parse_mode="Markdown")
+                await q_msg.reply_text(f"👉 Bạn đã chọn: {user_text}", parse_mode="Markdown")
             
             # Xử lý tin nhắn giả lập bằng AI Agent
             await process_customer_text_message(update, context, user_id, user_text)

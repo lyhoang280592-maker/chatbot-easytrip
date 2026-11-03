@@ -1073,41 +1073,41 @@ def get_itinerary_message(route_key: str, lang: str = "ru") -> str:
     
     if lang == "ru":
         return (
-            f"📋 **{title}**\n"
-            f"💰 **Стоимость:** {price}\n"
+            f"📋 {title}\n"
+            f"💰 Стоимость: {price}\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             f"{sched}\n\n"
             f"{pickup}\n\n"
             f"{border}"
             f"{booking_section}\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-            "👉 **СЛЕДУЮЩИЙ ШАГ:**\n"
+            "👉 Следующий шаг:\n"
             "Пожалуйста, нажмите кнопку ниже, чтобы проверить свободные места, выбрать место в автобусе и отправить фото паспорта для бронирования!"
         )
     elif lang == "vi":
         return (
-            f"📋 **{title}**\n"
-            f"💰 **Chi phí:** {itin['price']}\n"
+            f"📋 {title}\n"
+            f"💰 Chi phí: {itin['price']}\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             f"{sched}\n\n"
             f"{pickup}\n\n"
             f"{border}"
             f"{booking_section}\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-            "👉 **BƯỚC TIẾP THEO:**\n"
+            "👉 Bước tiếp theo:\n"
             "Vui lòng bấm nút bên dưới để kiểm tra sơ đồ chỗ trống, chọn số ghế trên xe và gửi ảnh Hộ chiếu để chúng tôi giữ chỗ cho bạn!"
         )
     else:
         return (
-            f"📋 **{title}**\n"
-            f"💰 **Price:** {itin['price']}\n"
+            f"📋 {title}\n"
+            f"💰 Price: {itin['price']}\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
             f"{sched}\n\n"
             f"{pickup}\n\n"
             f"{border}"
             f"{booking_section}\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-            "👉 **NEXT STEP:**\n"
+            "👉 Next step:\n"
             "Please click the button below to check seat availability, select your preferred seat, and send your passport photo to reserve!"
         )
 
@@ -1154,159 +1154,159 @@ def get_payment_detail_message(method: str, lang: str = "ru") -> str:
     if method == "vcb":
         if lang == "ru":
             return (
-                "💳 **ИНСТРУКЦИЯ ПО ОПЛАТЕ: VIETCOMBANK (VCB)**\n"
+                "💳 Инструкция по оплате: Vietcombank (VCB)\n"
                 "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                "🏦 **Банк:** Joint Stock Commercial Bank for Foreign Trade of Viet Nam (Vietcombank)\n"
-                "👤 **Получатель (Beneficiary):** EASY TRIP & VISA CO. LTD\n"
-                "🔢 **Номер счета (Account Number):** `1068582577`\n"
-                "🌐 **SWIFT-код:** `BFTVVNVX`\n"
-                "📝 **Назначение перевода:** `[Имя Фамилия] [Год рождения]`\n"
+                "🏦 Банк: Joint Stock Commercial Bank for Foreign Trade of Viet Nam (Vietcombank)\n"
+                "👤 Получатель: EASY TRIP & VISA CO. LTD\n"
+                "🔢 Номер счета: `1068582577`\n"
+                "🌐 SWIFT-код: `BFTVVNVX`\n"
+                "📝 Назначение перевода: `[Имя Фамилия] [Год рождения]`\n"
                 "*(Пример: IVANOV 1997)*\n\n"
-                "📲 **Официальный QR-код и банковские реквизиты:**\n"
-                "🏢 **Оплата наличными в офисе:**\n"
+                "📲 QR-код и реквизиты компании:\n"
+                "🏢 Оплата наличными в офисе:\n"
                 "📍 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
                 "🗺️ Карты: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
-                "📞 **Горячая линия поддержки:** +84 85 320 1277\n\n"
-                "📸 **После перевода, пожалуйста, отправьте чек / квитанцию в этот чат для подтверждения!**"
+                "📞 Горячая линия поддержки: +84 85 320 1277\n\n"
+                "📸 После перевода отправьте чек в этот чат для подтверждения!"
             )
         elif lang == "vi":
             return (
-                "💳 **HƯỚNG DẪN CHUYỂN KHOẢN: VIETCOMBANK (VCB)**\n"
+                "💳 Hướng dẫn chuyển khoản: Vietcombank (VCB)\n"
                 "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                "🏦 **Ngân hàng:** Ngân hàng TMCP Ngoại thương Việt Nam (Vietcombank)\n"
-                "👤 **Chủ tài khoản:** CONG TY TNHH EASY TRIP & VISA\n"
-                "🔢 **Số tài khoản:** `1068582577`\n"
-                "🌐 **Mã SWIFT:** `BFTVVNVX`\n"
-                "📝 **Cú pháp nội dung:** `[Họ tên khách] [năm sinh]`\n"
+                "🏦 Ngân hàng: Ngân hàng TMCP Ngoại thương Việt Nam (Vietcombank)\n"
+                "👤 Chủ tài khoản: CONG TY TNHH EASY TRIP & VISA\n"
+                "🔢 Số tài khoản: `1068582577`\n"
+                "🌐 Mã SWIFT: `BFTVVNVX`\n"
+                "📝 Cú pháp nội dung: `[Họ tên khách] [năm sinh]`\n"
                 "*(Ví dụ: IVANOV 1997)*\n\n"
-                "📲 **Mã QR & Hướng dẫn chính thức:**\n"
-                "🏢 **Thanh toán tiền mặt tại văn phòng:**\n"
+                "📲 Mã QR & Thông tin tài khoản:\n"
+                "🏢 Thanh toán tiền mặt tại văn phòng:\n"
                 "📍 Địa chỉ: 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
                 "🗺️ Bản đồ: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
-                "📞 **Hotline hỗ trợ:** +84 85 320 1277\n\n"
-                "📸 **Quý khách vui lòng gửi ảnh chụp biên lai chuyển khoản vào đây để chúng tôi xác nhận giữ chỗ!**"
+                "📞 Hotline hỗ trợ: +84 85 320 1277\n\n"
+                "📸 Quý khách vui lòng gửi ảnh chụp biên lai chuyển khoản vào đây để chúng tôi xác nhận giữ chỗ!"
             )
         else:
             return (
-                "💳 **PAYMENT INSTRUCTIONS: VIETCOMBANK (VCB)**\n"
+                "💳 Payment Instructions: Vietcombank (VCB)\n"
                 "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                "🏦 **Bank:** Joint Stock Commercial Bank for Foreign Trade of Viet Nam (Vietcombank)\n"
-                "👤 **Beneficiary:** EASY TRIP & VISA CO. LTD\n"
-                "🔢 **Account Number:** `1068582577`\n"
-                "🌐 **SWIFT Code:** `BFTVVNVX`\n"
-                "📝 **Transfer Memo:** `[Full Name] [Year of Birth]`\n"
+                "🏦 Bank: Joint Stock Commercial Bank for Foreign Trade of Viet Nam (Vietcombank)\n"
+                "👤 Beneficiary: EASY TRIP & VISA CO. LTD\n"
+                "🔢 Account Number: `1068582577`\n"
+                "🌐 SWIFT Code: `BFTVVNVX`\n"
+                "📝 Transfer Memo: `[Full Name] [Year of Birth]`\n"
                 "*(Example: IVANOV 1997)*\n\n"
-                "📲 **Official QR Code & Instructions:**\n"
-                "🏢 **Cash Payment at Office:**\n"
+                "📲 QR Code & Account Details:\n"
+                "🏢 Cash Payment at Office:\n"
                 "📍 Address: 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
                 "🗺️ Map: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
-                "📞 **Hotline Support:** +84 85 320 1277\n\n"
-                "📸 **Please send your payment screenshot / receipt in this chat after completing!**"
+                "📞 Hotline Support: +84 85 320 1277\n\n"
+                "📸 Please send your payment receipt in this chat after completing!"
             )
 
     elif method == "vrb":
         if lang == "ru":
             return (
-                "💳 **ИНСТРУКЦИЯ ПО ОПЛАТЕ: VRB (ВЬЕТНАМСКО-РОССИЙСКИЙ БАНК)**\n"
+                "💳 Инструкция по оплате: VRB (Вьетнамско-Российский банк)\n"
                 "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                "🏦 **Банк:** Вьетнамско-Российский Совместный Банк (Vietnam - Russia Joint Venture Bank - VRB)\n"
-                "📍 **Филиал:** Khánh Hòa (Нячанг)\n"
-                "👤 **Получатель (Beneficiary):** CONG TY TNHH EASY TRIP & VISA\n"
-                "🔢 **Номер счета:** `1068582577` (или межбанковский перевод Napas 24/7 на счет VRB)\n"
-                "📝 **Назначение перевода:** `[Имя Фамилия] [Год рождения]`\n"
+                "🏦 Банк: Вьетнамско-Российский Совместный Банк (Vietnam - Russia Joint Venture Bank - VRB)\n"
+                "📍 Филиал: Khánh Hòa (Нячанг)\n"
+                "👤 Получатель: CONG TY TNHH EASY TRIP & VISA\n"
+                "🔢 Номер счета: `1068582577` (или межбанковский перевод Napas 24/7 на счет VRB)\n"
+                "📝 Назначение перевода: `[Имя Фамилия] [Год рождения]`\n"
                 "*(Пример: IVANOV 1997)*\n\n"
-                "🌟 **Преимущества расчетов через VRB:**\n"
+                "🌟 Преимущества расчетов через VRB:\n"
                 "• Прямые взаиморасчеты Россия – Вьетнам (в RUB и VND)\n"
                 "• Удобно для переводов картами МИР и через банки-партнеры РФ\n"
                 "📲 **Официальный QR-код и реквизиты компании:**\n"
-                "🏢 **Оплата наличными в офисе:**\n"
+                "🏢 Оплата наличными в офисе:\n"
                 "📍 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
                 "🗺️ Карты: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
-                "📞 **Горячая линия поддержки:** +84 85 320 1277\n\n"
+                "📞 Горячая линия поддержки: +84 85 320 1277\n\n"
                 "📸 **После перевода, пожалуйста, отправьте чек / квитанцию в этот чат!**"
             )
         elif lang == "vi":
             return (
-                "💳 **HƯỚNG DẪN CHUYỂN KHOẢN: NGÂN HÀNG LIÊN DOANH VIỆT - NGA (VRB)**\n"
+                "💳 Hướng dẫn chuyển khoản: Ngân hàng Liên doanh Việt - Nga (VRB)\n"
                 "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                "🏦 **Ngân hàng:** Ngân hàng Liên doanh Việt - Nga (VRB)\n"
-                "📍 **Chi nhánh:** Khánh Hòa\n"
-                "👤 **Chủ tài khoản:** CONG TY TNHH EASY TRIP & VISA\n"
-                "🔢 **Số tài khoản:** `1068582577` (hoặc chuyển khoản liên ngân hàng Napas 24/7)\n"
-                "📝 **Cú pháp nội dung:** `[Họ tên khách] [năm sinh]`\n"
+                "🏦 Ngân hàng: Ngân hàng Liên doanh Việt - Nga (VRB)\n"
+                "📍 Chi nhánh: Khánh Hòa\n"
+                "👤 Chủ tài khoản: CONG TY TNHH EASY TRIP & VISA\n"
+                "🔢 Số tài khoản: `1068582577` (hoặc chuyển khoản liên ngân hàng Napas 24/7)\n"
+                "📝 Cú pháp nội dung: `[Họ tên khách] [năm sinh]`\n"
                 "*(Ví dụ: IVANOV 1997)*\n\n"
-                "🌟 **Đặc điểm nổi bật của VRB:**\n"
+                "🌟 Đặc điểm nổi bật của VRB:\n"
                 "• Cổng thanh toán song phương trực tiếp Việt Nam – LB Nga (đồng VND & RUB)\n"
                 "• Thuận tiện cho kiều bào, du khách Nga sử dụng thẻ MIR và ngân hàng Nga\n"
-                "📲 **Mã QR & Hướng dẫn chính thức:**\n"
-                "🏢 **Thanh toán tiền mặt tại văn phòng:**\n"
+                "📲 Mã QR & Thông tin tài khoản:\n"
+                "🏢 Thanh toán tiền mặt tại văn phòng:\n"
                 "📍 Địa chỉ: 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
                 "🗺️ Bản đồ: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
-                "📞 **Hotline hỗ trợ:** +84 85 320 1277\n\n"
+                "📞 Hotline hỗ trợ: +84 85 320 1277\n\n"
                 "📸 **Quý khách vui lòng gửi ảnh biên lai chuyển khoản vào đây để chúng tôi xác nhận giữ chỗ!**"
             )
         else:
             return (
-                "💳 **PAYMENT INSTRUCTIONS: VRB (VIETNAM - RUSSIA JOINT VENTURE BANK)**\n"
+                "💳 Payment Instructions: VRB Bank\n"
                 "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                "🏦 **Bank:** Vietnam - Russia Joint Venture Bank (VRB)\n"
-                "📍 **Branch:** Khanh Hoa\n"
-                "👤 **Beneficiary:** CONG TY TNHH EASY TRIP & VISA\n"
-                "🔢 **Account Number:** `1068582577`\n"
-                "📝 **Transfer Memo:** `[Full Name] [Year of Birth]`\n"
+                "🏦 Bank: Vietnam - Russia Joint Venture Bank (VRB)\n"
+                "📍 Branch: Khanh Hoa\n"
+                "👤 Beneficiary: CONG TY TNHH EASY TRIP & VISA\n"
+                "🔢 Account Number: `1068582577`\n"
+                "📝 Transfer Memo: `[Full Name] [Year of Birth]`\n"
                 "*(Example: IVANOV 1997)*\n\n"
-                "🌟 **VRB Highlights:**\n"
+                "🌟 VRB Highlights:\n"
                 "• Direct bilateral payment gateway between Vietnam & Russia (RUB & VND)\n"
                 "• Convenient for Russian payment systems and MIR transactions\n"
-                "📲 **Official QR Code & Instructions:**\n"
-                "🏢 **Cash Payment at Office:**\n"
+                "📲 QR Code & Account Details:\n"
+                "🏢 Cash Payment at Office:\n"
                 "📍 Address: 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
                 "🗺️ Map: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
-                "📞 **Hotline Support:** +84 85 320 1277\n\n"
-                "📸 **Please send your payment screenshot / receipt in this chat after completing!**"
+                "📞 Hotline Support: +84 85 320 1277\n\n"
+                "📸 Please send your payment receipt in this chat after completing!"
             )
 
     else:  # 3. Tiền mặt tại văn phòng ở Nha Trang (step|pay|cash)
         if lang == "ru":
             return (
-                "🏢 **ОПЛАТА НАЛИЧНЫМИ В ОФИСЕ (НЯЧАНГ)**\n"
+                "🏢 Оплата наличными в офисе (Нячанг)\n"
                 "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                "📍 **Адрес:** 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
-                "⏰ **Время работы:** 08:30 – 17:30 (Понедельник – Суббота)\n"
-                "🗺️ **Карты Google Maps:** https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
-                "📞 **Горячая линия поддержки:** +84 85 320 1277\n\n"
+                "📍 Адрес: 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
+                "⏰ Время работы: 08:30 – 17:30 (Понедельник – Суббота)\n"
+                "🗺️ Карты Google Maps: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
+                "📞 Горячая линия поддержки: +84 85 320 1277\n\n"
                 "💡 Вы можете подойти в наш офис для оплаты наличными (VND / USD) и личной консультации с нашими сотрудниками!"
             )
         elif lang == "vi":
             return (
-                "🏢 **THANH TOÁN TIỀN MẶT TẠI VĂN PHÒNG (NHA TRANG)**\n"
+                "🏢 Thanh toán tiền mặt tại văn phòng (Nha Trang)\n"
                 "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                "📍 **Địa chỉ:** 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
-                "⏰ **Thời gian làm việc:** 08:30 – 17:30 (Thứ 2 đến Thứ 7)\n"
-                "🗺️ **Bản đồ Google Maps:** https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
-                "📞 **Hotline hỗ trợ:** +84 85 320 1277\n\n"
+                "📍 Địa chỉ: 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
+                "⏰ Thời gian làm việc: 08:30 – 17:30 (Thứ 2 đến Thứ 7)\n"
+                "🗺️ Bản đồ Google Maps: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
+                "📞 Hotline hỗ trợ: +84 85 320 1277\n\n"
                 "💡 Quý khách có thể đến trực tiếp văn phòng để đóng tiền mặt và nhận hướng dẫn chi tiết từ chuyên viên phụ trách!"
             )
         else:
             return (
-                "🏢 **CASH PAYMENT AT NHA TRANG OFFICE**\n"
+                "🏢 Cash Payment at Nha Trang Office\n"
                 "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-                "📍 **Address:** 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
-                "⏰ **Working Hours:** 08:30 AM – 05:30 PM (Monday – Saturday)\n"
-                "🗺️ **Google Maps:** https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
-                "📞 **Hotline Support:** +84 85 320 1277\n\n"
+                "📍 Address: 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
+                "⏰ Working Hours: 08:30 AM – 05:30 PM (Monday – Saturday)\n"
+                "🗺️ Google Maps: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
+                "📞 Hotline Support: +84 85 320 1277\n\n"
                 "💡 You are welcome to visit our office in person to pay in cash (VND / USD) and meet our specialists!"
             )
 
 def get_payment_instruction_text(lang: str = "ru") -> str:
     if lang == "ru":
         return (
-            "💳 **ОФИЦИАЛЬНЫЕ СПОСОБЫ ОПЛАТЫ (EASY TRIP & VISA)**\n"
-            "🏦 **1. Vietcombank (VCB):** `1068582577` (EASY TRIP & VISA CO. LTD)\n"
+            "💳 Способы оплаты (Easy Trip & Visa):\n"
+            "🏦 1. Vietcombank (VCB): `1068582577` (EASY TRIP & VISA CO. LTD)\n"
             "   📝 Назначение: `[Имя Фамилия] [Год рождения]` (Пример: IVANOV 1997)\n"
-            "🏦 **2. VRB Bank (Вьетнамско-Российский банк):** `1068582577`\n"
+            "🏦 2. VRB Bank: `1068582577`\n"
             "   📝 Назначение: `[Имя Фамилия] [Год рождения]` (Пример: IVANOV 1997)\n"
-            "🏢 **3. Оплата наличными в офисе:**\n"
+            "🏢 3. Наличными в офисе:\n"
             "   📍 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
             "   🗺️ Карты: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
             "   📞 Горячая линия: +84 85 320 1277\n\n"
@@ -1314,12 +1314,12 @@ def get_payment_instruction_text(lang: str = "ru") -> str:
         )
     elif lang == "vi":
         return (
-            "💳 **THÔNG TIN THANH TOÁN CHÍNH THỨC (EASY TRIP & VISA)**\n"
-            "🏦 **1. Vietcombank (VCB):** `1068582577` (CONG TY TNHH EASY TRIP & VISA)\n"
+            "💳 Thông tin thanh toán (Easy Trip & Visa):\n"
+            "🏦 1. Vietcombank (VCB): `1068582577` (CONG TY TNHH EASY TRIP & VISA)\n"
             "   📝 Cú pháp nội dung: `[Họ tên khách] [năm sinh]` (Ví dụ: IVANOV 1997)\n"
-            "🏦 **2. Ngân hàng Liên doanh Việt - Nga (VRB):** `1068582577`\n"
+            "🏦 2. Ngân hàng Việt - Nga (VRB): `1068582577`\n"
             "   📝 Cú pháp nội dung: `[Họ tên khách] [năm sinh]` (Ví dụ: IVANOV 1997)\n"
-            "🏢 **3. Thanh toán tiền mặt tại văn phòng:**\n"
+            "🏢 3. Tiền mặt tại văn phòng:\n"
             "   📍 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
             "   🗺️ Bản đồ: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
             "   📞 Hotline hỗ trợ: +84 85 320 1277\n\n"
@@ -1327,12 +1327,12 @@ def get_payment_instruction_text(lang: str = "ru") -> str:
         )
     else:
         return (
-            "💳 **OFFICIAL PAYMENT DETAILS (EASY TRIP & VISA)**\n"
-            "🏦 **1. Vietcombank (VCB):** `1068582577` (EASY TRIP & VISA CO. LTD)\n"
+            "💳 Payment Details (Easy Trip & Visa):\n"
+            "🏦 1. Vietcombank (VCB): `1068582577` (EASY TRIP & VISA CO. LTD)\n"
             "   📝 Memo: `[Full Name] [Year of Birth]` (Example: IVANOV 1997)\n"
-            "🏦 **2. VRB Bank (Vietnam - Russia Bank):** `1068582577`\n"
+            "🏦 2. VRB Bank: `1068582577`\n"
             "   📝 Memo: `[Full Name] [Year of Birth]` (Example: IVANOV 1997)\n"
-            "🏢 **3. Cash at Office:**\n"
+            "🏢 3. Cash at Office:\n"
             "   📍 21 Phan Vinh, Phường Nha Trang, TP. Nha Trang, Khánh Hòa\n"
             "   🗺️ Map: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9\n"
             "   📞 Hotline: +84 85 320 1277\n\n"
@@ -1349,43 +1349,43 @@ def generate_booking_final_message(data: Any, lang: str = "ru") -> str:
     
     if lang == "ru":
         return (
-            "🎉 **БРОНИРОВАНИЕ ПОДТВЕРЖДЕНО! (EASY TRIP & VISA)**\n"
+            "🎉 Бронирование подтверждено! (Easy Trip & Visa)\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-            f"👤 **Пассажир:** {ho_ten}\n"
-            f"🛂 **Гражданство:** {quoc_tich}\n"
-            f"🚌 **Маршрут:** {loai_visa}\n"
-            f"📅 **Дата выезда:** {ngay_kh}\n"
-            "⏰ **Время посадки:** 21:00 (Выезд: 21:15 – 21:30)\n"
-            f"📍 **Точка сбора:** {diem_don}\n"
-            f"💺 **Место в автобусе:** {ghe_chon}\n"
-            "💰 **Статус оплаты:** ОПЛАЧЕНО ✅\n\n"
-            "ℹ️ **Номер автобуса и контакт водителя будут отправлены вам за 2 часа до отправления.**\n"
+            f"👤 Пассажир: {ho_ten}\n"
+            f"🛂 Гражданство: {quoc_tich}\n"
+            f"🚌 Маршрут: {loai_visa}\n"
+            f"📅 Дата выезда: {ngay_kh}\n"
+            "⏰ Время посадки: 21:00 (Выезд: 21:15 – 21:30)\n"
+            f"📍 Точка сбора: {diem_don}\n"
+            f"💺 Место в автобусе: {ghe_chon}\n"
+            "💰 Статус оплаты: ОПЛАЧЕНО ✅\n\n"
+            "ℹ️ Номер автобуса и контакт водителя будут отправлены вам за 2 часа до отправления.\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-            "📋 **ПРАВИЛА ОТМЕНЫ И ВОЗВРАТА СРЕДСТВ:**\n"
-            "1. **Билеты на автобус:** Отмена или перенос даты ДО 14:00 в день поездки — 100% возврат или бесплатный перенос. Отмена ПОСЛЕ 14:00 или неявка (No-show) — возврат не производится.\n"
-            "2. **Оформление визы (E-Visa):** После подачи документов на официальный портал Иммиграционной службы и оплаты госпошлины — сбор возврату НЕ ПОДЛЕЖИТ. В случае технической ошибки с нашей стороны — 100% возврат.\n"
-            "3. **Правила безопасности:** Курение (включая вейп), провоз алкоголя и запрещенных веществ строго запрещены. Нарушители высаживаются без компенсации.\n\n"
+            "📋 Правила отмены и возврата средств:\n"
+            "1. Билеты на автобус: Отмена или перенос даты ДО 14:00 в день поездки — 100% возврат или бесплатный перенос. Отмена ПОСЛЕ 14:00 или неявка (No-show) — возврат не производится.\n"
+            "2. Оформление визы (E-Visa): После подачи документов на официальный портал Иммиграционной службы и оплаты госпошлины — сбор возврату НЕ ПОДЛЕЖИТ. В случае технической ошибки с нашей стороны — 100% возврат.\n"
+            "3. Правила безопасности: Курение (включая вейп), провоз алкоголя и запрещенных веществ строго запрещены. Нарушители высаживаются без компенсации.\n\n"
             "📞 Горячая линия поддержки 24/7: +84 85 320 1277\n"
             "Желаем вам приятного и легкого путешествия! 🚌✨"
         )
     elif lang == "vi":
         return (
-            "🎉 **XÁC NHẬN ĐẶT CHỖ THÀNH CÔNG! (EASY TRIP & VISA)**\n"
+            "🎉 Xác nhận đặt chỗ thành công! (Easy Trip & Visa)\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-            f"👤 **Hành khách:** {ho_ten}\n"
-            f"🛂 **Quốc tịch:** {quoc_tich}\n"
-            f"🚌 **Tuyến đi:** {loai_visa}\n"
-            f"📅 **Ngày khởi hành:** {ngay_kh}\n"
-            "⏰ **Giờ tập trung:** 21:00 (Khởi hành: 21:15 – 21:30)\n"
-            f"📍 **Điểm đón:** {diem_don}\n"
-            f"💺 **Số ghế:** {ghe_chon}\n"
-            "💰 **Thanh toán:** ĐÃ HOÀN TẤT ✅\n\n"
-            "ℹ️ **Biển số xe buýt và số điện thoại tài xế sẽ được gửi đến quý khách trước giờ khởi hành 2 tiếng.**\n"
+            f"👤 Hành khách: {ho_ten}\n"
+            f"🛂 Quốc tịch: {quoc_tich}\n"
+            f"🚌 Tuyến đi: {loai_visa}\n"
+            f"📅 Ngày khởi hành: {ngay_kh}\n"
+            "⏰ Giờ tập trung: 21:00 (Khởi hành: 21:15 – 21:30)\n"
+            f"📍 Điểm đón: {diem_don}\n"
+            f"💺 Số ghế: {ghe_chon}\n"
+            "💰 Thanh toán: ĐÃ HOÀN TẤT ✅\n\n"
+            "ℹ️ Biển số xe buýt và số điện thoại tài xế sẽ được gửi đến quý khách trước giờ khởi hành 2 tiếng.\n"
             "━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-            "📋 **CHÍNH SÁCH HUỶ VÉ & HOÀN TIỀN:**\n"
-            "1. **Vé xe buýt:** Hủy hoặc đổi lịch TRƯỚC 14:00 ngày khởi hành — hoàn 100% hoặc đổi ngày miễn phí. Hủy SAU 14:00 hoặc không có mặt (No-show) — không hoàn tiền vé xe.\n"
-            "2. **Dịch vụ Visa / E-Visa:** Một khi hồ sơ đã nộp lên Cổng Dịch vụ công Xuất Nhập Cảnh và đóng phí — phí visa không được hoàn lại. Lỗi tính toán từ phía công ty — hoàn tiền 100%.\n"
-            "3. **An toàn trên xe:** Nghiêm cấm hút thuốc/vape, mang chất cấm hoặc gây rối. Vi phạm sẽ bị mời xuống xe tại điểm an toàn gần nhất và không hoàn tiền.\n\n"
+            "📋 Chính sách hủy vé & hoàn tiền:\n"
+            "1. Vé xe buýt: Hủy hoặc đổi lịch TRƯỚC 14:00 ngày khởi hành — hoàn 100% hoặc đổi ngày miễn phí. Hủy SAU 14:00 hoặc không có mặt (No-show) — không hoàn tiền vé xe.\n"
+            "2. Dịch vụ Visa / E-Visa: Một khi hồ sơ đã nộp lên Cổng Dịch vụ công Xuất Nhập Cảnh và đóng phí — phí visa không được hoàn lại. Lỗi tính toán từ phía công ty — hoàn tiền 100%.\n"
+            "3. An toàn trên xe: Nghiêm cấm hút thuốc/vape, mang chất cấm hoặc gây rối. Vi phạm sẽ bị mời xuống xe tại điểm an toàn gần nhất và không hoàn tiền.\n\n"
             "📞 Hotline hỗ trợ 24/7: +84 85 320 1277\n"
             "Chúc quý khách có một chuyến đi an toàn và thuận lợi! 🚌✨"
         )
@@ -1652,15 +1652,15 @@ def generate_evisa_consultation_message(info: dict, lang: str = "ru") -> str:
 
     if lang == "ru":
         return (
-            f"⚡ **РАСЧЕТ И ПЛАН ОФОРМЛЕНИЯ СРОЧНОЙ E-VISA**\n"
+            f"⚡ Расчет и план оформления срочной E-Visa\n"
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-            f"📦 **Рекомендуемый тариф:** {pkg_name}\n"
-            f"💰 **Стоимость оформления:** {price}\n\n"
+            f"📦 Рекомендуемый тариф: {pkg_name}\n"
+            f"💰 Стоимость оформления: {price}\n\n"
             f"📊 **НАУЧНЫЙ ГРАФИК ОБРАБОТКИ:**\n"
-            f"• 🕒 **Время подачи документов:** {sub_t}\n"
-            f"• 🕒 **Время выдачи готовой визы:** {del_t}\n"
+            f"• 🕒 Время подачи документов: {sub_t}\n"
+            f"• 🕒 Время выдачи готовой визы: {del_t}\n"
             f"• {buf_n}\n"
-            f"• 📅 **Дата активации визы:** {act_d}\n"
+            f"• 📅 Дата активации визы: {act_d}\n"
             f"• {val_n}\n"
             f"• 🚫 **Правило выходных:** Суббота и Воскресенье не входят в расчет Иммиграционной службы.\n\n"
             f"📋 **ДОКУМЕНТЫ ДЛЯ СТАРТА ОФОРМЛЕНИЯ:**\n"
@@ -1672,18 +1672,18 @@ def generate_evisa_consultation_message(info: dict, lang: str = "ru") -> str:
         )
     elif lang == "vi":
         return (
-            f"⚡ **BẢNG TÍNH TOÁN & KẾ HOẠCH CẤP E-VISA KHẨN CẤP**\n"
+            f"⚡ Bảng tính toán & kế hoạch cấp E-visa khẩn cấp\n"
             f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
-            f"📦 **Gói dịch vụ đề xuất:** {pkg_name}\n"
-            f"💰 **Chi phí trọn gói:** {price}\n\n"
-            f"📊 **LỘ TRÌNH XỬ LÝ KHOA HỌC:**\n"
-            f"• 🕒 **Thời điểm nộp hồ sơ:** {sub_t}\n"
-            f"• 🕒 **Thời điểm trả E-visa:** {del_t}\n"
+            f"📦 Gói dịch vụ đề xuất: {pkg_name}\n"
+            f"💰 Chi phí trọn gói: {price}\n\n"
+            f"📊 Lộ trình xử lý an toàn:\n"
+            f"• 🕒 Thời điểm nộp hồ sơ: {sub_t}\n"
+            f"• 🕒 Thời điểm trả E-visa: {del_t}\n"
             f"• {buf_n}\n"
-            f"• 📅 **Ngày kích hoạt E-visa:** {act_d}\n"
+            f"• 📅 Ngày kích hoạt E-visa: {act_d}\n"
             f"• {val_n}\n"
-            f"• 🚫 **Bộ đếm thời gian:** Không tính Thứ 7 & Chủ Nhật theo quy định Xuất nhập cảnh.\n\n"
-            f"📋 **HỒ SƠ CẦN GỬI ĐỂ TIẾN HÀNH:**\n"
+            f"• 🚫 Bộ đếm thời gian: Không tính Thứ 7 & Chủ Nhật theo quy định Xuất nhập cảnh.\n\n"
+            f"📋 Hồ sơ cần gửi để tiến hành:\n"
             f"1️⃣ Ảnh chụp trang Hộ chiếu (rõ nét, đủ 4 góc)\n"
             f"2️⃣ 01 Ảnh thẻ 4x6 chân dung (nền trắng, chụp thẳng rõ mặt)\n"
             f"3️⃣ Cửa khẩu nhập cảnh (Sân bay hoặc đường bộ)\n"
@@ -1749,9 +1749,9 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         # 1. Menu chính E-visa
         if action == "main":
             intro_msg = {
-                "ru": "⚡ **СИСТЕМА РАСЧЕТА СРОЧНОЙ E-VISA:**\nПожалуйста, выберите ваш статус перелета:",
-                "vi": "⚡ **TÍNH TOÁN GÓI E-VISA KHẨN CẤP:**\nVui lòng chọn tình trạng chuyến bay của bạn:",
-                "en": "⚡ **SMART E-VISA SCHEDULE CALCULATOR:**\nPlease select your flight status:"
+                "ru": "⚡ Система расчета срочной E-Visa:\nПожалуйста, выберите ваш статус перелета:",
+                "vi": "⚡ Tính toán gói E-visa khẩn cấp:\nVui lòng chọn tình trạng chuyến bay của bạn:",
+                "en": "⚡ Smart E-Visa Schedule Calculator:\nPlease select your flight status:"
             }
             await send_step_reply(update, context, intro_msg.get(lang, intro_msg["en"]), reply_markup=get_evisa_main_keyboard(lang), parse_mode="Markdown")
             return
@@ -1760,15 +1760,15 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         elif action == "has_flight":
             stay_msg = {
                 "ru": (
-                    "✈️ **СКОЛЬКО НОЧЕЙ ВЫ ПРОВЕДЕТЕ ЗА ГРАНИЦЕЙ ДО ВОЗВРАЩЕНИЯ ВО ВЬЕТНАМ?**\n\n"
+                    "✈️ Сколько ночей вы проведете за границей до возвращения во Вьетнам?\n\n"
                     "*(Время пребывания определяет безопасный тариф, чтобы виза была выдана ДО вашей посадки на рейс)*:"
                 ),
                 "vi": (
-                    "✈️ **BẠN DỰ KIẾN LƯU TRÚ Ở NƯỚC NGOÀI BAO LÂU TRƯỚC KHI BAY VỀ VIỆT NAM?**\n\n"
+                    "✈️ Bạn dự kiến lưu trú ở nước ngoài bao lâu trước khi bay về Việt Nam?\n\n"
                     "*(Thời gian ở nước ngoài quyết định gói E-visa an toàn nhất để visa được cấp TRƯỚC giờ bạn lên máy bay về lại VN)*:"
                 ),
                 "en": (
-                    "✈️ **HOW MANY NIGHTS WILL YOU STAY ABROAD BEFORE FLYING BACK TO VIETNAM?**\n\n"
+                    "✈️ How many nights will you stay abroad before flying back to Vietnam?\n\n"
                     "*(Your stay duration determines the safest package so your visa is issued BEFORE your return flight check-in)*:"
                 )
             }
@@ -1778,9 +1778,9 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         # 3. Khách chưa có vé / đang ở nước ngoài -> Mở lịch chọn ngày
         elif action == "no_flight":
             cal_msg = {
-                "ru": "📅 **ВЫБЕРИТЕ ЖЕЛАЕМУЮ ДАТУ ПОЛУЧЕНИЯ ВИЗЫ / ВЪЕЗДА ВО ВЬЕТНАМ В КАЛЕНДАРЕ:**\n*(Умный счетчик автоматически исключит субботу и воскресенье)*:",
-                "vi": "📅 **CHỌN NGÀY BẠN MONG MUỐN NHẬN E-VISA / DỰ KIẾN BAY VÀO VIỆT NAM TRÊN LỊCH:**\n*(Bộ đếm thông minh sẽ tự động trừ Thứ 7 và Chủ Nhật)*:",
-                "en": "📅 **SELECT YOUR DESIRED VISA DELIVERY / ENTRY DATE ON THE CALENDAR:**\n*(The smart counter automatically excludes Saturdays & Sundays)*:"
+                "ru": "📅 Выберите дату получения визы / въезда во Вьетнам в календаре:\n*(Умный счетчик автоматически исключит субботу и воскресенье)*:",
+                "vi": "📅 Chọn ngày bạn muốn nhận E-visa / dự kiến bay vào Việt Nam trên lịch:\n*(Bộ đếm thông minh sẽ tự động trừ Thứ 7 và Chủ Nhật)*:",
+                "en": "📅 Select your desired visa delivery / entry date on the calendar:\n*(The smart counter automatically excludes Saturdays & Sundays)*:"
             }
             now = datetime.now()
             await send_step_reply(update, context, cal_msg.get(lang, cal_msg["en"]), reply_markup=get_calendar_keyboard(now.year, now.month, lang, prefix="step|evisa_date"))
@@ -1844,10 +1844,10 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         if val == "other":
             memory_store[f"{session_id}_waiting_country"] = True
             prompt = (
-                "🌐 **Пожалуйста, напишите название вашей страны** в чате.\n"
+                "🌐 Пожалуйста, напишите название вашей страны в чате.\n"
                 "Наш бот и менеджер мгновенно подберут для вас оптимальный визовый маршрут!\n\n"
-                "🌐 **Please type your country name** in the chat.\n"
-                "🌐 **Vui lòng nhập tên quốc gia của bạn** vào khung chat:"
+                "🌐 Please type your country name in the chat.\n"
+                "🌐 Vui lòng nhập tên quốc gia của bạn vào khung chat:"
             )
             await send_step_reply(update, context, prompt, parse_mode="Markdown")
             return
@@ -1869,18 +1869,18 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
             now = datetime.now()
             c_name_disp = CITY_OPTIONS[cust_data.thanh_pho].get(f"name_{lang}", cust_data.thanh_pho.upper())
             cal_prompts = {
-                "ru": f"✅ Гражданство: **{cname}**\n📍 Город отправления: **{c_name_disp}**\n\n📅 **Выберите дату выезда в календаре**:",
-                "en": f"✅ Nationality: **{cname}**\n📍 Departure City: **{c_name_disp}**\n\n📅 **Please pick a departure date on the calendar**:",
-                "vi": f"✅ Quốc tịch: **{cname}**\n📍 Thành phố xuất phát: **{c_name_disp}**\n\n📅 **Vui lòng chọn ngày khởi hành trên lịch**:"
+                "ru": f"✅ Гражданство: {cname}\n📍 Город отправления: {c_name_disp}\n\n📅 Выберите дату выезда в календаре:",
+                "en": f"✅ Nationality: {cname}\n📍 Departure City: {c_name_disp}\n\n📅 Please pick a departure date on the calendar:",
+                "vi": f"✅ Quốc tịch: {cname}\n📍 Thành phố xuất phát: {c_name_disp}\n\n📅 Vui lòng chọn ngày khởi hành trên lịch:"
             }
             keyboard = get_calendar_keyboard(now.year, now.month, lang)
             await send_step_reply(update, context, cal_prompts.get(lang, cal_prompts["en"]), reply_markup=keyboard)
             return
 
         city_prompts = {
-            "ru": f"✅ Гражданство: **{cname}**\n\n📍 **В каком городе Вьетнама вы сейчас находитесь?**\n(Или выберите 'За рубежом', если только планируете въезд):",
-            "en": f"✅ Nationality: **{cname}**\n\n📍 **Which city in Vietnam are you currently staying in?**\n(Or select 'Currently Abroad' if you are planning to enter):",
-            "vi": f"✅ Quốc gia: **{cname}**\n\n📍 **Bạn hiện đang ở thành phố nào tại Việt Nam?**\n(Hoặc chọn 'Đang ở nước ngoài' nếu sắp bay vào VN):",
+            "ru": f"✅ Гражданство: {cname}\n\n📍 В каком городе Вьетнама вы сейчас находитесь?\n(Или выберите 'За рубежом', если только планируете въезд):",
+            "en": f"✅ Nationality: {cname}\n\n📍 Which city in Vietnam are you currently staying in?\n(Or select 'Currently Abroad' if you are planning to enter):",
+            "vi": f"✅ Quốc gia: {cname}\n\n📍 Bạn hiện đang ở thành phố nào tại Việt Nam?\n(Hoặc chọn 'Đang ở nước ngoài' nếu sắp bay vào VN):",
             "ko": f"✅ 국적: **{cname}**\n\n📍 **현재 베트남 어느 도시에 머물고 계신가요?**:"
         }
         keyboard = get_city_keyboard(lang)
@@ -1895,9 +1895,9 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         if city_key == "other":
             memory_store[f"{session_id}_waiting_other_city"] = True
             msg = {
-                "ru": "📍 **Пожалуйста, напишите ваш город или текущий адрес** в чате.\nНаш бот и команда подберут для вас ближайший пункт отправления и оптимальный трансфер!",
-                "en": "📍 **Please type your city or address** in the chat.\nWe will calculate and suggest the nearest bus pickup location for you!",
-                "vi": "📍 **Vui lòng nhập tên thành phố hoặc vị trí hiện tại của bạn** vào khung chat.\nChúng tôi sẽ tính toán tuyến xe buýt hoặc phương án đón gần bạn nhất!"
+                "ru": "📍 Пожалуйста, напишите ваш город или текущий адрес в чате.\nНаш бот и команда подберут для вас ближайший пункт отправления и оптимальный трансфер!",
+                "en": "📍 Please type your city or address in the chat.\nWe will calculate and suggest the nearest bus pickup location for you!",
+                "vi": "📍 Vui lòng nhập tên thành phố hoặc vị trí của bạn vào khung chat.\nChúng tôi sẽ tính toán tuyến xe buýt hoặc phương án đón gần bạn nhất!"
             }
             await send_step_reply(update, context, msg.get(lang, msg["en"]), parse_mode="Markdown")
             return
@@ -1909,9 +1909,9 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         # Nếu khách đang ở nước ngoài -> Chuyển sang tư vấn dịch vụ nhập cảnh
         if city_key == "abroad":
             svc_prompts = {
-                "ru": "✈️ **УСЛУГИ ДЛЯ ВЪЕЗДА ВО ВЬЕТНАМ (EASY TRIP & VISA):**\n(Выберите необходимый сервис):",
-                "en": "✈️ **SERVICES FOR ENTERING VIETNAM (EASY TRIP & VISA):**\n(Please select a service):",
-                "vi": "✈️ **DỊCH VỤ NHẬP CẢNH VIỆT NAM (EASY TRIP & VISA):**\n(Vui lòng chọn dịch vụ bạn cần):"
+                "ru": "✈️ Услуги для въезда во Вьетнам (Easy Trip & Visa):\n(Выберите необходимый сервис):",
+                "en": "✈️ Services for Entering Vietnam (Easy Trip & Visa):\n(Please select a service):",
+                "vi": "✈️ Dịch vụ nhập cảnh Việt Nam (Easy Trip & Visa):\n(Vui lòng chọn dịch vụ bạn cần):"
             }
             kb = get_smart_advisory_keyboard("abroad", cust_data.quoc_tich or "", lang)
             await send_step_reply(update, context, svc_prompts.get(lang, svc_prompts["en"]), reply_markup=kb, parse_mode="Markdown")
@@ -1920,9 +1920,9 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         # Ở trong nước -> Mở Lịch tháng tương tác chuẩn quốc tế
         now = datetime.now()
         cal_prompts = {
-            "ru": f"✅ Вы выбрали: **{cname}**\n\n📅 **Выберите дату в календаре** (когда заканчивается ваша текущая виза или желаемая дата выезда):",
-            "en": f"✅ Selected: **{cname}**\n\n📅 **Please pick a date on the calendar** (your visa expiry date or desired departure date):",
-            "vi": f"✅ Điểm khởi hành: **{cname}**\n\n📅 **Vui lòng chọn ngày trên lịch** (ngày hết hạn visa hoặc ngày bạn muốn đi):"
+            "ru": f"✅ Вы выбрали: {cname}\n\n📅 Выберите дату в календаре (когда заканчивается текущая виза hoặc ngày muốn đi):",
+            "en": f"✅ Selected: {cname}\n\n📅 Please pick a date on the calendar (your visa expiry date or desired departure date):",
+            "vi": f"✅ Điểm khởi hành: {cname}\n\n📅 Vui lòng chọn ngày trên lịch (ngày hết hạn visa hoặc ngày bạn muốn đi):"
         }
         keyboard = get_calendar_keyboard(now.year, now.month, lang)
         await send_step_reply(update, context, cal_prompts.get(lang, cal_prompts["en"]), reply_markup=keyboard, parse_mode="Markdown")
@@ -1954,25 +1954,25 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         
         advisory_header = {
             "ru": (
-                f"📊 **РЕЗУЛЬТАТ АНАЛИЗА ДАННЫХ ДЛЯ ВИЗАРАНА:**\n"
-                f"• Гражданство: **{cname}** ({'Безвизовый въезд 45 дней ✅' if exempt else 'Требуется E-Visa 90 дней 📑'})\n"
-                f"• Город отправления: **{city_key.upper()}**\n"
-                f"• Дата выезда / окончания визы: **{date_val}**\n\n"
-                "👉 **РЕКОМЕНДОВАННЫЕ ВАРИАНТЫ УСЛУГ (Выберите подходящий пакет):**"
+                f"📊 Результат анализа данных для визарана:\n"
+                f"• Гражданство: {cname} ({'Безвизовый въезд 45 дней ✅' if exempt else 'Требуется E-Visa 90 дней 📑'})\n"
+                f"• Город отправления: {city_key.upper()}\n"
+                f"• Дата выезда: {date_val}\n\n"
+                "👉 Рекомендованные варианты услуг (выберите подходящий пакет):"
             ),
             "en": (
-                f"📊 **VISA RUN ADVISORY SUMMARY:**\n"
-                f"• Nationality: **{cname}** ({'45-Day Visa-Free Eligible ✅' if exempt else '90-Day E-Visa Required 📑'})\n"
-                f"• Departure City: **{city_key.upper()}**\n"
-                f"• Expiry / Departure Date: **{date_val}**\n\n"
-                "👉 **RECOMMENDED PACKAGES (Please choose an option):**"
+                f"📊 Visa Run Advisory Summary:\n"
+                f"• Nationality: {cname} ({'45-Day Visa-Free Eligible ✅' if exempt else '90-Day E-Visa Required 📑'})\n"
+                f"• Departure City: {city_key.upper()}\n"
+                f"• Expiry / Departure Date: {date_val}\n\n"
+                "👉 Recommended packages (please choose an option):"
             ),
             "vi": (
-                f"📊 **KẾT QUẢ PHÂN TÍCH TƯ VẤN VISARUN:**\n"
-                f"• Quốc tịch: **{cname}** ({'Được Miễn thị thực 45 ngày ✅' if exempt else 'Cần đăng ký E-Visa 90 ngày 📑'})\n"
-                f"• Thành phố xuất phát: **{city_key.upper()}**\n"
+                f"📊 Kết quả phân tích tư vấn Visarun:\n"
+                f"• Quốc tịch: {cname} ({'Được Miễn thị thực 45 ngày ✅' if exempt else 'Cần đăng ký E-Visa 90 ngày 📑'})\n"
+                f"• Thành phố xuất phát: {city_key.upper()}\n"
                 f"• Ngày hết hạn / khởi hành: **{date_val}**\n\n"
-                "👉 **CÁC GÓI DỊCH VỤ PHÙ HỢP NHẤT (Vui lòng chọn gói):**"
+                "👉 Các gói dịch vụ phù hợp nhất (vui lòng chọn gói):"
             )
         }
         keyboard = get_smart_advisory_keyboard(city_key, cname, lang)
@@ -1990,17 +1990,17 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
             cust_data.loai_visa = "Urgent E-Visa"
             intro_msg = {
                 "ru": (
-                    "⚡ **СИСТЕМА РАСЧЕТА И ВЫБОРА ТАРИФА СРОЧНОЙ E-VISA**\n\n"
+                    "⚡ Система расчета и выбора тарифа срочной E-Visa\n\n"
                     "Для точного расчета безопасного графика оформления, исключения задержек на рейсах "
                     "и **сохранения полных 90 дней пребывания**, пожалуйста, выберите:"
                 ),
                 "vi": (
-                    "⚡ **HỆ THỐNG TƯ VẤN & TÍNH TOÁN GÓI E-VISA KHẨN CẤP THÔNG MINH**\n\n"
+                    "⚡ Hệ thống tư vấn & tính toán gói E-visa khẩn cấp thông minh\n\n"
                     "Để xác định gói E-visa an toàn, phòng ngừa rủi ro trễ chuyến "
                     "và **bảo toàn trọn vẹn đủ 90 ngày lưu trú tại Việt Nam**, vui lòng chọn:"
                 ),
                 "en": (
-                    "⚡ **SMART URGENT E-VISA CALCULATOR & PACKAGE SELECTION**\n\n"
+                    "⚡ Smart Urgent E-Visa Calculator\n\n"
                     "To determine the most accurate, risk-free schedule and **preserve your full 90-day stay**, please select:"
                 )
             }
@@ -2013,40 +2013,40 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
             cust_data.loai_visa = "Airport VIP Fast Track"
             fasttrack_msg = {
                 "ru": (
-                    "✈️ **AIRPORT VIP FAST TRACK (ВСТРЕЧА И ПРОХОД БЕЗ ОЧЕРЕДЕЙ)**\n\n"
-                    "💰 Стоимость: **1.200.000 VND / человек**\n"
+                    "✈️ Airport VIP Fast Track (встреча и проход без очередей)\n\n"
+                    "💰 Стоимость: 1.200.000 VND / человек\n"
                     "📍 Доступно в аэропортах: Cam Ranh (CXR), Tân Sơn Nhất (SGN), Nội Bài (HAN), Đà Nẵng (DAD)\n\n"
-                    "🌟 **Привилегии сервиса:**\n"
+                    "🌟 Привилегии сервиса:\n"
                     "• Персональный ассистент встречает вас у выхода из самолета с именной табличкой\n"
                     "• Проход паспортного контроля через дипломатический коридор (без ожидания в общей очереди)\n"
                     "• Помощь с получением багажа и сопровождение до выхода\n\n"
-                    "📋 **Для бронирования отправьте в этот чат:**\n"
+                    "📋 Для бронирования отправьте в этот чат:\n"
                     "1. Номер рейса и дату/время прилета\n"
                     "2. Фамилию и имя на латинице (как в паспорте)\n"
                     "3. Название аэропорта прилета"
                 ),
                 "vi": (
-                    "✈️ **DỊCH VỤ AIRPORT VIP FAST TRACK (ĐÓN TẠI CỬA MÁY BAY)**\n\n"
-                    "💰 Chi phí: **1.200.000 ₫ / khách**\n"
+                    "✈️ Dịch vụ Airport VIP Fast Track (đón tại cửa máy bay)\n\n"
+                    "💰 Chi phí: 1.200.000 ₫ / khách\n"
                     "📍 Áp dụng tại sân bay: Cam Ranh (CXR), Tân Sơn Nhất (SGN), Nội Bài (HAN), Đà Nẵng (DAD)\n\n"
-                    "🌟 **Quyền lợi dịch vụ:**\n"
+                    "🌟 Quyền lợi dịch vụ:\n"
                     "• Nhân viên đón khách ngay tại cửa ra máy bay với bảng tên riêng\n"
                     "• Dẫn khách qua làn ưu tiên Ngoại Giao / Fast Track không phải xếp hàng chờ đợi\n"
                     "• Hỗ trợ nhận hành lý và dẫn ra xe riêng\n\n"
-                    "📋 **Thông tin cần gửi vào chat:**\n"
+                    "📋 Thông tin cần gửi vào chat:\n"
                     "1. Số hiệu chuyến bay và ngày giờ hạ cánh\n"
                     "2. Họ tên trên hộ chiếu\n"
                     "3. Sân bay đến"
                 ),
                 "en": (
-                    "✈️ **AIRPORT VIP FAST TRACK SERVICE**\n\n"
-                    "💰 Price: **1,200,000 VND / pax**\n"
+                    "✈️ Airport VIP Fast Track Service\n\n"
+                    "💰 Price: 1,200,000 VND / pax\n"
                     "📍 Available at: Cam Ranh (CXR), Tan Son Nhat (SGN), Noi Bai (HAN), Da Nang (DAD)\n\n"
-                    "🌟 **VIP Benefits:**\n"
+                    "🌟 VIP Benefits:\n"
                     "• Personal assistant meets you at the arrival gate with your name board\n"
                     "• Fast-track escort through Diplomatic / Priority lane (skip all queues)\n"
                     "• Baggage collection assistance and escort to exit or driver\n\n"
-                    "📋 **Please send in this chat:**\n"
+                    "📋 Please send in this chat:\n"
                     "1. Flight number & arrival date/time\n"
                     "2. Full name as in passport\n"
                     "3. Arrival airport"
@@ -2112,17 +2112,17 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         lang = memory_store.get(f"{session_id}_lang", "en")
         seat_req_msg = {
             "ru": (
-                "⏳ **Мы проверяем наличие свободных мест в автобусе...**\n\n"
+                "⏳ Мы проверяем наличие свободных мест в автобусе...\n\n"
                 "📸 Пожалуйста, отправьте фото страницы с информацией загранпаспорта и напишите желаемое место (например: **A2**, **B3**).\n\n"
                 + get_payment_instruction_text(lang)
             ),
             "en": (
-                "⏳ **We are checking seat availability on the bus...**\n\n"
+                "⏳ We are checking seat availability on the bus...\n\n"
                 "📸 Please send a clear photo of your passport page and type your preferred seat number (e.g. **A2**, **B3**).\n\n"
                 + get_payment_instruction_text(lang)
             ),
             "vi": (
-                "⏳ **Chúng tôi đang kiểm tra sơ đồ chỗ trống trên xe buýt...**\n\n"
+                "⏳ Chúng tôi đang kiểm tra sơ đồ chỗ trống trên xe buýt...\n\n"
                 "📸 Quý khách vui lòng chụp gửi ảnh mặt Hộ chiếu và nhắn lại số ghế mong muốn (ví dụ: **A2**, **B3**).\n\n"
                 + get_payment_instruction_text(lang)
             )
@@ -2148,9 +2148,9 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                 "title_admin": "🚨 YÊU CẦU TƯ VẤN: QUÁ HẠN VISA (VISA OVERSTAY)",
                 "desc_admin": "Quá hạn visa cần xử lý khẩn cấp tránh bị phạt nặng / cấm nhập cảnh.",
                 "ru": (
-                    "⚠️ **Консультация по просрочке визы (Visa Overstay)**\n\n"
+                    "⚠️ Консультация по просрочке визы (Visa Overstay)\n\n"
                     "Мы зафиксировали ваш запрос! Наша команда помогает легально урегулировать просрочку визы во Вьетнаме, минимизировать штрафы и избежать черного списка.\n\n"
-                    "📋 **Пожалуйста, отправьте в этот чат:**\n"
+                    "📋 Пожалуйста, отправьте в этот чат:\n"
                     "1. Фото главной страницы загранпаспорта\n"
                     "2. Фото штампа последнего въезда или текущей визы\n"
                     "3. Точную дату окончания срока действия вашей визы\n\n"
@@ -2158,9 +2158,9 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                     "💬 Или свяжитесь напрямую со старшим менеджером: @easytripvisa_co_ltd"
                 ),
                 "en": (
-                    "⚠️ **Visa Overstay Consultation & Legal Settlement**\n\n"
+                    "⚠️ Visa Overstay Consultation & Legal Settlement\n\n"
                     "We have logged your request! Easy Trip Visa assists with legal overstay settlement in Vietnam, minimizing fines and preventing blacklisting.\n\n"
-                    "📋 **Please send in this chat:**\n"
+                    "📋 Please send in this chat:\n"
                     "1. Photo of your passport info page\n"
                     "2. Photo of your latest entry stamp or visa sticker\n"
                     "3. The exact date your visa expired\n\n"
@@ -2168,9 +2168,9 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                     "💬 Or message senior manager directly: @easytripvisa_co_ltd"
                 ),
                 "vi": (
-                    "⚠️ **Tư vấn & Xử lý Quá hạn Visa (Visa Overstay)**\n\n"
+                    "⚠️ Tư vấn & Xử lý Quá hạn Visa (Visa Overstay)\n\n"
                     "Easy Trip Visa đã tiếp nhận yêu cầu của quý khách! Chúng tôi chuyên xử lý quá hạn visa hợp pháp, giảm thiểu mức phạt và bảo vệ lịch xử xuất nhập cảnh.\n\n"
-                    "📋 **Quý khách vui lòng gửi vào khung chat này:**\n"
+                    "📋 Quý khách vui lòng gửi vào khung chat này:\n"
                     "1. Ảnh trang thông tin Hộ chiếu\n"
                     "2. Ảnh dấu nhập cảnh hoặc visa gần nhất\n"
                     "3. Ngày hết hạn visa chính xác\n\n"
@@ -2182,9 +2182,9 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                 "title_admin": "🪪 YÊU CẦU TƯ VẤN: THẺ TẠM TRÚ TRC 2 NĂM",
                 "desc_admin": "Làm thẻ tạm trú 2 năm (diện thăm thân TT, lao động LĐ, đầu tư ĐT).",
                 "ru": (
-                    "🪪 **Оформление карты временного резидента (TRC на 2 года)**\n\n"
+                    "🪪 Оформление карты временного резидента (TRC на 2 года)\n\n"
                     "Мы зафиксировали ваш запрос на получение TRC (ВНЖ Вьетнама на 2 года)!\n\n"
-                    "📋 **Пожалуйста, укажите желаемое основание:**\n"
+                    "📋 Пожалуйста, укажите желаемое основание:\n"
                     "• Семейная виза / брак с гражданином Вьетнама (Thăm thân)\n"
                     "• Рабочая виза / официальный контракт с компанией (Work Permit)\n"
                     "• Инвестиции / открытие юридического лица во Вьетнаме\n\n"
@@ -2192,9 +2192,9 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                     "💬 Консультация старшего менеджера: @easytripvisa_co_ltd"
                 ),
                 "en": (
-                    "🪪 **2-Year Temporary Residence Card (TRC)**\n\n"
+                    "🪪 2-Year Temporary Residence Card (TRC)\n\n"
                     "We have received your TRC inquiry! A 2-year TRC allows multiple entries and legal stay without visas.\n\n"
-                    "📋 **Please tell us your intended category:**\n"
+                    "📋 Please tell us your intended category:\n"
                     "• Family ties / Marriage with Vietnamese citizen\n"
                     "• Employment / Work Permit sponsor\n"
                     "• Business investment / Company establishment\n\n"
@@ -2202,9 +2202,9 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                     "💬 Or contact manager: @easytripvisa_co_ltd"
                 ),
                 "vi": (
-                    "🪪 **Tư vấn làm Thẻ tạm trú (TRC) thời hạn 2 năm**\n\n"
+                    "🪪 Tư vấn làm Thẻ tạm trú (TRC) thời hạn 2 năm\n\n"
                     "Chúng tôi đã tiếp nhận yêu cầu tư vấn Thẻ tạm trú (TRC 2 năm) của quý khách!\n\n"
-                    "📋 **Quý khách vui lòng cho biết diện làm hồ sơ:**\n"
+                    "📋 Quý khách vui lòng cho biết diện làm hồ sơ:\n"
                     "• Diện kết hôn / thăm thân với công dân Việt Nam (kí hiệu TT)\n"
                     "• Diện lao động có Giấy phép lao động / Work Permit (kí hiệu LĐ2)\n"
                     "• Diện góp vốn đầu tư thành lập công ty (kí hiệu ĐT)\n\n"
@@ -2216,27 +2216,27 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                 "title_admin": "💼 YÊU CẦU TƯ VẤN: VISA LAO ĐỘNG & WORK PERMIT",
                 "desc_admin": "Làm Giấy phép lao động (Work Permit) và Visa lao động.",
                 "ru": (
-                    "💼 **Рабочая виза и разрешение на работу (Work Permit)**\n\n"
+                    "💼 Рабочая виза и разрешение на работу (Work Permit)\n\n"
                     "Мы зафиксировали ваш запрос на оформление Work Permit и рабочей визы!\n\n"
-                    "📋 **Пожалуйста, уточните детали:**\n"
+                    "📋 Пожалуйста, уточните детали:\n"
                     "1. Есть ли у вас приглашающая компания/работодатель во Вьетнаме?\n"
                     "2. Ваша специальность, диплом и справка о несудимости?\n\n"
                     "Наш специалист визового отдела свяжется с вами прямо в этом чате в течение нескольких минут!\n"
                     "💬 Связаться с руководителем: @easytripvisa_co_ltd"
                 ),
                 "en": (
-                    "💼 **Work Visa & Work Permit (Giấy phép lao động)**\n\n"
+                    "💼 Work Visa & Work Permit\n\n"
                     "We have logged your Work Visa request! Easy Trip Visa provides full sponsorship and work permit processing.\n\n"
-                    "📋 **Please provide details:**\n"
+                    "📋 Please provide details:\n"
                     "1. Do you have a sponsoring company / employer in Vietnam?\n"
                     "2. Do you have your university degree and criminal record certificate ready?\n\n"
                     "Our corporate visa specialist will assist you directly in this chat shortly!\n"
                     "💬 Or contact manager: @easytripvisa_co_ltd"
                 ),
                 "vi": (
-                    "💼 **Tư vấn Visa lao động & Giấy phép lao động (Work Permit)**\n\n"
+                    "💼 Tư vấn Visa lao động & Giấy phép lao động\n\n"
                     "Easy Trip Visa đã ghi nhận yêu cầu tư vấn Giấy phép lao động (Work Permit) của quý khách!\n\n"
-                    "📋 **Quý khách vui lòng cho biết:**\n"
+                    "📋 Quý khách vui lòng cho biết:\n"
                     "1. Đã có công ty/doanh nghiệp tại Việt Nam bảo lãnh tuyển dụng chưa?\n"
                     "2. Bằng cấp đại học/chuyên môn và Lý lịch tư pháp đã có sẵn chưa?\n\n"
                     "Chuyên viên hồ sơ doanh nghiệp sẽ hỗ trợ giải đáp trực tiếp ngay tại đây!\n"
@@ -2247,27 +2247,27 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                 "title_admin": "👨‍👩‍👧 YÊU CẦU TƯ VẤN: VISA THĂM THÂN / GIA ĐÌNH",
                 "desc_admin": "Làm Visa thăm thân (TT) cho vợ/chồng/con/cha mẹ.",
                 "ru": (
-                    "👨‍👩‍👧 **Оформление визы для членов семьи (Family Visit Visa)**\n\n"
+                    "👨‍👩‍👧 Оформление визы для членов семьи (Family Visit Visa)\n\n"
                     "Мы зафиксировали ваш запрос на оформление семейной визы (TT)!\n\n"
-                    "📋 **Пожалуйста, подготовьте и отправьте:**\n"
+                    "📋 Пожалуйста, подготовьте и отправьте:\n"
                     "1. Фото загранпаспорта заявителя и приглашающего лица\n"
                     "2. Документ о родстве (свидетельство о браке / о рождении с переводом и легализацией)\n\n"
                     "Наш специалист по семейным визам ответит вам в этом чате в течение нескольких минут!\n"
                     "💬 Написать менеджеру: @easytripvisa_co_ltd"
                 ),
                 "en": (
-                    "👨‍👩‍👧 **Family Visit / Visitor Visa (Thăm thân)**\n\n"
+                    "👨‍👩‍👧 Family Visit / Visitor Visa\n\n"
                     "We have logged your Family Visa request! We assist spouses, children, and parents with family visas in Vietnam.\n\n"
-                    "📋 **Please prepare:**\n"
+                    "📋 Please prepare:\n"
                     "1. Passport photos of applicant and sponsoring family member\n"
                     "2. Proof of relationship (Marriage certificate / Birth certificate legalized and translated)\n\n"
                     "Our family visa consultant will assist you directly in this chat shortly!\n"
                     "💬 Or message manager: @easytripvisa_co_ltd"
                 ),
                 "vi": (
-                    "👨‍👩‍👧 **Tư vấn Visa Thăm thân / Gia đình (Kí hiệu TT)**\n\n"
+                    "👨‍👩‍👧 Tư vấn Visa Thăm thân / Gia đình\n\n"
                     "Easy Trip Visa đã ghi nhận yêu cầu làm Visa thăm thân cho thân nhân gia đình!\n\n"
-                    "📋 **Quý khách vui lòng chuẩn bị:**\n"
+                    "📋 Quý khách vui lòng chuẩn bị:\n"
                     "1. Ảnh hộ chiếu của người xin visa và người bảo lãnh tại Việt Nam\n"
                     "2. Giấy tờ chứng minh quan hệ (Đăng ký kết hôn / Giấy khai sinh đã hợp pháp hóa lãnh sự và dịch thuật)\n\n"
                     "Chuyên viên tư vấn sẽ hướng dẫn chi tiết từng bước hồ sơ ngay tại đây!\n"
@@ -2301,15 +2301,15 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         lang = memory_store.get(f"{session_id}_lang", "en")
         menu_title = {
             "ru": (
-                "💳 **ВЫБЕРИТЕ СПОСОБ ОПЛАТЫ (EASY TRIP & VISA)**\n\n"
+                "💳 Выберите способ оплаты (Easy Trip & Visa):\n\n"
                 "Пожалуйста, выберите подходящий банк для безналичного перевода или вариант оплаты наличными в офисе Нячанга:"
             ),
             "vi": (
-                "💳 **CHỌN PHƯƠNG THỨC THANH TOÁN (EASY TRIP & VISA)**\n\n"
+                "💳 Chọn phương thức thanh toán (Easy Trip & Visa):\n\n"
                 "Quý khách vui lòng chọn ngân hàng chuyển khoản phù hợp hoặc đến văn phòng nộp tiền mặt:"
             ),
             "en": (
-                "💳 **SELECT PAYMENT METHOD (EASY TRIP & VISA)**\n\n"
+                "💳 Select Payment Method (Easy Trip & Visa):\n\n"
                 "Please choose your preferred bank for transfer or select cash payment at our Nha Trang office:"
             )
         }
@@ -2340,23 +2340,23 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
             
             advisory_header = {
                 "ru": (
-                    f"📊 **РЕЗУЛЬТАТ ПОДБОРА ВИЗАРАНА:**\n"
-                    f"• Гражданство: **{cname}** ({'Безвизовый въезд на 45 дней ✅' if exempt else 'Требуется электронная виза 90 дней 📑'})\n"
-                    f"• Город отправления: **{city_key.upper()}**\n"
-                    f"• Дата выезда: **{date_val}**\n\n"
-                    "👉 **ДОСТУПНЫЕ ПАКЕТЫ И УСЛУГИ (Выберите вариант для изменения):**"
+                    f"📊 Результат подбора визарана:\n"
+                    f"• Гражданство: {cname} ({'Безвизовый въезд на 45 дней ✅' if exempt else 'Требуется электронная виза 90 дней 📑'})\n"
+                    f"• Город отправления: {city_key.upper()}\n"
+                    f"• Дата выезда: {date_val}\n\n"
+                    "👉 Доступные пакеты и услуги:"
                 ),
                 "en": (
-                    f"📊 **VISA RUN ADVISORY SUMMARY:**\n"
-                    f"• Nationality: **{cname}** ({'Visa-Free 45 Days Exempt ✅' if exempt else 'Requires 90-Day E-Visa 📑'})\n"
-                    f"• Departure City: **{city_key.upper()}**\n"
-                    f"• Expiry / Departure Date: **{date_val}**\n\n"
+                    f"📊 Visa Run Advisory Summary:\n"
+                    f"• Nationality: {cname} ({'Visa-Free 45 Days Exempt ✅' if exempt else 'Requires 90-Day E-Visa 📑'})\n"
+                    f"• Departure City: {city_key.upper()}\n"
+                    f"• Expiry / Departure Date: {date_val}\n\n"
                     "👉 **RECOMMENDED PACKAGES (Choose an option to change):**"
                 ),
                 "vi": (
-                    f"📊 **KẾT QUẢ PHÂN TÍCH TƯ VẤN VISARUN:**\n"
-                    f"• Quốc tịch: **{cname}** ({'Được Miễn thị thực 45 ngày ✅' if exempt else 'Cần đăng ký E-Visa 90 ngày 📑'})\n"
-                    f"• Thành phố xuất phát: **{city_key.upper()}**\n"
+                    f"📊 Kết quả phân tích tư vấn Visarun:\n"
+                    f"• Quốc tịch: {cname} ({'Được Miễn thị thực 45 ngày ✅' if exempt else 'Cần đăng ký E-Visa 90 ngày 📑'})\n"
+                    f"• Thành phố xuất phát: {city_key.upper()}\n"
                     f"• Ngày hết hạn / khởi hành: **{date_val}**\n\n"
                     "👉 **CÁC GÓI DỊCH VỤ PHÙ HỢP NHẤT (Chọn gói để thay đổi):**"
                 )
