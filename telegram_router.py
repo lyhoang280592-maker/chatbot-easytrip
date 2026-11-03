@@ -33,6 +33,7 @@ from wizard_flows import (
     analyze_customer_incoming_message,
     get_payment_instruction_text,
     get_payment_methods_keyboard,
+    is_russian_speaking_user,
 )
 from lark_api import create_customer_record, upload_image_to_lark, update_customer_image, update_order_status, create_order, get_daily_harvest_report
 from i18n import get_lang_code, get_msg
@@ -1205,7 +1206,9 @@ async def process_customer_text_message(update: Update, context: ContextTypes.DE
             cust_data.ghe_chon = seat_str
             route_disp = cust_data.loai_visa or "Nha Trang ⇄ Lào Bờ Y (90 Ngày)"
             date_val = cust_data.ngay_khoi_hanh or datetime.now().strftime("%d/%m")
-            grand_total = 4000000 if "90" in route_disp else 1400000
+            is_ru_client = (lang == "ru") or is_russian_speaking_user(getattr(cust_data, "quoc_tich", "") or lang)
+            unit_price_90d = 3400000 if is_ru_client else (4400000 if ("campuchia" in route_disp.lower() or "cambodia" in route_disp.lower()) else 4000000)
+            grand_total = unit_price_90d if "90" in route_disp else 1400000
             members_vi = "1 người lớn"
             members_ru = "1 взр."
             members_en = "1 adult"

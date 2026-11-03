@@ -589,10 +589,10 @@ def get_smart_advisory_keyboard(city: str, country: str, lang: str = "en"):
         if lang == "ru":
             rows.append([InlineKeyboardButton("🚌 Визаран Дананг ⇄ Лаос (Лао Бао)", callback_data="step|svc|dn_bus")])
             if exempt:
-                rows.append([InlineKeyboardButton("⭐ Безвиз 45 дней (Лао Бао) — 850.000 ₫", callback_data="step|svc|dn_bus")])
-                rows.append([InlineKeyboardButton("📑 Пакет: Bus + E-Visa 90 дней (Лао Бао) — 3.900.000 ₫", callback_data="step|svc|dn_combo_ultra")])
+                rows.append([InlineKeyboardButton("⭐ Безвиз 45 дней (Лао Бао) — 950.000 ₫", callback_data="step|svc|dn_bus")])
+                rows.append([InlineKeyboardButton("📑 Пакет: Bus + E-Visa 90 дней (Лао Бао) — 3.800.000 ₫", callback_data="step|svc|dn_combo_ultra")])
             else:
-                rows.append([InlineKeyboardButton("📑 Пакет: Bus + E-Visa 90 дней (Лао Бао) — 3.900.000 ₫", callback_data="step|svc|dn_combo_ultra")])
+                rows.append([InlineKeyboardButton("📑 Пакет: Bus + E-Visa 90 дней (Лао Бао) — 3.800.000 ₫", callback_data="step|svc|dn_combo_ultra")])
         elif lang == "vi":
             rows.append([InlineKeyboardButton("🚌 Visarun Đà Nẵng ⇄ Lao Bảo (Lào)", callback_data="step|svc|dn_bus")])
             if exempt:
@@ -615,11 +615,11 @@ def get_smart_advisory_keyboard(city: str, country: str, lang: str = "en"):
             rows.append([InlineKeyboardButton("🚌 Визаран Нячанг ⇄ Камбоджа (Мокбай) (30/45/90 дней)", callback_data="step|svc|nt_bus_cambodia")])
             if exempt:
                 rows.append([InlineKeyboardButton("⭐ Безвиз 45 дней (Лаос Бо-И) — 1.400.000 ₫", callback_data="step|svc|nt_bus_laos_45d")])
-                rows.append([InlineKeyboardButton("📑 Пакет E-Visa 90 дней (Лаос Бо-И) — 4.000.000 ₫", callback_data="step|svc|nt_bus_laos_90d")])
-                rows.append([InlineKeyboardButton("📑 Пакет E-Visa 90 дней (Камбоджа Мокбай) — 4.400.000 ₫", callback_data="step|svc|nt_combo_evisa")])
+                rows.append([InlineKeyboardButton("📑 Пакет E-Visa 90 дней (Лаос Бо-И) — 3.400.000 ₫", callback_data="step|svc|nt_bus_laos_90d")])
+                rows.append([InlineKeyboardButton("📑 Пакет E-Visa 90 дней (Камбоджа Мокбай) — 3.400.000 ₫", callback_data="step|svc|nt_combo_evisa")])
             else:
-                rows.append([InlineKeyboardButton("📑 Пакет E-Visa 90 дней (Лаос Бо-И) — 4.000.000 ₫", callback_data="step|svc|nt_bus_laos_90d")])
-                rows.append([InlineKeyboardButton("📑 Пакет E-Visa 90 дней (Камбоджа Мокбай) — 4.400.000 ₫", callback_data="step|svc|nt_combo_evisa")])
+                rows.append([InlineKeyboardButton("📑 Пакет E-Visa 90 дней (Лаос Бо-И) — 3.400.000 ₫", callback_data="step|svc|nt_bus_laos_90d")])
+                rows.append([InlineKeyboardButton("📑 Пакет E-Visa 90 дней (Камбоджа Мокбай) — 3.400.000 ₫", callback_data="step|svc|nt_combo_evisa")])
         elif lang == "vi":
             rows.append([InlineKeyboardButton("🚌 Visarun Nha Trang - Lào Bờ Y 45 ngày", callback_data="step|svc|nt_bus_laos_45d")])
             rows.append([InlineKeyboardButton("🚌 Visarun Nha Trang - Lào Bờ Y 90 ngày", callback_data="step|svc|nt_bus_laos_90d")])
@@ -846,7 +846,7 @@ ITINERARIES = {
         "title_en": "🚌 ROUTE: NHA TRANG ⇄ BO Y BORDER (LAOS) — 90-DAY E-VISA",
         "price": "1.400.000 VND (Chỉ vé xe khứ hồi) | 4.000.000 VND (Combo Trọn Gói Bus + E-Visa 90 ngày)",
         "price_vi": "1.400.000 VND (Chỉ vé xe khứ hồi) | 4.000.000 VND (Combo Trọn Gói Bus + E-Visa 90 ngày)",
-        "price_ru": "1.400.000 VND (Только билет на автобус) | 4.000.000 VND (Пакет: Автобус + E-Visa на 90 дней)",
+        "price_ru": "1.400.000 VND (Только билет на автобус) | 3.400.000 VND (Пакет: Автобус + E-Visa на 90 дней)",
         "price_en": "1,400,000 VND (Bus only) | 4,000,000 VND (Package: Bus + 90-day E-Visa)",
         "schedule_vi": (
             "⏰ LỊCH TRÌNH CHI TIẾT (XE CHẠY THỨ 3, THỨ 5, CHỦ NHẬT):\n"
@@ -903,10 +903,10 @@ ITINERARIES = {
         "title_en": "🚌 ROUTE: NHA TRANG ⇄ BO Y BORDER (LAOS) — 45/90 DAYS",
         "price": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo Bus + E-Visa 90 ngày) | 4.400.000 VND (Combo Bus + E-Visa 90 ngày + Visa Campuchia 24h)",
         "price_vi": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo Bus + E-Visa 90 ngày) | 4.400.000 VND (Combo Bus + E-Visa 90 ngày + Visa Campuchia 24h)",
-        "price_ru": "1.400.000 VND (Билет туда-обратно) | 4.000.000 VND (Пакет Bus + E-Visa 90 дней) | 4.400.000 VND (Пакет Bus + E-Visa 90 дней + виза Камбоджи за 24ч)",
+        "price_ru": "1.400.000 VND (Билет туда-обратно) | 3.400.000 VND (Пакет Bus + E-Visa 90 дней) | 4.400.000 VND (Пакет Bus + E-Visa 90 дней + виза Камбоджи за 24ч)",
         "price_en": "1,400,000 VND (Round-trip bus) | 4,000,000 VND (Package: Bus + 90-Day E-Visa) | 4,400,000 VND (Package: Bus + E-Visa + Cambodia 24h Visa)",
         "price_vi": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo Bus + E-Visa 90 ngày) | 4.400.000 VND (Combo Bus + E-Visa 90 ngày + Visa Campuchia 24h)",
-        "price_ru": "1.400.000 VND (Билет туда-обратно) | 4.000.000 VND (Пакет Bus + E-Visa 90 дней) | 4.400.000 VND (Пакет Bus + E-Visa 90 дней + виза Камбоджи за 24ч)",
+        "price_ru": "1.400.000 VND (Билет туда-обратно) | 3.400.000 VND (Пакет Bus + E-Visa 90 дней) | 4.400.000 VND (Пакет Bus + E-Visa 90 дней + виза Камбоджи за 24ч)",
         "price_en": "1,400,000 VND (Round-trip bus) | 4,000,000 VND (Package: Bus + 90-Day E-Visa) | 4,400,000 VND (Package: Bus + E-Visa + Cambodia 24h Visa)",
         "schedule_vi": (
             "⏰ LỊCH TRÌNH CHI TIẾT (ITINERARY):\n"
@@ -1014,7 +1014,7 @@ ITINERARIES = {
         "title_en": "🚌 ROUTE: NHA TRANG / MUI NE ⇄ MOC BAI (CAMBODIA)",
         "price": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo Bus + E-Visa 90 ngày) | 4.400.000 VND (Combo Bus + E-Visa 90 ngày + Visa Campuchia 24h)",
         "price_vi": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo Bus + E-Visa 90 ngày) | 4.400.000 VND (Combo Bus + E-Visa 90 ngày + Visa Campuchia 24h)",
-        "price_ru": "1.400.000 VND (Билет туда-обратно) | 4.000.000 VND (Пакет Bus + E-Visa 90 дней) | 4.400.000 VND (Пакет Bus + E-Visa 90 дней + виза Камбоджи за 24ч)",
+        "price_ru": "1.400.000 VND (Билет туда-обратно) | 3.400.000 VND (Пакет Bus + E-Visa 90 дней) | 4.400.000 VND (Пакет Bus + E-Visa 90 дней + виза Камбоджи за 24ч)",
         "price_en": "1,400,000 VND (Round-trip bus) | 4,000,000 VND (Package: Bus + 90-Day E-Visa) | 4,400,000 VND (Package: Bus + E-Visa + Cambodia 24h Visa)",
         "schedule_vi": (
             "⏰ LỊCH TRÌNH CHI TIẾT (ITINERARY):\n"
@@ -1267,50 +1267,80 @@ def get_bus_integrated_calendar_keyboard(route_key: str, year: int, month: int, 
     return InlineKeyboardMarkup(rows)
 
 
-def calculate_party_pricing(route_key: str, adults: int, kids_under9: int, kids_over9: int) -> dict:
-    """Tính toán chi phí minh bạch cho gia đình/nhóm khách"""
-    is_cambodia = "cambodia" in route_key or "mocbai" in route_key
-    is_45d = "45d" in route_key
-    
-    # Giá vé người lớn / trẻ trên 9 tuổi
-    if is_45d:
-        adult_unit = 1_400_000
-        service_title = "45-Day Visa-Free (Miễn thị thực 45 ngày)"
-    elif is_cambodia:
-        adult_unit = 4_400_000
-        service_title = "Cambodia Moc Bai Combo 90D"
-    else:
-        # Lào Bờ Y 90D
-        adult_unit = 4_000_000
-        service_title = "Nha Trang - Laos Bo Y Combo 90D"
-
-    # Trẻ em dưới 9 tuổi: 100% miễn phí vé xe (0 VND), E-visa khẩn trợ giá 1.480.000 VND (nếu đi 90D) hoặc 0 VND (nếu 45D)
-    child_unit = 0 if is_45d else 1_480_000
-    
-    total_adults_count = adults + kids_over9
-    total_adults_price = total_adults_count * adult_unit
-    total_kids_under9_price = kids_under9 * child_unit
-    
-    grand_total = total_adults_price + total_kids_under9_price
-    bus_ticket_saved = kids_under9 * 1_400_000
-    
-    return {
-        "adult_unit": adult_unit,
-        "child_unit": child_unit,
-        "total_adults_count": total_adults_count,
-        "adults": adults,
-        "kids_over9": kids_over9,
-        "kids_under9": kids_under9,
-        "total_adults_price": total_adults_price,
-        "total_kids_under9_price": total_kids_under9_price,
-        "grand_total": grand_total,
-        "bus_ticket_saved": bus_ticket_saved,
-        "service_title": service_title
-    }
-
-def get_party_counter_keyboard(route_key: str, date_val: str, adults: int, kids_under9: int, kids_over9: int, lang: str = "ru") -> InlineKeyboardMarkup:
-    """Bàn phím bộ đếm thông minh tăng giảm số lượng thành viên trong gia đình/nhóm"""
-    total = (adults + kids_over9) * (1_400_000 if "45d" in route_key else (4_400_000 if "cambodia" in route_key else 4_000_000)) + kids_under9 * (0 if "45d" in route_key else 1_480_000)
+def is_russian_speaking_user(country_or_lang: str = "", cust_data: Any = None) -> bool:
+    """Kiểm tra xem khách hàng có phải là người Nga hoặc đến từ các quốc gia nói tiếng Nga không"""
+    if country_or_lang:
+        col = str(country_or_lang).lower().strip()
+        if col in ("ru", "cis", "russia", "russian", "belarus", "kazakhstan", "kyrgyzstan", "uzbekistan", "tajikistan"):
+            return True
+        if any(k in col for k in ["russ", "росс", "nga", "kazakh", "казах", "kyrgyz", "кыргыз", "belarus", "беларус", "uzbek", "узбек", "tajik", "таджик", "cis"]):
+            return True
+            
+    if cust_data and getattr(cust_data, "quoc_tich", None):
+        qn = str(cust_data.quoc_tich).lower()
+        if any(k in qn for k in ["russ", "росс", "nga", "kazakh", "казах", "kyrgyz", "кыргыз", "belarus", "беларус", "uzbek", "узбек", "tajik", "таджик", "cis"]):
+            return True
+            
+    return False
+
+
+def calculate_party_pricing(route_key: str, adults: int, kids_under9: int, kids_over9: int, lang: str = "ru", country: str = "") -> dict:
+    """Tính toán chi phí minh bạch cho gia đình/nhóm khách:
+       - Khách Nga / CIS: 3.400.000 VND / người lớn cho tuyến 90D theo https://www.easytripvisa.com/russian
+       - Khách Quốc tế: 4.000.000 VND (Lào 90D) / 4.400.000 VND (Campuchia 90D)
+       - Tuyến 45D: 1.400.000 VND
+       - Trẻ em dưới 9 tuổi: 100% miễn phí vé xe (0 VND), E-visa khẩn trợ giá 1.480.000 VND (nếu đi 90D)
+    """
+    is_cambodia = "cambodia" in route_key or "mocbai" in route_key
+    is_45d = "45d" in route_key
+    is_russian = is_russian_speaking_user(country or lang)
+    
+    # Giá vé người lớn / trẻ trên 9 tuổi
+    if is_45d:
+        adult_unit = 1_400_000
+        service_title = "45-Day Visa-Free (Miễn thị thực 45 ngày)"
+    elif is_russian:
+        # Luồng giá riêng cho khách Nga & các nước nói tiếng Nga (3.400.000 VND theo website easytripvisa.com/russian)
+        adult_unit = 3_400_000
+        service_title = "Nha Trang - Lào Bờ Y / Campuchia 90D (Gói riêng khách nói tiếng Nga 3.400.000 ₫)"
+    elif is_cambodia:
+        adult_unit = 4_400_000
+        service_title = "Cambodia Moc Bai Combo 90D"
+    else:
+        # Lào Bờ Y 90D khách quốc tế
+        adult_unit = 4_000_000
+        service_title = "Nha Trang - Laos Bo Y Combo 90D"
+
+    # Trẻ em dưới 9 tuổi: 100% miễn phí vé xe (0 VND), E-visa khẩn trợ giá 1.480.000 VND (nếu đi 90D) hoặc 0 VND (nếu 45D)
+    child_unit = 0 if is_45d else 1_480_000
+    
+    total_adults_count = adults + kids_over9
+    total_adults_price = total_adults_count * adult_unit
+    total_kids_under9_price = kids_under9 * child_unit
+    
+    grand_total = total_adults_price + total_kids_under9_price
+    bus_ticket_saved = kids_under9 * 1_400_000
+    
+    return {
+        "adult_unit": adult_unit,
+        "child_unit": child_unit,
+        "total_adults_count": total_adults_count,
+        "adults": adults,
+        "kids_over9": kids_over9,
+        "kids_under9": kids_under9,
+        "total_adults_price": total_adults_price,
+        "total_kids_under9_price": total_kids_under9_price,
+        "grand_total": grand_total,
+        "bus_ticket_saved": bus_ticket_saved,
+        "service_title": service_title,
+        "is_russian": is_russian
+    }
+
+
+def get_party_counter_keyboard(route_key: str, date_val: str, adults: int, kids_under9: int, kids_over9: int, lang: str = "ru", country: str = "") -> InlineKeyboardMarkup:
+    """Bàn phím bộ đếm thông minh tăng giảm số lượng thành viên trong gia đình/nhóm"""
+    p_info = calculate_party_pricing(route_key, adults, kids_under9, kids_over9, lang=lang, country=country)
+    total = p_info["grand_total"]
     
     lbl_adults = "👨 Взрослые" if lang == "ru" else "👨 Người lớn" if lang == "vi" else "👨 Adults"
     lbl_k_over9 = "👦 Дети ≥ 9 лет" if lang == "ru" else "👦 Trẻ em ≥ 9 tuổi" if lang == "vi" else "👦 Kids ≥ 9yo"
@@ -2261,7 +2291,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
                 )
             }
             # Mặc định ban đầu: 1 người lớn, 0 trẻ dưới 9, 0 trẻ trên 9
-            kb_party = get_party_counter_keyboard(route_key, date_val, adults=1, kids_under9=0, kids_over9=0, lang=lang)
+            kb_party = get_party_counter_keyboard(route_key, date_val, adults=1, kids_under9=0, kids_over9=0, lang=lang, country=cust_data.quoc_tich)
             await send_step_reply(update, context, party_msg.get(lang, party_msg["en"]), reply_markup=kb_party, parse_mode="Markdown")
             return
         else:
@@ -2298,7 +2328,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         kids_over9 = int(parts[6])
         lang = memory_store.get(f"{session_id}_lang", "en")
         
-        kb_party = get_party_counter_keyboard(route_key, date_val, adults, kids_under9, kids_over9, lang)
+        kb_party = get_party_counter_keyboard(route_key, date_val, adults, kids_under9, kids_over9, lang=lang, country=cust_data.quoc_tich)
         if query and query.message:
             try:
                 await query.message.edit_reply_markup(reply_markup=kb_party)
@@ -2315,7 +2345,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         kids_over9 = int(parts[6])
         lang = memory_store.get(f"{session_id}_lang", "en")
         
-        pricing = calculate_party_pricing(route_key, adults, kids_under9, kids_over9)
+        pricing = calculate_party_pricing(route_key, adults, kids_under9, kids_over9, lang=lang, country=cust_data.quoc_tich)
         cust_data.ngay_khoi_hanh = date_val
         
         # Ghi nhận tổng số chỗ cần xếp
@@ -2423,7 +2453,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         kids_over9 = int(parts[6]) if len(parts) > 6 else 0
         lang = memory_store.get(f"{session_id}_lang", "en")
         
-        pricing = calculate_party_pricing(route_key, adults, kids_under9, kids_over9)
+        pricing = calculate_party_pricing(route_key, adults, kids_under9, kids_over9, lang=lang, country=cust_data.quoc_tich)
         total_seats_needed = adults + kids_over9
         cust_data.ngay_khoi_hanh = date_val
         cust_data.ghe_chon = "Chờ nhân viên gửi sơ đồ ghế / Awaiting Staff Seat Map"
@@ -2527,9 +2557,9 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
         
         pkg_names = {
             "laos_bus_only": ("Только билет на автобус Lào Bờ Y (1.400.000 ₫)", "Vé xe giường nằm Lào Bờ Y (1.400.000 ₫)", "Laos Bo Y Round-trip Bus Ticket (1,400,000 VND)"),
-            "laos_combo_90d": ("Пакет: Bus + E-Visa 90 дней Lào Bờ Y (4.000.000 ₫)", "Trọn gói: Bus + E-Visa 90 ngày Lào Bờ Y (4.000.000 ₫)", "Combo: Bus + 90-Day E-Visa Laos Bo Y (4,000,000 VND)"),
+            "laos_combo_90d": ("Пакет: Bus + E-Visa 90 дней Lào Bờ Y (3.400.000 ₫)", "Trọn gói: Bus + E-Visa 90 ngày Lào Bờ Y (4.000.000 ₫)", "Combo: Bus + 90-Day E-Visa Laos Bo Y (4,000,000 VND)"),
             "mocbai_bus_only": ("Только билет на автобус Mộc Bài (1.400.000 ₫)", "Vé xe giường nằm Mộc Bài (1.400.000 ₫)", "Moc Bai Round-trip Bus Ticket (1,400,000 VND)"),
-            "mocbai_combo_90d": ("Пакет: Bus + E-Visa 90 дней Mộc Bài (4.000.000 ₫)", "Trọn gói: Bus + E-Visa 90 ngày Mộc Bài (4.000.000 ₫)", "Combo: Bus + 90-Day E-Visa Moc Bai (4,000,000 VND)"),
+            "mocbai_combo_90d": ("Пакет: Bus + E-Visa 90 дней Mộc Bài (3.400.000 ₫)", "Trọn gói: Bus + E-Visa 90 ngày Mộc Bài (4.000.000 ₫)", "Combo: Bus + 90-Day E-Visa Moc Bai (4,000,000 VND)"),
             "mocbai_combo_24h": ("Пакет: Bus + E-Visa 24ч + виза Камбоджи (4.400.000 ₫)", "Trọn gói: Bus + E-Visa 24h + Visa Campuchia (4.400.000 ₫)", "Combo: Bus + 24h E-Visa + Cambodia Visa (4,400,000 VND)"),
             "baby_under9": ("Льготный тариф для детей до 9 лет (1.480.000 ₫ + 100% Бесплатный автобус)", "Ưu đãi trẻ em dưới 9 tuổi (1.480.000 ₫ + Miễn 100% vé xe)", "Subsidized Child Package under 9 (1,480,000 VND + 100% Free Bus)")
         }
