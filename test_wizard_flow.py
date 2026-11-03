@@ -151,6 +151,7 @@ def test_full_flow():
         ("Cần thẻ tạm trú TRC cho gia đình", "Dịch vụ chuyên biệt: TRC"),
         ("Airport VIP Fast Track tại sân bay Cam Ranh", "Dịch vụ: Fast Track"),
         ("Kazakhstan", "Khách tự gõ tên quốc tịch"),
+        ("Здравствуйте, Easy Trip & Visa! Я хочу забронировать визаран из Нячанга в Камбоджу (Мокбай): Автобус + однократная E-visa во Вьетнам на 90 дней + виза в Камбоджу (4.400.000 VND - оформление за 24 часа). Пожалуйста, проконсультируйте меня!", "Web Lead: Nha Trang -> Campuchia Mộc Bài 90D"),
     ]
     
     for text_in, desc in test_cases:

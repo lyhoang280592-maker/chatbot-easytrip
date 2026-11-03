@@ -265,18 +265,26 @@ def analyze_customer_incoming_message(text: str) -> dict:
 
     # 2. Kiểm tra Thành phố xuất phát & Tuyến xe
     city = None
-    if any(k in tl for k in ["muine", "mui ne", "mũi né", "муйне", "phan thiết", "phan thiet"]):
-        city = "muine"
-    elif any(k in tl for k in ["nhatrang", "nha trang", "нячанг"]):
+    if any(k in tl for k in ["nhatrang", "nha trang", "нячанг", "нячанга"]):
         city = "nhatrang"
+    elif any(k in tl for k in ["muine", "mui ne", "mũi né", "муйне", "phan thiết", "phan thiet"]):
+        city = "muine"
     elif any(k in tl for k in ["danang", "da nang", "đà nẵng", "дананг", "hội an", "hoi an"]):
         city = "danang"
     elif any(k in tl for k in ["hcm", "hồ chí minh", "ho chi minh", "хошимин", "sài gòn", "saigon", "tp.hcm", "tp hcm", "tphcm"]):
         city = "hcm"
-    elif any(k in tl for k in ["hanoi", "ha noi", "hà nội", "ханой"]):
+    elif any(k in tl for k in ["hanoi", "ha noi", "hà nội", "ханой", "ханоя"]):
         city = "hanoi"
     elif any(k in tl for k in ["abroad", "за рубежом", "nước ngoài"]):
         city = "abroad"
+    else:
+        # Nếu chưa có tên thành phố, suy đoán theo cửa khẩu đặc thù
+        if any(k in tl for k in ["bờ y", "bo y", "бо-и", "бо и"]):
+            city = "nhatrang"
+        elif any(k in tl for k in ["lao bảo", "lao bao", "лао бао"]):
+            city = "danang"
+        elif any(k in tl for k in ["hữu nghị", "huu nghi", "хыу нги"]):
+            city = "hanoi"
 
     # Nếu khách chuyển tiếp từ Web kèm tuyến xe/thành phố cụ thể (hoặc tin nhắn có đề cập thành phố)
     is_web_or_city = (
@@ -287,21 +295,127 @@ def analyze_customer_incoming_message(text: str) -> dict:
         ])
     )
     if is_web_or_city:
-        c_code = city
+        c_code = city or "nhatrang"
         service_name = ""
-        if c_code == "muine" or any(k in tl for k in ["камбодж", "cambodia", "campuchia", "mộc bài", "moc bai"]):
-            c_code = "muine"
-            service_name = "Визаран Муйне ⇄ Камбоджа (Мокбай)" if detected_lang == "ru" else "Visarun Mũi Né ⇄ Campuchia (Mộc Bài)" if detected_lang == "vi" else "Visarun Mui Ne ⇄ Cambodia (Moc Bai)"
-        elif c_code == "danang" or any(k in tl for k in ["lao bảo", "lao bao", "лао бао"]):
-            c_code = "danang"
-            service_name = "Визаран Дананг ⇄ Лаос (Лао Бао)" if detected_lang == "ru" else "Visarun Đà Nẵng ⇄ Lào (Lao Bảo)" if detected_lang == "vi" else "Visarun Da Nang ⇄ Laos (Lao Bao)"
-        elif c_code == "hanoi" or any(k in tl for k in ["hữu nghị", "huu nghi", "хыу нги"]):
-            c_code = "hanoi"
-            service_name = "Визаран Ханой ⇄ Хыу Нги" if detected_lang == "ru" else "Visarun Hà Nội ⇄ Hữu Nghị" if detected_lang == "vi" else "Visarun Hanoi ⇄ Huu Nghi"
+        is_cambodia = any(k in tl for k in ["камбодж", "cambodia", "campuchia", "mộc bài", "moc bai"])
+        is_laos = any(k in tl for k in ["лаос", "laos", "lào", "bờ y", "bo y", "бо-и", "бо и", "lao bảo", "lao bao", "лао бао"])
+        is_90d = any(k in tl for k in ["90", "4.400.000", "4400000", "4.000.000", "4000000"])
+        is_45d = any(k in tl for k in ["45", "1.400.000", "1400000", "безвиз", "miễn visa"])
+
+        if c_code == "nhatrang":
+            if is_cambodia:
+                if is_90d:
+                    service_name = (
+                        "Визаран Нячанг ⇄ Камбоджа (Мокбай) — 90 дней E-Visa (4.400.000 VND)"
+                        if detected_lang == "ru" else
+                        "Visarun Nha Trang ⇄ Campuchia (Mộc Bài) — 90 ngày E-Visa (4.400.000 VND)"
+                        if detected_lang == "vi" else
+                        "Visarun Nha Trang ⇄ Cambodia (Moc Bai) — 90-Day E-Visa (4,400,000 VND)"
+                    )
+                else:
+                    service_name = (
+                        "Визаран Нячанг ⇄ Камбоджа (Мокбай)"
+                        if detected_lang == "ru" else
+                        "Visarun Nha Trang ⇄ Campuchia (Mộc Bài)"
+                        if detected_lang == "vi" else
+                        "Visarun Nha Trang ⇄ Cambodia (Moc Bai)"
+                    )
+            elif is_laos or any(k in tl for k in ["bờ y", "bo y", "бо-и", "бо и"]):
+                if is_45d:
+                    service_name = (
+                        "Визаран Nha Trang - Lào Bờ Y 45 ngày (Безвиз 1.400.000 VND)"
+                        if detected_lang == "ru" else
+                        "Visarun Nha Trang - Lào Bờ Y 45 ngày (Miễn thị thực 1.400.000 VND)"
+                        if detected_lang == "vi" else
+                        "Visarun Nha Trang - Laos Bo Y 45 Days (Visa-Free 1,400,000 VND)"
+                    )
+                elif is_90d:
+                    service_name = (
+                        "Визаран Nha Trang - Lào Bờ Y 90 ngày (E-Visa 4.000.000 VND)"
+                        if detected_lang == "ru" else
+                        "Visarun Nha Trang - Lào Bờ Y 90 ngày (E-Visa 4.000.000 VND)"
+                        if detected_lang == "vi" else
+                        "Visarun Nha Trang - Laos Bo Y 90 Days (E-Visa 4,000,000 VND)"
+                    )
+                else:
+                    service_name = (
+                        "Визаран Nha Trang ⇄ Lào Bờ Y"
+                        if detected_lang == "ru" else
+                        "Visarun Nha Trang ⇄ Lào Bờ Y"
+                        if detected_lang == "vi" else
+                        "Visarun Nha Trang ⇄ Laos Bo Y"
+                    )
+            else:
+                service_name = (
+                    "Визаран Нячанг ⇄ Лаос / Камбоджа"
+                    if detected_lang == "ru" else
+                    "Visarun Nha Trang ⇄ Lào / Campuchia"
+                    if detected_lang == "vi" else
+                    "Visarun Nha Trang ⇄ Laos / Cambodia"
+                )
+
+        elif c_code == "muine":
+            if is_90d:
+                service_name = (
+                    "Визаран Муйне ⇄ Камбоджа (Мокбай) — 90 дней E-Visa (4.000.000 VND)"
+                    if detected_lang == "ru" else
+                    "Visarun Mũi Né ⇄ Campuchia (Mộc Bài) — 90 ngày E-Visa (4.000.000 VND)"
+                    if detected_lang == "vi" else
+                    "Visarun Mui Ne ⇄ Cambodia (Moc Bai) — 90-Day E-Visa"
+                )
+            else:
+                service_name = (
+                    "Визаран Муйне ⇄ Камбоджа (Мокбай)"
+                    if detected_lang == "ru" else
+                    "Visarun Mũi Né ⇄ Campuchia (Mộc Bài)"
+                    if detected_lang == "vi" else
+                    "Visarun Mui Ne ⇄ Cambodia (Moc Bai)"
+                )
+
+        elif c_code == "danang":
+            if is_90d:
+                service_name = (
+                    "Визаран Дананг ⇄ Лаос (Лао Бао) — 90 дней E-Visa (3.900.000 VND)"
+                    if detected_lang == "ru" else
+                    "Visarun Đà Nẵng ⇄ Lào (Lao Bảo) — 90 ngày E-Visa (3.900.000 VND)"
+                    if detected_lang == "vi" else
+                    "Visarun Da Nang ⇄ Laos (Lao Bao) — 90-Day E-Visa"
+                )
+            else:
+                service_name = (
+                    "Визаран Дананг ⇄ Лаос (Лао Бао)"
+                    if detected_lang == "ru" else
+                    "Visarun Đà Nẵng ⇄ Lào (Lao Bảo)"
+                    if detected_lang == "vi" else
+                    "Visarun Da Nang ⇄ Laos (Lao Bao)"
+                )
+
+        elif c_code == "hanoi":
+            service_name = (
+                "Визаран Ханой ⇄ Хыу Нги"
+                if detected_lang == "ru" else
+                "Visarun Hà Nội ⇄ Hữu Nghị"
+                if detected_lang == "vi" else
+                "Visarun Hanoi ⇄ Huu Nghi"
+            )
+
         elif c_code == "hcm":
-            service_name = "Индивидуальный трансфер Хошимин ⇄ Мокбай" if detected_lang == "ru" else "Xe riêng TP.HCM ⇄ Mộc Bài" if detected_lang == "vi" else "Private Car HCMC ⇄ Moc Bai"
-        else:
-            service_name = "Визаран Нячанг ⇄ Лаос / Камбоджа" if detected_lang == "ru" else "Visarun Nha Trang ⇄ Lào / Campuchia" if detected_lang == "vi" else "Visarun Nha Trang ⇄ Laos / Cambodia"
+            service_name = (
+                "Индивидуальный трансфер Хошимин ⇄ Мокбай"
+                if detected_lang == "ru" else
+                "Xe riêng TP.HCM ⇄ Mộc Bài"
+                if detected_lang == "vi" else
+                "Private Car HCMC ⇄ Moc Bai"
+            )
+
+        elif c_code == "abroad":
+            service_name = (
+                "Оформление визы во Вьетнам (E-Visa / Fast Track)"
+                if detected_lang == "ru" else
+                "Thị thực nhập cảnh Việt Nam (E-Visa / Fast Track)"
+                if detected_lang == "vi" else
+                "Vietnam Entry Visa (E-Visa / Fast Track)"
+            )
 
         return {
             "action": "web_lead",
@@ -473,10 +587,11 @@ def get_smart_advisory_keyboard(city: str, country: str, lang: str = "en"):
         if exempt:
             rows.append([InlineKeyboardButton("⭐ Miễn thị thực 45 ngày (Lào Bờ Y) - 1.400.000 ₫" if lang == "vi" else "⭐ Безвиз 45 дней (Лаос Бо-И) - 1.400.000 ₫" if lang == "ru" else "⭐ 45-Day Visa-Free (Laos Bo Y) - 1,400,000 VND", callback_data="step|svc|nt_bus_laos_45d")])
             rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Lào Bờ Y) - 4.000.000 ₫" if lang == "vi" else "📑 Пакет E-Visa 90 дней (Лаос Бо-И) - 4.000.000 ₫" if lang == "ru" else "📑 90-Day E-Visa Package (Laos Bo Y) - 4,000,000 VND", callback_data="step|svc|nt_bus_laos_90d")])
+            rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Campuchia Mộc Bài) - 4.400.000 ₫" if lang == "vi" else "📑 Пакет E-Visa 90 дней (Камбоджа Мокбай) - 4.400.000 ₫" if lang == "ru" else "📑 90-Day E-Visa Package (Cambodia Moc Bai) - 4,400,000 VND", callback_data="step|svc|nt_combo_evisa")])
         else:
             # Khách không miễn visa
             rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Lào Bờ Y) - 4.000.000 ₫" if lang == "vi" else "📑 Пакет E-Visa 90 дней (Лаос Бо-И) - 4.000.000 ₫" if lang == "ru" else "📑 90-Day E-Visa Package (Laos Bo Y) - 4,000,000 VND", callback_data="step|svc|nt_bus_laos_90d")])
-            rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Campuchia Mộc Bài) - 4.000.000 ₫" if lang == "vi" else "📑 Пакет E-Visa 90 дней (Мокбай) - 4.000.000 ₫" if lang == "ru" else "📑 90-Day E-Visa Package (Moc Bai) - 4,000,000 VND", callback_data="step|svc|nt_combo_evisa")])
+            rows.append([InlineKeyboardButton("📑 Trọn gói E-Visa 90 ngày (Campuchia Mộc Bài) - 4.400.000 ₫" if lang == "vi" else "📑 Пакет E-Visa 90 дней (Мокбай) - 4.400.000 ₫" if lang == "ru" else "📑 90-Day E-Visa Package (Moc Bai) - 4,400,000 VND", callback_data="step|svc|nt_combo_evisa")])
             
     elif city == "muine":
         rows.append([InlineKeyboardButton("🚌 Visarun Mũi Né - Cambodia (30/45/90D)", callback_data="step|svc|mn_bus_cambodia")])
@@ -686,7 +801,7 @@ ITINERARIES = {
         "title_vi": "🚌 TUYẾN: NHA TRANG ⇄ CỬA KHẨU BỜ Y (LÀO) — 45/90 NGÀY",
         "title_ru": "🚌 МАРШРУТ: НЯЧАНГ ⇄ КПП БО-И (ЛАОС) — 45/90 ДНЕЙ",
         "title_en": "🚌 ROUTE: NHA TRANG ⇄ BO Y BORDER (LAOS) — 45/90 DAYS",
-        "price": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo E-visa 90 ngày)",
+        "price": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo Bus + E-Visa 90 ngày) | 4.400.000 VND (Combo Bus + E-Visa 90 ngày + Visa Campuchia 24h)",
         "schedule_vi": (
             "⏰ LỊCH TRÌNH CHI TIẾT (ITINERARY):\n"
             "• 21:00: Tập trung tại điểm đón xe buýt.\n"
@@ -788,7 +903,7 @@ ITINERARIES = {
         "title_vi": "🚌 TUYẾN: NHA TRANG / MŨI NÉ ⇄ MỘC BÀI (CAMPUCHIA) (30/45/90 NGÀY)",
         "title_ru": "🚌 МАРШРУТ: НЯЧАНГ / МУЙНЕ ⇄ МОКБАЙ (КАМБОДЖА) (30/45/90 ДНЕЙ)",
         "title_en": "🚌 ROUTE: NHA TRANG / MUI NE ⇄ MOC BAI (CAMBODIA)",
-        "price": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo E-visa 90 ngày)",
+        "price": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo Bus + E-Visa 90 ngày) | 4.400.000 VND (Combo Bus + E-Visa 90 ngày + Visa Campuchia 24h)",
         "schedule_vi": (
             "⏰ LỊCH TRÌNH CHI TIẾT (ITINERARY):\n"
             "• Nha Trang: 21:00 đón tại DUY NHẤT 40 Hòn Chồng = Oceanus (https://maps.app.goo.gl/y8DjaoCNDsRyZN9B8) (Thứ 3, T5, CN).\n"
