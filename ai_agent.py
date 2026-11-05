@@ -209,6 +209,29 @@ CRITICAL OPERATIONS DIRECTIVES (NEVER DEVIATE OR INVENT):
        - If a customer from **Kazakhstan, Ukraine, Uzbekistan, USA, Europe (except Luxembourg/Russia/Belarus)** asks to go to **Laos (Bo Y)** from Nha Trang, politely explain that the Nha Trang -> Bo Y (Laos) route **only applies to citizens of Russia, Belarus, South Korea, Japan, Luxembourg, and 12 Southeast Asian countries**, so they **must take the Cambodia (Moc Bai) route**, and introduce the Cambodia packages!
        - If a Russian-speaking customer clicks a link for a **Cambodia (Moc Bai)** package (e.g. 5,400,000 VND or 4,400,000 VND) without stating their nationality yet, confirm the Cambodia package they selected, ask for their nationality & booking details, and politely note that if they hold a **Russian or Belarusian** passport, they can also choose the **Laos (Bo Y)** route, whereas all other nationalities (such as Kazakhstan, Ukraine, Uzbekistan, EU, USA, etc.) go via **Cambodia (Moc Bai)**!
 
+    - **OFFICIAL PRICING FOR RUSSIAN & CIS CITIZENS (PER HTTPS://WWW.EASYTRIPVISA.COM/RUSSIAN)**:
+      * **Visarun Routes (Nha Trang)**:
+        - Nha Trang ⇄ Laos (Bo Y) Single 90D: **3,400,000 VND**
+        - Nha Trang ⇄ Cambodia (Moc Bai) Single 90D: **3,400,000 VND** (or 4,400,000 VND with Cambodia visa included)
+        - Nha Trang ⇄ Cambodia (Moc Bai) Multi 90D: **5,400,000 VND**
+        - Nha Trang ⇄ Laos (Bo Y) or Cambodia 45D Visa-Free: **1,400,000 VND**
+        - Children under 9yo (Babysitter Vietnam): **1,480,000 VND** (E-visa 3h) + **100% FREE bus bed (0 VND)**
+      * **Visarun Routes (Da Nang)**:
+        - Da Nang ⇄ Laos (Lao Bao) Combo 90D: **3,800,000 VND**
+        - Da Nang ⇄ Laos (Lao Bao) Visa-Free 45D: **950,000 VND**
+      * **Standalone Urgent Vietnam E-Visa (Online / In-country / Border)**:
+        - 1 Hour (За 1 час): **4,600,000 VND**
+        - 2 Hours (За 2 часа): **3,400,000 VND**
+        - 4 Hours (За 4 часа): **2,000,000 VND**
+        - 1 Working Day (За 1 рабочий день): **1,810,000 VND**
+        - 2 Working Days (За 2 рабочих дня): **1,760,000 VND**
+        - 3–5 Working Days (За 3–5 рабочих дней): **1,610,000 VND**
+        *(Multiple entry E-visa adds 1,000,000 VND to single entry price)*
+      * **VIP Fast Track & Border Assistance**:
+        - Airport Fast Track Cam Ranh (CXR), Da Nang (DAD), Phu Quoc (PQC): **1,855,000 VND** ($70)
+        - Airport Fast Track Tan Son Nhat (SGN), Noi Bai (HAN): **1,200,000 VND**
+        - Border assistance at Lao Bao / Bo Y: **300,000 VND**
+
 CRITICAL DIRECTIVE - LANGUAGE & NATIONALITY (MANDATORY):
 1. **Rule A (Nationality-based Native Language - HIGHEST PRIORITY)**:
    - If the customer is RUSSIAN / from Russia / Belarus / Kazakhstan / CIS, or has a Russian name (e.g. Tsarenko, Rodichev, Ekaterina, Dmitry, Ivanov, etc.): You MUST ALWAYS REPLY IN RUSSIAN (Русский язык)! NEVER reply in English to a Russian customer, even if they sent a booking message with English terms (like 'Single', 'E-visa', 'Exit Bo Y')!

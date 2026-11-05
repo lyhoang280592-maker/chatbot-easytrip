@@ -3507,7 +3507,11 @@ def calculate_evisa_smart_schedule(
 
                 },
 
-                "price": "2.200.000 ₫ (Single) | 3.200.000 ₫ (Multi)",
+                "price": (
+                    ("1.810.000 ₫ (Однократная) | 2.810.000 ₫ (Многократная)" if lang == "ru" else "1.810.000 ₫ (Single) | 2.810.000 ₫ (Multi)")
+                    if is_russian_speaking_user(country or lang)
+                    else "2.200.000 ₫ (Single) | 3.200.000 ₫ (Multi)"
+                ),
 
                 "submit_time": f"13:30 {get_weekday_name(submit_dt, lang)} ({submit_dt.strftime('%d/%m')})",
 
@@ -3559,7 +3563,11 @@ def calculate_evisa_smart_schedule(
 
                 },
 
-                "price": "2.150.000 ₫ (Single) | 3.150.000 ₫ (Multi)",
+                "price": (
+                    ("1.760.000 ₫ (Однократная) | 2.760.000 ₫ (Многократная)" if lang == "ru" else "1.760.000 ₫ (Single) | 2.760.000 ₫ (Multi)")
+                    if is_russian_speaking_user(country or lang)
+                    else "2.150.000 ₫ (Single) | 3.150.000 ₫ (Multi)"
+                ),
 
                 "submit_time": f"13:30 {get_weekday_name(submit_dt, lang)} ({submit_dt.strftime('%d/%m')})",
 
@@ -3611,7 +3619,11 @@ def calculate_evisa_smart_schedule(
 
                 },
 
-                "price": "1.810.000 ₫ (Single) | 2.810.000 ₫ (Multi)",
+                "price": (
+                    ("1.610.000 ₫ (Однократная) | 2.610.000 ₫ (Многократная)" if lang == "ru" else "1.610.000 ₫ (Single) | 2.610.000 ₫ (Multi)")
+                    if is_russian_speaking_user(country or lang)
+                    else "1.810.000 ₫ (Single) | 2.810.000 ₫ (Multi)"
+                ),
 
                 "submit_time": f"13:30 {get_weekday_name(submit_dt, lang)} ({submit_dt.strftime('%d/%m')})",
 
@@ -4681,13 +4693,13 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
 
                 f"━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n"
 
-                f"👉 **Следующий шаг:**\n"
+                f"👉 **Следующие шаги:**\n"
 
-                f"1️⃣ Наш менеджер прямо сейчас отправит вам актуальную схему свободных мест в автобусе для выбора удобных полок.\n"
+                f"1️⃣ Нажмите кнопку **\"🔔 Запросить проверку свободных мест в автобусе\"** ниже, чтобы мы проверили наличие свободных мест.\n"
 
-                f"2️⃣ Пожалуйста, пришлите в этот чат четкие фото загранпаспортов всех участников поездки.\n"
+                f"2️⃣ Наш специалист отправит в этот чат актуальную схему свободных мест для выбора удобных полок для семьи.\n"
 
-                f"3️⃣ После согласования мест нажмите кнопку оплаты ниже:"
+                f"3️⃣ После того как вы напишете выбранные номера мест (например: A2, B3), система автоматически подтвердит бронирование и пришлет реквизиты для оплаты."
 
             )
 
@@ -4737,11 +4749,11 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
 
                 f"👉 **Các bước tiếp theo:**\n"
 
-                f"1️⃣ Chuyên viên Easy Trip sẽ gửi ngay sơ đồ chỗ trống mới nhất để quý khách chọn số ghế phù hợp cho gia đình.\n"
+                f"1️⃣ Bấm nút **\"🔔 Báo nhân viên kiểm tra vị trí cabin trống\"** bên dưới để Easy Trip kiểm tra tình trạng chỗ trên xe.\n"
 
-                f"2️⃣ Vui lòng gửi ảnh Hộ chiếu của tất cả thành viên vào khung chat này để công ty làm thủ tục.\n"
+                f"2️⃣ Nhân viên sẽ gửi sơ đồ chỗ trống mới nhất vào khung chat để quý khách chọn số ghế phù hợp cho gia đình.\n"
 
-                f"3️⃣ Sau khi chọn ghế xong, quý khách bấm nút bên dưới để thanh toán:"
+                f"3️⃣ Sau khi quý khách nhắn lại số ghế mong muốn (ví dụ: A2, B3), hệ thống sẽ tự động gửi xác nhận đặt chỗ chính thức kèm hướng dẫn thanh toán chi tiết."
 
             )
 
@@ -4791,11 +4803,11 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
 
                 f"👉 **Next Steps:**\n"
 
-                f"1️⃣ Our consultant is sending the live bus seat layout for your family to select preferred beds.\n"
+                f"1️⃣ Click **\"🔔 Notify staff to check vacant cabins\"** below so our team can verify seat availability.\n"
 
-                f"2️⃣ Please upload clear passport photos for all passengers in this chat.\n"
+                f"2️⃣ Our staff will send the live bus seat layout in this chat for your family to pick preferred beds.\n"
 
-                f"3️⃣ Proceed with payment using the buttons below:"
+                f"3️⃣ Once you reply with your desired seats (e.g. A2, B3), the system will automatically confirm your final booking and provide payment instructions."
 
             )
 
@@ -4947,7 +4959,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
 
                 f"💰 Общая сумма: {pricing['grand_total']:,.0f} VND\n\n"
 
-                f"👉 Xin vui lòng đợi một lát chúng tôi đang kiểm tra và sẽ quay trở lại với bạn trong vài phút nữa"
+                f"👉 Пожалуйста, подождите немного — мы проверяем наличие свободных мест и вернемся к вам через несколько минут!"
 
             )
 
@@ -4987,7 +4999,7 @@ async def handle_step_callback(update: Update, context: ContextTypes.DEFAULT_TYP
 
                 f"💰 Estimated Total: {pricing['grand_total']:,.0f} VND\n\n"
 
-                f"👉 Xin vui lòng đợi một lát chúng tôi đang kiểm tra và sẽ quay trở lại với bạn trong vài phút nữa"
+                f"👉 Please wait a moment, we are checking bus availability and will get back to you in a few minutes!"
 
             )
 
