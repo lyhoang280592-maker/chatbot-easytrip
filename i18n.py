@@ -6,6 +6,7 @@ NATIONALITY_MAP = {
     "ko": ["korean", "korea", "hàn quốc", "han quoc", "ko", "kor"],
     "zh": ["chinese", "china", "trung quốc", "trung quoc", "zh", "cn", "taiwan"],
     "vi": ["vietnamese", "vietnam", "việt nam", "viet nam", "vi", "vn"],
+    "ar": ["arabic", "arab", "saudi", "uae", "emirates", "egypt", "qatar", "kuwait", "oman", "bahrain", "jordan", "iraq", "morocco", "algeria", "tunisia", "ả rập", "ai cập"],
     "en": ["english", "american", "british", "australian", "canada", "en", "us", "uk", "germany", "france", "italy", "spain", "europe"]
 }
 
@@ -59,6 +60,16 @@ MESSAGES = {
         "please_pay": "请在这里支付 ✅",
         "seat_map_caption": "🚌 {date} 的座位图。",
         "seat_map_waiting": "请稍等片刻，我将查询 {date} 大巴的空余座位，并在几分钟内为您发送座位图以便您选座！🚌"
+    },
+    "ar": {
+        "welcome": "مرحباً بكم في مساعد Easy Trip & Visa! 🚌🌏",
+        "system_busy": "عذراً، نظامنا مشغول مؤقتاً. يرجى ترك رقم هاتفك أو التواصل مع خدمة العملاء!",
+        "processing_info": "عذراً، أنا بصدد معالجة المعلومات، يرجى الانتظار لحظة!",
+        "payment_confirmed": "✅ تم استلام الدفع. شكراً لك! يرجى إرسال صورة جواز السفر.",
+        "image_received": "تم استلام {img_type}! شكراً لك.",
+        "please_pay": "يرجى الدفع هنا ✅",
+        "seat_map_caption": "🚌 مخطط مقاعد الحافلة ليوم {date}.",
+        "seat_map_waiting": "يرجى الانتظار قليلاً، سأتحقق من المقاعد المتاحة في الحافلة ليوم {date} وأرسل لك المخطط لاختيار مقعدك خلال دقائق! 🚌"
     }
 }
 

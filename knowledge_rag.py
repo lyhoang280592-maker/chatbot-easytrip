@@ -42,10 +42,10 @@ MANUAL_QA_FILE = resolve_kb_file("manual_qa.json")  # Admin tự thêm Q&A thủ
 # =====================================================================
 
 def tokenize(text: str) -> list[str]:
-    """Tách từ đơn giản, hỗ trợ tiếng Anh, Việt, Nga, Hàn."""
+    """Tách từ đơn giản, hỗ trợ tiếng Anh, Việt, Nga, Hàn, Trung, Ả Rập."""
     text = text.lower()
     # Giữ lại chữ cái, số, khoảng trắng (ghép các lớp ký tự Latin + Nga + Việt vào làm một từ contiguous)
-    tokens = re.findall(r'[a-z0-9а-яё\u00c0-\u00ff\u0100-\u017f\u0180-\u024f\u1ea0-\u1eff]+|[\uac00-\ud7a3]+|[\u4e00-\u9fff]+', text)
+    tokens = re.findall(r'[a-z0-9а-яё\u00c0-\u00ff\u0100-\u017f\u0180-\u024f\u1ea0-\u1eff]+|[\uac00-\ud7a3]+|[\u4e00-\u9fff]+|[\u0600-\u06ff]+', text)
     return [t for t in tokens if len(t) > 1]
 
 

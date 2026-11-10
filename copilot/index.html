@@ -6,10 +6,10 @@
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
-    <title>Easy Trip & Visa - Co-Pilot Chat Studio</title>
+    <title>Easy Trip & Visa - Co-Pilot Chat & Training Studio</title>
     <!-- Font chữ Outfit & Inter hiện đại -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="index.css?v=3.2">
+    <link rel="stylesheet" href="index.css?v=3.3">
 </head>
 <body>
     <!-- Nền sinh động Ambient -->
@@ -35,7 +35,7 @@
             <div class="dashboard-tabs">
                 <button class="tab-btn active" id="tab-btn-sandbox" onclick="switchTab('sandbox')">🧪 Sandbox Playground</button>
                 <button class="tab-btn" id="tab-btn-live" onclick="switchTab('live')">🌐 Live Channels Control</button>
-                <button class="tab-btn" id="tab-btn-ops" onclick="switchTab('ops')">📋 Quy Trình Vận Hành & Calculator</button>
+                <button class="tab-btn" id="tab-btn-ops" onclick="switchTab('ops')">📋 Vận Hành & 🎓 Đào Tạo AI</button>
             </div>
 
             <!-- Khu Vực Điều Khiển & Chỉ Số Trực Quan -->
@@ -426,19 +426,27 @@
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="ops-fasttrack">Dịch vụ Fast Track (Thông quan nhanh)</label>
+                                    <label for="ops-fasttrack">Dịch vụ Fast Track & Hỗ trợ cửa khẩu</label>
                                     <select id="ops-fasttrack" onchange="calculateOps()">
                                         <option value="none">Không sử dụng</option>
-                                        <option value="SGN">Tân Sơn Nhất (SGN) / Nội Bài (HAN)</option>
-                                        <option value="DAD">Đà Nẵng (DAD)</option>
-                                        <option value="CXR">Cam Ranh (CXR)</option>
-                                        <option value="other">Các sân bay khác (PQC, VDO, HPH...)</option>
+                                        <option value="DAD_CXR">CXR / DAD / PQC / VDO / HPH... ($70 / 1,855,000đ)</option>
+                                        <option value="SGN">Tân Sơn Nhất (SGN) / Nội Bài (HAN) (1,200,000đ)</option>
+                                        <option value="LAO_BORDER">Hỗ trợ cửa khẩu Lào — Lao Bảo / Bờ Y (300,000đ)</option>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="form-row">
-                                <div class="form-group" style="display: flex; gap: 15px; align-items: center; height: 100%; padding-top: 10px; margin-bottom: 10px;">
+                                <div class="form-group">
+                                    <label for="ops-market-tier">Bảng giá thị trường (Website)</label>
+                                    <select id="ops-market-tier" onchange="calculateOps()">
+                                        <option value="auto">🔄 Tự động theo Quốc tịch</option>
+                                        <option value="en_kr">🌍 Quốc tế / Hàn Quốc (/english, /korean)</option>
+                                        <option value="ru">🇷🇺 Nga & CIS (/russian)</option>
+                                        <option value="ar">🇸🇦 Ả Rập / Trung Đông (/arabic +1.5M)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="display: flex; gap: 15px; align-items: center; height: 100%; padding-top: 20px; margin-bottom: 10px;">
                                     <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.8rem; color: var(--text-primary); font-weight: 500;">
                                         <input type="checkbox" id="ops-loyalty" onchange="calculateOps()" style="width: 15px; height: 15px; cursor: pointer;"> Khách Loyalty / Đại lý
                                     </label>
@@ -629,7 +637,7 @@
                             
                             <div class="template-display-box">
                                 <div class="box-header">
-                                    <span>💳 Thông tin chuyển khoản (Ngân Hàng Nam Á):</span>
+                                    <span>💳 Thông tin thanh toán (Vietcombank / VRB / USDT):</span>
                                     <button class="btn-copy-small" onclick="copyText('tmpl-payment-text')">Sao chép</button>
                                 </div>
                                 <div class="box-body" id="tmpl-payment-text">...</div>
@@ -728,16 +736,32 @@
                         <!-- STAFF INTERNAL AI HELPDESK CHAT đã được di chuyển thành CỘT 3 riêng biệt -->
                     </section>
 
-                    <!-- COLUMN 3: STAFF INTERNAL AI HELPDESK CHAT (Cột Phải Ngoài Cùng) -->
+                    <!-- COLUMN 3: STAFF INTERNAL AI TRAINING & HELPDESK CHAT (Cột Phải Ngoài Cùng) -->
                     <section class="panel-section staff-chat-panel" id="staff-chat-panel">
-                        <div class="panel-header">
-                            <div class="panel-icon">💬</div>
-                            <h3>EasyTrip Staff AI Chat (Hỏi Đáp Nghiệp Vụ)</h3>
+                        <div class="panel-header" style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div class="panel-icon">🎓</div>
+                                <h3>Đào Tạo & Hỏi Đáp AI Nội Bộ</h3>
+                            </div>
+                            <button class="staff-reset-btn" onclick="resetStaffChat()" title="Bắt đầu cuộc hội thoại đào tạo mới">🔄 Phiên mới</button>
+                        </div>
+
+                        <!-- Chọn chế độ hỏi AI cho nhân viên -->
+                        <div class="staff-mode-bar" id="staff-mode-bar">
+                            <button class="staff-mode-btn active" data-mode="training" onclick="setStaffChatMode('training')">🎓 Hỏi tình huống / SOP</button>
+                            <button class="staff-mode-btn" data-mode="reply_draft" onclick="setStaffChatMode('reply_draft')">💬 Soạn tin trả lời khách</button>
+                            <button class="staff-mode-btn" data-mode="quiz" onclick="setStaffChatMode('quiz')">🎯 Luyện tập tình huống</button>
                         </div>
                         
                         <div class="staff-chat-window" id="staff-chat-window">
                             <div class="staff-msg bot">
-                                Chào bạn! Mình là AI hỗ trợ nghiệp vụ. Bạn có câu hỏi nào về dịch vụ, bảng giá, quy trình làm visa hay thông tin ngân hàng cần giải đáp nhanh không? Bạn cũng có thể dán ảnh hộ chiếu (passport) hoặc gửi file excel vào đây để mình hỗ trợ nhé!
+                                <div class="staff-msg-content">
+                                    👋 Chào bạn! Mình là <strong>Mentor AI Đào Tạo & Nghiệp Vụ</strong> của Easy Trip & Visa.<br><br>
+                                    Bạn có thể hỏi bất kỳ tình huống nào chưa rõ (nhớ chọn chế độ phù hợp ở trên):<br>
+                                    • <strong>🎓 Hỏi tình huống / SOP:</strong> Tra giá 4 website (<code>/english</code>, <code>/korean</code>, <code>/russian</code>, <code>/arabic</code>), sự cố cửa khẩu (nhầm dấu 45D, gửi dấu trễ &gt;08:00), sơ đồ ghế &amp; lệnh Telegram.<br>
+                                    • <strong>💬 Soạn tin trả lời khách:</strong> Dán tin nhắn khách hỏi (Nga/Anh/Hàn/Ả Rập/Trung/Việt) để AI viết câu trả lời chuẩn kèm lưu ý nghiệp vụ.<br>
+                                    • <strong>🎯 Luyện tập tình huống:</strong> AI đóng vai Quản lý ra đề thực tế và chấm điểm cách bạn xử lý!
+                                </div>
                             </div>
                         </div>
 
@@ -748,18 +772,21 @@
                             <div class="staff-chat-input-area-new">
                                 <button class="staff-chat-attach-btn" onclick="document.getElementById('staff-chat-file-input').click()" title="Đính kèm ảnh/tệp">📎</button>
                                 <input type="file" id="staff-chat-file-input" style="display: none;" multiple onchange="handleStaffFileSelect(this)">
-                                <textarea id="staff-chat-input" placeholder="Hỏi AI giá khẩn cấp, dán ảnh passport, kéo thả file..." rows="1" oninput="autoResizeStaffInput(this)"></textarea>
+                                <textarea id="staff-chat-input" placeholder="Nhập tình huống bạn chưa rõ, dán tin nhắn khách hoặc Enter để gửi..." rows="1" oninput="autoResizeStaffInput(this)" onkeydown="handleStaffChatTextareaKey(event)"></textarea>
                                 <button id="staff-chat-send-btn" onclick="sendStaffChatMessage()">Gửi</button>
                             </div>
                         </div>
 
-                        <div class="staff-suggestions" style="margin-top: 12px; display: flex; flex-wrap: wrap; gap: 6px;">
-                            <span style="font-size: 0.7rem; color: var(--text-secondary); width: 100%;">Gợi ý hỏi nhanh:</span>
-                            <button class="btn-copy-small" onclick="quickAskStaff('Giá e-visa khẩn cấp')" style="font-size: 0.65rem;">Giá khẩn cấp</button>
-                            <button class="btn-copy-small" onclick="quickAskStaff('Tài khoản ngân hàng Nam Á')" style="font-size: 0.65rem;">Tài khoản ngân hàng</button>
-                            <button class="btn-copy-small" onclick="quickAskStaff('Địa chỉ văn phòng ở đâu')" style="font-size: 0.65rem;">Địa chỉ văn phòng</button>
-                            <button class="btn-copy-small" onclick="quickAskStaff('Hồ sơ e-visa cần chụp gì')" style="font-size: 0.65rem;">Hồ sơ e-visa cần gì</button>
-                            <button class="btn-copy-small" onclick="quickAskStaff('Lịch xe đi Campuchia')" style="font-size: 0.65rem;">Lịch xe Campuchia</button>
+                        <div class="staff-suggestions" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+                            <span style="font-size: 0.7rem; color: var(--text-secondary); width: 100%;">Gợi ý hỏi nhanh & tình huống hay gặp:</span>
+                            <button class="btn-copy-small" onclick="quickAskStaff('So sánh bảng giá 4 website /english, /korean, /russian, /arabic và Fast Track $70')" style="font-size: 0.65rem;">Bảng giá 4 web</button>
+                            <button class="btn-copy-small" onclick="quickAskStaff('Khách bị đóng nhầm dấu 45 ngày dù có E-visa 90 ngày tại cửa khẩu thì xử lý thế nào?')" style="font-size: 0.65rem;">Nhầm dấu 45D</button>
+                            <button class="btn-copy-small" onclick="quickAskStaff('Khách Mộc Bài gửi ảnh dấu xuất cảnh trễ sau 08:00 sáng hoặc lỡ chuyến xe 13:00 thì làm sao?')" style="font-size: 0.65rem;">Gửi dấu trễ &gt;08:00</button>
+                            <button class="btn-copy-small" onclick="quickAskStaff('Cuối tuần Thứ 7, Chủ Nhật có làm E-visa 4-8h không và chính sách hoàn tiền 100% thế nào?')" style="font-size: 0.65rem;">Cuối tuần & Hoàn tiền</button>
+                            <button class="btn-copy-small" onclick="quickAskStaff('Quy tắc đọc sơ đồ ghế xe màu trắng / gạch vàng và lệnh Lock ghế Telegram như thế nào?')" style="font-size: 0.65rem;">Sơ đồ ghế & Lock</button>
+                            <button class="btn-copy-small" onclick="quickAskStaff('Khách hỏi E-visa có cần in giấy A4 tại Mộc Bài hay dùng PDF tại Bờ Y?')" style="font-size: 0.65rem;">In A4 vs PDF</button>
+                            <button class="btn-copy-small" onclick="quickAskStaff('Thông tin thanh toán Vietcombank, VRB, USDT và quy trình đóng mộc đỏ receipt?')" style="font-size: 0.65rem;">VCB / VRB / USDT</button>
+                            <button class="btn-copy-small" onclick="startQuizScenario()" style="font-size: 0.65rem; background: rgba(16, 185, 129, 0.18); border-color: rgba(16, 185, 129, 0.45); color: #34D399;">🎯 Ra bài tập tình huống</button>
                         </div>
                     </section>
                 </div>
@@ -780,6 +807,6 @@
     </div>
 
     <!-- Script xử lý Logic của toàn bộ hệ thống -->
-    <script src="app.js?v=3.2"></script>
+    <script src="app.js?v=3.3"></script>
 </body>
 </html>

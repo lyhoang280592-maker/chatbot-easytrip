@@ -1948,7 +1948,7 @@ async def get_knowledge():
         "manual": manual_data,
         "original": [
             {"question": "Đi visarun theo quốc tịch (Nga/Hàn/ASEAN)", "answer": "Người Nga/Hàn/ASEAN đi visarun Lào (Bờ Y) để được miễn visa. Các nước khác đi Campuchia (Mộc Bài)."},
-            {"question": "Giá làm E-visa Việt Nam chuẩn 3-5 ngày", "answer": "Giá E-visa 3-5 ngày là 2.150.000đ. Khách loyalty ưu đãi 1.810.000đ."},
+            {"question": "Giá làm E-visa Việt Nam chuẩn 3-5 ngày", "answer": "Quốc tế/Hàn: 1.810.000đ | Nga/CIS: 1.610.000đ | Ả Rập (/arabic): 3.310.000đ (Khách loyalty ưu đãi 1.110.000đ)."},
             {"question": "Thuê xe máy Nha Trang", "answer": "Dịch vụ thuê xe máy 24/7 giao tận nơi đầy đủ mũ bảo hiểm xe ga/số."}
         ]
     }
@@ -2066,6 +2066,8 @@ async def api_staff_chat(request: Request):
     """API trợ lý AI nghiệp vụ nội bộ dành cho nhân viên (Staff AI Chatbot)"""
     body = await request.json()
     question = body.get("question", "").strip()
+    history = body.get("history", [])
+    mode = body.get("mode", "training")
     attachments = body.get("attachments", [])  # Danh sách tệp đính kèm: {"url": "...", "filename": "...", "content_type": "..."}
     
     if not question and not attachments:
@@ -2090,8 +2092,8 @@ async def api_staff_chat(request: Request):
             
     try:
         from ai_agent import process_staff_chat
-        answer = await process_staff_chat(question)
-        return {"success": True, "answer": answer}
+        answer = await process_staff_chat(question, history=history, mode=mode)
+        return {"success": True, "answer": answer, "mode": mode}
     except Exception as e:
         return {"success": False, "message": str(e)}
 

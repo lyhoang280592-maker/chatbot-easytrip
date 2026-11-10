@@ -46,13 +46,13 @@ const defaultLessons = [
         id: 'def-2',
         keywords: ['campuchia', 'mộc bài', 'cambodia', 'quốc tịch khác', 'mỹ', 'anh'],
         promptText: "Giá đi visarun Campuchia (Mộc Bài) thế nào?",
-        response: "🇰🇭 Chào bạn! Tuyến **Nha Trang <=> CAMPUCHIA (Cửa khẩu Mộc Bài)** khởi hành lúc **21:30 tối Thứ 3, Thứ 5, Chủ Nhật** hàng tuần:\n\n* **Gói xe 45 ngày:** 1.400.000đ (Phí visa Campuchia tự túc tại cửa khẩu tầm 35$-40$).\n* **Gói 90 ngày (Trọn gói visa Việt Nam 90 ngày):** 4.000.000đ. \n👉 Bạn vui lòng gửi cho mình hình ảnh passport và visa hiện tại để kiểm tra lịch xe phù hợp nhất nhé!"
+        response: "🇰🇭 Chào bạn! Tuyến **Nha Trang <=> CAMPUCHIA (Cửa khẩu Mộc Bài)** khởi hành lúc **21:30 tối Thứ 3, Thứ 5, Chủ Nhật** hàng tuần:\n\n* **Gói xe 45 ngày (miễn thị thực):** 1.400.000đ.\n* **Quốc tế / Hàn Quốc (`/english`, `/korean`):** 4.000.000đ (Bus + E-visa 90D, +1.000.000đ Visa Cam) | 5.000.000đ (Single + Visa Cam) | 6.000.000đ (Multi + Visa Cam).\n* **Nga & CIS (`/russian`):** 3.400.000đ (Single 90D) | 4.400.000đ (Single + Cam) | 5.400.000đ (Multi + Cam).\n* **Ả Rập (`/arabic`):** 5.500.000đ / 6.500.000đ / 7.500.000đ.\n👉 Bạn vui lòng gửi mình quốc tịch và hình ảnh passport/visa hiện tại để kiểm tra lịch xe phù hợp nhất nhé!"
     },
     {
         id: 'def-3',
         keywords: ['e-visa', '3-5 ngày', 'giá e-visa', 'chi phí', 'làm visa'],
         promptText: "Giá làm E-visa Việt Nam chuẩn 3-5 ngày là bao nhiêu?",
-        response: "💳 Dạ, chi phí làm **E-visa Việt Nam tiêu chuẩn (3-5 ngày làm việc)** là **2.150.000đ**.\n🔥 Đặc biệt: Nếu bạn là **Khách Hàng Cũ (Loyalty)** từng dùng dịch vụ của Easy Trip, giá ưu đãi chỉ còn **1.810.000đ**! Bạn có cần làm gấp hơn không (khẩn cấp 1 ngày / 2 ngày)?"
+        response: "💳 Dạ, chi phí làm **E-visa Việt Nam tiêu chuẩn (3-5 ngày làm việc, Single Entry)** theo từng thị trường Website là:\n* **Quốc tế / Hàn Quốc (`/english`, `/korean`):** **1.810.000đ**\n* **Nga & CIS (`/russian`):** **1.610.000đ**\n* **Ả Rập (`/arabic`):** **3.310.000đ**\n🔥 Nếu là **Khách Hàng Cũ (Loyalty)** giá ưu đãi còn **1.110.000đ** (Multiple Entry +1.000.000đ). Bạn có cần làm gấp hơn (1h / 2h / 4h / 1-2 ngày) không?"
     },
     {
         id: 'def-4',
@@ -1461,40 +1461,59 @@ function calculateOps() {
     // Lấy lại giá trị visaType sau khi đã tự động điều chỉnh ở trên
     const finalVisaType = document.getElementById('ops-visa-type').value;
 
-    // 2. Tính toán Giá nền
+    // 2. Tính toán Giá nền theo đúng 4 bảng giá Website (/english, /korean, /russian, /arabic)
     const isLaos = route.includes('LÀO') || route.includes('LAOS') || route.includes('لاوس');
     const isCIS = isCISGroup(nationalityRaw);
+    const natNormLower = nationalityRaw ? removeVietnameseTones(nationalityRaw).toLowerCase() : '';
+    const isArabNat = ['arab', 'saudi', 'uae', 'emirates', 'egypt', 'ai cap', 'qatar', 'kuwait', 'oman', 'bahrain', 'jordan', 'iraq', 'morocco', 'ma roc', 'algeria', 'tunisia', 'tunusia'].some(k => natNormLower.includes(k));
+    const tierSelect = document.getElementById('ops-market-tier');
+    const selectedTier = tierSelect ? tierSelect.value : 'auto';
+    const marketTier = selectedTier === 'auto' ? (isArabNat ? 'ar' : (isCIS ? 'ru' : 'en_kr')) : selectedTier;
+    const isArabicTier = marketTier === 'ar';
+    const isRussianTier = marketTier === 'ru';
     
     let adultPrice = 0;
     let childPrice = 0;
 
     if (finalVisaType.startsWith('visarun-')) {
         const isExempt = finalVisaType.endsWith('-45d');
-        const standardAdultPackPrice = isExempt ? (isLoyalty ? 1300000 : 1400000) : (isLoyalty ? 3550000 : 4000000);
-        const busTicketPrice = isLoyalty ? 1300000 : 1400000;
+        const isDaNang = city === 'Da Nang';
+        let standardAdultPackPrice = 4000000;
+        if (isExempt) {
+            standardAdultPackPrice = isDaNang ? (isLoyalty ? 850000 : 950000) : (isLoyalty ? 1300000 : 1400000);
+        } else if (isDaNang) {
+            standardAdultPackPrice = isLoyalty ? 3550000 : (isArabicTier ? 5300000 : 3800000);
+        } else if (isArabicTier) {
+            standardAdultPackPrice = isLoyalty ? 3550000 : (isLaos ? 5500000 : 6500000);
+        } else if (isRussianTier) {
+            standardAdultPackPrice = isLoyalty ? 3000000 : (isLaos ? 3400000 : 4400000);
+        } else {
+            standardAdultPackPrice = isLoyalty ? 3550000 : (isLaos ? 4000000 : 5000000);
+        }
+        const busTicketPrice = isDaNang ? (isLoyalty ? 850000 : 950000) : (isLoyalty ? 1300000 : 1400000);
         
         // Adult Price calculation
         if (transport === 'no') {
             if (isExempt) {
                 adultPrice = 0;
             } else {
-                adultPrice = isCIS ? 2000000 : (standardAdultPackPrice - busTicketPrice);
+                adultPrice = isRussianTier ? 2000000 : Math.max(0, standardAdultPackPrice - busTicketPrice);
             }
         } else {
             adultPrice = standardAdultPackPrice;
         }
 
-        // Child under 9 Price calculation (bus ticket is free, so they only pay the visa portion)
+        // Child under 9 Price calculation (bus ticket is free 0 VND, E-visa portion only)
         if (isExempt) {
             childPrice = 0;
         } else {
-            childPrice = isCIS ? 2000000 : (standardAdultPackPrice - busTicketPrice);
+            childPrice = isLoyalty ? 1480000 : (isArabicTier ? 2980000 : 1480000);
         }
         
         basePrice = (adults * adultPrice) + (children * childPrice);
     } else {
-        // E-Visa khẩn cấp / tiêu chuẩn (không có đi xe buýt, tính giá giống nhau cho cả người lớn & trẻ em)
-        const pricingTable = {
+        // E-Visa khẩn cấp / tiêu chuẩn theo từng thị trường Website
+        const pricingTableEnKr = {
             'ev-1h': { standard: 4600000, loyalty: 3300000 },
             'ev-2h': { standard: 3400000, loyalty: 2900000 },
             'ev-3h': { standard: 3000000, loyalty: 2500000 },
@@ -1504,8 +1523,22 @@ function calculateOps() {
             'ev-2d': { standard: 2150000, loyalty: 1450000 },
             'ev-std': { standard: 1810000, loyalty: 1110000 }
         };
-        const p = pricingTable[finalVisaType] || pricingTable['ev-std'];
-        const evPrice = isLoyalty ? p.loyalty : p.standard;
+        const pricingTableRu = {
+            'ev-1h': { standard: 4600000, loyalty: 3300000 },
+            'ev-2h': { standard: 3400000, loyalty: 2900000 },
+            'ev-3h': { standard: 3000000, loyalty: 2500000 },
+            'ev-4h': { standard: 2000000, loyalty: 1600000 },
+            'ev-8h': { standard: 2200000, loyalty: 1800000 },
+            'ev-1d': { standard: 1810000, loyalty: 1500000 },
+            'ev-2d': { standard: 1760000, loyalty: 1450000 },
+            'ev-std': { standard: 1610000, loyalty: 1110000 }
+        };
+        const table = isRussianTier ? pricingTableRu : pricingTableEnKr;
+        const p = table[finalVisaType] || table['ev-std'];
+        let evPrice = isLoyalty ? p.loyalty : p.standard;
+        if (!isLoyalty && isArabicTier) {
+            evPrice += 1500000;
+        }
         basePrice = (adults + children) * evPrice;
     }
 
@@ -1526,9 +1559,14 @@ function calculateOps() {
     }
     
     if (fasttrack !== 'none') {
-        const ftPrice = (fasttrack === 'SGN' || fasttrack === 'HAN') 
-            ? (isLoyalty ? 675000 : 1200000) 
-            : (isLoyalty ? 540000 : 1200000);
+        let ftPrice = 1855000; // $70 (CXR, DAD, PQC, VDO, HPH, HUI, VII, DLI, VCA)
+        if (fasttrack === 'SGN' || fasttrack === 'HAN') {
+            ftPrice = isLoyalty ? 675000 : 1200000;
+        } else if (fasttrack === 'LAO_BORDER') {
+            ftPrice = 300000;
+        } else if (isLoyalty) {
+            ftPrice = 540000;
+        }
         surchargeFasttrack = ftPrice * totalPax;
     }
 
@@ -1553,18 +1591,29 @@ function calculateOps() {
         const weekdays = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
         departureDateStr = `${formattedDepDate} (${weekdays[depDayOfWeek]})`;
         
-        if (!isLaos && nationalityRaw) {
-            if (depDayOfWeek !== 0 && depDayOfWeek !== 2 && depDayOfWeek !== 4) {
-                if (dateWarningEl) {
-                    dateWarningEl.textContent = "⚠️ Xe đi Campuchia chỉ khởi hành vào Thứ 3, Thứ 5, Chủ Nhật.";
-                    dateWarningEl.style.display = 'block';
-                }
-            } else {
-                if (dateWarningEl) dateWarningEl.style.display = 'none';
+        if (!isLaos && nationalityRaw && (depDayOfWeek !== 0 && depDayOfWeek !== 2 && depDayOfWeek !== 4)) {
+            if (dateWarningEl) {
+                dateWarningEl.textContent = "⚠️ Xe đi Campuchia chỉ khởi hành vào Thứ 3, Thứ 5, Chủ Nhật.";
+                dateWarningEl.style.display = 'block';
+            }
+        } else if ((finalVisaType === 'ev-4h' || finalVisaType === 'ev-8h') && (depDayOfWeek === 0 || depDayOfWeek === 6)) {
+            if (dateWarningEl) {
+                dateWarningEl.textContent = "⚠️ E-Visa 4–8h không xử lý cuối tuần (T7/CN) & ngày lễ. Hoàn 100% nếu trễ hạn GMT+7.";
+                dateWarningEl.style.display = 'block';
             }
         } else {
             if (dateWarningEl) dateWarningEl.style.display = 'none';
         }
+    } else if (finalVisaType === 'ev-4h' || finalVisaType === 'ev-8h') {
+        const todayDow = new Date().getDay();
+        if ((todayDow === 0 || todayDow === 6) && dateWarningEl) {
+            dateWarningEl.textContent = "⚠️ Hôm nay là cuối tuần (T7/CN): gói 4–8h tạm nghỉ cuối tuần, hãy báo khách liên hệ WhatsApp/Telegram nếu khẩn.";
+            dateWarningEl.style.display = 'block';
+        } else if (dateWarningEl) {
+            dateWarningEl.style.display = 'none';
+        }
+    } else if (dateWarningEl) {
+        dateWarningEl.style.display = 'none';
     }
 
     // 5. Tính toán E-visa Khẩn Cấp dựa trên thời gian có dấu xuất cảnh
@@ -1776,36 +1825,71 @@ Dear customer, here is the bus details for your upcoming visa run:
 };
 
 const paymentTemplates = {
-    vi: `💰 THÔNG TIN CHUYỂN KHOẢN THANH TOÁN:
-Để hoàn tất đăng ký dịch vụ, kính đề nghị quý khách thực hiện thanh toán chuyển khoản:
+    vi: `💰 THÔNG TIN THANH TOÁN EASY TRIP & VISA:
+Quý khách có thể chọn thanh toán bằng chuyển khoản ngân hàng, USDT (crypto) hoặc tiền mặt VND/USD:
 
-🏦 Ngân hàng: Joint Stock Commercial Bank for Foreign Trade of Viet Nam (Vietcombank)
-👤 Chủ tài khoản: EASY TRIP & VISA CO. LTD / Công Ty TNHH chuyến đi và thị thực dễ dàng
+🏦 Ngân hàng: Vietcombank (VCB) / VRB
+👤 Chủ tài khoản: EASY TRIP & VISA CO. LTD
 🔢 Số tài khoản (VCB OneQR): QRPACQ1ZZZZ50600546
 🔢 Số tài khoản thường: 1068582577
 🌐 Mã SWIFT: BFTVVNVX
+🪙 Crypto: Hỗ trợ thanh toán USDT
 
 📍 Địa chỉ văn phòng Easy Trip & Visa Nha Trang: 21 Phan Vinh, Nha Trang.
 (Định vị Google Maps: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9)
 
 🚨 LƯU Ý QUAN TRỌNG:
 - Thanh toán tiền xe buýt TRƯỚC 14:00 ngày khởi hành.
-- E-Visa thường cần thanh toán trước ít nhất 3 ngày (trừ gói khẩn cấp đặc biệt). Sau khi nhận thanh toán, chúng tôi sẽ lập tức tiến hành thủ tục và gửi receipt có mộc đỏ công ty cho khách hàng.`,
-    en: `💰 BANK TRANSFER PAYMENT DETAILS:
-To complete your booking, please make the payment using bank transfer:
+- E-Visa 4–8h không xử lý Thứ 7, Chủ Nhật & ngày lễ. Hoàn tiền 100% nếu không đạt đúng hạn GMT+7.
+- Sau khi nhận thanh toán, nhân viên đóng dấu mộc đỏ công ty lên receipt và chụp ảnh gửi khách hàng.`,
+    en: `💰 PAYMENT DETAILS — EASY TRIP & VISA CO. LTD:
+You may pay via Bank Transfer, USDT (crypto), or Cash (VND / USD):
 
-🏦 Bank: Joint Stock Commercial Bank for Foreign Trade of Viet Nam (Vietcombank)
+🏦 Bank: Vietcombank (VCB) / VRB
 👤 Recipient: EASY TRIP & VISA CO. LTD
 🔢 Account number (VCB OneQR): QRPACQ1ZZZZ50600546
 🔢 Standard Account number: 1068582577
 🌐 SWIFT Code: BFTVVNVX
+🪙 Crypto: USDT accepted
 
 📍 Office address in Nha Trang: 21 Phan Vinh, South Nha Trang.
 (Google Maps: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9)
 
-🚨 IMPORTANT NOTE:
+🚨 IMPORTANT NOTES:
 - Bus ticket payment must be completed BEFORE 2:00 PM (14:00) on departure day.
-- E-visa fee must be paid 3 days in advance. We will issue a red-stamped confirmation receipt once the payment is confirmed.`
+- 4–8h urgent E-visa processing is unavailable on Sat/Sun & public holidays. 100% full refund if E-visa is not delivered within promised GMT+7 hours.
+- We will issue a red-stamped confirmation receipt once payment is confirmed.`,
+    ru: `💰 СПОСОБЫ ОПЛАТЫ — EASY TRIP & VISA CO. LTD:
+Вы можете оплатить наличными (VND / USD), криптовалютой USDT или банковским переводом:
+
+🏦 Банк: Vietcombank (VCB) / VRB
+👤 Получатель: EASY TRIP & VISA CO. LTD
+🔢 Номер счета (VCB OneQR): QRPACQ1ZZZZ50600546
+🔢 Номер счета: 1068582577
+🌐 SWIFT: BFTVVNVX
+🪙 Криптовалюта: принимаем USDT
+
+📍 Офис в Нячанге: 21 Phan Vinh, South Nha Trang.
+(Карта: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9)
+
+🚨 ВАЖНО:
+- Оплата автобуса строго до 14:00 в день отправления.
+- Срочные E-Visa 4–8ч не оформляются в сб/вс и праздники. Гарантия возврата 100% при несоблюдении сроков (GMT+7).`,
+    ar: `💰 تفاصيل الدفع — EASY TRIP & VISA CO. LTD:
+يمكنكم الدفع نقداً (VND / USD)، أو بعملة USDT، أو عبر التحويل البنكي:
+
+🏦 البنك: Vietcombank (VCB) / VRB
+👤 اسم الحساب: EASY TRIP & VISA CO. LTD
+🔢 رقم الحساب: 1068582577
+🌐 رمز SWIFT: BFTVVNVX
+🪙 العملات الرقمية: نقبل الدفع بـ USDT
+
+📍 عنوان المكتب في نها ترانج: 21 Phan Vinh, South Nha Trang.
+(الخريطة: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9)
+
+🚨 ملاحظات هامة:
+- يجب دفع تذكرة الحافلة قبل الساعة 14:00 في يوم المغادرة.
+- استرداد 100% في حال عدم استلام التأشيرة ضمن المدة المحددة (GMT+7).`
 };
 
 const feedbackTemplates = {
@@ -1925,84 +2009,163 @@ function changeSopLanguage() {
     updateDanangTemplate();
 }
 
-// 8. LOGIC CHATBOT AI NỘI BỘ DÀNH CHO NHÂN VIÊN (Staff Internal Helpdesk Chatbot)
+// 8. LOGIC CHATBOT AI ĐÀO TẠO & HỎI ĐÁP NGHIỆP VỤ NHÂN VIÊN (Staff Internal Training & Helpdesk AI)
 const staffAIDatabase = [
+    {
+        keywords: ['4 website', 'bang gia', 'arabic', 'a rap', 'korean', 'russian', 'english', 'english', 'fast track', '$70', '1.855'],
+        answer: `🌍 **BẢNG GIÁ ĐỒNG BỘ 4 WEBSITE (/english, /korean, /russian, /arabic):**
+1. **Quốc tế & Hàn Quốc (/english, /korean):**
+   - Mộc Bài (T3/T5/CN 21:30): **6.000.000đ** (Multi+Cam) | **5.000.000đ** (Single+Cam) | **4.000.000đ** (Bus+90D EV, +1M Cam) | **1.400.000đ** (45D).
+   - Bờ Y (Lào): **1.400.000đ** (45D hằng ngày) | **4.000.000đ** (90D không phải Nga).
+   - Đà Nẵng–Lào Bảo: **3.800.000đ** (90D, đặt >=3d còn 3.550.000đ) | **950.000đ** (45D).
+   - E-visa lẻ: 1h 4.6M | 2h 3.4M | 4h 2.6M | 8h 2.9M | 1d 2.2M | 2d 2.15M | 3-5d 1.81M (Multi +1M) | Trẻ <9T: **1.480.000đ** + miễn 100% vé xe.
+2. **Nga & CIS (/russian):**
+   - Bờ Y 90D Single: **3.400.000đ** (Khách cũ CRM 3.0M) | Multi: **4.400.000đ** (Khách cũ 4.0M) | 45D: **1.400.000đ** (Khách cũ 1.3M).
+   - Mộc Bài: **5.400.000đ** (Multi+Cam) | **4.400.000đ** (Single+Cam) | **3.400.000đ** (90D Single Bus+EV) | **1.400.000đ** (45D).
+   - E-visa lẻ RU: 1h 4.6M | 2h 3.4M | 4h **2.0M** | 1d **1.81M** | 2d **1.76M** | 3-5d **1.61M** (Multi +1M).
+3. **Ả Rập (/arabic = Giá EN + 1.500.000đ):**
+   - Mộc Bài: **7.5M** (Multi+Cam) | **6.5M** (Single+Cam) | **5.5M** (Bus+90D EV) | Đà Nẵng–Lào: **5.3M**.
+   - E-visa lẻ AR: 1h 6.1M | 2h 4.9M | 4h 4.1M | 1d 3.7M | 2d 3.65M | 3-5d 3.31M | Trẻ <9T card: **2.98M**.
+4. **VIP Fast Track & Hỗ trợ cửa khẩu:**
+   - Sân bay CXR / DAD / PQC / VDO / HPH / HUI / VII / DLI / VCA: **1.855.000đ ($70)**.
+   - Sân bay SGN / HAN: **1.200.000đ** | Hỗ trợ cửa khẩu Lào (Lao Bảo / Bờ Y): **300.000đ**.`
+    },
+    {
+        keywords: ['nham dau', '45d', '45 ngay', 'sai dau', 'dong dau sai', 'in a4', 'pdf', 'moc bai', 'giay a4'],
+        answer: `🚨 **XỬ LÝ SỰ CỐ CỬA KHẨU & GIẤY TỜ E-VISA:**
+1. **Sự cố đóng nhầm dấu 45 ngày dù khách có E-visa 90 ngày:**
+   - Nguyên nhân: Khách quên báo hoặc quên đưa bản E-visa tại quầy nhập cảnh.
+   - Xử lý: Yêu cầu khách giữ bình tĩnh, đứng tại khu vực quầy hải quan, đưa bản E-visa ra ngay cho cán bộ kiểm soát đối chiếu để **hủy dấu 45D và đóng lại dấu đúng hạn 90D** trước khi rời cửa khẩu! Không rời khỏi trạm rồi mới báo.
+2. **In giấy A4 tại Mộc Bài vs PDF tại Bờ Y / Lao Bảo:**
+   - **Mộc Bài (Campuchia):** **BẮT BUỘC in E-visa ra giấy A4** (có tiệm photo ngay khu vực cửa khẩu hỗ trợ in).
+   - **Bờ Y & Lao Bảo (Lào):** Dùng file PDF trên điện thoại là được chấp nhận.`
+    },
+    {
+        keywords: ['gui dau tre', 'sau 08:00', 'sau 8:00', 'lo xe', '13:00', '2 gio chieu', 'xe quay ve'],
+        answer: `⏰ **XỬ LÝ KHI KHÁCH GỬI ẢNH DẤU XUẤT CẢNH TRỄ (>08:00) HOẶC LỠ CHUYẾN 13:00:**
+- Quy chuẩn Mộc Bài: Khách qua cửa khẩu 07:30–08:00, gửi ảnh dấu xuất cảnh **trước 08:00** để chạy gói 4h nhận E-visa lúc 11:30–12:00, kịp lên xe về lúc **13:00**.
+- Nếu khách gửi dấu trễ sau 08:30 (trễ mốc sáng):
+  1. Báo ngay cho nhóm điều hành / Anh Luân kiểm tra nâng cấp gói **2h hoặc 1h** (nếu còn kịp chốt 11:30) hoặc chuyển sang ca chiều trả lúc **17:30**.
+  2. Nếu nhà xe không thể đợi quá 13:00 (trả kết quả ca chiều 17:30): Báo rõ cho khách phương án đi xe khách tuyến sau / xe riêng từ Mộc Bài về TP.HCM/Nha Trang và báo Giám đốc Mr. Lý Việt Hoàng (+84 89 69 16 361) hỗ trợ điều phối.`
+    },
+    {
+        keywords: ['cuoi tuan', 'thu 7', 'chu nhat', 'ngay le', 'hoan tien', '100%', 'refund'],
+        answer: `🛡️ **CHÍNH SÁCH CUỐI TUẦN T7/CN & CAM KẾT HOÀN TIỀN 100%:**
+- **Cuối tuần (Thứ 7, Chủ Nhật) & Ngày lễ:** Không xử lý E-visa khẩn gói 4–8h theo lịch chuẩn. Nếu khách cần cực gấp cuối tuần, hướng dẫn liên hệ trực tiếp **WhatsApp (+84 85 320 1277)** hoặc **Telegram (@easytripvisa_co_ltd)** để Giám đốc kiểm tra ca hỗ trợ riêng.
+- **Cam kết hoàn tiền 100%:** Nếu E-visa không ra đúng khung giờ đã cam kết theo giờ Việt Nam (**GMT+7**), Easy Trip & Visa hoàn tiền **100%**.
+- **Điều kiện hộ chiếu:** Bắt buộc còn hạn **>= 6 tháng**.`
+    },
+    {
+        keywords: ['so do ghe', 'mau trang', 'gach vang', 'lock ghe', 'scheme', 'tang tren', 'tang duoi', 'a11', 'a20'],
+        answer: `🚌 **QUY TẮC ĐỌC SƠ ĐỒ GHẾ & LỆNH TELEGRAM:**
+- **Cấu trúc xe:** CHỈ có Tầng dưới số lẻ (\`A1, B1, A3, B3, A5, B5, A7, B7, A9, B9\`) và Tầng trên số chẵn (\`A2, B2, A4, B4, A6, B6, A8, B8, A10, B10\`, đôi khi có \`A12\` dài 160cm). **TUYỆT ĐỐI KHÔNG** có \`A11, B11, A13..A20\`.
+- **Cách đọc ảnh sơ đồ:**
+  - ⬜ **Ô màu trắng (không gạch):** CÒN TRỐNG — khách được chọn.
+  - 🟨 **Ô gạch vàng / đánh dấu X:** ĐÃ ĐẶT — tuyệt đối không cho khách chọn.
+- **Lệnh Telegram Topic General:** \`Scheme [DD/MM] - [45D/90D] [Laos/Cambodia]\` -> Đợi nhà xe gửi ảnh -> Cho khách chọn ô trắng -> Gửi lệnh Topic **Lock Ghế** trước **14:00** ngày khởi hành.`
+    },
     {
         keywords: ['tre em', 'cabin', 'duoi 9 tuoi', 'so luong', 'khong xe buyt', 'khong di xe buyt', 'tu di chuyen'],
         answer: `👶 **CHÍNH SÁCH TRẺ EM & PHƯƠNG TIỆN (VISA RUN):**
-- **Trẻ em dưới 9 tuổi:** Được **MIỄN PHÍ** vé xe buýt vì nằm chung cabin với bố mẹ.
-  - Ví dụ: Gia đình 2 lớn + 2 trẻ em < 9 tuổi đi Visa Run 90D chỉ cần đặt **2 vé xe buýt** (2 người lớn), nhưng vẫn cần mua **4 E-visa 90 ngày**.
-  - Cách tính tiền: 2 gói trọn gói người lớn (đã gồm xe buýt) + 2 phần visa lẻ của trẻ em (không tính tiền xe buýt).
+- **Trẻ em dưới 9 tuổi:** **MIỄN PHÍ 100% vé xe buýt (0 VND)** khi nằm chung cabin với bố mẹ. E-visa khẩn trợ giá: **1.480.000đ** (Web Quốc tế/Nga, đăng ký trước 4 ngày) hoặc **2.980.000đ** (Web `/arabic`).
 - **Khách tự di chuyển (Không sử dụng xe buýt):**
-  - Giá Visa lẻ (không xe buýt): **2.000.000 VND** áp dụng cho công dân Nga, Ukraine và các nước CIS (Belarus, Kyrgyzstan, Kazakhstan, Uzbekistan, Tajikistan...).
-  - Đối với các quốc tịch khác: Giá visa lẻ = Giá trọn gói tương ứng - 1.400.000 VND (tiền vé xe buýt).`
+  - Nga / CIS: Visa 90D lẻ (không bus) **2.000.000 VND**.
+  - Các quốc tịch khác: Trừ 1.400.000đ tiền vé xe khỏi gói combo tương ứng.`
     },
     {
-        keywords: ['gia', 'khan cap', 'bao nhieu', 'bang gia', '1 gio', '2 gio', '3 gio', '4 gio', '8 gio', '1 ngay', '2 ngay', 'tieu chuan'],
-        answer: `💵 **BẢNG GIÁ DỊCH VỤ E-VISA KHẨN CẤP (Khách lẻ):**
-- 1 giờ: 4.600.000 VND
-- 2 giờ: 3.400.000 VND
-- 3 giờ: 3.000.000 VND (Mới)
-- 4 giờ: 2.600.000 VND (Loyalty/Đại lý: 2.000.000 VND)
-- 8 giờ / 1 ngày: 2.200.000 VND (Loyalty/Đại lý: 1.500.000 VND)
-- 2 ngày: 2.150.000 VND (Loyalty/Đại lý: 1.450.000 VND)
-- Tiêu chuẩn 3-5 ngày: 1.810.000 VND (Loyalty/Đại lý: 1.110.000 VND)
-
-🚨 **PHỤ PHÍ:**
-- Đăng ký visa nhiều lần (Multi-entry): +1.000.000 VND.
-- Quốc tịch khó nhóm 1 (Egypt, Algeria, Tunisia, Sri Lanka, Mauritius): +850.000 VND.
-- Quốc tịch khó nhóm 2 (Turkey, Morocco, UAE): +650.000 VND.`
+        keywords: ['gia', 'khan cap', 'bao nhieu', '1 gio', '2 gio', '3 gio', '4 gio', '8 gio', '1 ngay', '2 ngay', 'tieu chuan'],
+        answer: `💵 **BẢNG GIÁ E-VISA KHẨN CẤP LẺ (SINGLE — MULTI +1.000.000đ):**
+- **Quốc tế & Hàn Quốc (`/english`, `/korean`):** 1h: 4.6M | 2h: 3.4M | 4h: 2.6M | 8h: 2.9M | 1d: 2.2M | 2d: 2.15M | 3–5d: 1.81M.
+- **Nga & CIS (`/russian`):** 1h: 4.6M | 2h: 3.4M | 4h: **2.0M** | 1d: **1.81M** | 2d: **1.76M** | 3–5d: **1.61M**.
+- **Ả Rập (`/arabic`):** Cộng thêm **+1.500.000đ** vào giá `/english` (1h 6.1M | 4h 4.1M | 1d 3.7M | 3–5d 3.31M).
+- **Nội bộ Loyalty / Đại lý:** 1h 3.3M | 2h 2.9M | 3h 2.5M | 4h 1.6M | 8h 1.9M | 1d 1.5M | 2d 1.45M | 3–5d 1.11M.
+- **Phụ phí quốc tịch khó:** Nhóm 1 (Ai Cập, Algeria, Tunisia, Sri Lanka, Mauritius) **+850k** | Nhóm 2 (Thổ Nhĩ Kỳ, Morocco, UAE) **+650k**.`
     },
     {
-        keywords: ['tai khoan', 'ngan hang', 'vcb', 'vietcombank', 'bank', 'stk', 'swift', 'chuyen khoan', 'thanh toan', 'nam a'],
-        answer: `🏦 **THÔNG TIN CHUYỂN KHOẢN MỚI NHẤT (Vietcombank VCB):**
-- Ngân hàng: Joint Stock Commercial Bank for Foreign Trade of Viet Nam (Vietcombank)
-- Chủ tài khoản: EASY TRIP & VISA CO. LTD
-- Số tài khoản (VCB OneQR): QRPACQ1ZZZZ50600546
-- Số tài khoản thường: 1068582577
-- Mã SWIFT: BFTVVNVX
-📍 Địa chỉ văn phòng Easy Trip & Visa Nha Trang: 21 Phan Vinh, Nha Trang (Định vị: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9)`
+        keywords: ['tai khoan', 'ngan hang', 'vcb', 'vietcombank', 'vrb', 'usdt', 'bank', 'stk', 'swift', 'chuyen khoan', 'thanh toan', 'moc do', 'receipt'],
+        answer: `🏦 **THÔNG TIN THANH TOÁN & QUY TRÌNH RECEIPT MỘC ĐỎ:**
+- **Ngân hàng:** Vietcombank (**VCB**) hoặc **VRB**
+- **Chủ tài khoản:** \`EASY TRIP & VISA CO. LTD\` | **STK:** \`1068582577\` | **VCB OneQR:** \`QRPACQ1ZZZZ50600546\` | **SWIFT:** \`BFTVVNVX\`
+- **Hình thức khác:** Tiền mặt VND/USD tại văn phòng **21 Phan Vinh, Nha Trang**, hoặc **USDT (Crypto)**.
+- **Quy trình bắt buộc:** Sau khi xác nhận tiền vào tài khoản, đóng **dấu mộc đỏ công ty** lên receipt, chụp ảnh gửi khách và cập nhật trạng thái Paid trên Telegram Lock Ghế (hạn chót vé xe trước **14:00** ngày đi).`
     },
     {
         keywords: ['dia chi', 'van phong', 'dinh vi', 'office', 'nha trang', 'phan vinh', 'maps', 'o dau'],
-        answer: `📍 **THÔNG TIN VĂN PHÒNG & ĐỊA ĐIỂM:**
-- Địa chỉ văn phòng: 21 Phan Vinh, Nha Trang.
-- Link Google Maps văn phòng: https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9
-- Link điểm đón khách xe buýt 40 Hòn Chồng: https://maps.app.goo.gl/AUkyctD6mwBtkiBF7
-- Link điểm đón Bờ Kè Bờ Cát: https://maps.app.goo.gl/Kc6dm92VVAF1j13j9`
+        answer: `📍 **THÔNG TIN VĂN PHÒNG & ĐIỂM ĐÓN:**
+- **Văn phòng:** 21 Phan Vinh, Nha Trang ([Google Maps](https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9)) — MST: \`4202051389\`
+- **Điểm đón Nha Trang:** 40 Hòn Chồng / Oceanus (21:30) hoặc Số 4 Trần Phú (21:15).
+- **Hotline Điều hành & Giám đốc:** Mr. Lý Việt Hoàng (+84 89 69 16 361) | WhatsApp/Zalo CSKH: +84 85 320 1277 | Telegram: @easytripvisa_co_ltd.`
     },
     {
         keywords: ['ho so', 'bio', 'chup', 'anh', 'forehead', 'tran', 'passport', 'ho chieu'],
         answer: `📷 **QUY ĐỊNH HỒ SƠ YÊU CẦU:**
-1. **Ảnh chụp thông tin hộ chiếu (Passport Bio Page):** Phải rõ nét, chụp vuông góc đầy đủ 4 góc của hộ chiếu. Không bị lóa sáng đèn, không bị che mất thông tin và không dính ngón tay cầm hộ chiếu.
-2. **Ảnh chân dung (Portrait):** Ảnh nền sáng, khách nhìn thẳng, lộ rõ trán (không để tóc mái che khuất trán) và lộ rõ tai.
-3. **Ảnh dấu xuất cảnh (Exit Stamp):** Chụp ngay sau khi khách hàng vừa làm xong thủ tục xuất cảnh khỏi Việt Nam.`
+1. **Passport Bio Page:** Rõ nét, chụp vuông góc đủ **4 góc**, không lóa đèn, không che ngón tay, hộ chiếu còn hạn **>= 6 tháng**.
+2. **Ảnh chân dung (Portrait):** Nền sáng, nhìn thẳng, **lộ rõ trán và hai tai**, không đeo kính.
+3. **Ảnh dấu xuất cảnh (Exit Stamp):** Gửi ngay khi qua hải quan Việt Nam (trước **08:00 sáng** tại Mộc Bài).`
     },
     {
-        keywords: ['lich', 'chay', 'lao', 'campuchia', 'moc bai', 'bo y', 'bus', 'xe buyt', 'thoi gian', 'da nang'],
-        answer: `🚌 **LỊCH TRÌNH VÀ THỜI GIAN KHỞI HÀNH:**
-- **Xe đi Lào (Bờ Y):** Chạy HÀNG NGÀY lúc 21:30 tại 40 Hòn Chồng. Khách Nga, Hàn được miễn visa Lào.
-- **Xe đi Campuchia (Mộc Bài):** Chỉ khởi hành lúc 21:30 tối các ngày thứ 3, thứ 5 và chủ nhật hàng tuần. Hạn visa khách phải rơi vào Thứ 2, 4, 6.
-- **Tuyến Đà Nẵng - Lao Bảo (90 Phút):** Đi xe lúc 5:45 sáng từ bến xe Đà Nẵng (Hanie hỗ trợ tại cửa khẩu, phí mộc 200k VND). Giá: 3,55M (đặt trước 3 ngày) / 3,8M (khẩn cấp).`
-    },
-    {
-        keywords: ['quy tac', 'khan cap', 'gioi han', '11:30', '17:30', 'cuc', 'gio'],
-        answer: `⚡ **QUY TẮC PHÂN CHIA THỜI GIAN LÀM VISA KHẨN CẤP:**
-Cục quản lý xuất nhập cảnh làm việc từ 8:00 - 12:00 và 13:30 - 17:30 (Monday to Friday). Trả kết quả vào 2 khung giờ cố định là **11:30** và **17:30**.
-
-- **Hồ sơ trả lúc 11:30 Sáng:**
-  - Nhận dấu xuất cảnh trước 8:30 - 9:00: Chạy gói khẩn cấp 4 tiếng.
-  - Nhận dấu trước 10:00: Chạy gói 2 tiếng / 3 tiếng.
-  - Nhận dấu trước 11:00: Chạy gói 1 tiếng.
-- **Hồ sơ trả lúc 17:30 Chiều:**
-  - Nhận dấu trước 13:30 - 14:00: Chạy gói khẩn cấp 4 tiếng.
-  - Nhận dấu trước 15:00: Chạy gói 2 tiếng.
-  - Nhận dấu trước 16:30: Chạy gói 1 tiếng.`
+        keywords: ['lich', 'chay', 'lao', 'campuchia', 'bo y', 'bus', 'xe buyt', 'thoi gian', 'da nang'],
+        answer: `🚌 **LỊCH TRÌNH & TUYẾN XE VISARUN:**
+- **Nha Trang ⇄ Lào (Bờ Y):** CHỈ dành cho Nga, Belarus, Hàn Quốc, Nhật, Luxembourg, 12 nước ASEAN. 45D chạy **hàng ngày** (1.4M); 90D chạy **T3, T5, CN** lúc 21:30 (Nga 3.4M / 4.4M Multi; Non-RU 4.0M).
+- **Nha Trang ⇄ Campuchia (Mộc Bài):** Toàn bộ quốc tịch khác (Mỹ, EU, Kazakhstan, Ukraine, Ả Rập...). Chạy **T3, T5, CN** lúc 21:30 tại 40 Hòn Chồng.
+- **Đà Nẵng ⇄ Lao Bảo (Lào):** 90D chạy T2–T6 lúc 05:30–18:30 (3.8M website / 3.55M đặt trước >=3d; Web `/arabic` 5.3M; +Hanie tại cửa khẩu). 45D chạy T2–T7 (950k).`
     }
 ];
 
-// State variables for staff chat attachments
+// State variables for staff chat attachments, history, and training mode
 let staffAttachments = [];
+let staffChatHistory = [];
+let staffChatMode = 'training';
+
+function setStaffChatMode(mode) {
+    if (!['training', 'reply_draft', 'quiz'].includes(mode)) mode = 'training';
+    staffChatMode = mode;
+
+    document.querySelectorAll('.staff-mode-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.mode === mode);
+    });
+
+    const input = document.getElementById('staff-chat-input');
+    if (input) {
+        if (mode === 'reply_draft') {
+            input.placeholder = 'Dán tin nhắn khách hỏi (Anh/Nga/Hàn/Ả Rập/Việt) để AI soạn câu trả lời chuẩn...';
+        } else if (mode === 'quiz') {
+            input.placeholder = 'Nhập câu trả lời xử lý tình huống của bạn (hoặc bấm "Ra bài tập tình huống")...';
+        } else {
+            input.placeholder = 'Nhập tình huống bạn chưa rõ, hỏi SOP, dán ảnh passport... (Enter để gửi)';
+        }
+    }
+}
+
+function resetStaffChat() {
+    staffChatHistory = [];
+    const chatWindow = document.getElementById('staff-chat-window');
+    if (chatWindow) {
+        chatWindow.innerHTML = `
+            <div class="staff-msg bot">
+                <div class="staff-msg-content">
+                    🔄 Đã bắt đầu phiên đào tạo / hỏi đáp mới (chế độ hiện tại: <strong>${staffChatMode === 'reply_draft' ? '💬 Soạn tin trả lời khách' : staffChatMode === 'quiz' ? '🎯 Luyện tập tình huống' : '🎓 Hỏi tình huống / SOP'}</strong>). Bạn hãy nhập câu hỏi hoặc tình huống nhé!
+                </div>
+            </div>
+        `;
+    }
+}
+
+function startQuizScenario() {
+    setStaffChatMode('quiz');
+    quickAskStaff('Hãy ra cho tôi 1 tình huống thực tế khó vừa phải tại quầy hoặc cửa khẩu Easy Trip & Visa để tôi tập xử lý.');
+}
+
+function copyStaffBotReply(btnEl) {
+    const msgEl = btnEl.closest('.staff-msg.bot');
+    const raw = msgEl ? (msgEl.dataset.rawText || msgEl.innerText) : '';
+    if (!raw) return;
+    navigator.clipboard.writeText(raw).then(() => {
+        const prev = btnEl.textContent;
+        btnEl.textContent = '✅ Đã chép';
+        setTimeout(() => { btnEl.textContent = prev; }, 1500);
+    });
+}
 
 function autoResizeStaffInput(el) {
     el.style.height = 'auto';
@@ -2191,10 +2354,13 @@ function handleStaffChatTextareaKey(event) {
 function appendStaffMessage(chatWindow, sender, text, attachmentsList = []) {
     const msgDiv = document.createElement('div');
     msgDiv.className = `staff-msg ${sender}`;
+    if (text) {
+        msgDiv.dataset.rawText = text;
+    }
     
     let contentHtml = '';
     if (text) {
-        contentHtml += `<div>${formatMarkdown(text)}</div>`;
+        contentHtml += `<div class="staff-msg-content">${formatMarkdown(text)}</div>`;
     }
     
     if (attachmentsList.length > 0) {
@@ -2230,6 +2396,13 @@ function appendStaffMessage(chatWindow, sender, text, attachmentsList = []) {
         attachmentsHtml += '</div>';
         contentHtml += attachmentsHtml;
     }
+
+    if (sender === 'bot' && text) {
+        contentHtml += `
+        <div class="staff-msg-actions">
+            <button class="staff-copy-msg-btn" onclick="copyStaffBotReply(this)">📋 Sao chép</button>
+        </div>`;
+    }
     
     msgDiv.innerHTML = contentHtml;
     chatWindow.appendChild(msgDiv);
@@ -2245,6 +2418,7 @@ function sendStaffChatMessage() {
     if (!question && staffAttachments.length === 0) return;
     
     const currentAttachments = [...staffAttachments];
+    const historySnapshot = staffChatHistory.slice(-10);
     
     appendStaffMessage(chatWindow, 'user', question, currentAttachments);
     
@@ -2255,7 +2429,7 @@ function sendStaffChatMessage() {
     
     const botMsgDiv = document.createElement('div');
     botMsgDiv.className = 'staff-msg bot typing-indicator';
-    botMsgDiv.innerHTML = '<span style="font-style: italic; color: var(--text-secondary);">🤖 AI đang suy nghĩ...</span>';
+    botMsgDiv.innerHTML = '<span style="font-style: italic; color: var(--text-secondary);">🤖 Mentor AI đang phân tích tình huống...</span>';
     chatWindow.appendChild(botMsgDiv);
     chatWindow.scrollTop = chatWindow.scrollHeight;
 
@@ -2268,59 +2442,73 @@ function sendStaffChatMessage() {
     fetch(`${BACKEND_URL}/api/staff/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question: question, attachments: apiAttachments })
+        body: JSON.stringify({
+            question: question,
+            history: historySnapshot,
+            mode: staffChatMode,
+            attachments: apiAttachments
+        })
     })
     .then(res => {
         if (!res.ok) throw new Error("HTTP error " + res.status);
         return res.json();
     })
     .then(data => {
-        chatWindow.removeChild(botMsgDiv);
-        const finalMsgDiv = document.createElement('div');
-        finalMsgDiv.className = 'staff-msg bot';
-        if (data.success) {
-            finalMsgDiv.innerHTML = formatMarkdown(data.answer);
+        if (botMsgDiv.parentNode) chatWindow.removeChild(botMsgDiv);
+        let replyText = '';
+        if (data.success && data.answer && !data.answer.startsWith('🤖 Không thể kết nối với AI')) {
+            replyText = data.answer;
         } else {
-            const localAnswer = getLocalStaffAnswer(question);
-            finalMsgDiv.innerHTML = formatMarkdown(localAnswer);
+            replyText = getLocalStaffAnswer(question, staffChatMode);
         }
-        chatWindow.appendChild(finalMsgDiv);
-        chatWindow.scrollTop = chatWindow.scrollHeight;
+        appendStaffMessage(chatWindow, 'bot', replyText);
+        if (question) staffChatHistory.push({ role: 'user', content: question });
+        if (replyText) staffChatHistory.push({ role: 'assistant', content: replyText });
+        if (staffChatHistory.length > 12) staffChatHistory = staffChatHistory.slice(-12);
     })
     .catch(err => {
         console.warn("⚠️ Staff AI API Error, falling back to local keywords:", err);
-        chatWindow.removeChild(botMsgDiv);
-        const finalMsgDiv = document.createElement('div');
-        finalMsgDiv.className = 'staff-msg bot';
-        
-        const localAnswer = getLocalStaffAnswer(question);
-        finalMsgDiv.innerHTML = formatMarkdown(localAnswer);
-        chatWindow.appendChild(finalMsgDiv);
-        chatWindow.scrollTop = chatWindow.scrollHeight;
+        if (botMsgDiv.parentNode) chatWindow.removeChild(botMsgDiv);
+        const localAnswer = getLocalStaffAnswer(question, staffChatMode);
+        appendStaffMessage(chatWindow, 'bot', localAnswer);
+        if (question) staffChatHistory.push({ role: 'user', content: question });
+        if (localAnswer) staffChatHistory.push({ role: 'assistant', content: localAnswer });
+        if (staffChatHistory.length > 12) staffChatHistory = staffChatHistory.slice(-12);
     });
 }
 
-function getLocalStaffAnswer(question) {
+function getLocalStaffAnswer(question, mode = 'training') {
+    if (mode === 'quiz' && removeVietnameseTones(question).toLowerCase().includes('tinh huong')) {
+        return `🎯 **BÀI TẬP TÌNH HUỐNG MẪU (CHẾ ĐỘ OFFLINE):**
+Khách quốc tịch **Kazakhstan** nhắn tin: *"Xin chào, visa của tôi sắp hết hạn sau 4 ngày. Tôi đang ở Nha Trang và muốn đi xe sang Lào Bờ Y gói 90 ngày, có mang theo con 6 tuổi."*
+👉 **Câu hỏi cho bạn:**
+1. Khách này đi tuyến nào? Có đi Lào Bờ Y được không?
+2. Báo tổng chi phí là bao nhiêu tiền (theo bảng giá \`/russian\` hoặc \`/english\`)?
+3. Nhắn lại cho khách như thế nào và cần dặn in giấy A4 hay dùng PDF?`;
+    }
+
     let answerText = '';
     const cleanQuestion = removeVietnameseTones(question).toLowerCase();
     
-    // Match keywords
-    let matched = false;
+    // Score keywords so multi-keyword queries hit the best entry
+    let bestScore = 0;
     for (const item of staffAIDatabase) {
+        let score = 0;
         for (const kw of item.keywords) {
             const cleanKw = removeVietnameseTones(kw).toLowerCase();
             if (cleanQuestion.includes(cleanKw)) {
-                answerText = item.answer;
-                matched = true;
-                break;
+                score += 1;
             }
         }
-        if (matched) break;
+        if (score > bestScore) {
+            bestScore = score;
+            answerText = item.answer;
+        }
     }
     
-    if (!matched) {
-        answerText = `🤖 Xin lỗi, mình chưa tìm thấy thông tin cụ thể cho câu hỏi này trong cơ sở dữ liệu. 
-Vui lòng thử hỏi các từ khóa khác như: "giá khẩn cấp", "tài khoản ngân hàng", "định vị văn phòng", "hồ sơ e-visa cần gì" hoặc "lịch xe đi Campuchia" nhé!`;
+    if (!answerText) {
+        answerText = `🤖 Hiện đang dùng bộ tra cứu ngoại tuyến nên chưa phân tích được chi tiết câu hỏi tự do này.
+Bạn có thể hỏi các tình huống như: *"bảng giá 4 website"*, *"nhầm dấu 45D"*, *"gửi dấu trễ >08:00"*, *"cuối tuần & hoàn tiền 100%"*, *"sơ đồ ghế trắng vàng"*, *"thanh toán VCB / VRB / USDT"*, hoặc kiểm tra kết nối AI Backend!`;
     }
     return answerText;
 }
@@ -2364,7 +2552,7 @@ function removeVietnameseTones(str) {
 
 // Hàm kiểm tra quốc tịch có được miễn thị thực vào Việt Nam hay không
 function isVietnamVisaExempt(nationality) {
-    if (!nationality) return true;
+    if (!nationality) return false;
     const norm = removeVietnameseTones(nationality).toLowerCase();
     // Danh sách các quốc tịch miễn thị thực đơn phương/song phương vào Việt Nam
     const exemptList = [

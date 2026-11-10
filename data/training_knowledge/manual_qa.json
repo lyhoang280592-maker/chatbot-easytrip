@@ -13,7 +13,23 @@
   },
   {
     "question": "Tài khoản ngân hàng để chuyển tiền?",
-    "answer": "Vietcombank (Ngân hàng Ngoại thương Việt Nam) - Tên TK: EASY TRIP & VISA CO. LTD - Số TK: 1068582577 (chỉ nhận VND)"
+    "answer": "Easy Trip & Visa chấp nhận: Tiền mặt VND/USD, tiền mã hóa USDT, và Chuyển khoản Vietcombank (VCB) / VRB - Tên TK: EASY TRIP & VISA CO. LTD - Số TK: 1068582577."
+  },
+  {
+    "question": "Giá dịch vụ trên website tiếng Anh (/english), Hàn (/korean), Nga (/russian) và Ả Rập (/arabic) khác nhau thế nào?",
+    "answer": "Bảng giá niêm yết đồng bộ 4 website:\n1. /english & /korean (Quốc tế & Hàn Quốc): Mộc Bài 6.000.000đ (Multi+Cam), 5.000.000đ (Single+Cam), 4.000.000đ (90D Single Bus+EV, +1tr Cam), 1.400.000đ (45D Bus). Đà Nẵng–Lào: 3.800.000đ (90D) / 950.000đ (45D). E-visa lẻ: 1h 4.6M | 2h 3.4M | 4h 2.6M | 1d 2.2M | 2d 2.15M | 3-5d 1.81M. Trẻ <9T: 1.48M.\n2. /russian (Nga & CIS): Mộc Bài 5.4M (Multi+Cam) / 4.4M (Single+Cam) / 1.4M (45D). Lào Bờ Y: 3.4M (90D Single 2h) / 4.4M (Multi) / 1.4M (45D). E-visa lẻ: 1h 4.6M | 2h 3.4M | 4h 2.0M | 1d 1.81M | 2d 1.76M | 3-5d 1.61M.\n3. /arabic (Ả Rập / Trung Đông — bằng giá /english + 1.500.000đ): Mộc Bài 7.5M (Multi+Cam) / 6.5M (Single+Cam) / 5.5M (90D Single Bus+EV). Đà Nẵng–Lào: 5.3M. E-visa lẻ: 1h 6.1M | 2h 4.9M | 4h 4.1M | 1d 3.7M | 2d 3.65M | 3-5d 3.31M. Trẻ <9T: 2.98M."
+  },
+  {
+    "question": "Dịch vụ Fast Track sân bay giá bao nhiêu và áp dụng sân bay nào?",
+    "answer": "Giá công khai trên website: VIP Fast Track (Đón & Tiễn, chưa gồm phí tem) là 1.855.000 VND ($70) tại DAD, CXR, PQC, VDO, HPH, HUI, VII, DLI, VCA; 1.200.000 VND tại Tân Sơn Nhất (SGN) & Nội Bài (HAN); và 300.000 VND cho hỗ trợ cửa khẩu Lào (Lao Bảo & Bờ Y). Lưu ý giá nội bộ cho khách cũ CRM/Đại lý vẫn áp dụng riêng."
+  },
+  {
+    "question": "Cuối tuần Thứ 7 Chủ nhật có làm E-visa khẩn 4-8h không và chính sách hoàn tiền thế nào?",
+    "answer": "Dịch vụ E-visa khẩn 4–8 giờ không khả dụng vào cuối tuần (Thứ 7, Chủ Nhật) và ngày lễ (khách bay gấp cuối tuần cần nhắn WhatsApp/Telegram hỗ trợ khẩn). Nếu không kịp giao E-visa đúng khung giờ cam kết (GMT+7), công ty hoàn tiền 100% theo yêu cầu."
+  },
+  {
+    "question": "Sự cố hải quan đóng nhầm dấu 45 ngày, khách gửi dấu xuất cảnh trễ sau 8h sáng, hoặc xe 13h sắp chạy phải xử lý sao?",
+    "answer": "1) Đóng nhầm 45D thay vì 90D: Khách kiểm tra ngay trước khi rời quầy, quay lại quầy xuất trình E-visa để cán bộ gạch và đóng lại dấu 90D.\n2) Gửi ảnh dấu xuất cảnh trễ >08:00: Nhân viên gọi điện hỗ trợ khách bắt Wifi quán cafe gửi ảnh gấp, đồng thời báo ngay Anh Luân (Zalo) đẩy duyệt đặc biệt.\n3) Xếp hàng nhập cảnh trễ sát 13:00: Gọi tài xế giữ xe chờ khách và nhắn trấn an khách xe sẽ đợi.\n4) In giấy: Mộc Bài BẮT BUỘC in A4; Bờ Y / Lao Bảo chỉ cần PDF trên điện thoại."
   },
   {
     "question": "Bảng giá dịch vụ Visarun và E-visa mới nhất thế nào?",

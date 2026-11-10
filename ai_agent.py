@@ -209,34 +209,38 @@ CRITICAL OPERATIONS DIRECTIVES (NEVER DEVIATE OR INVENT):
        - If a customer from **Kazakhstan, Ukraine, Uzbekistan, USA, Europe (except Luxembourg/Russia/Belarus)** asks to go to **Laos (Bo Y)** from Nha Trang, politely explain that the Nha Trang -> Bo Y (Laos) route **only applies to citizens of Russia, Belarus, South Korea, Japan, Luxembourg, and 12 Southeast Asian countries**, so they **must take the Cambodia (Moc Bai) route**, and introduce the Cambodia packages!
        - If a Russian-speaking customer clicks a link for a **Cambodia (Moc Bai)** package (e.g. 5,400,000 VND or 4,400,000 VND) without stating their nationality yet, confirm the Cambodia package they selected, ask for their nationality & booking details, and politely note that if they hold a **Russian or Belarusian** passport, they can also choose the **Laos (Bo Y)** route, whereas all other nationalities (such as Kazakhstan, Ukraine, Uzbekistan, EU, USA, etc.) go via **Cambodia (Moc Bai)**!
 
-    - **OFFICIAL PRICING FOR RUSSIAN & CIS CITIZENS (PER HTTPS://WWW.EASYTRIPVISA.COM/RUSSIAN)**:
-      * **Visarun Routes (Nha Trang)**:
-        - Nha Trang ⇄ Laos (Bo Y) Single 90D: **3,400,000 VND**
-        - Nha Trang ⇄ Cambodia (Moc Bai) Single 90D: **3,400,000 VND** (or 4,400,000 VND with Cambodia visa included)
-        - Nha Trang ⇄ Cambodia (Moc Bai) Multi 90D: **5,400,000 VND**
-        - Nha Trang ⇄ Laos (Bo Y) or Cambodia 45D Visa-Free: **1,400,000 VND**
-        - Children under 9yo (Babysitter Vietnam): **1,480,000 VND** (E-visa 3h) + **100% FREE bus bed (0 VND)**
-      * **Visarun Routes (Da Nang)**:
-        - Da Nang ⇄ Laos (Lao Bao) Combo 90D: **3,800,000 VND**
-        - Da Nang ⇄ Laos (Lao Bao) Visa-Free 45D: **950,000 VND**
-      * **Standalone Urgent Vietnam E-Visa (Online / In-country / Border)**:
-        - 1 Hour (За 1 час): **4,600,000 VND**
-        - 2 Hours (За 2 часа): **3,400,000 VND**
-        - 4 Hours (За 4 часа): **2,000,000 VND**
-        - 1 Working Day (За 1 рабочий день): **1,810,000 VND**
-        - 2 Working Days (За 2 рабочих дня): **1,760,000 VND**
-        - 3–5 Working Days (За 3–5 рабочих дней): **1,610,000 VND**
-        *(Multiple entry E-visa adds 1,000,000 VND to single entry price)*
-      * **VIP Fast Track & Border Assistance**:
-        - Airport Fast Track Cam Ranh (CXR), Da Nang (DAD), Phu Quoc (PQC): **1,855,000 VND** ($70)
-        - Airport Fast Track Tan Son Nhat (SGN), Noi Bai (HAN): **1,200,000 VND**
-        - Border assistance at Lao Bao / Bo Y: **300,000 VND**
+    - **OFFICIAL WEBSITE PRICING ACROSS ALL 4 MARKET PAGES (SYNCED 2026)**:
+      1) **INTERNATIONAL & KOREAN TIER (`/english` & `/korean`)**:
+         - Nha Trang ⇄ Cambodia (Moc Bai, Tue/Thu/Sun 21:30): **6,000,000 VND** (Bus + 90D Multi VN + Cam visa, 24h) | **5,000,000 VND** (Bus + 90D Single VN + Cam visa, 24h) | **4,000,000 VND** (Bus + 90D Single VN E-visa 4h; `+1,000,000 VND` Cambodia E-visa) | **1,400,000 VND** (Bus only 30/45D Free Visa, 20h).
+         - Nha Trang ⇄ Laos (Bo-Y): **1,400,000 VND** (Daily 21:00/21:30 Free Visa 30/45D) | **4,000,000 VND** (90D Single non-RU).
+         - Da Nang ⇄ Laos (Lao Bao, excl. Laos visa): **3,800,000 VND** (Mon–Fri 05:30–18:30, 90D Single 90 min at 13:30 + supporter; >=3d advance `3,550,000 VND`) | **950,000 VND** (Mon–Sat 05:30 Free Visa 30/45D).
+         - Standalone Urgent E-Visa (Single Entry): Children <9yo (Babysitter Vietnam, >=4d early): **1,480,000 VND** (+100% Free bus) | 1h: **4,600,000** | 2h: **3,400,000** | 4h: **2,600,000** | 8h: **2,900,000** | 1d: **2,200,000** | 2d: **2,150,000** | 3–5d: **1,810,000 VND** *(Multi: +1,000,000 VND)*.
 
-CRITICAL DIRECTIVE - LANGUAGE & NATIONALITY (MANDATORY):
-1. **Rule A (Nationality-based Native Language - HIGHEST PRIORITY)**:
-   - If the customer is RUSSIAN / from Russia / Belarus / Kazakhstan / CIS, or has a Russian name (e.g. Tsarenko, Rodichev, Ekaterina, Dmitry, Ivanov, etc.): You MUST ALWAYS REPLY IN RUSSIAN (Русский язык)! NEVER reply in English to a Russian customer, even if they sent a booking message with English terms (like 'Single', 'E-visa', 'Exit Bo Y')!
-   - If the customer is VIETNAMESE: You MUST reply in VIETNAMESE (Tiếng Việt)!
-   - If the customer is KOREAN: You MUST reply in KOREAN (한국어)!
+      2) **RUSSIAN & CIS TIER (`/russian`)**:
+         - Nha Trang ⇄ Laos (Bo Y): **3,400,000 VND** (90D Single 2h, Tue/Thu/Sun 21:30; Returning: `3,000,000`) | **4,400,000 VND** (90D Multi; Returning: `4,000,000`) | **1,400,000 VND** (45D Daily; Returning: `1,300,000`).
+         - Nha Trang ⇄ Cambodia (Moc Bai): **5,400,000 VND** (Multi + Cam visa) | **4,400,000 VND** (Single + Cam visa) | **3,400,000 VND** (90D Single Bus+EV) | **1,400,000 VND** (45D).
+         - Children <9yo: **1,480,000 VND** (+100% Free bus bed).
+         - Da Nang ⇄ Laos (Lao Bao): **3,800,000 VND** (90D) | **950,000 VND** (45D).
+         - Standalone Urgent E-Visa (Single Entry): 1h: **4,600,000** | 2h: **3,400,000** | 4h: **2,000,000** | 1d: **1,810,000** | 2d: **1,760,000** | 3–5d: **1,610,000 VND** *(Multi: +1,000,000 VND)*.
+
+      3) **ARABIC & MIDDLE EAST TIER (`/arabic` = EN tier + 1,500,000 VND)**:
+         - Nha Trang ⇄ Cambodia (Moc Bai): **7,500,000 VND** (Multi + Cam visa) | **6,500,000 VND** (Single + Cam visa) | **5,500,000 VND** (Bus + 90D Single VN; `+1,000,000 VND` Cam E-visa).
+         - Da Nang ⇄ Laos (Lao Bao): **5,300,000 VND** (Bus + 90D Single + border supporter).
+         - Standalone Urgent E-Visa (Single Entry): Children <9yo (Babysitter Vietnam card): **2,980,000 VND** (+100% Free bus) | 1h: **6,100,000** | 2h: **4,900,000** | 4h: **4,100,000** | 1d: **3,700,000** | 2d: **3,650,000** | 3–5d: **3,310,000 VND** *(Multi: +1,000,000 VND)*.
+
+      4) **VIP FAST TRACK, BORDER ASSISTANCE, PAYMENT & WEEKEND POLICY**:
+         - Airport Fast Track (Arrival & Departure, excl. visa stamping fee): **1,855,000 VND ($70)** at DAD, CXR, PQC, VDO, HPH, HUI, VII, DLI, VCA; **1,200,000 VND** at SGN & HAN.
+         - Laos Border Assistance & Rider (Lao Bao / Bo-Y): **300,000 VND**.
+         - Motorbike Rental (Nha Trang): 1d **340,000** (fuel incl.) | 7d **1,820,000** | 14d **2,940,000** | 1mo **4,100,000 VND**.
+         - Payment Methods: VND cash, USD cash, **USDT (crypto)**, Bank transfer **Vietcombank (VCB `1068582577` - EASY TRIP & VISA CO. LTD) / VRB**.
+         - Weekend & Refund Policy: 4–8h E-visa processing is unavailable Sat/Sun & public holidays (advise contacting WhatsApp/Telegram for emergency assistance). **100% full refund** if E-visa is not obtained within the promised GMT+7 timeframe. Passport must have >=6 months validity.
+
+CRITICAL DIRECTIVE - LANGUAGE & NATIONALITY (MANDATORY):
+1. **Rule A (Nationality-based Native Language - HIGHEST PRIORITY)**:
+   - If the customer is RUSSIAN / from Russia / Belarus / Kazakhstan / CIS, or has a Russian name (e.g. Tsarenko, Rodichev, Ekaterina, Dmitry, Ivanov, etc.): You MUST ALWAYS REPLY IN RUSSIAN (Русский язык)! NEVER reply in English to a Russian customer, even if they sent a booking message with English terms (like 'Single', 'E-visa', 'Exit Bo Y')!
+   - If the customer is ARABIC-speaking (messages in Arabic script or from UAE, Saudi Arabia, Egypt, Qatar, Kuwait, Oman, Bahrain, Jordan, Morocco, Algeria, Tunisia, etc.): You MUST reply in ARABIC (العربية)!
+   - If the customer is VIETNAMESE: You MUST reply in VIETNAMESE (Tiếng Việt)!
+   - If the customer is KOREAN: You MUST reply in KOREAN (한국어)!
    - If the customer is CHINESE: You MUST reply in CHINESE (中文)!
 2. **Rule B (Default Language for International Guests)**:
    - For all other nationalities (USA, UK, Australia, Germany, France, Canada, Europe, etc.) or when nationality is international: Reply in clear, professional ENGLISH.
@@ -355,7 +359,7 @@ PHASE 3 - PAYMENT:
   1) A VALID, AVAILABLE seat is chosen (must be in `A1..A10, B1..B10, A12` and NOT in `BOOKED SEATS`!)
   2) OR customer asks how to pay / asks for QR code / bank transfer (e.g. "Как оплатить?", "QR", "Thanh toán như thế nào?", "How to pay?", "Account number", "реквизиты", "оплата").
 - Set `current_phase = "PAYMENT"`.
-- IMPORTANT: In `PHASE 3 - PAYMENT`, the customer has ALREADY chosen their seat — so NEVER say "Please wait while I check seat availability and send you the seat map" again! Instead, confirm their chosen seat (`extracted_data.ghe_chon`), summarize their booking details with the official website package price (`4,400,000 VND` single / `5,400,000 VND` multi for Cambodia Moc Bai 90D; `2,000,000 VND` for Laos Bo Y 45D; `2,800,000 VND` single / `3,800,000 VND` multi for Laos Bo Y 90D), and provide the official company payment details (translated to the customer's language):
+- IMPORTANT: In `PHASE 3 - PAYMENT`, the customer has ALREADY chosen their seat — so NEVER say "Please wait while I check seat availability and send you the seat map" again! Instead, confirm their chosen seat (`extracted_data.ghe_chon`), summarize their booking details with the accurate official website package price for their market tier (RU/CIS: `1,400,000` 45D / `3,400,000` 90D Single / `4,400,000` 90D Multi or Cam Single+Visa / `5,400,000` Cam Multi+Visa; EN/KR: `1,400,000` 45D / `4,000,000` 90D Bus+EV / `5,000,000` Cam Single+Visa / `6,000,000` Cam Multi+Visa; AR: `5,500,000` / `6,500,000` / `7,500,000`; or returning CRM rate if verified), mention payment methods (VCB Bank transfer/QR `1068582577`, VRB Bank, VND/USD cash, or USDT), and provide the official company payment details (translated to the customer's language):
   • In Russian:
     "Пожалуйста, выберите удобный способ оплаты:
 
@@ -532,33 +536,38 @@ OUTPUT SCHEMA: You MUST return strictly a JSON object with these EXACT keys:
     return None
 
 
-async def call_gemini_fallback(messages):
-    if not GEMINI_API_KEY:
-        return None
-    try:
-        import google.generativeai as genai
-        genai.configure(api_key=GEMINI_API_KEY.strip())
-        model = genai.GenerativeModel(
-            "gemini-3.6-flash",
-            generation_config={"response_mime_type": "application/json"}
-        )
-        system_content = ""
-        conversation_history = []
-        for m in messages:
-            if m["role"] == "system":
-                system_content += m["content"] + "\n\n"
-            elif m["role"] == "assistant":
-                conversation_history.append(f"Assistant: {m['content']}")
-            elif m["role"] == "user":
-                conversation_history.append(f"Customer: {m['content']}")
-        
-        full_prompt = f"{system_content}CONVERSATION HISTORY:\n" + "\n".join(conversation_history) + "\n\nRespond with ONLY a valid JSON object matching the schema:"
-        response = await model.generate_content_async(full_prompt)
-        if response and response.text and response.text.strip():
-            return response.text.strip()
-        return None
-    except Exception as e:
-        print(f"⚠️ Gemini fallback exception: {e}")
+async def call_gemini_fallback(messages):
+    if not GEMINI_API_KEY:
+        return None
+    try:
+        import google.generativeai as genai
+        genai.configure(api_key=GEMINI_API_KEY.strip())
+        system_content = ""
+        conversation_history = []
+        for m in messages:
+            if m["role"] == "system":
+                system_content += m["content"] + "\n\n"
+            elif m["role"] == "assistant":
+                conversation_history.append(f"Assistant: {m['content']}")
+            elif m["role"] == "user":
+                conversation_history.append(f"Customer: {m['content']}")
+        full_prompt = f"{system_content}CONVERSATION HISTORY:\n" + "\n".join(conversation_history) + "\n\nRespond with ONLY a valid JSON object matching the schema:"
+
+        candidate_models = [os.getenv("GEMINI_MODEL", "").strip(), "gemini-2.5-flash", "gemini-2.0-flash", "gemini-3.6-flash"]
+        for model_name in [m for m in candidate_models if m]:
+            try:
+                model = genai.GenerativeModel(
+                    model_name,
+                    generation_config={"response_mime_type": "application/json"}
+                )
+                response = await model.generate_content_async(full_prompt)
+                if response and response.text and response.text.strip():
+                    return response.text.strip()
+            except Exception as me:
+                print(f"⚠️ Gemini model {model_name} failed: {me}")
+        return None
+    except Exception as e:
+        print(f"⚠️ Gemini fallback exception: {e}")
         return None
 
 
@@ -717,31 +726,30 @@ async def process_chat(
     user_text_all = " ".join([re.sub(r'\[.*?\]', '', m.get("content", "")) for m in history_messages if m.get("role") == "user"]).lower()
     user_explicit_cambodia = any(k in user_text_all for k in ["камбодж", "cambodia", "campuchia", "мокбай", "мок бай", "moc bai", "mộc bài"])
 
-    # Route directives to guide the LLM accurately without overriding explicit customer package requests
-    if destination == "cambodia" and user_explicit_cambodia:
-        route_directive_context = (
-            f"\nCRITICAL ROUTE & PACKAGE DIRECTIVE (NHA TRANG VISARUN RULE):\n"
-            f"- The customer explicitly asked about the **CAMBODIA (Moc Bai border)** visarun package.\n"
-            f"- Confirm the exact Cambodia (Moc Bai) package and price they asked about:\n"
-            f"  + **5,400,000 VND**: Bus + 90-day Multi Vietnam E-visa + Cambodia Visa included (24h processing).\n"
-            f"  + **4,400,000 VND**: Bus + 90-day Single Vietnam E-visa + Cambodia Visa included (24h processing).\n"
-            f"  + **4,000,000 VND**: Bus + 90-day Vietnam E-visa (customer pays Cambodia visa $35-$50 at border).\n"
-            f"  + **1,400,000 VND**: Bus only for 45-day Visa-Free stamp.\n"
-            f"  + Schedule: Departs Tuesday, Thursday, and Sunday at 21:30 (40 Hon Chong) / 21:15 (04 Tran Phu).\n"
-            f"- IMPORTANT NHA TRANG ROUTE RULE: The Nha Trang -> Laos (Bo Y) route ONLY applies to citizens of **Russia, Belarus, South Korea, Japan, Luxembourg, and 12 Southeast Asian countries**. All other nationalities in the world (including Kazakhstan, Ukraine, Uzbekistan, EU, USA, etc.) MUST go via **Cambodia (Moc Bai)**.\n"
-            f"- Ask the customer for their booking details (1. Nationality, 2. Current visa expiry date or desired departure date, 3. Full Name + Year of birth, 4. Pickup point in Nha Trang, 5. Contact phone number) and WAIT for their reply!"
-        )
-    elif destination == "cambodia":
-        route_directive_context = (
-            f"\nCRITICAL ROUTE DIRECTIVE (NHA TRANG VISARUN RULE):\n"
-            f"- For Visarun departing from Nha Trang, the **Laos (Bo Y) route ONLY applies to citizens of Russia, Belarus, South Korea, Japan, Luxembourg, and 12 Southeast Asian countries**.\n"
-            f"- Because the customer's nationality is NOT on that list, they **MUST take the CAMBODIA route (Moc Bai border)**! Even if they asked about Laos (Bo Y), politely explain this rule and guide them to the **Cambodia (Moc Bai)** packages (5,400,000 VND Multi w/ Cambodia Visa, 4,400,000 VND Single w/ Cambodia Visa, 4,000,000 VND 90D E-visa, or 1,400,000 VND 45D Visa-Free if eligible)."
-        )
-    else:
-        route_directive_context = (
-            f"\nCRITICAL ROUTE DIRECTIVE (NHA TRANG VISARUN RULE):\n"
-            f"- For Visarun departing from Nha Trang, the **LAOS route (Bo Y border)** applies ONLY to citizens of **Russia, Belarus, South Korea, Japan, Luxembourg, and 12 Southeast Asian countries** (1,400,000 VND for 45D Visa-Free; 3,400,000 VND for 90D Single E-visa; 4,400,000 VND for 90D Multi E-visa).\n"
-            f"- All other nationalities in the world MUST take the **CAMBODIA route (Moc Bai border)**. Always check the customer's nationality!"
+    # Route directives to guide the LLM accurately across market tiers (/english, /korean, /russian, /arabic)
+    if destination == "cambodia" and user_explicit_cambodia:
+        route_directive_context = (
+            f"\nCRITICAL ROUTE & PACKAGE DIRECTIVE (NHA TRANG VISARUN RULE):\n"
+            f"- The customer explicitly asked about the **CAMBODIA (Moc Bai border)** visarun package.\n"
+            f"- Confirm the exact Cambodia (Moc Bai) packages according to their market tier:\n"
+            f"  + **EN/KR Tier (`/english`, `/korean`)**: **6,000,000 VND** (Bus + 90D Multi VN + Cam visa) | **5,000,000 VND** (Bus + 90D Single VN + Cam visa) | **4,000,000 VND** (Bus + 90D Single VN E-visa; +1,000,000 VND Cam E-visa) | **1,400,000 VND** (45D Free Visa bus only).\n"
+            f"  + **Russian/CIS Tier (`/russian`)**: **5,400,000 VND** (Multi + Cam visa) | **4,400,000 VND** (Single + Cam visa) | **3,400,000 VND** (90D Single Bus+EV) | **1,400,000 VND** (45D).\n"
+            f"  + **Arabic Tier (`/arabic`)**: **7,500,000 VND** (Multi + Cam visa) | **6,500,000 VND** (Single + Cam visa) | **5,500,000 VND** (90D Single Bus+EV; +1,000,000 VND Cam E-visa).\n"
+            f"  + Schedule: Departs Tuesday, Thursday, and Sunday at 21:30 (40 Hon Chong) / 21:15 (04 Tran Phu).\n"
+            f"- IMPORTANT NHA TRANG ROUTE RULE: The Nha Trang -> Laos (Bo Y) route ONLY applies to citizens of **Russia, Belarus, South Korea, Japan, Luxembourg, and 12 Southeast Asian countries**. All other nationalities in the world (including Kazakhstan, Ukraine, Uzbekistan, EU, USA, Arab countries, etc.) MUST go via **Cambodia (Moc Bai)**.\n"
+            f"- Ask the customer for their booking details (1. Nationality, 2. Current visa expiry date or desired departure date, 3. Full Name + Year of birth, 4. Pickup point in Nha Trang, 5. Contact phone number) and WAIT for their reply!"
+        )
+    elif destination == "cambodia":
+        route_directive_context = (
+            f"\nCRITICAL ROUTE DIRECTIVE (NHA TRANG VISARUN RULE):\n"
+            f"- For Visarun departing from Nha Trang, the **Laos (Bo Y) route ONLY applies to citizens of Russia, Belarus, South Korea, Japan, Luxembourg, and 12 Southeast Asian countries**.\n"
+            f"- Because the customer's nationality is NOT on that list, they **MUST take the CAMBODIA route (Moc Bai border)**! Even if they asked about Laos (Bo Y), politely explain this rule and guide them to the **Cambodia (Moc Bai)** packages (EN/KR: 4M/5M/6M VND; RU/CIS: 4.4M/5.4M VND; AR: 5.5M/6.5M/7.5M VND; or 1,400,000 VND 45D Visa-Free if eligible)."
+        )
+    else:
+        route_directive_context = (
+            f"\nCRITICAL ROUTE DIRECTIVE (NHA TRANG VISARUN RULE):\n"
+            f"- For Visarun departing from Nha Trang, the **LAOS route (Bo Y border)** applies ONLY to citizens of **Russia, Belarus, South Korea, Japan, Luxembourg, and 12 Southeast Asian countries** (1,400,000 VND for 45D Visa-Free; RU 90D: 3,400,000 VND Single / 4,400,000 VND Multi; Non-RU 90D: 4,000,000 VND).\n"
+            f"- All other nationalities in the world MUST take the **CAMBODIA route (Moc Bai border)**. Always check the customer's nationality!"
         )
 
     if expiry_date:
@@ -802,49 +810,56 @@ async def process_chat(
     # Kiểm tra ký tự tiếng Việt thực tế từ người dùng (loại trừ từ "lào" nếu chỉ nằm trong tên tuyến)
     vietnamese_keywords = ["chào", "xin chào", "giá", "vé", "bao nhiêu", "cho tôi", "sơ đồ", "hết hạn", "đón ở đâu", "tư vấn giúp"]
     has_real_vietnamese = bool(re.search(r'[àáảãạăằắẳẵặâầấẩẫậèéẻẽẹêềếểễệìíỉĩịòóỏõọôồốổỗộơờớởỡợùúủũụưừứửữựỳýỷỹỵđ]', clean_user_text_lower)) or any(re.search(r'\b' + re.escape(w) + r'\b', clean_user_text_lower) for w in vietnamese_keywords)
-    has_cyrillic = bool(re.search(r'[а-яё]', clean_user_text_lower))
-    
-    # Ưu tiên tuyệt đối quốc tịch Nga / CIS đã lưu trong hồ sơ khách
-    saved_nat = (getattr(saved_data, "quoc_tich", "") or "").lower() if saved_data else ""
-    prof_nat = (customer_profile.get("nationality", "") or "").lower() if customer_profile else ""
-    is_russian_profile = any(k in saved_nat or k in prof_nat for k in ["russia", "россия", "nga", "cis", "kazakh", "kyrgyz", "belarus"])
-    is_vietnamese_profile = any(k in saved_nat or k in prof_nat for k in ["việt nam", "vietnam", "vietnamese"])
-    
-    if has_cyrillic:
-        lang_code = "ru"
-    elif is_russian_profile or is_russian_nat or has_russian_name:
-        # Khách Nga / CIS: luôn luôn trả lời tiếng Nga (kể cả khi khách gõ tên tuyến xe có chữ Lào hoặc tiếng Anh như OK, YES)
-        if has_real_vietnamese and is_vietnamese_profile:
-            lang_code = "vi"
-        else:
-            lang_code = "ru"
-    elif has_real_vietnamese and not has_cyrillic:
-        lang_code = "vi"
-    elif has_prev_russian and not has_real_vietnamese:
-        lang_code = "ru"
-    elif re.search(r'[\uac00-\ud7a3]', clean_user_text_lower) or bool(re.search(r'\b(kr|korea|korean|hàn quốc)\b', clean_user_text_lower)):
-        lang_code = "ko"
-    elif re.search(r'[\u4e00-\u9fff]', clean_user_text_lower) or bool(re.search(r'\b(cn|china|chinese|trung quốc)\b', clean_user_text_lower)):
-        lang_code = "zh"
-    elif customer_profile:
-        prof_nat = (customer_profile.get("nationality") or "").lower()
-        if any(r in prof_nat for r in ["nga", "russia", "belarus", "kazakh", "ukrain"]):
-            lang_code = "ru"
-        elif any(k in prof_nat for k in ["korea", "hàn"]):
-            lang_code = "ko"
-        elif customer_profile.get("preferred_lang"):
-            lang_code = str(customer_profile.get("preferred_lang") or "en")
-        else:
-            lang_code = get_lang_code(destination) or "en"
-    else:
-        lang_code = get_lang_code(destination) or "en"
-        
-    lang_names = {
-        "en": "ENGLISH",
-        "ru": "RUSSIAN",
-        "vi": "VIETNAMESE",
-        "ko": "KOREAN",
-        "zh": "CHINESE"
+    has_cyrillic = bool(re.search(r'[а-яё]', clean_user_text_lower))
+    has_arabic = bool(re.search(r'[\u0600-\u06FF]', clean_user_text))
+    
+    # Ưu tiên tuyệt đối quốc tịch Nga / CIS đã lưu trong hồ sơ khách
+    saved_nat = (getattr(saved_data, "quoc_tich", "") or "").lower() if saved_data else ""
+    prof_nat = (customer_profile.get("nationality", "") or "").lower() if customer_profile else ""
+    is_russian_profile = any(k in saved_nat or k in prof_nat for k in ["russia", "россия", "nga", "cis", "kazakh", "kyrgyz", "belarus"])
+    is_vietnamese_profile = any(k in saved_nat or k in prof_nat for k in ["việt nam", "vietnam", "vietnamese"])
+    is_arabic_profile = any(k in saved_nat or k in prof_nat for k in ["arab", "saudi", "uae", "emirates", "egypt", "qatar", "kuwait", "oman", "bahrain", "jordan", "iraq", "morocco", "algeria", "tunisia", "ả rập"])
+    
+    if has_cyrillic:
+        lang_code = "ru"
+    elif has_arabic or is_arabic_profile:
+        lang_code = "ar"
+    elif is_russian_profile or is_russian_nat or has_russian_name:
+        # Khách Nga / CIS: luôn luôn trả lời tiếng Nga (kể cả khi khách gõ tên tuyến xe có chữ Lào hoặc tiếng Anh như OK, YES)
+        if has_real_vietnamese and is_vietnamese_profile:
+            lang_code = "vi"
+        else:
+            lang_code = "ru"
+    elif has_real_vietnamese and not has_cyrillic:
+        lang_code = "vi"
+    elif has_prev_russian and not has_real_vietnamese:
+        lang_code = "ru"
+    elif re.search(r'[\uac00-\ud7a3]', clean_user_text_lower) or bool(re.search(r'\b(kr|korea|korean|hàn quốc)\b', clean_user_text_lower)):
+        lang_code = "ko"
+    elif re.search(r'[\u4e00-\u9fff]', clean_user_text_lower) or bool(re.search(r'\b(cn|china|chinese|trung quốc)\b', clean_user_text_lower)):
+        lang_code = "zh"
+    elif customer_profile:
+        prof_nat = (customer_profile.get("nationality") or "").lower()
+        if any(r in prof_nat for r in ["nga", "russia", "belarus", "kazakh", "ukrain"]):
+            lang_code = "ru"
+        elif any(k in prof_nat for k in ["korea", "hàn"]):
+            lang_code = "ko"
+        elif any(a in prof_nat for a in ["arab", "saudi", "uae", "egypt", "qatar", "kuwait", "oman", "bahrain", "jordan", "morocco"]):
+            lang_code = "ar"
+        elif customer_profile.get("preferred_lang"):
+            lang_code = str(customer_profile.get("preferred_lang") or "en")
+        else:
+            lang_code = get_lang_code(destination) or "en"
+    else:
+        lang_code = get_lang_code(destination) or "en"
+        
+    lang_names = {
+        "en": "ENGLISH",
+        "ru": "RUSSIAN",
+        "vi": "VIETNAMESE",
+        "ko": "KOREAN",
+        "zh": "CHINESE",
+        "ar": "ARABIC"
     }
     target_lang_name = lang_names.get(lang_code, "ENGLISH")
     
@@ -1132,80 +1147,169 @@ async def call_groq_fallback_text(messages):
     return None
 
 
-async def call_gemini_fallback_text(messages):
-    if not GEMINI_API_KEY:
-        return None
-    try:
-        import google.generativeai as genai
-        genai.configure(api_key=GEMINI_API_KEY.strip())
-        model = genai.GenerativeModel("gemini-3.6-flash")
-        system_content = ""
-        user_content = ""
-        for m in messages:
-            if m["role"] == "system":
-                system_content += m["content"] + "\n\n"
-            else:
-                user_content += m["content"] + "\n"
-        full_prompt = f"{system_content}YÊU CẦU / CÂU HỎI:\n{user_content}"
-        response = await model.generate_content_async(full_prompt)
-        if response and response.text and response.text.strip():
-            return response.text.strip()
-        return None
-    except Exception as e:
-        print(f"⚠️ Gemini text fallback exception: {e}")
-        return None
-
-
-async def process_staff_chat(question: str) -> str:
-    # 1. Lấy ngữ cảnh RAG từ cơ sở kiến thức
-    rag_context = ""
-    try:
-        rag_context = knowledge_rag.format_for_prompt(question, top_k=5)
-    except Exception as e:
-        print(f"⚠️ RAG search error for staff chat: {e}")
-
-    # 2. Xây dựng prompt nội bộ
-    system_prompt = (
-        "You are the internal AI Assistant for the staff members of Easy Trip & Visa Co. Ltd (a travel and visa agency in Nha Trang, Vietnam).\n"
-        "Your role is to help staff members handle customer requests quickly and professionally. When a staff member asks a question or pastes a customer's query, your job is to:\n"
-        "1. If it looks like a customer request (e.g., asking for visa prices, visarun dates, bus routes, requirements), immediately draft a polite, professional, and complete reply that the staff member can copy-paste directly to the customer. Draft the reply in the language the customer used (Vietnamese, English, Russian, etc.).\n"
-        "2. If it is an internal staff question (e.g., asking about schedules, bank accounts, office address, emergency visa rules), answer it directly, clearly, and concisely in Vietnamese.\n\n"
-        "CRITICAL OPERATIONS DIRECTIVES (NEVER DEVIATE OR INVENT):\n"
-        "1. Visa Run Pick-up & Schedule:\n"
-        "   - The bus to Laos (Bo Y) or Cambodia (Moc Bai) departures are ALWAYS overnight. Departure time from Nha Trang is 21:30 (from 40 Hon Chong) or 21:15 (from No. 4 Tran Phu). We do NOT pick up customers in the morning or at 5:00 AM.\n"
-        "   - The bus arrives at the Moc Bai border around 06:00 - 06:30 AM the next morning.\n"
-        "2. No Border Guides:\n"
-        "   - We do NOT have guides at the border. Customers must go through the exit/entry gates themselves. The driver will only help collect passports for the Bo Y (Laos) route, but for Cambodia (Moc Bai), the passengers must do it themselves.\n"
-        "3. Moc Bai Visa Run Process:\n"
-        "   - Passengers cross into Cambodia around 7:30 - 8:00 AM.\n"
-        "   - Passengers MUST take a photo of their Vietnam exit stamp and send it to EasyTrip before 08:00 AM.\n"
-        "   - We process the emergency e-visa in 4 hours while they wait at a café in Cambodia.\n"
-        "   - The new e-visa is delivered via message/email between 11:30 AM and 12:00 PM.\n"
-        "4. Visa Extension (Inside Vietnam):\n"
-        "   - Vietnam does NOT allow extensions for tourist visas inside the country. Extension is impossible (0 VND / Not available). The customer MUST do a visarun.\n"
-        "5. Route Eligibility (Special Rule for Nha Trang Visarun):\n"
-        "   - The Nha Trang to Laos (Bo Y) route ONLY applies to citizens of Russia, Belarus, South Korea, Japan, Luxembourg, and 12 Southeast Asian countries. It does NOT apply to any other countries in the world.\n"
-        "   - All other nationalities in the world (including Kazakhstan, Ukraine, Uzbekistan, USA, Canada, Australia, UK, Europe except Luxembourg/Russia/Belarus, etc.) MUST take the Cambodia (Moc Bai) route.\n"
-        "   - Cambodia visa run packages from Nha Trang: 5,400,000 VND (Bus + 90D Multi Vietnam E-visa + Cambodia Visa included), 4,400,000 VND (Bus + 90D Single Vietnam E-visa + Cambodia Visa included), 4,000,000 VND (Bus + 90D Vietnam E-visa, customer pays Cambodia visa at border), or 1,400,000 VND (45D Bus only). Cambodia bus departs only on Tuesdays, Thursdays, and Sundays.\n\n"
-        "Use the following core knowledge base about Easy Trip's services, pricing, and schedules to construct your response:\n"
-        f"{KNOWLEDGE_BASE}\n"
-    )
-    if rag_context:
-        system_prompt += "\n" + rag_context
-
-    messages = [
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": question}
-    ]
-
-    # 3. Gọi LLM chính hoặc fallback dạng text
-    content = await call_deepseek_text(messages)
-    if not content or not content.strip():
-        content = await call_groq_fallback_text(messages)
-    if not content or not content.strip():
-        content = await call_gemini_fallback_text(messages)
-
-    if not content or not content.strip():
-        return "🤖 Không thể kết nối với AI (API Error). Vui lòng thử lại sau hoặc tra cứu từ khóa!"
-
+async def call_gemini_fallback_text(messages):
+    if not GEMINI_API_KEY:
+        return None
+    try:
+        import google.generativeai as genai
+        genai.configure(api_key=GEMINI_API_KEY.strip())
+        system_content = ""
+        history_lines = []
+        for m in messages:
+            if m["role"] == "system":
+                system_content += m["content"] + "\n\n"
+            elif m["role"] == "assistant":
+                history_lines.append(f"AI Mentor: {m['content']}")
+            else:
+                history_lines.append(f"Nhân viên: {m['content']}")
+        full_prompt = f"{system_content}HỘI THOẠI ĐÀO TẠO / HỎI ĐÁP:\n" + "\n".join(history_lines)
+
+        candidate_models = [os.getenv("GEMINI_MODEL", "").strip(), "gemini-2.5-flash", "gemini-2.0-flash", "gemini-3.6-flash"]
+        for model_name in [m for m in candidate_models if m]:
+            try:
+                model = genai.GenerativeModel(model_name)
+                response = await model.generate_content_async(full_prompt)
+                if response and response.text and response.text.strip():
+                    return response.text.strip()
+            except Exception as me:
+                print(f"⚠️ Gemini text model {model_name} failed: {me}")
+        return None
+    except Exception as e:
+        print(f"⚠️ Gemini text fallback exception: {e}")
+        return None
+
+
+def _load_staff_training_sops() -> str:
+    """Đọc các tài liệu SOP và bộ quy tắc đào tạo nhân viên nội bộ."""
+    chunks = []
+    base_dir = os.path.dirname(__file__)
+    for rel in [
+        "QUY_TRINH_VAN_HANH_CHUAN_SOP_EASYTRIP.md",
+        os.path.join("docs", "FILE_HUAN_LUYEN_RANG_BUOC_BAT_BUOC_AI_CHATBOT.md"),
+    ]:
+        p = os.path.join(base_dir, rel)
+        if os.path.exists(p):
+            try:
+                with open(p, "r", encoding="utf-8") as f:
+                    txt = f.read().strip()
+                if txt:
+                    chunks.append(f"=== TÀI LIỆU NỘI BỘ: {os.path.basename(p)} ===\n{txt}")
+            except Exception:
+                pass
+    return "\n\n".join(chunks)
+
+
+STAFF_TRAINING_SOPS = _load_staff_training_sops()
+
+
+async def process_staff_chat(
+    question: str,
+    history: list[dict] | None = None,
+    mode: str = "training",
+) -> str:
+    """
+    Trợ lý AI Đào tạo & Hỗ trợ Nghiệp vụ Nội bộ (Co-Pilot Staff Training & Helpdesk).
+    - mode='training' (mặc định): Giải đáp tình huống chưa rõ, hướng dẫn SOP từng bước, cảnh báo sai sót, kèm mẫu câu trả lời khách nếu cần.
+    - mode='reply_draft': Dán câu hỏi/tình huống của khách -> Soạn ngay tin nhắn trả lời chuẩn xác đúng ngôn ngữ khách + ghi chú nội bộ cho nhân viên.
+    - mode='quiz': Đóng vai Quản lý đào tạo ra bài tập tình huống thực tế và chấm điểm/sửa lỗi cách xử lý của nhân viên.
+    """
+    q_clean = (question or "").strip()
+    mode_norm = (mode or "training").strip().lower()
+    if mode_norm not in {"training", "reply_draft", "quiz"}:
+        mode_norm = "training"
+
+    # 1. Lấy ngữ cảnh RAG từ cơ sở kiến thức (kết hợp thêm lượt hỏi gần nhất nếu nhân viên đang hỏi tiếp)
+    rag_query = q_clean
+    if history:
+        recent_user_turns = [
+            str(h.get("content", "")).strip()
+            for h in history[-4:]
+            if h.get("role") == "user" and str(h.get("content", "")).strip()
+        ]
+        if recent_user_turns:
+            rag_query = " ".join(recent_user_turns[-2:] + [q_clean])
+
+    rag_context = ""
+    try:
+        rag_context = knowledge_rag.format_for_prompt(rag_query, top_k=6)
+    except Exception as e:
+        print(f"⚠️ RAG search error for staff chat: {e}")
+
+    # 2. Chỉ dẫn riêng theo từng chế độ đào tạo / hỗ trợ nhân viên
+    if mode_norm == "reply_draft":
+        mode_directive = (
+            "CHẾ ĐỘ HIỆN TẠI: 💬 SOẠN TIN TRẢ LỜI KHÁCH (REPLY_DRAFT MODE)\n"
+            "- Nhân viên đang dán tin nhắn/tình huống của khách hoặc hỏi cách trả lời khách.\n"
+            "- Hãy trình bày rõ 2 phần:\n"
+            "  1) **💬 Tin nhắn mẫu gửi khách** (Viết đúng 100% ngôn ngữ của khách: Nga/Anh/Hàn/Ả Rập/Trung/Việt, đúng bảng giá website theo thị trường khách, sạch sẽ để nhân viên bấm Sao chép gửi ngay).\n"
+            "  2) **📌 Lưu ý nghiệp vụ cho nhân viên** (bằng Tiếng Việt: giải thích ngắn vì sao báo giá/tuyến đó, cần xin thêm thông tin gì hay thao tác Telegram/Zalo gì tiếp theo)."
+        )
+    elif mode_norm == "quiz":
+        mode_directive = (
+            "CHẾ ĐỘ HIỆN TẠI: 🎯 LUYỆN TẬP TÌNH HUỐNG THỰC TẾ (QUIZ & COACHING MODE)\n"
+            "- Bạn là **Trưởng phòng Điều hành / Mentor Đào tạo** của Easy Trip & Visa Co. Ltd.\n"
+            "- Mục tiêu: Giúp nhân viên mới thành thạo mọi tình huống thực tế (chọn tuyến Bo-Y vs Mộc Bài, phân biệt giá 4 website /english /korean /russian /arabic, sơ đồ ghế ô trắng/gạch vàng và lệnh Lock, trẻ em <9 tuổi, sự cố đóng nhầm dấu 45D, gửi dấu trễ sau 08:00, in giấy A4 tại Mộc Bài vs PDF điện thoại tại Bờ Y, E-visa cuối tuần & hoàn tiền 100%, thanh toán VCB/VRB/USDT và mộc đỏ receipt).\n"
+            "- Quy tắc tương tác:\n"
+            "  * Nếu nhân viên yêu cầu bắt đầu/ra đề/cho tình huống mới: Hãy đưa ra **01 tình huống cụ thể thực tế** (gồm tin nhắn khách hoặc sự cố tại cửa khẩu/văn phòng) và hỏi nhân viên: *'Bạn sẽ xử lý bước nào, thu bao nhiêu tiền và nhắn gì cho khách?'*.\n"
+            "  * Nếu nhân viên đang trả lời bài tập của lượt trước: Hãy **chấm điểm (thang 10)**, nêu rõ **✅ Điểm làm tốt**, **⚠️ Điểm còn thiếu / ❌ Điểm sai so với SOP**, đưa ra **✨ Đáp án chuẩn & Mẫu câu gửi khách**, rồi hỏi nhân viên có muốn thử tiếp tình huống khó hơn không."
+        )
+    else:
+        mode_directive = (
+            "CHẾ ĐỘ HIỆN TẠI: 🎓 HỎI ĐÁP TÌNH HUỐNG & ĐÀO TẠO SOP (TRAINING MODE)\n"
+            "- Nhân viên đang hỏi về một tình huống chưa rõ hoặc cách xử lý nghiệp vụ thực tế.\n"
+            "- Hãy giải thích rõ ràng, thực chiến bằng **Tiếng Việt** theo cấu trúc gọn dễ đọc:\n"
+            "  1) **🎯 Kết luận & Quy tắc áp dụng** (Nêu rõ đúng/sai, số tiền chính xác theo đúng website `/english`, `/korean`, `/russian`, `/arabic` hoặc giá nội bộ CRM/đại lý nếu nhân viên hỏi nội bộ).\n"
+            "  2) **📋 Các bước nhân viên cần làm** (Từng bước cụ thể: kiểm tra gì, gõ lệnh `Scheme` / `Lock ghế` trên Telegram Topic nào, báo Anh Luân Zalo hoặc nhà xe Chị Ngọc Cao / tài xế lúc nào).\n"
+            "  3) **⚠️ Lưu ý & Lỗi hay gặp cần tránh** (VD: nhầm ghế A11/A20, quên nhắc in A4 ở Mộc Bài, nhầm giá giữa khách Nga và khách Quốc tế/Ả Rập, cuối tuần T7/CN không chạy gói 4-8h...).\n"
+            "  4) **💬 Mẫu câu nhắn lại khách (nếu tình huống liên quan đến khách)** để nhân viên copy dùng ngay.\n"
+            "- Nếu câu hỏi của nhân viên còn thiếu dữ kiện (chưa rõ quốc tịch, chưa rõ đi từ Nha Trang hay Đà Nẵng, khách mới hay khách cũ CRM...), hãy hướng dẫn **cả 2-3 trường hợp phổ biến nhất** rồi gợi ý nhân viên cung cấp thêm chi tiết để chốt phương án 100% chính xác."
+        )
+
+    # 3. Xây dựng system prompt đầy đủ kiến thức website + SOP
+    system_prompt = (
+        "Bạn là **Chuyên gia Đào tạo & Trợ lý Nghiệp vụ AI Nội bộ** của **Công ty TNHH Easy Trip & Visa (EASY TRIP & VISA CO. LTD)** — Trụ sở: 21 Phan Vinh, Nha Trang (MST: 4202051389).\n"
+        "Nhiệm vụ tối thượng: Đào tạo nhân viên mới/CSKH/điều hành, giải đáp mọi tình huống chưa rõ 100% chính xác theo dữ liệu 4 website (`/english`, `/korean`, `/russian`, `/arabic`) và Tài liệu Quy trình Vận hành Chuẩn (SOP).\n\n"
+        f"{mode_directive}\n\n"
+        "QUY TẮC BẮT BUỘC (KHÔNG BAO GIỜ ĐƯỢC BỊA ĐẶT):\n"
+        "1. **Chính xác tuyệt đối về giá theo từng thị trường Website**:\n"
+        "   - `/english` & `/korean`: Mộc Bài 6.000.000đ (Multi+Cam) / 5.000.000đ (Single+Cam) / 4.000.000đ (Bus+90D EV, +1tr Cam) / 1.400.000đ (45D) | Đà Nẵng–Lào 3.800.000đ (khẩn/tiêu chuẩn website; đặt sớm >=3d 3.550.000đ) / 950.000đ (45D) | E-visa lẻ: 1h 4.6M, 2h 3.4M, 4h 2.6M, 8h 2.9M, 1d 2.2M, 2d 2.15M, 3-5d 1.81M (Multi +1M) | Trẻ <9T: 1.48M + miễn 100% xe.\n"
+        "   - `/russian` (Nga & CIS): Bờ Y 90D Single 3.400.000đ (2h) / Multi 4.400.000đ (Khách cũ CRM: 3.0M / 4.0M) / 45D 1.400.000đ (Khách cũ 1.3M) | Mộc Bài 5.4M (Multi+Cam) / 4.4M (Single+Cam) / 3.4M (90D Single) / 1.4M (45D) | E-visa lẻ RU: 1h 4.6M, 2h 3.4M, 4h 2.0M, 1d 1.81M, 2d 1.76M, 3-5d 1.61M (Multi +1M).\n"
+        "   - `/arabic` (Ả Rập — bằng giá EN + 1.500.000đ): Mộc Bài 7.5M (Multi+Cam) / 6.5M (Single+Cam) / 5.5M (Bus+90D EV) | Đà Nẵng–Lào 5.3M | E-visa lẻ AR: 1h 6.1M, 2h 4.9M, 4h 4.1M, 1d 3.7M, 2d 3.65M, 3-5d 3.31M | Trẻ <9T card: 2.98M + miễn 100% xe.\n"
+        "   - VIP Fast Track Website: 1.855.000đ ($70) tại DAD, CXR, PQC, VDO, HPH, HUI, VII, DLI, VCA; 1.200.000đ tại SGN & HAN; 300.000đ hỗ trợ cửa khẩu Lào (Lao Bảo/Bờ Y). (Khách cũ CRM/Đại lý vẫn có mức giá nội bộ riêng trong bảng SOP).\n"
+        "2. **Chính sách thanh toán, cuối tuần & hoàn tiền**:\n"
+        "   - Chấp nhận tiền mặt VND/USD, USDT (crypto), chuyển khoản Vietcombank (VCB) / VRB STK `1068582577` (`EASY TRIP & VISA CO. LTD`). Sau khi nhận tiền: đóng dấu mộc đỏ công ty lên receipt, chụp ảnh gửi khách.\n"
+        "   - Hạn chót nộp tiền vé xe buýt: trước **14:00** ngày khởi hành.\n"
+        "   - E-visa 4–8h không làm cuối tuần (T7/CN) & ngày lễ. Hoàn tiền **100%** nếu không ra visa đúng hạn đã cam kết (GMT+7).\n"
+        "3. **Quy tắc cửa khẩu & sơ đồ ghế**:\n"
+        "   - Tuyến Lào Bờ Y từ Nha Trang CHỈ dành cho Nga, Belarus, Hàn Quốc, Nhật Bản, Luxembourg, và 12 nước ASEAN. Toàn bộ quốc tịch khác từ Nha Trang PHẢI đi Campuchia (Mộc Bài, chạy tối T3, T5, CN lúc 21:30).\n"
+        "   - Sơ đồ ghế xe chỉ có Tầng dưới lẻ (`A1..A9`, `B1..B9`) và Tầng trên chẵn (`A2..A10`, `B2..B10`, đôi khi `A12` dài 160cm); KHÔNG có A11/B11 hay số 13–20. Ô gạch vàng = ĐÃ ĐẶT; ô trắng = CÒN TRỐNG.\n"
+        "   - Mộc Bài BẮT BUỘC in E-visa ra giấy A4; Bờ Y & Lao Bảo dùng file PDF trên điện thoại.\n"
+        "4. Nếu nhân viên hỏi điều gì không có trong dữ liệu thực tế (VD: khách bay chuyến ngoài quy chuẩn, quá hạn visa overstay nặng...), hãy nói rõ cần báo Giám đốc Mr. Lý Việt Hoàng (+84 89 69 16 361) hoặc Anh Luân kiểm tra ca trực tiếp.\n\n"
+        "=== CƠ SỞ KIẾN THỨC CỐT LÕI (KNOWLEDGE.TXT) ===\n"
+        f"{KNOWLEDGE_BASE}\n\n"
+        "=== TÀI LIỆU SOP & ĐÀO TẠO CHI TIẾT ===\n"
+        f"{STAFF_TRAINING_SOPS}\n"
+    )
+    if rag_context:
+        system_prompt += "\n" + rag_context
+
+    messages = [{"role": "system", "content": system_prompt}]
+    if history:
+        for h in history[-10:]:
+            h_role = "assistant" if h.get("role") in ("assistant", "bot", "model") else "user"
+            h_content = str(h.get("content", "")).strip()
+            if h_content:
+                messages.append({"role": h_role, "content": h_content})
+    messages.append({"role": "user", "content": q_clean})
+
+    # 4. Gọi LLM chính hoặc fallback dạng text
+    content = await call_deepseek_text(messages)
+    if not content or not content.strip():
+        content = await call_groq_fallback_text(messages)
+    if not content or not content.strip():
+        content = await call_gemini_fallback_text(messages)
+
+    if not content or not content.strip():
+        return "🤖 Không thể kết nối với AI (API Error). Vui lòng thử lại sau hoặc tra cứu từ khóa!"
+
     return content.strip()

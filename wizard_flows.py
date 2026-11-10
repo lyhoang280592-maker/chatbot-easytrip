@@ -498,6 +498,10 @@ def analyze_customer_incoming_message(text: str) -> dict:
 
         detected_lang = "vi"
 
+    elif re.search(r"[\u0600-\u06FF]", t):
+
+        detected_lang = "ar"
+
     elif any(c in tl for c in ["안녕", "비자"]):
 
         detected_lang = "ko"
@@ -600,7 +604,7 @@ def analyze_customer_incoming_message(text: str) -> dict:
 
         is_laos = any(k in tl for k in ["лаос", "laos", "lào", "bờ y", "bo y", "бо-и", "бо и", "lao bảo", "lao bao", "лао бао"])
 
-        is_90d = any(k in tl for k in ["90", "4.400.000", "4400000", "4.000.000", "4000000"])
+        is_90d = any(k in tl for k in ["90", "6.000.000", "6000000", "5.000.000", "5000000", "5.400.000", "5400000", "4.400.000", "4400000", "4.000.000", "4000000", "7,500,000", "7.500.000", "6,500,000", "6.500.000", "5,500,000", "5.500.000", "5,300,000", "5.300.000"])
 
         is_45d = any(k in tl for k in ["45", "1.400.000", "1400000", "безвиз", "miễn visa"])
 
@@ -1194,13 +1198,13 @@ def get_smart_advisory_keyboard(city: str, country: str, lang: str = "en"):
 
             if exempt:
 
-                rows.append([InlineKeyboardButton("⭐ Miễn thị thực 45 ngày (Lao Bảo) - 850.000 ₫", callback_data="step|svc|dn_bus")])
+                rows.append([InlineKeyboardButton("⭐ Miễn thị thực 45 ngày (Lao Bảo) - 950.000 ₫", callback_data="step|svc|dn_bus")])
 
-                rows.append([InlineKeyboardButton("📑 Combo trọn gói E-Visa 90 ngày (Lao Bảo) - 3.900.000 ₫", callback_data="step|svc|dn_combo_ultra")])
+                rows.append([InlineKeyboardButton("📑 Combo trọn gói E-Visa 90 ngày (Lao Bảo) - 3.800.000 ₫", callback_data="step|svc|dn_combo_ultra")])
 
             else:
 
-                rows.append([InlineKeyboardButton("📑 Combo trọn gói E-Visa 90 ngày (Lao Bảo) - 3.900.000 ₫", callback_data="step|svc|dn_combo_ultra")])
+                rows.append([InlineKeyboardButton("📑 Combo trọn gói E-Visa 90 ngày (Lao Bảo) - 3.800.000 ₫", callback_data="step|svc|dn_combo_ultra")])
 
         else:
 
@@ -1208,13 +1212,13 @@ def get_smart_advisory_keyboard(city: str, country: str, lang: str = "en"):
 
             if exempt:
 
-                rows.append([InlineKeyboardButton("⭐ 45-Day Visa-Free (Lao Bao) - 850,000 VND", callback_data="step|svc|dn_bus")])
+                rows.append([InlineKeyboardButton("⭐ 45-Day Visa-Free (Lao Bao) - 950,000 VND", callback_data="step|svc|dn_bus")])
 
-                rows.append([InlineKeyboardButton("📑 90-Day E-Visa Package (Lao Bao) - 3,900,000 VND", callback_data="step|svc|dn_combo_ultra")])
+                rows.append([InlineKeyboardButton("📑 90-Day E-Visa Package (Lao Bao) - 3,800,000 VND", callback_data="step|svc|dn_combo_ultra")])
 
             else:
 
-                rows.append([InlineKeyboardButton("📑 90-Day E-Visa Package (Lao Bao) - 3,900,000 VND", callback_data="step|svc|dn_combo_ultra")])
+                rows.append([InlineKeyboardButton("📑 90-Day E-Visa Package (Lao Bao) - 3,800,000 VND", callback_data="step|svc|dn_combo_ultra")])
 
             
 
@@ -1536,9 +1540,9 @@ ROUTE_SERVICES = {
 
     "danang": [
 
-        {"id": "dn_bus", "name_vi": "🚌 Sleeper Bus Đà Nẵng ⇄ Lao Bảo (Lào)", "price": 850000},
+        {"id": "dn_bus", "name_vi": "🚌 Sleeper Bus Đà Nẵng ⇄ Lao Bảo (Lào)", "price": 950000},
 
-        {"id": "dn_combo_ultra", "name_vi": "⭐ Combo: Bus + E-Visa Ultra Fast 3-4h", "price": 3900000}
+        {"id": "dn_combo_ultra", "name_vi": "⭐ Combo: Bus + E-Visa 90 Ngày (90 Phút)", "price": 3800000}
 
     ],
 
@@ -1804,19 +1808,13 @@ ITINERARIES = {
 
         "title_en": "🚌 ROUTE: NHA TRANG ⇄ BO Y BORDER (LAOS) — 45/90 DAYS",
 
-        "price": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo Bus + E-Visa 90 ngày) | 4.400.000 VND (Combo Bus + E-Visa 90 ngày + Visa Campuchia 24h)",
+        "price": "1.400.000 VND (Vé xe 45D) | 4.000.000 VND (Bus + E-Visa 90D Quốc tế) | 3.400.000 VND (Khách Nga/CIS Single 90D) | 4.400.000 VND (Multi 90D)",
 
-        "price_vi": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo Bus + E-Visa 90 ngày) | 4.400.000 VND (Combo Bus + E-Visa 90 ngày + Visa Campuchia 24h)",
+        "price_vi": "1.400.000 VND (Vé xe 45D) | 4.000.000 VND (Bus + E-Visa 90D Quốc tế) | 3.400.000 VND (Khách Nga/CIS Single 90D) | 4.400.000 VND (Multi 90D)",
 
-        "price_ru": "1.400.000 VND (Билет туда-обратно) | 3.400.000 VND (Пакет Bus + E-Visa 90 дней) | 4.400.000 VND (Пакет Bus + E-Visa 90 дней + виза Камбоджи за 24ч)",
+        "price_ru": "1.400.000 VND (Безвиз 45 дней) | 3.400.000 VND (Пакет Bus + E-Visa 90D Single) | 4.400.000 VND (Пакет Bus + E-Visa 90D Multi)",
 
-        "price_en": "1,400,000 VND (Round-trip bus) | 4,000,000 VND (Package: Bus + 90-Day E-Visa) | 4,400,000 VND (Package: Bus + E-Visa + Cambodia 24h Visa)",
-
-        "price_vi": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo Bus + E-Visa 90 ngày) | 4.400.000 VND (Combo Bus + E-Visa 90 ngày + Visa Campuchia 24h)",
-
-        "price_ru": "1.400.000 VND (Билет туда-обратно) | 3.400.000 VND (Пакет Bus + E-Visa 90 дней) | 4.400.000 VND (Пакет Bus + E-Visa 90 дней + виза Камбоджи за 24ч)",
-
-        "price_en": "1,400,000 VND (Round-trip bus) | 4,000,000 VND (Package: Bus + 90-Day E-Visa) | 4,400,000 VND (Package: Bus + E-Visa + Cambodia 24h Visa)",
+        "price_en": "1,400,000 VND (45D Bus) | 4,000,000 VND (Bus + 90D Single E-Visa) | 3,400,000 VND (Russian/CIS 90D Single)",
 
         "schedule_vi": (
 
@@ -2026,13 +2024,13 @@ ITINERARIES = {
 
         "title_en": "🚌 ROUTE: NHA TRANG / MUI NE ⇄ MOC BAI (CAMBODIA)",
 
-        "price": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo Bus + E-Visa 90 ngày) | 4.400.000 VND (Combo Bus + E-Visa 90 ngày + Visa Campuchia 24h)",
+        "price": "1.400.000 VND (Vé xe 45D) | 4.000.000 VND (Bus + E-Visa 90D) | 5.000.000 VND (Single + Visa Cam) | 6.000.000 VND (Multi + Visa Cam)",
 
-        "price_vi": "1.400.000 VND (Vé xe khứ hồi) | 4.000.000 VND (Combo Bus + E-Visa 90 ngày) | 4.400.000 VND (Combo Bus + E-Visa 90 ngày + Visa Campuchia 24h)",
+        "price_vi": "1.400.000 VND (Vé xe 45D) | 4.000.000 VND (Bus + E-Visa 90D) | 5.000.000 VND (Single + Visa Cam) | 6.000.000 VND (Multi + Visa Cam)",
 
-        "price_ru": "1.400.000 VND (Билет туда-обратно) | 3.400.000 VND (Пакет Bus + E-Visa 90 дней) | 4.400.000 VND (Пакет Bus + E-Visa 90 дней + виза Камбоджи за 24ч)",
+        "price_ru": "1.400.000 VND (45 дней) | 3.400.000 VND (Bus + E-Visa 90D) | 4.400.000 VND (Single + виза Камбоджи) | 5.400.000 VND (Multi + виза Камбоджи)",
 
-        "price_en": "1,400,000 VND (Round-trip bus) | 4,000,000 VND (Package: Bus + 90-Day E-Visa) | 4,400,000 VND (Package: Bus + E-Visa + Cambodia 24h Visa)",
+        "price_en": "1,400,000 VND (45D Bus) | 4,000,000 VND (Bus + 90D E-Visa) | 5,000,000 VND (Single + Cambodia Visa) | 6,000,000 VND (Multi + Cambodia Visa)",
 
         "schedule_vi": (
 

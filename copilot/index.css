@@ -2476,3 +2476,84 @@ body {
     line-height: 1.4;
 }
 
+/* Staff Training & Helpdesk Mode Controls */
+.staff-mode-bar {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.staff-mode-btn {
+    flex: 1;
+    min-width: 95px;
+    background: rgba(30, 41, 59, 0.65);
+    border: 1px solid var(--border-glass);
+    color: var(--text-secondary);
+    border-radius: 8px;
+    padding: 6px 8px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    white-space: nowrap;
+}
+
+.staff-mode-btn:hover {
+    color: #FFF;
+    border-color: rgba(20, 184, 166, 0.45);
+}
+
+.staff-mode-btn.active {
+    background: rgba(20, 184, 166, 0.18);
+    border-color: var(--accent-teal);
+    color: var(--accent-teal);
+    box-shadow: 0 0 10px rgba(20, 184, 166, 0.18);
+}
+
+.staff-reset-btn {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid var(--border-glass);
+    color: var(--text-secondary);
+    border-radius: 7px;
+    padding: 4px 10px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.staff-reset-btn:hover {
+    background: rgba(59, 130, 246, 0.18);
+    border-color: rgba(59, 130, 246, 0.4);
+    color: #FFF;
+}
+
+.staff-msg-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+    margin-top: 6px;
+    padding-top: 5px;
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+}
+
+.staff-copy-msg-btn {
+    background: rgba(59, 130, 246, 0.14);
+    border: 1px solid rgba(59, 130, 246, 0.28);
+    color: #93C5FD;
+    border-radius: 5px;
+    padding: 2px 8px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.staff-copy-msg-btn:hover {
+    background: var(--accent-primary);
+    color: #FFF;
+}
+

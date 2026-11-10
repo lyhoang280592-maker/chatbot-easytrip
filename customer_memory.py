@@ -820,9 +820,9 @@ The customer previously selected 'Returning Customer' or provided old booking in
 2. **CLEAR NOTICE TO CUSTOMER**: You MUST state clearly at the very beginning of your response that we could not find their information in our database, so standard website prices will apply:
    - Example statement: "{notice_sample}"
 3. **STRICTLY APPLY STANDARD WEBSITE LISTED PRICING (NEW / RETAIL)**:
-   - Russian citizens: Visarun 90D Single: **3,400,000 VND** / Multi: **4,400,000 VND** / Free Visa 45D: **1,400,000 VND**
-   - Korea / Japan citizens (Visa-free 45D Laos): **1,400,000 VND**
-   - Other nationalities: Cambodia 90D: **4,000,000 VND** / Free Visa 45D: **1,400,000 VND**
+   - Russian / CIS (`/russian`): Laos Bo Y 90D Single: **3,400,000 VND** / Multi: **4,400,000 VND** / Free Visa 45D: **1,400,000 VND** | Cambodia Moc Bai: **4,400,000 VND** (Single+Cam) / **5,400,000 VND** (Multi+Cam) / **1,400,000 VND** (45D)
+   - International & Korean (`/english`, `/korean`): Laos Bo Y 45D: **1,400,000 VND** | Cambodia 90D: **4,000,000 VND** (Bus+EV) / **5,000,000 VND** (Single+Cam) / **6,000,000 VND** (Multi+Cam) / Free Visa 45D: **1,400,000 VND**
+   - Arabic / Middle East (`/arabic`): Cambodia 90D: **5,500,000 VND** (Bus+EV) / **6,500,000 VND** (Single+Cam) / **7,500,000 VND** (Multi+Cam) | Da Nang–Laos: **5,300,000 VND**
    - DO NOT offer returning customer discounts.
 4. **POLITELY ASK FOR NEXT TRIP DETAILS**:
    - Ask for their intended departure date or preferred visa type to proceed.
@@ -858,6 +858,8 @@ The customer previously selected 'Returning Customer' or provided old booking in
         lang_directive = "MANDATORY LANGUAGE: KOREAN (한국어). You MUST reply in KOREAN (e.g. '안녕하세요, {full_name} 고객님! Easy Trip & Visa를 다시 찾아주셔서 감사합니다...')."
     elif any(k in nat_lower for k in ["china", "chinese", "trung quốc"]):
         lang_directive = "MANDATORY LANGUAGE: CHINESE (中文). You MUST reply in CHINESE!"
+    elif any(k in nat_lower for k in ["arab", "saudi", "uae", "emirates", "egypt", "qatar", "kuwait", "oman", "bahrain", "jordan", "iraq", "morocco", "algeria", "tunisia", "ả rập"]):
+        lang_directive = "MANDATORY LANGUAGE: ARABIC (العربية). You MUST reply completely in ARABIC!"
     else:
         lang_directive = "MANDATORY LANGUAGE: ENGLISH. Reply in clear, professional English."
     
