@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>Easy Trip & Visa - Co-Pilot Chat & Training Studio (English)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="index.css?v=3.6">
+</head>
+<body>
+    <!-- Ambient Animated Background -->
+    <div class="ambient-bg">
+        <div class="color-blob blob-1"></div>
+        <div class="color-blob blob-2"></div>
+        <div class="color-blob blob-3"></div>
+    </div>
+
+    <!-- Main Dashboard Wrapper -->
+    <div class="dashboard-wrapper">
+        <!-- Header Command Center -->
+        <header class="dashboard-header">
+            <div class="header-logo">
+                <div class="brand-badge">HITL</div>
+                <div class="brand-names">
+                    <h1>Easy Trip & Visa</h1>
+                    <span>AI Co-Pilot &amp; Staff Training Studio</span>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="dashboard-tabs">
+                <button class="tab-btn active" id="tab-btn-sandbox" onclick="switchTab('sandbox')">🧪 Sandbox</button>
+                <button class="tab-btn" id="tab-btn-live" onclick="switchTab('live')">🌐 Live Chat</button>
+                <button class="tab-btn" id="tab-btn-ops" onclick="switchTab('ops')">📋 SOP &amp; 🎓 AI Training</button>
+            </div>
+
+            <!-- Controls & Metrics -->
+            <div class="header-controls-group">
+                <a href="index.html" class="copilot-lang-switch" title="Switch to Vietnamese Co-Pilot">🇻🇳 VN</a>
+                <div class="global-bot-control" id="global-bot-control" title="Global Bot Mode">
+                    <span class="bot-icon-pulse">🤖</span>
+                    <select id="global-bot-mode-select" class="global-bot-select" onchange="changeGlobalBotMode()" title="Switch global bot mode">
+                        <option value="auto">🟢 Auto Reply</option>
+                        <option value="copilot">🟡 Co-Pilot Draft</option>
+                        <option value="off">🔴 Bot Off</option>
+                    </select>
+                </div>
+
+                <div class="analytics-bar">
+                    <div class="stat-pill" title="Approved Drafts">
+                        <span class="stat-pill-icon">✅</span>
+                        <span class="stat-pill-num" id="stat-approved">0</span>
+                        <span class="stat-pill-label">Approved</span>
+                    </div>
+                    <div class="stat-pill" title="Total Learned AI Lessons">
+                        <span class="stat-pill-icon">🧠</span>
+                        <span class="stat-pill-num" id="stat-learned">0</span>
+                        <span class="stat-pill-label">Lessons</span>
+                    </div>
+                    <div class="stat-pill" title="Average AI Confidence">
+                        <span class="stat-pill-icon">⚡</span>
+                        <span class="stat-pill-num text-cyan" id="stat-confidence">--%</span>
+                        <span class="stat-pill-label">Trust</span>
+                    </div>
+                    <div class="system-status sync-status online" id="backend-sync-indicator" title="Click to re-check backend connection">
+                        <span class="dot-sync"></span>
+                        <span id="backend-sync-text">Backend Online</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Dashboard Main Content -->
+        <main class="dashboard-main-content">
+
+            <!-- ========================================================== -->
+            <!-- TAB 1: SANDBOX PLAYGROUND                                  -->
+            <!-- ========================================================== -->
+            <div id="tab-sandbox" class="tab-panel active">
+                <div class="dashboard-body">
+
+                    <!-- LEFT: CUSTOMER SIMULATOR -->
+                    <section class="panel-section customer-panel">
+                        <div class="panel-header">
+                            <div class="panel-icon">👤</div>
+                            <h3>Customer Chat Simulator</h3>
+                        </div>
+
+                        <div class="phone-frame">
+                            <div class="phone-screen">
+                                <div class="phone-header">
+                                    <div class="phone-avatar-wrapper">
+                                        <div class="phone-avatar-pulse"></div>
+                                        <div class="phone-avatar">ET</div>
+                                    </div>
+                                    <div class="phone-header-info">
+                                        <h4>Easy Trip & Visa</h4>
+                                        <span class="phone-status"><span class="phone-dot"></span> Online</span>
+                                    </div>
+                                </div>
+
+                                <div class="sandbox-test-banner">
+                                    <span>🧪 <strong>Test Sandbox:</strong> Safely test pricing, visa rules, and bus schedules anytime without affecting real customers!</span>
+                                </div>
+
+                                <div class="phone-chat-history" id="customer-chat-history">
+                                    <div class="phone-message bot">
+                                        <div class="phone-message-bubble">
+                                            Hello! I am the AI Assistant for Easy Trip &amp; Visa.
+                                            How can I help you today? Please tell me your nationality to get started! 🇻🇳🌍
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="phone-input-area">
+                                    <input type="text" id="customer-input" placeholder="Type a message as a customer..." autocomplete="off">
+                                    <button id="customer-send-btn" aria-label="Send">
+                                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M22 2L11 13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="customer-suggested-queries">
+                            <span class="suggest-title">Quick-test sample customer messages:</span>
+                            <div class="queries-grid">
+                                <button class="query-chip" data-text="Hi, I am Russian and want to do a Laos visa run from Nha Trang.">🇷🇺 Laos Visa Run (Russian)</button>
+                                <button class="query-chip" data-text="What is the Cambodia (Moc Bai) bus schedule and price?">🇰🇭 Cambodia Bus (Moc Bai)</button>
+                                <button class="query-chip" data-text="How much is a 90-day Vietnam visa run for a US citizen?">🇺🇸 90-Day E-Visa (USA)</button>
+                                <button class="query-chip" data-text="I want to rent a motorbike in Nha Trang, what are the prices?">🛵 Motorbike Rental</button>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- RIGHT: AGENT WORKSPACE & AI CO-PILOT -->
+                    <section class="panel-section agent-panel">
+                        <div class="workspace-card">
+                            <div class="panel-header">
+                                <div class="panel-icon">🧑‍💻</div>
+                                <h3>Agent Workspace (You &amp; Bot Co-Pilot)</h3>
+                            </div>
+
+                            <div class="agent-monitor-area" id="agent-monitor-area">
+                                <div class="agent-chat-history" id="agent-chat-history">
+                                    <div class="agent-message system">
+                                        <span class="badge">System</span> Session started. Working alongside AI Bot.
+                                    </div>
+                                    <div class="agent-message bot">
+                                        <div class="sender-info">Bot AI:</div>
+                                        <div class="bubble">
+                                            Hello! I am the AI Assistant for Easy Trip &amp; Visa. Please let me know the customer's nationality! 🇻🇳🌍
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="copilot-draft-center" id="copilot-draft-center">
+                                <div class="copilot-card-header">
+                                    <div class="copilot-badge">🤖 CO-PILOT DRAFT</div>
+                                    <div class="confidence-container">
+                                        Confidence: <span id="copilot-confidence-badge" class="conf-high">--%</span>
+                                    </div>
+                                </div>
+
+                                <div class="customer-question-preview">
+                                    <strong>Customer asked:</strong>
+                                    <p id="customer-question-text">Waiting for new message from customer...</p>
+                                </div>
+
+                                <div class="draft-editor-container">
+                                    <label for="draft-textarea">Suggested Bot Reply (Edit directly below):</label>
+                                    <textarea id="draft-textarea" rows="3" placeholder="AI suggested reply will appear here..."></textarea>
+                                </div>
+
+                                <div class="action-buttons-row">
+                                    <button id="btn-approve" class="btn btn-success" disabled>
+                                        <span class="btn-icon">✅</span> Approve &amp; Send
+                                    </button>
+                                    <button id="btn-edit-send" class="btn btn-warning" disabled>
+                                        <span class="btn-icon">✍️</span> Edit &amp; Teach Bot
+                                    </button>
+                                    <button id="btn-takeover" class="btn btn-primary" disabled>
+                                        <span class="btn-icon">🧑‍💻</span> Manual Takeover
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="brain-hub-card">
+                            <div class="panel-header">
+                                <div class="panel-icon">🧠</div>
+                                <h3>Bot Knowledge Brain (AI Learning Hub)</h3>
+                                <button id="btn-clear-brain" class="btn-link">Clear all lessons</button>
+                            </div>
+
+                            <p class="brain-desc">
+                                Any conversation you edit or handle manually is automatically saved as a new lesson so the AI replies accurately next time!
+                            </p>
+
+                            <div class="brain-lessons-list" id="brain-lessons-list"></div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+
+            <!-- ========================================================== -->
+            <!-- TAB 2: LIVE CHANNELS CONTROL                               -->
+            <!-- ========================================================== -->
+            <div id="tab-live" class="tab-panel">
+                <div class="dashboard-body live-grid">
+
+                    <section class="panel-section channels-list-panel">
+                        <div class="panel-header" style="display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div class="panel-icon">💬</div>
+                                <h3>Active Customer Chats</h3>
+                            </div>
+                            <button id="btn-reload-channels" class="btn btn-sm btn-outline" onclick="reloadLiveSessions()" title="Reload sessions from Database" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #e2e8f0; display: flex; align-items: center; gap: 4px;">
+                                <span>🔄</span> <span>Reload</span>
+                            </button>
+                        </div>
+                        <div class="channels-search-bar">
+                            <input type="text" id="channels-search-input" placeholder="Search customers..." onkeyup="filterLiveSessions()">
+                        </div>
+                        <div class="channels-list" id="live-channels-list-container">
+                            <div class="no-channels">Scanning live conversations...</div>
+                        </div>
+                    </section>
+
+                    <section class="panel-section live-chat-panel">
+                        <div class="panel-header live-chat-header-info">
+                            <div class="live-chat-client-info">
+                                <div class="platform-icon" id="live-chat-platform-icon">🧑‍💻</div>
+                                <h3 id="live-chat-client-name">Please select a customer</h3>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <button id="btn-reload-chat" class="btn btn-sm btn-outline" onclick="reloadCurrentActiveSession()" title="Refresh this chat from Database" style="padding: 4px 10px; font-size: 0.75rem; border-radius: 6px; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: #e2e8f0; display: flex; align-items: center; gap: 4px;">
+                                    <span>🔄</span> <span>Refresh</span>
+                                </button>
+                                <div class="session-mode-indicator-wrap" id="session-mode-indicator-wrap" style="display: none;">
+                                    <span>Bot Mode:</span>
+                                    <select id="session-mode-select" onchange="changeSessionMode()">
+                                        <option value="auto">🟢 Auto</option>
+                                        <option value="copilot">🟡 Co-Pilot</option>
+                                        <option value="manual">🔴 Manual</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="live-chat-history-wrapper">
+                            <div class="live-chat-history" id="live-chat-history-container">
+                                <div class="no-active-chat">
+                                    <div class="chat-placeholder-icon">🧑‍💻</div>
+                                    <p>Select a customer from the left list to monitor live chat or take over manually.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="live-chat-input-area" id="live-chat-input-area-container" style="display: none;">
+                            <button class="attach-btn" onclick="document.getElementById('live-chat-file-input').click()" title="Send photo/file">📎</button>
+                            <input type="file" id="live-chat-file-input" style="display: none;" onchange="uploadLiveMedia(this)">
+                            <input type="text" id="live-chat-input" placeholder="Type a direct message to the customer...">
+                            <button id="live-chat-send-btn" onclick="sendLiveManualMessage()">Send</button>
+                        </div>
+                    </section>
+
+                    <section class="panel-section live-copilot-panel">
+                        <div class="workspace-card live-copilot-card" id="live-copilot-draft-card" style="display: none;">
+                            <div class="panel-header">
+                                <div class="panel-icon">🤖</div>
+                                <h3>Co-Pilot Draft</h3>
+                            </div>
+                            <div class="copilot-draft-center">
+                                <div class="copilot-card-header">
+                                    <div class="copilot-badge">AI BOT DRAFT</div>
+                                </div>
+                                <div class="draft-editor-container">
+                                    <textarea id="live-draft-textarea" rows="4" placeholder="Bot is preparing a draft..."></textarea>
+                                </div>
+                                <div class="action-buttons-row">
+                                    <button class="btn btn-success" id="btn-live-approve" onclick="approveLiveDraft()">✅ Approve &amp; Send</button>
+                                    <button class="btn btn-warning" id="btn-live-edit" onclick="editSendLiveDraft()">✍️ Edit &amp; Teach</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="brain-hub-card live-brain-card">
+                            <div class="panel-header" style="display: flex; align-items: center; width: 100%;">
+                                <div class="panel-icon">🧠</div>
+                                <h3 style="margin: 0;">System Knowledge Hub</h3>
+                                <button id="btn-sync-excel" class="btn btn-warning" onclick="syncExcelMaster()" style="margin-left: auto; font-size: 0.75rem; padding: 6px 12px; border-radius: 6px; display: flex; align-items: center; gap: 4px; border: 1px solid rgba(251,191,36,0.3); background: rgba(251,191,36,0.1); color: #FBBF24; cursor: pointer; transition: all 0.2s;">
+                                    <span>🔄</span> Sync Excel Master
+                                </button>
+                            </div>
+                            <p class="brain-desc">Approved training lessons are saved here and applied immediately to incoming chats.</p>
+                            <div class="brain-lessons-list" id="live-brain-lessons-container"></div>
+                        </div>
+                    </section>
+
+                </div>
+            </div>
+
+            <!-- ========================================================== -->
+            <!-- TAB 3: OPERATIONS SOP, CALCULATOR & AI STAFF TRAINING      -->
+            <!-- ========================================================== -->
+            <div id="tab-ops" class="tab-panel">
+                <div class="dashboard-body ops-grid">
+                    <!-- COLUMN 1: INTERACTIVE CALCULATOR -->
+                    <section class="panel-section calculator-panel">
+                        <div class="panel-header">
+                            <div class="panel-icon">🧮</div>
+                            <h3>Auto Route &amp; Pricing Calculator</h3>
+                        </div>
+
+                        <div class="ops-form">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="ops-cust-name">Customer Name</label>
+                                    <input type="text" id="ops-cust-name" placeholder="e.g. John Doe" oninput="calculateOps()">
+                                </div>
+                                <div class="form-group">
+                                    <label for="ops-nationality">Nationality</label>
+                                    <input type="text" id="ops-nationality" placeholder="e.g. Russia, Myanmar, US..." oninput="calculateOps()">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="ops-adults">Adults</label>
+                                    <input type="number" id="ops-adults" value="1" min="1" oninput="calculateOps()" style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--border-glass); border-radius: 8px; padding: 10px; color: var(--text-primary); outline: none;">
+                                </div>
+                                <div class="form-group">
+                                    <label for="ops-children">Children Under 9yo</label>
+                                    <input type="number" id="ops-children" value="0" min="0" oninput="calculateOps()" style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--border-glass); border-radius: 8px; padding: 10px; color: var(--text-primary); outline: none;">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="ops-city">Departure City</label>
+                                    <select id="ops-city" onchange="calculateOps()">
+                                        <option value="Nha Trang">Nha Trang</option>
+                                        <option value="Da Nang">Da Nang</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ops-expiry">Current Visa Expiry Date</label>
+                                    <input type="date" id="ops-expiry" onchange="calculateOps()">
+                                    <div id="ops-date-warning" style="color: var(--warning); font-size: 0.75rem; margin-top: 4px; display: none; font-weight: 500;"></div>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="ops-visa-type">Requested Service</label>
+                                    <select id="ops-visa-type" onchange="onVisaTypeChange()">
+                                        <option value="visarun-laos-45d">Visa Run Laos — 45D Visa-Free</option>
+                                        <option value="visarun-laos-90d">Visa Run Laos — 90D E-Visa</option>
+                                        <option value="visarun-cambodia-45d">Visa Run Cambodia — 45D Visa-Free</option>
+                                        <option value="visarun-cambodia-90d">Visa Run Cambodia — 90D E-Visa</option>
+                                        <option value="ev-1h">Urgent E-Visa 1 Hour</option>
+                                        <option value="ev-2h">Urgent E-Visa 2 Hours</option>
+                                        <option value="ev-3h">Urgent E-Visa 3 Hours</option>
+                                        <option value="ev-4h">Urgent E-Visa 4 Hours</option>
+                                        <option value="ev-8h">Urgent E-Visa 8 Hours (Same Day)</option>
+                                        <option value="ev-1d">Urgent E-Visa 1 Working Day</option>
+                                        <option value="ev-2d">Urgent E-Visa 2 Working Days</option>
+                                        <option value="ev-std">Standard E-Visa (3–5 Working Days)</option>
+                                    </select>
+                                    <div id="ops-visa-warning" style="color: var(--danger); font-size: 0.75rem; margin-top: 4px; display: none; font-weight: 500;"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ops-entry-type">Entry Type</label>
+                                    <select id="ops-entry-type" onchange="calculateOps()">
+                                        <option value="single">Single Entry</option>
+                                        <option value="multi">Multiple Entry (+1M VND)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="ops-transport">Bus Transport</label>
+                                    <select id="ops-transport" onchange="calculateOps()" style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--border-glass); border-radius: 8px; padding: 10px; color: var(--text-primary); outline: none;">
+                                        <option value="yes">With Sleeper Bus</option>
+                                        <option value="no">No Bus (Visa Processing Only)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="ops-fasttrack">VIP Fast Track &amp; Border Assist</label>
+                                    <select id="ops-fasttrack" onchange="calculateOps()">
+                                        <option value="none">None</option>
+                                        <option value="DAD_CXR">CXR / DAD / PQC / VDO / HPH... ($70 / 1,855,000đ)</option>
+                                        <option value="SGN">Tan Son Nhat (SGN) / Noi Bai (HAN) (1,200,000đ)</option>
+                                        <option value="LAO_BORDER">Laos Border Assist — Lao Bao / Bo Y (300,000đ)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="ops-market-tier">Website Pricing Tier</label>
+                                    <select id="ops-market-tier" onchange="calculateOps()">
+                                        <option value="auto">🔄 Auto by Nationality</option>
+                                        <option value="en_kr">🌍 International / Korean (/english, /korean)</option>
+                                        <option value="ru">🇷🇺 Russia &amp; CIS (/russian)</option>
+                                        <option value="ar">🇸🇦 Arabic / Middle East (/arabic +1.5M)</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="display: flex; gap: 15px; align-items: center; height: 100%; padding-top: 20px; margin-bottom: 10px;">
+                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.8rem; color: var(--text-primary); font-weight: 500;">
+                                        <input type="checkbox" id="ops-loyalty" onchange="calculateOps()" style="width: 15px; height: 15px; cursor: pointer;"> Returning / Agency
+                                    </label>
+                                    <label style="display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.8rem; color: var(--text-primary); font-weight: 500;">
+                                        <input type="checkbox" id="ops-urgent-24h" onchange="calculateOps()" style="width: 15px; height: 15px; cursor: pointer;"> &lt;24h Urgent
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Urgent E-Visa Calculator Box -->
+                            <div class="emergency-calc-box" id="ops-emergency-box" style="background: rgba(244, 63, 94, 0.05); border: 1px solid rgba(244, 63, 94, 0.15); border-radius: 12px; padding: 12px; margin-top: 5px; display: none;">
+                                <h4 style="color: var(--danger); font-size: 0.85rem; margin-top: 0; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; font-weight: 600;">⚡ Urgent E-Visa Deadline Calculator</h4>
+                                <div class="form-row">
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label for="ops-stamp-time">Exit Stamp / Submission Time</label>
+                                        <select id="ops-stamp-time" onchange="calculateOps()">
+                                            <option value="08:00">08:00 AM</option>
+                                            <option value="08:30">08:30 AM (Cutoff for AM 4h)</option>
+                                            <option value="09:00">09:00 AM (Cutoff for AM 3h)</option>
+                                            <option value="09:30">09:30 AM</option>
+                                            <option value="10:00">10:00 AM (Cutoff for AM 2h)</option>
+                                            <option value="10:30">10:30 AM</option>
+                                            <option value="11:00">11:00 AM (Cutoff for AM 1h)</option>
+                                            <option value="12:00">12:00 PM</option>
+                                            <option value="13:00">13:00 PM (Cutoff for PM 4h)</option>
+                                            <option value="13:30">13:30 PM</option>
+                                            <option value="14:00">14:00 PM (Cutoff for PM 3h)</option>
+                                            <option value="14:30">14:30 PM</option>
+                                            <option value="15:00">15:00 PM (Cutoff for PM 2h)</option>
+                                            <option value="15:30">15:30 PM</option>
+                                            <option value="16:00">16:00 PM (Cutoff for PM 1h)</option>
+                                            <option value="17:00">17:00 PM</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="margin-bottom: 0;">
+                                        <label for="ops-release-time">Target Release Window</label>
+                                        <select id="ops-release-time" onchange="calculateOps()">
+                                            <option value="11:30">11:30 AM (Mon – Fri)</option>
+                                            <option value="17:30">17:30 PM (Mon – Fri)</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div id="ops-emergency-warning" style="color: #FB7185; font-size: 0.75rem; margin-top: 6px; font-weight: 500;"></div>
+                            </div>
+                        </div>
+
+                        <!-- BUS LOGISTICS INFO -->
+                        <div class="bus-logistics-card" style="background: rgba(30, 41, 59, 0.4); border: 1px solid var(--border-glass); border-radius: 12px; padding: 15px; margin-bottom: 20px;">
+                            <div class="bus-logistics-header" style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+                                <span style="font-size: 1.1rem;">🚌</span>
+                                <h4 style="margin: 0; font-size: 0.85rem; font-weight: 600; color: var(--text-primary);">Bus &amp; Route Dispatch Rules</h4>
+                            </div>
+                            <div class="bus-logistics-content" style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5;">
+                                <p style="margin: 0 0 6px 0;">⚠️ <strong>Seat Map Rule:</strong> Live seat maps come directly from the bus company. Staff must <strong>NEVER promise seat numbers before receiving the map</strong> (White = Available, Yellow crossed = Booked).</p>
+                                <p style="margin: 0 0 6px 0;">📍 <strong>Laos Route (Bo Y):</strong> Daily <strong>21:30</strong> from 40 Hon Chong (Nha Trang). Restricted to Russia, Belarus, South Korea, Japan, Luxembourg, and 12 ASEAN nations (Myanmar gets 14-day visa exemption).</p>
+                                <p style="margin: 0;">📍 <strong>Cambodia Route (Moc Bai):</strong> Runs only on <strong>Tuesday, Thursday, Sunday</strong> at 21:30. Mandatory for all other nationalities.</p>
+                            </div>
+                        </div>
+
+                        <!-- OUTPUT CARD -->
+                        <div class="calc-results-card">
+                            <h4 class="calc-results-title">📊 Route &amp; Pricing Summary</h4>
+
+                            <div class="result-item">
+                                <span class="result-label">Recommended Route:</span>
+                                <span class="result-value text-cyan" id="calc-route">--</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Estimated Departure:</span>
+                                <span class="result-value" id="calc-departure">--</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Restricted Nationality Fee:</span>
+                                <span class="result-value text-warning" id="calc-surcharge-nation">0 VND</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Multi-Entry Surcharge:</span>
+                                <span class="result-value text-warning" id="calc-surcharge-multi">0 VND</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-label">Fast Track / Border Assist:</span>
+                                <span class="result-value text-warning" id="calc-surcharge-fasttrack">0 VND</span>
+                            </div>
+                            <div class="result-item" id="calc-urgent-package-row" style="display: none;">
+                                <span class="result-label">Auto-Calculated Urgent Tier:</span>
+                                <span class="result-value text-cyan" id="calc-urgent-package-name">--</span>
+                            </div>
+
+                            <div class="calc-divider"></div>
+
+                            <div class="result-item total">
+                                <span class="result-label">Estimated Total:</span>
+                                <span class="result-value text-green" id="calc-total">0 VND</span>
+                            </div>
+                        </div>
+
+                        <!-- GENERATED COMMANDS -->
+                        <div class="ops-command-hub">
+                            <div class="command-group">
+                                <div class="command-header">
+                                    <span>🤖 Bus Scheme Request (Telegram General)</span>
+                                    <button class="btn-copy-small" onclick="copyText('cmd-bus-booking')">Copy</button>
+                                </div>
+                                <pre id="cmd-bus-booking">Scheme [Date] + [Service]</pre>
+                            </div>
+
+                            <div class="command-group">
+                                <div class="command-header">
+                                    <span>🔒 Seat Lock Command (Telegram Lock Ghế)</span>
+                                    <button class="btn-copy-small" onclick="copyText('cmd-seat-lock')">Copy</button>
+                                </div>
+                                <pre id="cmd-seat-lock">Waiting for input...</pre>
+                            </div>
+
+                            <div class="command-group">
+                                <div class="command-header">
+                                    <span>💬 E-Visa Submission (WhatsApp Group)</span>
+                                    <button class="btn-copy-small" onclick="copyText('cmd-ev-apply')">Copy</button>
+                                </div>
+                                <pre id="cmd-ev-apply">Waiting for input...</pre>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- COLUMN 2: OPERATIONAL PROCEDURES & TEMPLATES -->
+                    <section class="panel-section procedures-panel">
+                        <div class="panel-header">
+                            <div class="panel-icon">📋</div>
+                            <h3>SOP Handbook &amp; Client Templates</h3>
+                        </div>
+
+                        <div class="template-selector" style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; background: rgba(30, 41, 59, 0.3); padding: 8px 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                            <label for="greet-lang-select" style="font-size: 0.8rem; font-weight: 600; color: var(--text-secondary);">Client Reply Template Language:</label>
+                            <select id="greet-lang-select" onchange="changeSopLanguage()" style="background: rgba(30, 41, 59, 0.6); border: 1px solid var(--border-glass); border-radius: 6px; padding: 4px 8px; color: var(--text-primary); font-size: 0.8rem; outline: none;">
+                                <option value="en">English 🇬🇧</option>
+                                <option value="ru">Russian 🇷🇺</option>
+                                <option value="kr">Korean 🇰🇷</option>
+                                <option value="ar">Arabic 🇸🇦</option>
+                                <option value="fr">French 🇫🇷</option>
+                                <option value="vi">Tiếng Việt 🇻🇳</option>
+                            </select>
+                        </div>
+
+                        <div class="sop-tabs">
+                            <button class="sop-tab-btn active" id="sop-tab-btn-greeting" onclick="switchSopTab('sop-greeting')">👋 Greetings</button>
+                            <button class="sop-tab-btn" id="sop-tab-btn-payment" onclick="switchSopTab('sop-payment')">💳 Payment</button>
+                            <button class="sop-tab-btn" id="sop-tab-btn-border" onclick="switchSopTab('sop-border')">🚌 Border</button>
+                            <button class="sop-tab-btn" id="sop-tab-btn-feedback" onclick="switchSopTab('sop-feedback')">✨ Feedback</button>
+                        </div>
+
+                        <!-- SOP TAB 1 -->
+                        <div id="sop-greeting" class="sop-tab-panel active">
+                            <div class="sop-card-warning">
+                                <strong>💡 Routing Rule:</strong> Check the client's nationality first — Russia, Belarus, South Korea, Japan, Luxembourg &amp; ASEAN can use the lower-cost <strong>Laos (Bo Y)</strong> border; all other nationalities must use <strong>Cambodia (Moc Bai)</strong>.
+                            </div>
+
+                            <div class="template-display-box">
+                                <div class="box-header">
+                                    <span>💬 Step 1: Greeting &amp; Info Collection:</span>
+                                    <button class="btn-copy-small" onclick="copyText('tmpl-greeting-text')">Copy</button>
+                                </div>
+                                <div class="box-body" id="tmpl-greeting-text">...</div>
+                            </div>
+
+                            <div class="template-display-box">
+                                <div class="box-header">
+                                    <span>🚌 Step 2: Recommended Route &amp; Pricing:</span>
+                                    <button class="btn-copy-small" onclick="copyText('tmpl-route-text')">Copy</button>
+                                </div>
+                                <div class="box-body" id="tmpl-route-text">...</div>
+                            </div>
+
+                            <div class="template-display-box">
+                                <div class="box-header">
+                                    <span>🚌 Da Nang – Lao Bao (90-Min E-Visa):</span>
+                                    <button class="btn-copy-small" onclick="copyText('tmpl-danang-text')">Copy</button>
+                                </div>
+                                <div class="box-body" id="tmpl-danang-text">...</div>
+                            </div>
+                        </div>
+
+                        <!-- SOP TAB 2 -->
+                        <div id="sop-payment" class="sop-tab-panel">
+                            <div class="sop-card-warning">
+                                <strong>🚨 Payment Cutoff:</strong> Bus tickets must be paid <strong>before 14:00 on departure day</strong>. Submit E-Visa applications only after full payment is confirmed.
+                            </div>
+
+                            <div class="template-display-box">
+                                <div class="box-header">
+                                    <span>💳 Payment Details (Vietcombank / VRB / USDT):</span>
+                                    <button class="btn-copy-small" onclick="copyText('tmpl-payment-text')">Copy</button>
+                                </div>
+                                <div class="box-body" id="tmpl-payment-text">...</div>
+                            </div>
+
+                            <div class="template-display-box">
+                                <div class="box-header">
+                                    <span>📷 Bio Page &amp; Photo Guidelines:</span>
+                                    <button class="btn-copy-small" onclick="copyText('tmpl-req-docs')">Copy</button>
+                                </div>
+                                <div class="box-body" id="tmpl-req-docs">...</div>
+                            </div>
+
+                            <div class="qr-container" style="display: flex; flex-direction: column; align-items: center; background: rgba(30, 41, 59, 0.3); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.03);">
+                                <img src="qr_code.jpg" alt="VCB Payment QR Code" class="qr-image" style="max-width: 130px; border-radius: 8px;" />
+                                <div class="qr-caption" id="lbl-qr-caption" style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 6px;">Scan QR to pay via Vietcombank VCB OneQR</div>
+                            </div>
+                        </div>
+
+                        <!-- SOP TAB 3 -->
+                        <div id="sop-border" class="sop-tab-panel">
+                            <div class="border-select-row">
+                                <button class="btn-route-select active" id="btn-guide-laos45" onclick="showBorderGuide('laos45')">🚌 Laos 45D</button>
+                                <button class="btn-route-select" id="btn-guide-laos90" onclick="showBorderGuide('laos90')">🚌 Laos 90D</button>
+                                <button class="btn-route-select" id="btn-guide-cam" onclick="showBorderGuide('cam')">🚌 Cambodia</button>
+                            </div>
+
+                            <div id="guide-laos45" class="guide-content active">
+                                <div class="sop-card-warning red">
+                                    <strong>🚨 BO Y FAST TRACK PAUSED:</strong> Border Fast Track at Bo Y is temporarily suspended since April 23. Passengers complete the border crossing on foot manually.
+                                </div>
+                                <h4 style="font-size: 0.85rem; margin-top: 8px; margin-bottom: 6px; color: #FFF;">Laos Border Schedule (Bo Y) — 45D Visa-Free:</h4>
+                                <ol class="guide-list" style="font-size: 0.75rem; color: var(--text-secondary); padding-left: 15px; margin: 0 0 10px 0; line-height: 1.5;">
+                                    <li><strong>21:30</strong>: Bus departs 40 Hon Chong, Nha Trang (or 21:15 at 04 Tran Phu).</li>
+                                    <li><strong>06:00</strong>: Arrive at Bo Y border. Breakfast/coffee on own account.</li>
+                                    <li><strong>06:45</strong>: Driver collects passports to assist with exit stamping.</li>
+                                    <li><strong>07:30</strong>: Passengers walk through facial scan, stamp into Laos and return.</li>
+                                    <li><strong>08:00</strong>: Return to Vietnam immigration counter for re-entry stamp.</li>
+                                    <li><strong>09:30</strong>: Bus departs back to Nha Trang.</li>
+                                </ol>
+                                <p class="guide-fee" style="font-size: 0.75rem; color: var(--accent-teal); font-weight: 500; margin: 0;">📌 Border Cash Fees: Vietnam 50,000đ × 2 = 100,000đ | Laos 20,000đ × 2 = 40,000đ (Total: 140,000đ).</p>
+                            </div>
+
+                            <div id="guide-laos90" class="guide-content">
+                                <h4 style="font-size: 0.85rem; margin-top: 8px; margin-bottom: 6px; color: #FFF;">Laos Border Schedule (Bo Y) — 90D E-Visa:</h4>
+                                <ol class="guide-list" style="font-size: 0.75rem; color: var(--text-secondary); padding-left: 15px; margin: 0 0 10px 0; line-height: 1.5;">
+                                    <li>Bus departs <strong>Tue, Thu, Sun at 21:30</strong>.</li>
+                                    <li>Exit Vietnam (50,000đ fee). Immediately photograph the exit stamp and send to EasyTrip.</li>
+                                    <li>Cross Laos immigration and pay 20,000đ form/stamp fee.</li>
+                                    <li>Wait at the neutral-zone café while EasyTrip processes the E-Visa (mobile PDF accepted at Bo Y).</li>
+                                    <li>Once approved (~11:30 AM), re-enter Vietnam (50,000đ). <strong>Important:</strong> Tell the officer you have a 90D E-Visa!</li>
+                                </ol>
+                            </div>
+
+                            <div id="guide-cam" class="guide-content">
+                                <h4 style="font-size: 0.85rem; margin-top: 8px; margin-bottom: 6px; color: #FFF;">Cambodia Schedule (Moc Bai) — 45D / 90D:</h4>
+                                <ol class="guide-list" style="font-size: 0.75rem; color: var(--text-secondary); padding-left: 15px; margin: 0 0 10px 0; line-height: 1.5;">
+                                    <li>Bus departs <strong>Tue, Thu, Sun at 21:30</strong> from 40 Hon Chong.</li>
+                                    <li><strong>06:30</strong>: Arrive at Moc Bai border; queue for 07:30 gate opening.</li>
+                                    <li>Exit Vietnam (50k–150k VND). Send Exit Stamp photo <strong>before 08:00 AM</strong>.</li>
+                                    <li>Cross to Cambodia gate (walk or motorbike taxi ~100k–150k VND).</li>
+                                    <li>Purchase Cambodia visa at border (~$35–$50) unless all-inclusive package was booked.</li>
+                                    <li>Wait ~4h at a café with Wi-Fi until EasyTrip sends the new Vietnam E-Visa (~11:30–12:00).</li>
+                                    <li><strong>Print the E-Visa on A4 paper</strong>, then queue for Vietnam re-entry (11:15–11:45).</li>
+                                </ol>
+                            </div>
+
+                            <div class="template-display-box" style="margin-top: 10px;">
+                                <div class="box-header">
+                                    <span>🚌 Step 9: Bus Dispatch &amp; Wi-Fi Template:</span>
+                                    <button class="btn-copy-small" onclick="copyText('tmpl-bus-dispatch')">Copy</button>
+                                </div>
+                                <div class="box-body" id="tmpl-bus-dispatch">...</div>
+                            </div>
+                        </div>
+
+                        <!-- SOP TAB 4 -->
+                        <div id="sop-feedback" class="sop-tab-panel">
+                            <div class="template-display-box">
+                                <div class="box-header">
+                                    <span>✨ Google Maps Review Request Template:</span>
+                                    <button class="btn-copy-small" onclick="copyText('tmpl-feedback-text')">Copy</button>
+                                </div>
+                                <div class="box-body" id="tmpl-feedback-text">...</div>
+                            </div>
+
+                            <div class="template-display-box">
+                                <div class="box-header">
+                                    <span>⚠️ Passport Entry Stamp Check Warning:</span>
+                                    <button class="btn-copy-small" onclick="copyText('tmpl-warning-text')">Copy</button>
+                                </div>
+                                <div class="box-body" id="tmpl-warning-text">...</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- COLUMN 3: STAFF INTERNAL AI TRAINING & HELPDESK (ENGLISH) -->
+                    <section class="panel-section staff-chat-panel" id="staff-chat-panel">
+                        <div class="panel-header" style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                            <div style="display: flex; align-items: center; gap: 8px;">
+                                <div class="panel-icon">🎓</div>
+                                <h3>Internal AI Training &amp; Helpdesk</h3>
+                            </div>
+                            <button class="staff-reset-btn" onclick="resetStaffChat()" title="Start a new training session">🔄 New Session</button>
+                        </div>
+
+                        <!-- Mode Switcher -->
+                        <div class="staff-mode-bar" id="staff-mode-bar">
+                            <button class="staff-mode-btn active" data-mode="training" onclick="setStaffChatMode('training')">🎓 SOP / Case Q&amp;A</button>
+                            <button class="staff-mode-btn" data-mode="reply_draft" onclick="setStaffChatMode('reply_draft')">💬 Draft Client Reply</button>
+                            <button class="staff-mode-btn" data-mode="quiz" onclick="setStaffChatMode('quiz')">🎯 Practice Scenario</button>
+                        </div>
+
+                        <div class="staff-chat-window" id="staff-chat-window">
+                            <div class="staff-msg bot">
+                                <div class="staff-msg-content">
+                                    👋 Hello! I am the <strong>AI Training &amp; Operations Mentor</strong> for Easy Trip &amp; Visa.<br><br>
+                                    Ask me any unclear customer scenario or SOP rule in English (pick a mode above):<br>
+                                    • <strong>🎓 SOP / Case Q&amp;A:</strong> Check 4-website prices (<code>/english</code>, <code>/korean</code>, <code>/russian</code>, <code>/arabic</code>), border incidents (wrong 45D stamp, late stamp &gt;08:00), seat maps &amp; Telegram commands.<br>
+                                    • <strong>💬 Draft Client Reply:</strong> Paste a customer's message (Russian/English/Korean/Arabic) to get a ready-to-send reply + English SOP notes.<br>
+                                    • <strong>🎯 Practice Scenario:</strong> I act as Operations Manager, give you realistic cases, and grade your handling out of 10!
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="staff-chat-input-container">
+                            <div id="staff-chat-attachment-preview" class="staff-chat-attachment-preview" style="display: none;"></div>
+
+                            <div class="staff-chat-input-area-new">
+                                <button class="staff-chat-attach-btn" onclick="document.getElementById('staff-chat-file-input').click()" title="Attach image/file">📎</button>
+                                <input type="file" id="staff-chat-file-input" style="display: none;" multiple onchange="handleStaffFileSelect(this)">
+                                <textarea id="staff-chat-input" placeholder="Ask any unclear SOP or client scenario (press Enter to send)..." rows="1" oninput="autoResizeStaffInput(this)" onkeydown="handleStaffChatTextareaKey(event)"></textarea>
+                                <button id="staff-chat-send-btn" onclick="sendStaffChatMessage()">Send</button>
+                            </div>
+                        </div>
+
+                        <div class="staff-suggestions" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 6px;">
+                            <span style="font-size: 0.7rem; color: var(--text-secondary); width: 100%;">Quick SOP &amp; Common Case Prompts:</span>
+                            <button class="btn-copy-small" onclick="quickAskStaff('Compare all 4 website pricing tiers (/english, /korean, /russian, /arabic) and Fast Track $70')" style="font-size: 0.65rem;">4 Website Prices</button>
+                            <button class="btn-copy-small" onclick="quickAskStaff('What should we do if the border officer stamped 45 days (or 14 days) even though the client has a 90-day E-Visa?')" style="font-size: 0.65rem;">Wrong 45D Stamp</button>
+                            <button class="btn-copy-small" onclick="quickAskStaff('What if a Moc Bai client sends their Exit Stamp photo after 08:00 AM or misses the 13:00 return bus?')" style="font-size: 0.65rem;">Late Stamp &gt;08:00</button>
+                            <button class="btn-copy-small" onclick="quickAskStaff('Are 4-8h urgent E-Visas processed on Sat/Sun and how does the 100% GMT+7 refund policy work?')" style="font-size: 0.65rem;">Weekend &amp; 100% Refund</button>
+                            <button class="btn-copy-small" onclick="quickAskStaff('Explain how to read white vs yellow bus seat maps and submit the Telegram Lock command')" style="font-size: 0.65rem;">Seat Map &amp; Lock</button>
+                            <button class="btn-copy-small" onclick="quickAskStaff('Does the client need a printed A4 E-Visa at Moc Bai or is a phone PDF accepted at Bo Y?')" style="font-size: 0.65rem;">A4 Print vs PDF</button>
+                            <button class="btn-copy-small" onclick="quickAskStaff('What are the Vietcombank, VRB, USDT payment details and red-stamped receipt SOP?')" style="font-size: 0.65rem;">VCB / VRB / USDT</button>
+                            <button class="btn-copy-small" onclick="startQuizScenario()" style="font-size: 0.65rem; background: rgba(16, 185, 129, 0.18); border-color: rgba(16, 185, 129, 0.45); color: #34D399;">🎯 Start Practice Case</button>
+                        </div>
+                    </section>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Auth Gate Overlay -->
+    <div id="auth-gate-overlay" class="auth-gate-overlay" style="display: none;">
+        <div class="auth-card">
+            <div class="auth-logo">🔒</div>
+            <h2>Admin Verification</h2>
+            <p>Please enter the security access code to open Co-Pilot Studio.</p>
+            <input type="password" id="auth-password-input" placeholder="Enter access code..." onkeypress="handleAuthKeyPress(event)">
+            <button onclick="submitAuthCode()">Access Studio</button>
+        </div>
+    </div>
+
+    <script src="app.js?v=3.6"></script>
+</body>
+</html>
+
