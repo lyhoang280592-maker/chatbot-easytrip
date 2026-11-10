@@ -2068,6 +2068,7 @@ async def api_staff_chat(request: Request):
     question = body.get("question", "").strip()
     history = body.get("history", [])
     mode = body.get("mode", "training")
+    staff_lang = body.get("staff_lang", "")
     attachments = body.get("attachments", [])  # Danh sách tệp đính kèm: {"url": "...", "filename": "...", "content_type": "..."}
     
     if not question and not attachments:
@@ -2092,7 +2093,7 @@ async def api_staff_chat(request: Request):
             
     try:
         from ai_agent import process_staff_chat
-        answer = await process_staff_chat(question, history=history, mode=mode)
+        answer = await process_staff_chat(question, history=history, mode=mode, staff_lang=staff_lang)
         return {"success": True, "answer": answer, "mode": mode}
     except Exception as e:
         return {"success": False, "message": str(e)}

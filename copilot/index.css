@@ -25,7 +25,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Inter', sans-serif;
+    font-family: 'Inter', 'Noto Sans Myanmar', sans-serif;
 }
 
 body {
@@ -2554,6 +2554,28 @@ body {
 
 .staff-copy-msg-btn:hover {
     background: var(--accent-primary);
+    color: #FFF;
+}
+
+.copilot-lang-switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: rgba(30, 41, 59, 0.78);
+    border: 1px solid var(--border-glass-light);
+    color: #E2E8F0;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: all 0.2s ease;
+}
+
+.copilot-lang-switch:hover {
+    background: rgba(59, 130, 246, 0.22);
+    border-color: rgba(59, 130, 246, 0.55);
     color: #FFF;
 }
 

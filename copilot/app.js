@@ -4,6 +4,7 @@
 
 const isArabicUI = window.location.pathname.includes('index_ar.html') || window.location.pathname.includes('arabic.html');
 const isFrenchUI = window.location.pathname.includes('index_fr.html') || window.location.pathname.includes('french.html');
+const isMyanmarUI = window.location.pathname.includes('index_my.html') || window.location.pathname.includes('myanmar.html');
 
 // Các phần tử giao diện
 const customerChatHistory = document.getElementById('customer-chat-history');
@@ -1373,10 +1374,12 @@ function calculateOps() {
             autoLang = 'vi';
         } else if (natNorm.includes('ai cap') || natNorm.includes('egypt') || natNorm.includes('arab') || natNorm.includes('morocco') || natNorm.includes('ma roc') || natNorm.includes('tunisia') || natNorm.includes('uae')) {
             autoLang = 'ar';
+        } else if (isMyanmarUI && (natNorm.includes('myanmar') || natNorm.includes('burm'))) {
+            autoLang = 'my';
         }
         
         const langSelect = document.getElementById('greet-lang-select');
-        if (langSelect && langSelect.value !== autoLang) {
+        if (langSelect && langSelect.querySelector(`option[value="${autoLang}"]`) && langSelect.value !== autoLang) {
             langSelect.value = autoLang;
             changeSopLanguage();
         }
@@ -1393,6 +1396,8 @@ function calculateOps() {
                 route = 'نها ترانغ ↔ لاوس (معبر بو إي الحدودي)';
             } else if (isFrenchUI) {
                 route = 'Nha Trang ↔ LAOS (Frontière de Bo Y)';
+            } else if (isMyanmarUI) {
+                route = 'Nha Trang ↔ လာအို (Bờ Y နယ်စပ်ဂိတ်)';
             } else {
                 route = 'Nha Trang ↔ LÀO (Cửa khẩu Bờ Y)';
             }
@@ -1401,6 +1406,8 @@ function calculateOps() {
                 route = 'نها ترانغ ↔ كمبوديا (معبر موk باي الحدودي)';
             } else if (isFrenchUI) {
                 route = 'Nha Trang ↔ CAMBODGE (Frontière de Moc Bai)';
+            } else if (isMyanmarUI) {
+                route = 'Nha Trang ↔ ကမ္ဘောဒီးယား (Mộc Bài နယ်စပ်ဂိတ်)';
             } else {
                 route = 'Nha Trang ↔ CAMPUCHIA (Cửa khẩu Mộc Bài)';
             }
@@ -1428,6 +1435,8 @@ function calculateOps() {
             route = 'يرجى إدخال الجنسية';
         } else if (isFrenchUI) {
             route = 'Veuillez saisir la nationalité';
+        } else if (isMyanmarUI) {
+            route = 'ကျေးဇူးပြု၍ နိုင်ငံသား ထည့်သွင်းပါ';
         } else {
             route = 'Vui lòng nhập quốc tịch';
         }
@@ -1450,6 +1459,8 @@ function calculateOps() {
                 warnMsg = "⚠️ هذه الجنسية غير معفاة من تأشيرة فيتنام، لا يمكن اختيار إعفاء 45 يومًا.";
             } else if (isFrenchUI) {
                 warnMsg = "⚠️ Cette nationalité n'est pas exemptée de visa pour le VN, le forfait de 45 jours n'est pas disponible.";
+            } else if (isMyanmarUI) {
+                warnMsg = "⚠️ ဤနိုင်ငံသားသည် ဗီယက်နမ် ဗီဇာကင်းလွတ်ခွင့် (45D) မရပါ။ (မြန်မာနိုင်ငံသားဖြစ်ပါက 14 ရက်သာ ကင်းလွတ်ခွင့်ရှိသည်)";
             }
             visaWarningEl.textContent = warnMsg;
             visaWarningEl.style.display = 'block';
@@ -1462,7 +1473,7 @@ function calculateOps() {
     const finalVisaType = document.getElementById('ops-visa-type').value;
 
     // 2. Tính toán Giá nền theo đúng 4 bảng giá Website (/english, /korean, /russian, /arabic)
-    const isLaos = route.includes('LÀO') || route.includes('LAOS') || route.includes('لاوس');
+    const isLaos = route.includes('LÀO') || route.includes('LAOS') || route.includes('لاوس') || route.includes('လာအို');
     const isCIS = isCISGroup(nationalityRaw);
     const natNormLower = nationalityRaw ? removeVietnameseTones(nationalityRaw).toLowerCase() : '';
     const isArabNat = ['arab', 'saudi', 'uae', 'emirates', 'egypt', 'ai cap', 'qatar', 'kuwait', 'oman', 'bahrain', 'jordan', 'iraq', 'morocco', 'ma roc', 'algeria', 'tunisia', 'tunusia'].some(k => natNormLower.includes(k));
@@ -1573,7 +1584,7 @@ function calculateOps() {
     total = basePrice + surchargeNation + surchargeMulti + surchargeFasttrack;
 
     // 4. Tính toán ngày đi (Hạn visa - 1 ngày)
-    let departureDateStr = 'Đang chờ nhập ngày...';
+    let departureDateStr = isMyanmarUI ? 'ရက်စွဲထည့်ရန် စောင့်နေသည်...' : 'Đang chờ nhập ngày...';
     let formattedDepDate = '';
     const dateWarningEl = document.getElementById('ops-date-warning');
 
@@ -1588,17 +1599,23 @@ function calculateOps() {
         formattedDepDate = `${dd}/${mm}/${yyyy}`;
         
         const depDayOfWeek = departureDate.getDay();
-        const weekdays = ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
+        const weekdays = isMyanmarUI
+            ? ['တနင်္ဂနွေ', 'တနင်္လာ', 'အင်္ဂါ', 'ဗုဒ္ဓဟူး', 'ကြာသပတေး', 'သောကြာ', 'စနေ']
+            : ['Chủ Nhật', 'Thứ 2', 'Thứ 3', 'Thứ 4', 'Thứ 5', 'Thứ 6', 'Thứ 7'];
         departureDateStr = `${formattedDepDate} (${weekdays[depDayOfWeek]})`;
         
         if (!isLaos && nationalityRaw && (depDayOfWeek !== 0 && depDayOfWeek !== 2 && depDayOfWeek !== 4)) {
             if (dateWarningEl) {
-                dateWarningEl.textContent = "⚠️ Xe đi Campuchia chỉ khởi hành vào Thứ 3, Thứ 5, Chủ Nhật.";
+                dateWarningEl.textContent = isMyanmarUI
+                    ? "⚠️ ကမ္ဘောဒီးယား (Mộc Bài) ဘတ်စ်ကားသည် အင်္ဂါ၊ ကြာသပတေး၊ တနင်္ဂနွေ နေ့များတွင်သာ ထွက်ခွာပါသည်။"
+                    : "⚠️ Xe đi Campuchia chỉ khởi hành vào Thứ 3, Thứ 5, Chủ Nhật.";
                 dateWarningEl.style.display = 'block';
             }
         } else if ((finalVisaType === 'ev-4h' || finalVisaType === 'ev-8h') && (depDayOfWeek === 0 || depDayOfWeek === 6)) {
             if (dateWarningEl) {
-                dateWarningEl.textContent = "⚠️ E-Visa 4–8h không xử lý cuối tuần (T7/CN) & ngày lễ. Hoàn 100% nếu trễ hạn GMT+7.";
+                dateWarningEl.textContent = isMyanmarUI
+                    ? "⚠️ E-Visa 4–8 နာရီ အမြန်ဝန်ဆောင်မှုကို စနေ/တနင်္ဂနွေနှင့် ရုံးပိတ်ရက်များတွင် မပြုလုပ်ပါ။ GMT+7 သတ်မှတ်ချိန်အတွင်း မရပါက 100% ငွေပြန်အမ်းပေးပါသည်။"
+                    : "⚠️ E-Visa 4–8h không xử lý cuối tuần (T7/CN) & ngày lễ. Hoàn 100% nếu trễ hạn GMT+7.";
                 dateWarningEl.style.display = 'block';
             }
         } else {
@@ -1607,7 +1624,9 @@ function calculateOps() {
     } else if (finalVisaType === 'ev-4h' || finalVisaType === 'ev-8h') {
         const todayDow = new Date().getDay();
         if ((todayDow === 0 || todayDow === 6) && dateWarningEl) {
-            dateWarningEl.textContent = "⚠️ Hôm nay là cuối tuần (T7/CN): gói 4–8h tạm nghỉ cuối tuần, hãy báo khách liên hệ WhatsApp/Telegram nếu khẩn.";
+            dateWarningEl.textContent = isMyanmarUI
+                ? "⚠️ ယနေ့သည် စနေ/တနင်္ဂနွေ ဖြစ်သည် - 4–8 နာရီ E-Visa ပိတ်ပါသည် (အရေးပေါ်လိုပါက WhatsApp/Telegram သို့ ဆက်သွယ်ခိုင်းပါ)။"
+                : "⚠️ Hôm nay là cuối tuần (T7/CN): gói 4–8h tạm nghỉ cuối tuần, hãy báo khách liên hệ WhatsApp/Telegram nếu khẩn.";
             dateWarningEl.style.display = 'block';
         } else if (dateWarningEl) {
             dateWarningEl.style.display = 'none';
@@ -1633,43 +1652,47 @@ function calculateOps() {
         const stampMinutes = stampH * 60 + stampM;
         
         let recommendedPackage = 'ev-std';
-        let recommendedName = 'Không khả dụng gói khẩn cấp cùng ngày';
+        let recommendedName = isMyanmarUI ? 'တစ်နေ့တည်း အမြန်ပက်ကေ့ချ် မရနိုင်ပါ' : 'Không khả dụng gói khẩn cấp cùng ngày';
         let warnMsg = '';
 
         if (releaseTimeStr === '11:30') {
             if (stampMinutes > 11 * 60) {
-                warnMsg = "⚠️ Thời điểm nộp/dấu xuất cảnh sau 11:00 sáng. Vui lòng chuyển sang khung giờ chiều 17:30.";
+                warnMsg = isMyanmarUI
+                    ? "⚠️ နံနက် ၁၁:၀၀ နောက်ပိုင်း တံဆိပ်တုံးရရှိပါက ညနေ ၁၇:၃၀ အချိန်သို့ ပြောင်းရွှေ့ပါ။"
+                    : "⚠️ Thời điểm nộp/dấu xuất cảnh sau 11:00 sáng. Vui lòng chuyển sang khung giờ chiều 17:30.";
                 recommendedName = "N/A";
             } else {
                 if (stampMinutes <= 8 * 60 + 30) {
                     recommendedPackage = 'ev-4h';
-                    recommendedName = "Gói khẩn cấp 4 tiếng (Dấu xuất cảnh trễ nhất 8:30)";
+                    recommendedName = isMyanmarUI ? "၄ နာရီ အမြန် (နောက်ဆုံး ၈:၃၀ တံဆိပ်တုံး)" : "Gói khẩn cấp 4 tiếng (Dấu xuất cảnh trễ nhất 8:30)";
                 } else if (stampMinutes <= 9 * 60) {
                     recommendedPackage = 'ev-3h';
-                    recommendedName = "Gói khẩn cấp 3 tiếng (Nhận dấu trước 9:00)";
+                    recommendedName = isMyanmarUI ? "၃ နာရီ အမြန် (၉:၀၀ မတိုင်မီ တံဆိပ်တုံး)" : "Gói khẩn cấp 3 tiếng (Nhận dấu trước 9:00)";
                 } else if (stampMinutes <= 10 * 60) {
                     recommendedPackage = 'ev-2h';
-                    recommendedName = "Gói khẩn cấp 2 tiếng (Nhận dấu trước 10:00)";
+                    recommendedName = isMyanmarUI ? "၂ နာရီ အမြန် (၁၀:၀၀ မတိုင်မီ တံဆိပ်တုံး)" : "Gói khẩn cấp 2 tiếng (Nhận dấu trước 10:00)";
                 } else if (stampMinutes <= 11 * 60) {
                     recommendedPackage = 'ev-1h';
-                    recommendedName = "Gói khẩn cấp 1 tiếng (Nhận dấu trước 11:00)";
+                    recommendedName = isMyanmarUI ? "၁ နာရီ အမြန် (၁၁:၀၀ မတိုင်မီ တံဆိပ်တုံး)" : "Gói khẩn cấp 1 tiếng (Nhận dấu trước 11:00)";
                 }
             }
         } else {
             // Chiều 17:30
             if (stampMinutes > 16 * 60 + 30) {
-                warnMsg = "⚠️ Nộp/dấu xuất cảnh sau 16:30. Không thể nhận kết quả trong ngày, vui lòng chuyển sang ngày hôm sau.";
+                warnMsg = isMyanmarUI
+                    ? "⚠️ ၁၆:၃၀ နောက်ပိုင်း တံဆိပ်တုံးရပါက တစ်နေ့တည်း မရနိုင်ပါ — နောက်တစ်နေ့သို့ ရွှေ့ပါ။"
+                    : "⚠️ Nộp/dấu xuất cảnh sau 16:30. Không thể nhận kết quả trong ngày, vui lòng chuyển sang ngày hôm sau.";
                 recommendedName = "N/A";
             } else {
                 if (stampMinutes <= 14 * 60) {
                     recommendedPackage = 'ev-4h';
-                    recommendedName = "Gói khẩn cấp 4 tiếng (Dấu xuất cảnh trễ nhất 14:00)";
+                    recommendedName = isMyanmarUI ? "၄ နာရီ အမြန် (နောက်ဆုံး ၁၄:၀၀ တံဆိပ်တုံး)" : "Gói khẩn cấp 4 tiếng (Dấu xuất cảnh trễ nhất 14:00)";
                 } else if (stampMinutes <= 15 * 60) {
                     recommendedPackage = 'ev-2h';
-                    recommendedName = "Gói khẩn cấp 2 tiếng hoặc 3 tiếng (Dấu trước 15:00)";
+                    recommendedName = isMyanmarUI ? "၂ နာရီ သို့မဟုတ် ၃ နာရီ အမြန် (၁၅:၀၀ မတိုင်မီ)" : "Gói khẩn cấp 2 tiếng hoặc 3 tiếng (Dấu trước 15:00)";
                 } else if (stampMinutes <= 16 * 60 + 30) {
                     recommendedPackage = 'ev-1h';
-                    recommendedName = "Gói khẩn cấp 1 tiếng (Dấu trước 16:30)";
+                    recommendedName = isMyanmarUI ? "၁ နာရီ အမြန် (၁၆:၃၀ မတိုင်မီ တံဆိပ်တုံး)" : "Gói khẩn cấp 1 tiếng (Dấu trước 16:30)";
                 }
             }
         }
@@ -1690,7 +1713,9 @@ function calculateOps() {
 
     if (isUrgent24h) {
         if (emergencyWarningEl) {
-            emergencyWarningEl.textContent = "⚠️ Đăng ký khẩn cấp trước 24 tiếng. Cần thỏa thuận lại mức giá và điều khoản!";
+            emergencyWarningEl.textContent = isMyanmarUI
+                ? "⚠️ ၂၄ နာရီအတွင်း အရေးပေါ် စာရင်းသွင်းမှု — ဈေးနှုန်းနှင့် စည်းကမ်းချက်များကို ထပ်မံအတည်ပြုပါ။"
+                : "⚠️ Đăng ký khẩn cấp trước 24 tiếng. Cần thỏa thuận lại mức giá và điều khoản!";
             emergencyWarningEl.style.display = 'block';
         }
     }
@@ -1789,6 +1814,24 @@ Please tell us: your nationality, the city you are currently staying in Vietnam,
 💰 Cost:
 - 3,550,000 VND (registered at least 3 days in advance).
 - 3,800,000 VND (urgent same-day processing).`
+    },
+    my: {
+        greet: `Easy Trip & Visa Co. Ltd မှ ကြိုဆိုပါတယ်! ဗီယက်နမ်ရှိ တရားဝင် ဗီဇာရန်း (Visa Run) ဝန်ဆောင်မှု ဖြစ်ပါသည်။
+လုပ်ငန်းမှတ်ပုံတင်အမှတ် - 4202051389
+ကျေးဇူးပြု၍ လူကြီးမင်း၏ နိုင်ငံသား၊ ဗီယက်နမ်တွင် လက်ရှိနေထိုင်သည့်မြို့ နှင့် လက်ရှိ ဗီဇာသက်တမ်းကုန်ဆုံးရက် တို့ကို ပြောပြပေးပါ။
+* မြန်မာနိုင်ငံသားဖြစ်ပါက ဗီယက်နမ်သို့ ၁၄ ရက်သာ ဗီဇာကင်းလွတ်ခွင့်ရရှိပြီး ရက် ၉၀ နေထိုင်ရန်အတွက် E-Visa 90 Days ပြုလုပ်ရန် အကြံပြုအပ်ပါသည်။`,
+        route: `🚌 နိုင်ငံသားအလိုက် ရွေးချယ်သင့်သော လမ်းကြောင်းများ -
+
+👉 လာအိုလမ်းကြောင်း (Bờ Y နယ်စပ်ဂိတ်) - လာအိုဗီဇာကင်းလွတ်ခွင့်ရ နိုင်ငံသားများ (ရုရှား၊ ကိုရီးယား၊ ဘီလာရုစ်၊ မြန်မာ နှင့် ASEAN ၁၂ နိုင်ငံ...) အတွက်ဖြစ်သည်။
+- Nha Trang ⇄ Bờ Y (နေ့စဉ် ည ၂၁:၃၀ တွင် 40 Hon Chong မှ ထွက်ခွာ): ရက်တို Visa-Free ဘတ်စ်ကားခ `1,400,000 VND` | ရက် ၉၀ Single E-Visa + ဘတ်စ်ကား `4,000,000 VND` (ရုရှား/CIS `3,400,000 VND`)။
+
+👉 ကမ္ဘောဒီးယားလမ်းကြောင်း (Mộc Bài နယ်စပ်ဂိတ်) - အခြားနိုင်ငံသားအားလုံး (အမေရိကန်၊ ဥရောပ၊ ကာဇက်စတန်၊ ယူကရိန်း...) အတွက်ဖြစ်သည်။
+- အင်္ဂါ၊ ကြာသပတေး၊ တနင်္ဂနွေ ည ၂၁:၃၀ တွင် 40 Hon Chong မှ ထွက်ခွာသည်။
+- နိုင်ငံတကာ (`/english`): 45D `1,400,000 VND` | Bus+90D EV `4,000,000 VND` (+1M Cam) | Single+Cam `5,000,000 VND` | Multi+Cam `6,000,000 VND`။`,
+        danang: `🚌 ဒါနန်း - လာအို (Lao Bảo နယ်စပ်ဂိတ်) E-Visa ၉၀ မိနစ် လမ်းကြောင်း -
+1. ထွက်ခွာချိန် - ၁၅-၃၀ မိနစ်စော၍ နံနက် ၀၅:၃၀ တွင် Da Nang Central Bus Station ၌ စောင့်ဆိုင်းပါ။
+2. နေ့လယ်ပိုင်း Lao Bảo နယ်စပ်ဂိတ်သို့ ရောက်ရှိမည် (E-visa ၉၀ မိနစ်အတွင်း ရရှိမည်)။
+3. စုစုပေါင်း ကုန်ကျစရိတ် - `3,800,000 VND` (၃ ရက်ကြိုတင်စာရင်းသွင်းပါက `3,550,000 VND`) | 45D Visa-Free ဘတ်စ် `950,000 VND`။`
     }
 };
 
@@ -1804,7 +1847,13 @@ Please send us the following documents:
 1. Scanned or clear photograph of your passport's information page (Bio Page).
 2. A recent portrait photo (showing your face, forehead, and ears clearly, looking straight, no glasses).
 🚨 Photo requirements: Must show all 4 corners of the passport page, clearly readable text, no glare, and no fingers holding the passport.
-* For visarun or fly-out customers: Please send us a photo of your exit stamp immediately after exiting Vietnam boundary to start the emergency processing.`
+* For visarun or fly-out customers: Please send us a photo of your exit stamp immediately after exiting Vietnam boundary to start the emergency processing.`,
+    my: `📷 E-VISA လျှောက်ထားရန် လိုအပ်သော စာရွက်စာတမ်း ဓာတ်ပုံလမ်းညွှန် -
+ကျေးဇူးပြု၍ အောက်ပါတို့ကို ပေးပို့ပါ -
+1. နိုင်ငံကူးလက်မှတ် (Passport Bio Page) အချက်အလက်စာမျက်နှာ ဓာတ်ပုံ။
+2. မျက်နှာပုံ (နဖူးနှင့် နားရွက် ရှင်းလင်းစွာမြင်ရပြီး မျက်မှန်မတပ်ထားသော ပုံ)။
+🚨 ဓာတ်ပုံစည်းကမ်း - Passport ထောင့် ၄ ထောင့်လုံး ပါဝင်ရမည်၊ စာသားကြည်လင်ရမည်၊ အလင်းမပြန်ရပါ၊ လက်ချောင်းမပါရပါ (သက်တမ်း အနည်းဆုံး ၆ လ ကျန်ရမည်)။
+* Visa Run / ပြည်ပထွက်ခွာ ဧည့်သည်များ - ဗီယက်နမ် လဝက မှ ထွက်ခွာတံဆိပ်တုံး (Exit Stamp) ရိုက်ပြီးသည်နှင့် နံနက် ၀၈:၀၀ မတိုင်မီ ဓာတ်ပုံချက်ချင်းပို့ပေးပါ။`
 };
 
 const busDispatchTemplates = {
@@ -1821,7 +1870,13 @@ Dear customer, here is the bus details for your upcoming visa run:
 - Pickup location: 40 Hon Chong, North Nha Trang, Khanh Hoa.
   (View map: https://maps.app.goo.gl/AUkyctD6mwBtkiBF7)
 - Departure time: 21:30 PM (Please arrive 15-30 minutes early).
-- Bus Wi-Fi Password: **19002679**`
+- Bus Wi-Fi Password: **19002679**`,
+    my: `🚍 ဘတ်စ်ကား ထွက်ခွာမှု အချက်အလက်များ -
+လေးစားအပ်သော ဧည့်သည်တော်ခင်ဗျာ၊ လူကြီးမင်း၏ ခရီးစဉ် ဘတ်စ်ကား အချက်အလက်များမှာ အောက်ပါအတိုင်းဖြစ်ပါသည် -
+- ကားနံပါတ် (License Plate) - [ဝန်ထမ်းမှ ဖြည့်သွင်းရန်]
+- ကြိုမည့်နေရာ (Pickup) - 40 Hòn Chồng, North Nha Trang (သို့) 04 Trần Phú
+- ထွက်ခွာချိန် - ည ၂၁:၃၀ (၁၅-၃၀ မိနစ် ကြိုတင်ရောက်ရှိပါ)
+- ဘတ်စ်ကား Wi-Fi စကားဝှက် - **19002679**`
 };
 
 const paymentTemplates = {
@@ -1889,7 +1944,22 @@ You may pay via Bank Transfer, USDT (crypto), or Cash (VND / USD):
 
 🚨 ملاحظات هامة:
 - يجب دفع تذكرة الحافلة قبل الساعة 14:00 في يوم المغادرة.
-- استرداد 100% في حال عدم استلام التأشيرة ضمن المدة المحددة (GMT+7).`
+- استرداد 100% في حال عدم استلام التأشيرة ضمن المدة المحددة (GMT+7).`,
+    my: `💰 ငွေပေးချေမှု အချက်အလက် — EASY TRIP & VISA CO. LTD -
+ဘဏ်ငွေလွှဲ၊ USDT (Crypto) သို့မဟုတ် ငွေသား (VND / USD) ဖြင့် ပေးချေနိုင်ပါသည် -
+
+🏦 ဘဏ် - Vietcombank (VCB) / VRB
+👤 အကောင့်အမည် - EASY TRIP & VISA CO. LTD
+🔢 VCB OneQR - QRPACQ1ZZZZ50600546
+🔢 ဘဏ်အကောင့်နံပါတ် - 1068582577
+🌐 SWIFT ကုဒ် - BFTVVNVX
+🪙 Crypto - USDT လက်ခံပါသည်
+
+📍 နာထရန်း ရုံးလိပ်စာ - 21 Phan Vinh, South Nha Trang (https://maps.app.goo.gl/hPNMWxUAmm4VcgWK9)
+
+🚨 အရေးကြီးသတိပြုရန် -
+- ဘတ်စ်ကားလက်မှတ်ခကို ထွက်ခွာသည့်နေ့ **၁၄:၀၀ နာရီမတိုင်မီ** ပေးချေရမည်။
+- ၄-၈ နာရီ အမြန် E-Visa ကို စနေ/တနင်္ဂနွေနှင့် ရုံးပိတ်ရက်များတွင် မပြုလုပ်ပါ။ GMT+7 သတ်မှတ်ချိန်အတွင်း မရပါက **၁၀၀% ငွေပြန်အမ်းပေးပါသည်**။`
 };
 
 const feedbackTemplates = {
@@ -1914,7 +1984,14 @@ Si vous êtes satisfait, veuillez laisser un avis sur Google Maps :
 
 Pour tout retour direct, veuillez contacter la direction :
 👤 Mr. Ly Viet Hoang - Président, Easy Trip & Visa Co. Ltd
-📞 +84 89 69 16 361 (Support en anglais)`
+📞 +84 89 69 16 361 (Support en anglais)`,
+    my: `✨ Easy Trip & Visa ၏ ဝန်ဆောင်မှုကို အသုံးပြုသည့်အတွက် ကျေးဇူးတင်ပါသည်!
+ဝန်ဆောင်မှုကို ကျေနပ်မှုရှိပါက Google Maps တွင် ကြယ် ၅ ပွင့် သုံးသပ်ချက် ရေးသားပေးပါရန် မေတ္တာရပ်ခံအပ်ပါသည် -
+🔗 https://g.page/r/CREMymPQwmBuEBI/review
+
+တိုက်ရိုက်ဆက်သွယ်ရန် -
+👤 Mr. Ly Viet Hoang - Chairman, Easy Trip & Visa Co. Ltd
+📞 +84 89 69 16 361`
 };
 
 const warningTemplates = {
@@ -1935,7 +2012,10 @@ Please DOUBLE CHECK the entry stamp expiry date on your passport before leaving 
 يرجى التحقق مرتين من تاريخ انتهاء الصلاحية الموضح على ختم الدخول في جواز سفرك قبل مغادرة شباك الجوازات لضمان تطابقه مع تأشيرة E-visa الخاصة بك.`,
     fr: `🚨 AVERTISSEMENT CONTRÔLE VISA À LA FRONTIÈRE :
 
-Veuillez VERIFIER ATTENTIVEMENT la date d'expiration imprimée sur le tampon d'entrée de votre passeport avant de quitter le guichet frontalier pour vous assurer qu'elle correspond à votre E-visa.`
+Veuillez VERIFIER ATTENTIVEMENT la date d'expiration imprimée sur le tampon d'entrée de votre passeport avant de quitter le guichet frontalier pour vous assurer qu'elle correspond à votre E-visa.`,
+    my: `🚨 နယ်စပ်ဂိတ် ဝင်ခွင့်တံဆိပ်တုံး သတိပေးချက် -
+
+လဝက ဝန်ထမ်းမှ ရက်စွဲမှားယွင်းတံဆိပ်တုံးထုခြင်း (ဥပမာ - ရက် ၉၀ E-visa ပါသော်လည်း ၁၄/၄၅ ရက်သာ ထုပေးခြင်း) မဖြစ်စေရန် နယ်စပ်ကောင်တာမှ မထွက်ခွာမီ Passport စာမျက်နှာပေါ်ရှိ တံဆိပ်တုံးရက်စွဲကို သေချာစွာ စစ်ဆေးပါ!`
 };
 
 function updateFeedbackTemplate() {
@@ -2117,6 +2197,62 @@ let staffAttachments = [];
 let staffChatHistory = [];
 let staffChatMode = 'training';
 
+const staffAIDatabaseMy = [
+    {
+        keywords: ['ဈေးနှုန်း', 'website', 'english', 'korean', 'russian', 'arabic', 'fast track', '$70'],
+        answer: `🌍 **Website ၄ ခု ဈေးနှုန်းစာရင်း (/english, /korean, /russian, /arabic):**
+1. **နိုင်ငံတကာ & ကိုရီးယား (/english, /korean):**
+   - Mộc Bài (အင်္ဂါ/ကြာသပတေး/တနင်္ဂနွေ 21:30): **6,000,000đ** (Multi+Cam) | **5,000,000đ** (Single+Cam) | **4,000,000đ** (Bus+90D EV, +1M Cam) | **1,400,000đ** (45D).
+   - Bờ Y (လာအို): **1,400,000đ** (နေ့စဉ် 45D/14D) | **4,000,000đ** (90D).
+   - ဒါနန်း–Lao Bảo: **3,800,000đ** (90D, >=၃ရက်ကြို 3,550,000đ) | **950,000đ** (45D).
+   - E-visa ခွဲဈေး: 1h 4.6M | 2h 3.4M | 4h 2.6M | 8h 2.9M | 1d 2.2M | 2d 2.15M | 3-5d 1.81M (Multi +1M) | ကလေး <9 နှစ် **1,480,000đ** + ဘတ်စ် အခမဲ့။
+2. **ရုရှား & CIS (/russian):**
+   - Bờ Y 90D Single **3,400,000đ** (ဧည့်ဟောင်း CRM 3.0M) | Multi **4,400,000đ** (ဧည့်ဟောင်း 4.0M) | 45D **1,400,000đ** (ဧည့်ဟောင်း 1.3M).
+   - Mộc Bài: **5.4M** (Multi+Cam) | **4.4M** (Single+Cam) | **3.4M** (90D Single) | **1.4M** (45D).
+   - E-visa RU: 1h 4.6M | 2h 3.4M | 4h **2.0M** | 1d **1.81M** | 2d **1.76M** | 3-5d **1.61M** (Multi +1M).
+3. **အာရပ် (/arabic = EN + 1,500,000đ):**
+   - Mộc Bài **7.5M / 6.5M / 5.5M** | ဒါနန်း **5.3M** | E-visa 1h 6.1M | 4h 4.1M | 1d 3.7M | 3-5d 3.31M | ကလေး <9 နှစ် **2.98M**။
+4. **VIP Fast Track:**
+   - CXR / DAD / PQC / VDO / HPH / HUI / VII / DLI / VCA: **1,855,000đ ($70)**.
+   - SGN / HAN: **1,200,000đ** | လာအိုနယ်စပ်အကူအညီ (Lao Bảo / Bờ Y): **300,000đ**။`
+    },
+    {
+        keywords: ['တံဆိပ်တုံး', '45d', 'မှား', 'a4', 'pdf', 'mộc bài', 'စာရွက်'],
+        answer: `🚨 **နယ်စပ်ဂိတ် တံဆိပ်တုံးမှားမှု နှင့် E-Visa စာရွက်စည်းကမ်း:**
+1. **90D E-visa ရှိပါလျက် 45D/14D တံဆိပ်တုံး မှားထုခံရလျှင်:**
+   - **လုံးဝ ဂိတ်ကနေ မထွက်ခွာခိုင်းပါနှင့်!** ကောင်တာရှေ့တွင် စိတ်အေးအေးထား၍ 90D E-visa ကို လဝက အရာရှိထံ ချက်ချင်းပြပြီး 45D တံဆိပ်တုံးကို ပယ်ဖျက်ကာ 90D ပြန်ထုခိုင်းပါ။
+2. **A4 စက္ကူ print vs PDF:**
+   - **Mộc Bài (ကမ္ဘောဒီးယား):** E-visa ကို **A4 စက္ကူဖြင့် မဖြစ်မနေ Print ထုတ်ရမည်**။
+   - **Bờ Y & Lao Bảo (လာအို):** ဖုန်းထဲမှ PDF ဖိုင်ပြရုံဖြင့် အဆင်ပြေသည်။`
+    },
+    {
+        keywords: ['08:00', 'နောက်ကျ', '၁၃:၀၀', '13:00', 'exit stamp'],
+        answer: `⏰ **၀၈:၀၀ နောက်ပိုင်း တံဆိပ်တုံးပို့နောက်ကျခြင်း / ၁၃:၀၀ ကားလွတ်ခြင်း:**
+- ပုံမှန်အားဖြင့် 07:30–08:00 အတွင်း နယ်စပ်ဖြတ်ပြီး **08:00 မတိုင်မီ** Exit Stamp ပို့ရမည် (11:30–12:00 တွင် E-visa ရပြီး 13:00 ကားဖြင့် ပြန်နိုင်ရန်)။
+- 08:30 နောက်ပိုင်း ပို့လာပါက **Anh Luân / ညှိနှိုင်းရေးအဖွဲ့** ထံ ချက်ချင်းသတင်းပို့ပြီး 2h/1h အမြန်ပြောင်းမလား (သို့) ညနေ **17:30** အသုတ်သို့ ရွှေ့မလား စစ်ဆေးပါ။ 13:00 ကားမမီပါက **Mr. Lý Việt Hoàng (+84 89 69 16 361)** ထံ ဆက်သွယ်အကြောင်းကြားပါ။`
+    },
+    {
+        keywords: ['စနေ', 'တနင်္ဂနွေ', 'ပိတ်ရက်', 'ငွေပြန်အမ်း', '100%'],
+        answer: `🛡️ **စနေ/တနင်္ဂနွေ မူဝါဒ နှင့် 100% ငွေပြန်အမ်းအာမခံ:**
+- **စနေ၊ တနင်္ဂနွေ & ရုံးပိတ်ရက်:** 4–8 နာရီ E-visa မလုပ်ပါ။ အရေးပေါ်လိုပါက WhatsApp (+84 85 320 1277) သို့မဟုတ် Telegram (@easytripvisa_co_ltd) သို့ ဆက်သွယ်ခိုင်းပါ။
+- **100% ငွေပြန်အမ်း:** GMT+7 သတ်မှတ်ချိန်အတွင်း E-visa မရရှိပါက **100% ငွေအပြည့် ပြန်အမ်းပေးပါသည်** (Passport သက်တမ်း $\\ge 6$ လ ရှိရမည်)။`
+    },
+    {
+        keywords: ['ထိုင်ခုံ', 'အဖြူ', 'အဝါ', 'lock', 'scheme', 'a11', 'a20'],
+        answer: `🚌 **ဘတ်စ်ကား ထိုင်ခုံဇယား & Telegram အမိန့်ပေးစနစ်:**
+- **ထိုင်ခုံနံပါတ်များ:** အောက်ထပ် မဂဏန်း (\`A1, B1, A3, B3, A5, B5, A7, B7, A9, B9\`) နှင့် အပေါ်ထပ် စုံဂဏန်း (\`A2, B2, A4, B4, A6, B6, A8, B8, A10, B10\`, တစ်ခါတစ်ရံ \`A12\`) သာ ရှိသည်။ **\`A11, B11, 13..20\` လုံးဝ မရှိပါ!**
+- ⬜ **အဖြူရောင်အကွက်:** လွတ်နေသောခုံ (ရွေးချယ်နိုင်) | 🟨 **အဝါရောင်ခြစ်ထားသောအကွက်:** ဝယ်ယူပြီးသား (ရွေးမရ)။
+- **Telegram General Topic:** \`Scheme [DD/MM] - [45D/90D] [Laos/Cambodia]\` -> ခုံပုံစောင့် -> Topic **Lock Ghế** တွင် **14:00 မတိုင်မီ** Lock တင်ပါ။`
+    },
+    {
+        keywords: ['vcb', 'vrb', 'usdt', 'ငွေပေးချေ', 'ဘဏ်', 'တံဆိပ်တုံးအနီ', 'receipt'],
+        answer: `🏦 **ငွေပေးချေမှု နှင့် တံဆိပ်တုံးအနီ (Red Stamp) Receipt စည်းကမ်း:**
+- **ဘဏ်:** Vietcombank (**VCB**) သို့မဟုတ် **VRB** | **အကောင့်အမည်:** \`EASY TRIP & VISA CO. LTD\` | **နံပါတ်:** \`1068582577\` | **SWIFT:** \`BFTVVNVX\`
+- **အခြားနည်းလမ်း:** ရုံး (21 Phan Vinh, Nha Trang) တွင် ငွေသား (VND/USD) သို့မဟုတ် **USDT (Crypto)**။
+- **လုပ်ဆောင်ရန်:** ငွေဝင်ပြီးသည်နှင့် **ကုမ္ပဏီတံဆိပ်တုံးအနီ** Receipt ပေါ်တွင် ထု၍ ဧည့်သည်ထံ ဓာတ်ပုံပို့ပြီး Lock Ghế တွင် Paid ပြောင်းပါ (ကားခ 14:00 မတိုင်မီ)။`
+    }
+];
+
 function setStaffChatMode(mode) {
     if (!['training', 'reply_draft', 'quiz'].includes(mode)) mode = 'training';
     staffChatMode = mode;
@@ -2127,12 +2263,22 @@ function setStaffChatMode(mode) {
 
     const input = document.getElementById('staff-chat-input');
     if (input) {
-        if (mode === 'reply_draft') {
-            input.placeholder = 'Dán tin nhắn khách hỏi (Anh/Nga/Hàn/Ả Rập/Việt) để AI soạn câu trả lời chuẩn...';
-        } else if (mode === 'quiz') {
-            input.placeholder = 'Nhập câu trả lời xử lý tình huống của bạn (hoặc bấm "Ra bài tập tình huống")...';
+        if (isMyanmarUI) {
+            if (mode === 'reply_draft') {
+                input.placeholder = 'ဧည့်သည်ပို့လာသော စာကို ကူးထည့်ပါ — AI မှ ပြန်စာ + မှတ်ချက် ရေးပေးပါမည်...';
+            } else if (mode === 'quiz') {
+                input.placeholder = 'လေ့ကျင့်ခန်း အဖြေရေးပါ (သို့) "လက်တွေ့ပုစ္ဆာ ထုတ်ခိုင်းရန်" ကိုနှိပ်ပါ...';
+            } else {
+                input.placeholder = 'နားမလည်သည့် အခြေအနေ / SOP မေးခွန်း ရိုက်ထည့်ပါ (Enter နှိပ်၍ ပို့ပါ)...';
+            }
         } else {
-            input.placeholder = 'Nhập tình huống bạn chưa rõ, hỏi SOP, dán ảnh passport... (Enter để gửi)';
+            if (mode === 'reply_draft') {
+                input.placeholder = 'Dán tin nhắn khách hỏi (Anh/Nga/Hàn/Ả Rập/Việt) để AI soạn câu trả lời chuẩn...';
+            } else if (mode === 'quiz') {
+                input.placeholder = 'Nhập câu trả lời xử lý tình huống của bạn (hoặc bấm "Ra bài tập tình huống")...';
+            } else {
+                input.placeholder = 'Nhập tình huống bạn chưa rõ, hỏi SOP, dán ảnh passport... (Enter để gửi)';
+            }
         }
     }
 }
@@ -2141,19 +2287,34 @@ function resetStaffChat() {
     staffChatHistory = [];
     const chatWindow = document.getElementById('staff-chat-window');
     if (chatWindow) {
-        chatWindow.innerHTML = `
-            <div class="staff-msg bot">
-                <div class="staff-msg-content">
-                    🔄 Đã bắt đầu phiên đào tạo / hỏi đáp mới (chế độ hiện tại: <strong>${staffChatMode === 'reply_draft' ? '💬 Soạn tin trả lời khách' : staffChatMode === 'quiz' ? '🎯 Luyện tập tình huống' : '🎓 Hỏi tình huống / SOP'}</strong>). Bạn hãy nhập câu hỏi hoặc tình huống nhé!
+        if (isMyanmarUI) {
+            const modeLabel = staffChatMode === 'reply_draft' ? '💬 ဧည့်သည်စာ ပြန်ရေးရန်' : staffChatMode === 'quiz' ? '🎯 လက်တွေ့ စာမေးပွဲ' : '🎓 အခြေအနေ / SOP မေးရန်';
+            chatWindow.innerHTML = `
+                <div class="staff-msg bot">
+                    <div class="staff-msg-content">
+                        🔄 သင်တန်း / အမေးအဖြေ စကားဝိုင်းအသစ် စတင်လိုက်ပါပြီ (လက်ရှိမုဒ် - <strong>${modeLabel}</strong>)။ သင်သိလိုသည့် အခြေအနေကို မေးမြန်းနိုင်ပါသည်!
+                    </div>
                 </div>
-            </div>
-        `;
+            `;
+        } else {
+            chatWindow.innerHTML = `
+                <div class="staff-msg bot">
+                    <div class="staff-msg-content">
+                        🔄 Đã bắt đầu phiên đào tạo / hỏi đáp mới (chế độ hiện tại: <strong>${staffChatMode === 'reply_draft' ? '💬 Soạn tin trả lời khách' : staffChatMode === 'quiz' ? '🎯 Luyện tập tình huống' : '🎓 Hỏi tình huống / SOP'}</strong>). Bạn hãy nhập câu hỏi hoặc tình huống nhé!
+                    </div>
+                </div>
+            `;
+        }
     }
 }
 
 function startQuizScenario() {
     setStaffChatMode('quiz');
-    quickAskStaff('Hãy ra cho tôi 1 tình huống thực tế khó vừa phải tại quầy hoặc cửa khẩu Easy Trip & Visa để tôi tập xử lý.');
+    if (isMyanmarUI) {
+        quickAskStaff('Easy Trip & Visa ရုံး သို့မဟုတ် နယ်စပ်ဂိတ်တွင် ကြုံတွေ့ရနိုင်သော လက်တွေ့အခြေအနေ ပုစ္ဆာ ၁ ခု ထုတ်ပေးပါ။');
+    } else {
+        quickAskStaff('Hãy ra cho tôi 1 tình huống thực tế khó vừa phải tại quầy hoặc cửa khẩu Easy Trip & Visa để tôi tập xử lý.');
+    }
 }
 
 function copyStaffBotReply(btnEl) {
@@ -2162,7 +2323,7 @@ function copyStaffBotReply(btnEl) {
     if (!raw) return;
     navigator.clipboard.writeText(raw).then(() => {
         const prev = btnEl.textContent;
-        btnEl.textContent = '✅ Đã chép';
+        btnEl.textContent = isMyanmarUI ? '✅ ကူးယူပြီး' : '✅ Đã chép';
         setTimeout(() => { btnEl.textContent = prev; }, 1500);
     });
 }
@@ -2400,7 +2561,7 @@ function appendStaffMessage(chatWindow, sender, text, attachmentsList = []) {
     if (sender === 'bot' && text) {
         contentHtml += `
         <div class="staff-msg-actions">
-            <button class="staff-copy-msg-btn" onclick="copyStaffBotReply(this)">📋 Sao chép</button>
+            <button class="staff-copy-msg-btn" onclick="copyStaffBotReply(this)">${isMyanmarUI ? '📋 ကူးယူမည်' : '📋 Sao chép'}</button>
         </div>`;
     }
     
@@ -2429,7 +2590,9 @@ function sendStaffChatMessage() {
     
     const botMsgDiv = document.createElement('div');
     botMsgDiv.className = 'staff-msg bot typing-indicator';
-    botMsgDiv.innerHTML = '<span style="font-style: italic; color: var(--text-secondary);">🤖 Mentor AI đang phân tích tình huống...</span>';
+    botMsgDiv.innerHTML = isMyanmarUI
+        ? '<span style="font-style: italic; color: var(--text-secondary);">🤖 AI Mentor မှ အခြေအနေကို စစ်ဆေးဖြေကြားပေးနေပါသည်...</span>'
+        : '<span style="font-style: italic; color: var(--text-secondary);">🤖 Mentor AI đang phân tích tình huống...</span>';
     chatWindow.appendChild(botMsgDiv);
     chatWindow.scrollTop = chatWindow.scrollHeight;
 
@@ -2446,6 +2609,7 @@ function sendStaffChatMessage() {
             question: question,
             history: historySnapshot,
             mode: staffChatMode,
+            staff_lang: isMyanmarUI ? 'my' : 'vi',
             attachments: apiAttachments
         })
     })
@@ -2478,6 +2642,33 @@ function sendStaffChatMessage() {
 }
 
 function getLocalStaffAnswer(question, mode = 'training') {
+    if (isMyanmarUI) {
+        if (mode === 'quiz' && (question.includes('ပုစ္ဆာ') || question.toLowerCase().includes('quiz'))) {
+            return `🎯 **လက်တွေ့ အခြေအနေ စာမေးပွဲ (OFFLINE):**
+**ကာဇက်စတန် (Kazakhstan)** နိုင်ငံသား ဧည့်သည်မှ *"ကျွန်တော့်ဗီဇာ နောက် ၄ ရက်နေရင် ကုန်တော့မယ်။ Nha Trang ကနေ Bờ Y (လာအို) 90D ဘတ်စ်ကားစီးချင်တယ်၊ ၆ နှစ်အရွယ် ကလေး ၁ ယောက်ပါတယ်"* ဟု စာပို့လာပါသည်။
+👉 **သင့်အနေဖြင့် ဖြေဆိုရန်:**
+1. ဤဧည့်သည်သည် လာအို (Bờ Y) သွားခွင့်ရှိပါသလား? မည်သည့်ဂိတ်သို့ သွားရမည်နည်း?
+2. စုစုပေါင်း ဈေးနှုန်း မည်မျှကျသင့်မည်နည်း (\`/russian\` သို့မဟုတ် \`/english\` အရ)?
+3. E-Visa ကို A4 Print ထုတ်ရမည်လား PDF ပြရမည်လား?`;
+        }
+        let bestMy = '';
+        let bestMyScore = 0;
+        const qLow = question.toLowerCase();
+        for (const item of staffAIDatabaseMy) {
+            let s = 0;
+            for (const kw of item.keywords) {
+                if (qLow.includes(kw.toLowerCase())) s += 1;
+            }
+            if (s > bestMyScore) {
+                bestMyScore = s;
+                bestMy = item.answer;
+            }
+        }
+        if (bestMy) return bestMy;
+        return `🤖 လက်ရှိ AI ဆာဗာနှင့် ချိတ်ဆက်မှုမရှိသေး၍ Offline လမ်းညွှန်ဖြင့် ပြသနေပါသည်။
+*"Website ၄ ခု ဈေးနှုန်း"*, *"တံဆိပ်တုံး 45D မှား"*, *"08:00 နောက်ကျ"*, *"စနေ/တနင်္ဂနွေ"*, *"ထိုင်ခုံဇယား"*, *"VCB / VRB / USDT"* စသည့် စကားလုံးများဖြင့် မေးမြန်းနိုင်ပါသည်!`;
+    }
+
     if (mode === 'quiz' && removeVietnameseTones(question).toLowerCase().includes('tinh huong')) {
         return `🎯 **BÀI TẬP TÌNH HUỐNG MẪU (CHẾ ĐỘ OFFLINE):**
 Khách quốc tịch **Kazakhstan** nhắn tin: *"Xin chào, visa của tôi sắp hết hạn sau 4 ngày. Tôi đang ở Nha Trang và muốn đi xe sang Lào Bờ Y gói 90 ngày, có mang theo con 6 tuổi."*

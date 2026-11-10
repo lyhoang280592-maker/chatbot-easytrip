@@ -1206,17 +1206,36 @@ async def process_staff_chat(
     question: str,
     history: list[dict] | None = None,
     mode: str = "training",
+    staff_lang: str = "",
 ) -> str:
     """
     Trợ lý AI Đào tạo & Hỗ trợ Nghiệp vụ Nội bộ (Co-Pilot Staff Training & Helpdesk).
     - mode='training' (mặc định): Giải đáp tình huống chưa rõ, hướng dẫn SOP từng bước, cảnh báo sai sót, kèm mẫu câu trả lời khách nếu cần.
     - mode='reply_draft': Dán câu hỏi/tình huống của khách -> Soạn ngay tin nhắn trả lời chuẩn xác đúng ngôn ngữ khách + ghi chú nội bộ cho nhân viên.
     - mode='quiz': Đóng vai Quản lý đào tạo ra bài tập tình huống thực tế và chấm điểm/sửa lỗi cách xử lý của nhân viên.
+    - staff_lang: Ngôn ngữ nhân viên sử dụng trên Co-Pilot ('vi' hoặc 'my' - Myanmar/Burmese; tự động nhận diện chữ Myanmar [\u1000-\u109F]).
     """
     q_clean = (question or "").strip()
     mode_norm = (mode or "training").strip().lower()
     if mode_norm not in {"training", "reply_draft", "quiz"}:
         mode_norm = "training"
+
+    has_myanmar_script = bool(re.search(r"[\u1000-\u109F]", q_clean))
+    if not has_myanmar_script and history:
+        has_myanmar_script = any(
+            bool(re.search(r"[\u1000-\u109F]", str(h.get("content", ""))))
+            for h in history[-4:]
+        )
+    is_myanmar_staff = (staff_lang or "").strip().lower() in {"my", "mm", "myanmar", "burmese"} or has_myanmar_script
+
+    staff_lang_directive = (
+        "NGÔN NGỮ TRẢ LỜI CHO NHÂN VIÊN (BẮT BUỘC): **TIẾNG MYANMAR (မြန်မာဘာသာ)**.\n"
+        "- Toàn bộ giải thích, hướng dẫn SOP từng bước, cảnh báo lỗi, câu hỏi/chấm điểm Quiz và ghi chú nội bộ PHẢI viết bằng **Tiếng Myanmar (မြန်မာဘာသာ)** tự nhiên, rõ ràng, dễ hiểu cho nhân viên Myanmar.\n"
+        "- Giữ nguyên các thuật ngữ thao tác hệ thống & lệnh chuẩn bằng ký tự gốc để tránh sai sót: `Scheme ...`, `Lock Ghế`, `VCB / VRB 1068582577`, `USDT`, `/english`, `/korean`, `/russian`, `/arabic`, tên cửa khẩu `Bờ Y`, `Mộc Bài`, `Lao Bảo`, `A1..A10`, `B1..B10`.\n"
+        "- Riêng phần **💬 Tin nhắn mẫu gửi khách** (trong chế độ `reply_draft` hoặc ví dụ gửi khách) PHẢI viết bằng **ngôn ngữ của khách hàng** (Anh/Nga/Hàn/Ả Rập/Trung/Việt/Myanmar tùy khách), kèm chú thích ngắn bằng Tiếng Myanmar.\n"
+        if is_myanmar_staff
+        else "NGÔN NGỮ TRẢ LỜI CHO NHÂN VIÊN (BẮT BUỘC): **TIẾNG VIỆT** (riêng phần tin nhắn mẫu gửi khách viết đúng ngôn ngữ của khách hàng).\n"
+    )
 
     # 1. Lấy ngữ cảnh RAG từ cơ sở kiến thức (kết hợp thêm lượt hỏi gần nhất nếu nhân viên đang hỏi tiếp)
     rag_query = q_clean
@@ -1241,23 +1260,23 @@ async def process_staff_chat(
             "CHẾ ĐỘ HIỆN TẠI: 💬 SOẠN TIN TRẢ LỜI KHÁCH (REPLY_DRAFT MODE)\n"
             "- Nhân viên đang dán tin nhắn/tình huống của khách hoặc hỏi cách trả lời khách.\n"
             "- Hãy trình bày rõ 2 phần:\n"
-            "  1) **💬 Tin nhắn mẫu gửi khách** (Viết đúng 100% ngôn ngữ của khách: Nga/Anh/Hàn/Ả Rập/Trung/Việt, đúng bảng giá website theo thị trường khách, sạch sẽ để nhân viên bấm Sao chép gửi ngay).\n"
-            "  2) **📌 Lưu ý nghiệp vụ cho nhân viên** (bằng Tiếng Việt: giải thích ngắn vì sao báo giá/tuyến đó, cần xin thêm thông tin gì hay thao tác Telegram/Zalo gì tiếp theo)."
+            "  1) **💬 Tin nhắn mẫu gửi khách** (Viết đúng 100% ngôn ngữ của khách: Nga/Anh/Hàn/Ả Rập/Trung/Việt/Myanmar, đúng bảng giá website theo thị trường khách, sạch sẽ để nhân viên bấm Sao chép gửi ngay).\n"
+            "  2) **📌 Lưu ý nghiệp vụ cho nhân viên** (Viết bằng ngôn ngữ của nhân viên đang dùng — Tiếng Việt hoặc Tiếng Myanmar nếu `staff_lang=my`: giải thích ngắn vì sao báo giá/tuyến đó, cần xin thêm thông tin gì hay thao tác Telegram/Zalo gì tiếp theo)."
         )
     elif mode_norm == "quiz":
         mode_directive = (
             "CHẾ ĐỘ HIỆN TẠI: 🎯 LUYỆN TẬP TÌNH HUỐNG THỰC TẾ (QUIZ & COACHING MODE)\n"
             "- Bạn là **Trưởng phòng Điều hành / Mentor Đào tạo** của Easy Trip & Visa Co. Ltd.\n"
             "- Mục tiêu: Giúp nhân viên mới thành thạo mọi tình huống thực tế (chọn tuyến Bo-Y vs Mộc Bài, phân biệt giá 4 website /english /korean /russian /arabic, sơ đồ ghế ô trắng/gạch vàng và lệnh Lock, trẻ em <9 tuổi, sự cố đóng nhầm dấu 45D, gửi dấu trễ sau 08:00, in giấy A4 tại Mộc Bài vs PDF điện thoại tại Bờ Y, E-visa cuối tuần & hoàn tiền 100%, thanh toán VCB/VRB/USDT và mộc đỏ receipt).\n"
-            "- Quy tắc tương tác:\n"
-            "  * Nếu nhân viên yêu cầu bắt đầu/ra đề/cho tình huống mới: Hãy đưa ra **01 tình huống cụ thể thực tế** (gồm tin nhắn khách hoặc sự cố tại cửa khẩu/văn phòng) và hỏi nhân viên: *'Bạn sẽ xử lý bước nào, thu bao nhiêu tiền và nhắn gì cho khách?'*.\n"
+            "- Quy tắc tương tác (viết bằng ngôn ngữ của nhân viên đang dùng — Tiếng Việt hoặc Tiếng Myanmar):\n"
+            "  * Nếu nhân viên yêu cầu bắt đầu/ra đề/cho tình huống mới: Hãy đưa ra **01 tình huống cụ thể thực tế** (gồm tin nhắn khách hoặc sự cố tại cửa khẩu/văn phòng) và hỏi nhân viên: *Bạn sẽ xử lý bước nào, thu bao nhiêu tiền và nhắn gì cho khách?*.\n"
             "  * Nếu nhân viên đang trả lời bài tập của lượt trước: Hãy **chấm điểm (thang 10)**, nêu rõ **✅ Điểm làm tốt**, **⚠️ Điểm còn thiếu / ❌ Điểm sai so với SOP**, đưa ra **✨ Đáp án chuẩn & Mẫu câu gửi khách**, rồi hỏi nhân viên có muốn thử tiếp tình huống khó hơn không."
         )
     else:
         mode_directive = (
             "CHẾ ĐỘ HIỆN TẠI: 🎓 HỎI ĐÁP TÌNH HUỐNG & ĐÀO TẠO SOP (TRAINING MODE)\n"
             "- Nhân viên đang hỏi về một tình huống chưa rõ hoặc cách xử lý nghiệp vụ thực tế.\n"
-            "- Hãy giải thích rõ ràng, thực chiến bằng **Tiếng Việt** theo cấu trúc gọn dễ đọc:\n"
+            "- Hãy giải thích rõ ràng, thực chiến (bằng Tiếng Việt hoặc Tiếng Myanmar theo chỉ dẫn ngôn ngữ bên dưới) theo cấu trúc gọn dễ đọc:\n"
             "  1) **🎯 Kết luận & Quy tắc áp dụng** (Nêu rõ đúng/sai, số tiền chính xác theo đúng website `/english`, `/korean`, `/russian`, `/arabic` hoặc giá nội bộ CRM/đại lý nếu nhân viên hỏi nội bộ).\n"
             "  2) **📋 Các bước nhân viên cần làm** (Từng bước cụ thể: kiểm tra gì, gõ lệnh `Scheme` / `Lock ghế` trên Telegram Topic nào, báo Anh Luân Zalo hoặc nhà xe Chị Ngọc Cao / tài xế lúc nào).\n"
             "  3) **⚠️ Lưu ý & Lỗi hay gặp cần tránh** (VD: nhầm ghế A11/A20, quên nhắc in A4 ở Mộc Bài, nhầm giá giữa khách Nga và khách Quốc tế/Ả Rập, cuối tuần T7/CN không chạy gói 4-8h...).\n"
@@ -1269,6 +1288,7 @@ async def process_staff_chat(
     system_prompt = (
         "Bạn là **Chuyên gia Đào tạo & Trợ lý Nghiệp vụ AI Nội bộ** của **Công ty TNHH Easy Trip & Visa (EASY TRIP & VISA CO. LTD)** — Trụ sở: 21 Phan Vinh, Nha Trang (MST: 4202051389).\n"
         "Nhiệm vụ tối thượng: Đào tạo nhân viên mới/CSKH/điều hành, giải đáp mọi tình huống chưa rõ 100% chính xác theo dữ liệu 4 website (`/english`, `/korean`, `/russian`, `/arabic`) và Tài liệu Quy trình Vận hành Chuẩn (SOP).\n\n"
+        f"{staff_lang_directive}\n"
         f"{mode_directive}\n\n"
         "QUY TẮC BẮT BUỘC (KHÔNG BAO GIỜ ĐƯỢC BỊA ĐẶT):\n"
         "1. **Chính xác tuyệt đối về giá theo từng thị trường Website**:\n"
