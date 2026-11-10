@@ -8,7 +8,7 @@
     <meta http-equiv="Expires" content="0">
     <title>Easy Trip & Visa - Co-Pilot Chat & Training Studio (မြန်မာ)</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+Myanmar:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="index.css?v=3.4">
+    <link rel="stylesheet" href="index.css?v=3.5">
 </head>
 <body>
     <!-- Ambient Animated Background -->
@@ -32,14 +32,14 @@
 
             <!-- Tabs -->
             <div class="dashboard-tabs">
-                <button class="tab-btn active" id="tab-btn-sandbox" onclick="switchTab('sandbox')">🧪 Sandbox စမ်းသပ်ခန်း</button>
-                <button class="tab-btn" id="tab-btn-live" onclick="switchTab('live')">🌐 တိုက်ရိုက်ချန်နယ် ထိန်းချုပ်မှု</button>
-                <button class="tab-btn" id="tab-btn-ops" onclick="switchTab('ops')">📋 လုပ်ငန်းလမ်းညွှန် & 🎓 AI သင်တန်း</button>
+                <button class="tab-btn active" id="tab-btn-sandbox" onclick="switchTab('sandbox')">🧪 Sandbox</button>
+                <button class="tab-btn" id="tab-btn-live" onclick="switchTab('live')">🌐 Live Chat</button>
+                <button class="tab-btn" id="tab-btn-ops" onclick="switchTab('ops')">📋 SOP &amp; 🎓 AI သင်တန်း</button>
             </div>
 
             <!-- Controls & Metrics -->
             <div class="header-controls-group">
-                <a href="index.html" class="copilot-lang-switch" title="Chuyển sang tiếng Việt (Vietnamese)">🇻🇳 Tiếng Việt</a>
+                <a href="index.html" class="copilot-lang-switch" title="Chuyển sang tiếng Việt (Vietnamese)">🇻🇳 VN</a>
                 <div class="global-bot-control" id="global-bot-control" title="Bot လုပ်ဆောင်မှုစနစ်">
                     <span class="bot-icon-pulse">🤖</span>
                     <select id="global-bot-mode-select" class="global-bot-select" onchange="changeGlobalBotMode()" title="စနစ်တစ်ခုလုံး Bot မုဒ်ပြောင်းရန်">
@@ -562,10 +562,10 @@
                         </div>
 
                         <div class="sop-tabs">
-                            <button class="sop-tab-btn active" id="sop-tab-btn-greeting" onclick="switchSopTab('sop-greeting')">👋 နှုတ်ဆက် & လမ်းညွှန်</button>
-                            <button class="sop-tab-btn" id="sop-tab-btn-payment" onclick="switchSopTab('sop-payment')">💳 ငွေပေးချေမှု & စည်းကမ်း</button>
-                            <button class="sop-tab-btn" id="sop-tab-btn-border" onclick="switchSopTab('sop-border')">🚌 ဘတ်စ် & နယ်စပ်ဂိတ်</button>
-                            <button class="sop-tab-btn" id="sop-tab-btn-feedback" onclick="switchSopTab('sop-feedback')">✨ ဝန်ဆောင်မှု & သုံးသပ်ချက်</button>
+                            <button class="sop-tab-btn active" id="sop-tab-btn-greeting" onclick="switchSopTab('sop-greeting')">👋 နှုတ်ဆက်</button>
+                            <button class="sop-tab-btn" id="sop-tab-btn-payment" onclick="switchSopTab('sop-payment')">💳 ငွေပေးချေ</button>
+                            <button class="sop-tab-btn" id="sop-tab-btn-border" onclick="switchSopTab('sop-border')">🚌 နယ်စပ်</button>
+                            <button class="sop-tab-btn" id="sop-tab-btn-feedback" onclick="switchSopTab('sop-feedback')">✨ သုံးသပ်</button>
                         </div>
 
                         <!-- SOP TAB 1 -->
@@ -773,7 +773,7 @@
         </div>
     </div>
 
-    <script src="app.js?v=3.4"></script>
+    <script src="app.js?v=3.5"></script>
 </body>
 </html>
 

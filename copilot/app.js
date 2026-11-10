@@ -1823,15 +1823,15 @@ Please tell us: your nationality, the city you are currently staying in Vietnam,
         route: `🚌 နိုင်ငံသားအလိုက် ရွေးချယ်သင့်သော လမ်းကြောင်းများ -
 
 👉 လာအိုလမ်းကြောင်း (Bờ Y နယ်စပ်ဂိတ်) - လာအိုဗီဇာကင်းလွတ်ခွင့်ရ နိုင်ငံသားများ (ရုရှား၊ ကိုရီးယား၊ ဘီလာရုစ်၊ မြန်မာ နှင့် ASEAN ၁၂ နိုင်ငံ...) အတွက်ဖြစ်သည်။
-- Nha Trang ⇄ Bờ Y (နေ့စဉ် ည ၂၁:၃၀ တွင် 40 Hon Chong မှ ထွက်ခွာ): ရက်တို Visa-Free ဘတ်စ်ကားခ `1,400,000 VND` | ရက် ၉၀ Single E-Visa + ဘတ်စ်ကား `4,000,000 VND` (ရုရှား/CIS `3,400,000 VND`)။
+- Nha Trang ⇄ Bờ Y (နေ့စဉ် ည ၂၁:၃၀ တွင် 40 Hon Chong မှ ထွက်ခွာ): ရက်တို Visa-Free ဘတ်စ်ကားခ 1,400,000 VND | ရက် ၉၀ Single E-Visa + ဘတ်စ်ကား 4,000,000 VND (ရုရှား/CIS 3,400,000 VND)။
 
 👉 ကမ္ဘောဒီးယားလမ်းကြောင်း (Mộc Bài နယ်စပ်ဂိတ်) - အခြားနိုင်ငံသားအားလုံး (အမေရိကန်၊ ဥရောပ၊ ကာဇက်စတန်၊ ယူကရိန်း...) အတွက်ဖြစ်သည်။
 - အင်္ဂါ၊ ကြာသပတေး၊ တနင်္ဂနွေ ည ၂၁:၃၀ တွင် 40 Hon Chong မှ ထွက်ခွာသည်။
-- နိုင်ငံတကာ (`/english`): 45D `1,400,000 VND` | Bus+90D EV `4,000,000 VND` (+1M Cam) | Single+Cam `5,000,000 VND` | Multi+Cam `6,000,000 VND`။`,
+- နိုင်ငံတကာ (/english): 45D 1,400,000 VND | Bus+90D EV 4,000,000 VND (+1M Cam) | Single+Cam 5,000,000 VND | Multi+Cam 6,000,000 VND။`,
         danang: `🚌 ဒါနန်း - လာအို (Lao Bảo နယ်စပ်ဂိတ်) E-Visa ၉၀ မိနစ် လမ်းကြောင်း -
 1. ထွက်ခွာချိန် - ၁၅-၃၀ မိနစ်စော၍ နံနက် ၀၅:၃၀ တွင် Da Nang Central Bus Station ၌ စောင့်ဆိုင်းပါ။
 2. နေ့လယ်ပိုင်း Lao Bảo နယ်စပ်ဂိတ်သို့ ရောက်ရှိမည် (E-visa ၉၀ မိနစ်အတွင်း ရရှိမည်)။
-3. စုစုပေါင်း ကုန်ကျစရိတ် - `3,800,000 VND` (၃ ရက်ကြိုတင်စာရင်းသွင်းပါက `3,550,000 VND`) | 45D Visa-Free ဘတ်စ် `950,000 VND`။`
+3. စုစုပေါင်း ကုန်ကျစရိတ် - 3,800,000 VND (၃ ရက်ကြိုတင်စာရင်းသွင်းပါက 3,550,000 VND) | 45D Visa-Free ဘတ်စ် 950,000 VND။`
     }
 };
 
@@ -2147,7 +2147,7 @@ const staffAIDatabase = [
     {
         keywords: ['tre em', 'cabin', 'duoi 9 tuoi', 'so luong', 'khong xe buyt', 'khong di xe buyt', 'tu di chuyen'],
         answer: `👶 **CHÍNH SÁCH TRẺ EM & PHƯƠNG TIỆN (VISA RUN):**
-- **Trẻ em dưới 9 tuổi:** **MIỄN PHÍ 100% vé xe buýt (0 VND)** khi nằm chung cabin với bố mẹ. E-visa khẩn trợ giá: **1.480.000đ** (Web Quốc tế/Nga, đăng ký trước 4 ngày) hoặc **2.980.000đ** (Web `/arabic`).
+- **Trẻ em dưới 9 tuổi:** **MIỄN PHÍ 100% vé xe buýt (0 VND)** khi nằm chung cabin với bố mẹ. E-visa khẩn trợ giá: **1.480.000đ** (Web Quốc tế/Nga, đăng ký trước 4 ngày) hoặc **2.980.000đ** (Web /arabic).
 - **Khách tự di chuyển (Không sử dụng xe buýt):**
   - Nga / CIS: Visa 90D lẻ (không bus) **2.000.000 VND**.
   - Các quốc tịch khác: Trừ 1.400.000đ tiền vé xe khỏi gói combo tương ứng.`
@@ -2155,9 +2155,9 @@ const staffAIDatabase = [
     {
         keywords: ['gia', 'khan cap', 'bao nhieu', '1 gio', '2 gio', '3 gio', '4 gio', '8 gio', '1 ngay', '2 ngay', 'tieu chuan'],
         answer: `💵 **BẢNG GIÁ E-VISA KHẨN CẤP LẺ (SINGLE — MULTI +1.000.000đ):**
-- **Quốc tế & Hàn Quốc (`/english`, `/korean`):** 1h: 4.6M | 2h: 3.4M | 4h: 2.6M | 8h: 2.9M | 1d: 2.2M | 2d: 2.15M | 3–5d: 1.81M.
-- **Nga & CIS (`/russian`):** 1h: 4.6M | 2h: 3.4M | 4h: **2.0M** | 1d: **1.81M** | 2d: **1.76M** | 3–5d: **1.61M**.
-- **Ả Rập (`/arabic`):** Cộng thêm **+1.500.000đ** vào giá `/english` (1h 6.1M | 4h 4.1M | 1d 3.7M | 3–5d 3.31M).
+- **Quốc tế & Hàn Quốc (/english, /korean):** 1h: 4.6M | 2h: 3.4M | 4h: 2.6M | 8h: 2.9M | 1d: 2.2M | 2d: 2.15M | 3–5d: 1.81M.
+- **Nga & CIS (/russian):** 1h: 4.6M | 2h: 3.4M | 4h: **2.0M** | 1d: **1.81M** | 2d: **1.76M** | 3–5d: **1.61M**.
+- **Ả Rập (/arabic):** Cộng thêm **+1.500.000đ** vào giá /english (1h 6.1M | 4h 4.1M | 1d 3.7M | 3–5d 3.31M).
 - **Nội bộ Loyalty / Đại lý:** 1h 3.3M | 2h 2.9M | 3h 2.5M | 4h 1.6M | 8h 1.9M | 1d 1.5M | 2d 1.45M | 3–5d 1.11M.
 - **Phụ phí quốc tịch khó:** Nhóm 1 (Ai Cập, Algeria, Tunisia, Sri Lanka, Mauritius) **+850k** | Nhóm 2 (Thổ Nhĩ Kỳ, Morocco, UAE) **+650k**.`
     },
@@ -2188,7 +2188,7 @@ const staffAIDatabase = [
         answer: `🚌 **LỊCH TRÌNH & TUYẾN XE VISARUN:**
 - **Nha Trang ⇄ Lào (Bờ Y):** CHỈ dành cho Nga, Belarus, Hàn Quốc, Nhật, Luxembourg, 12 nước ASEAN. 45D chạy **hàng ngày** (1.4M); 90D chạy **T3, T5, CN** lúc 21:30 (Nga 3.4M / 4.4M Multi; Non-RU 4.0M).
 - **Nha Trang ⇄ Campuchia (Mộc Bài):** Toàn bộ quốc tịch khác (Mỹ, EU, Kazakhstan, Ukraine, Ả Rập...). Chạy **T3, T5, CN** lúc 21:30 tại 40 Hòn Chồng.
-- **Đà Nẵng ⇄ Lao Bảo (Lào):** 90D chạy T2–T6 lúc 05:30–18:30 (3.8M website / 3.55M đặt trước >=3d; Web `/arabic` 5.3M; +Hanie tại cửa khẩu). 45D chạy T2–T7 (950k).`
+- **Đà Nẵng ⇄ Lao Bảo (Lào):** 90D chạy T2–T6 lúc 05:30–18:30 (3.8M website / 3.55M đặt trước >=3d; Web /arabic 5.3M; +Hanie tại cửa khẩu). 45D chạy T2–T7 (950k).`
     }
 ];
 
